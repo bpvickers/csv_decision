@@ -1,0 +1,15 @@
+AllCops:
+  TargetRubyVersion: 2.3.1
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 15
+
+Metrics/AbcSize:
+  Max: 18
+
+Metrics/LineLength:
+  Max: 80
+
+Layout/TrailingWhitespace:
+  Enabled: false

@@ -1,8 +1,8 @@
-# csv-decision - Work In Progress
-`csv-decision` is a Ruby gem for CSV based decision tables. It accepts decision table logic encoded in
+# csv_decision - Work In Progress
+`csv_decision` is a Ruby gem for CSV based decision tables. It accepts decision table logic encoded in
 a CSV file, which can then be used to implement complex conditional logic.
 
-`csv-decision` has many useful features:
+`csv_decision` has many useful features:
  * able to parse and load into memory many CSV files for subsequent processing
  * can return the first matching row as a hash, or accumulate all matches as an array of hashes
  * input columns may be indexed for fast lookup performance
