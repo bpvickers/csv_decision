@@ -7,6 +7,7 @@ module CSVDecision
   # Decision Table that accepts input hashes and makes deciosn
   class Table
     attr_accessor :file
+    attr_accessor :header
     attr_accessor :options
     attr_accessor :rows
     attr_reader :tables
@@ -17,6 +18,7 @@ module CSVDecision
 
     def initialize
       @file = nil
+      @header = nil
       @options = nil
       @rows = []
       @tables = nil

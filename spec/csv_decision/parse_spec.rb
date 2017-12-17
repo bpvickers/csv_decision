@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative '../../lib/csv_decision/parse'
 
 describe CSVDecision::Parse do
