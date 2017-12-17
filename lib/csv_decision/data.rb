@@ -12,8 +12,13 @@ module CSVDecision
   module Data
     # Parse the input data which may either be a file path name, CSV string or
     # array of arrays. Strips out empty columns/rows and comment cells
-    def self.to_array(input, options: { force_utf_8_encoding: true, ascii_only?: true })
-      strip_rows(data_array(input), options)
+    def self.to_array(data:, options: { force_utf_8_encoding: true, ascii_only?: true })
+      strip_rows(data: data_array(data), options: options)
+    end
+
+    # TODO: strip empty columns
+    def self.strip_columns(data:, empty_cols:)
+
     end
 
     # Parse the input data which may either be a file path name, CSV string or
@@ -29,10 +34,10 @@ module CSVDecision
     end
     private_class_method :data_array
 
-    def self.strip_rows(data, options)
+    def self.strip_rows(data:, options:)
       rows = []
       data.each do |row|
-        row = strip_cells(row, options)
+        row = strip_cells(row: row, options: options)
         rows << row if row.find { |cell| cell != '' }
       end
       rows
@@ -42,7 +47,7 @@ module CSVDecision
     # Strip cells of leading/trailing spaces; treat comments as an empty cell.
     # Non string values treated as empty cells.
     # Non-ascii strings treated as empty cells by default.
-    def self.strip_cells(row, options)
+    def self.strip_cells(row:, options:)
       row.map! do |cell|
         next '' unless cell.is_a?(String)
         cell = options[:force_utf_8_encoding] ? cell.force_encoding('UTF-8') : cell
@@ -51,5 +56,6 @@ module CSVDecision
         cell.strip
       end
     end
+    private_class_method :strip_cells
   end
 end
