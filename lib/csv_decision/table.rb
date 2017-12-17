@@ -14,8 +14,8 @@ module CSVDecision
       {}
     end
 
-    def initialize(options)
-      @options = options
+    def initialize
+      @options = nil
       @rows = []
       @file = nil
       @tables = nil

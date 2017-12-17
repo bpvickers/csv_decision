@@ -14,10 +14,13 @@ module CSVDecision
     options = Options.new(options)
 
     # Initialize the table object
-    table = CSVDecision::Table.new(options)
+    table = CSVDecision::Table.new
 
     # Parse input data, which may include overriding options specified in a CSV file
-    table = Parse.data(table: table, input: input, options: options)
+    table = Parse.data(table: table, input: input, options: options.attributes)
+
+    # Reset to the options hash
+    table.options = options.attributes
 
     table.freeze
   end
