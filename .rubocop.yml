@@ -9,7 +9,7 @@ Metrics/AbcSize:
   Max: 18
 
 Metrics/LineLength:
-  Max: 80
+  Max: 100
 
 Layout/TrailingWhitespace:
   Enabled: false

@@ -19,6 +19,8 @@ module CSVDecision
   module Parse
     def self.data(table:, input:, options:)
       table.rows = Data.to_array(input)
+
+      table
     end
   end
 end
