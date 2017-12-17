@@ -6,18 +6,19 @@
 module CSVDecision
   # Decision Table that accepts input hashes and makes deciosn
   class Table
-    attr_accessor :rows
+    attr_accessor :file
     attr_accessor :options
-    attr_reader :file
+    attr_accessor :rows
+    attr_reader :tables
 
-    def decide(input, symbolize_keys: true)
+    def decide(_input, _symbolize_keys: true)
       {}
     end
 
     def initialize
+      @file = nil
       @options = nil
       @rows = []
-      @file = nil
       @tables = nil
     end
   end

@@ -14,5 +14,6 @@ module CSVDecision
   end
 
   autoload :Data,     'csv_decision/data'
+  autoload :Options,  'csv_decision/options'
   autoload :Parse,    'csv_decision/parse'
 end
