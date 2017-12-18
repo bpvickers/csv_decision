@@ -4,7 +4,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = 'csv_decison'
+  spec.name          = 'csv_decision'
   spec.version       = '0.0.1'
   spec.authors       = ['Brett Vickers']
   spec.email         = ['brett@phillips-vickers.com']
