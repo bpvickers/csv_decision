@@ -14,14 +14,11 @@ module CSVDecision
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
-    attr_reader :table
     attr_reader :ins
     attr_reader :outs
     attr_reader :defaults
 
     def initialize(table)
-      @table = table
-
       # The input and output columns, where the key is the row's array
       # column index. Note that input and output columns can be interspersed,
       # and need not have unique names.

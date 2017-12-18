@@ -9,7 +9,6 @@ describe CSVDecision::Header do
       header = CSVDecision::Header.new(table)
 
       expect(header).to be_a(CSVDecision::Header)
-      expect(header.table).to eq table
     end
   end
 
@@ -21,7 +20,6 @@ describe CSVDecision::Header do
     result = CSVDecision.parse(data)
 
     expect(result.header).to be_a(CSVDecision::Header)
-    expect(result.header.table).to eq(result)
     expect(result.header.ins[0]).to eq(name: :input, text_only: nil)
     expect(result.header.ins[2]).to eq(name: :input, text_only: nil)
     expect(result.header.outs[1]).to eq(name: :output, text_only: nil)
@@ -33,7 +31,6 @@ describe CSVDecision::Header do
     result = CSVDecision.parse(file)
 
     expect(result.header).to be_a(CSVDecision::Header)
-    expect(result.header.table).to eq(result)
     expect(result.header.ins).to eq(0 => { name: :input, text_only: nil })
     expect(result.header.outs).to eq(1 => { name: :output, text_only: nil })
   end

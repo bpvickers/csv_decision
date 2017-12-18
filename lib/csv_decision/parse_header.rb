@@ -9,6 +9,7 @@ module CSVDecision
     # More lenient than a Ruby method name - any spaces will have beeb replaced with underscores
     COLUMN_NAME = %r{\A\w[\w:/!?]*\z}
 
+    # These column types do not need a name
     COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
 
     # Does this row contain a recognisable header cell?
@@ -17,7 +18,7 @@ module CSVDecision
     end
 
     # Parse the header row
-    def self.parse(table:, options: {})
+    def self.parse(table:)
       header = CSVDecision::Header.new(table)
 
       header.freeze

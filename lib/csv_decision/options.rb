@@ -22,7 +22,7 @@ module CSVDecision
   }.freeze
 
   # Parse the CSV file and create a new decision table object
-  class Options
+  module Options
     def self.default(options)
       result = options.deep_dup
 
@@ -40,15 +40,15 @@ module CSVDecision
       return CSV_OPTION_NAMES[key] if CSV_OPTION_NAMES.key?(key)
     end
 
-    def self.valid?(options)
+    def self.validate(options)
       invalid_options = options.keys - VALID_OPTIONS.keys
 
-      return true if invalid_options.empty?
+      return if invalid_options.empty?
 
       raise ArgumentError, "invalid option(s) supplied: #{invalid_options.inspect}"
     end
 
-    def self.from_csv(table, attributes)
+    def self.from_csv(table:, attributes:)
       row = table.rows.first
       return attributes if row.nil?
 
@@ -62,21 +62,12 @@ module CSVDecision
       end
 
       table.rows.shift
-      from_csv(table, attributes)
+      from_csv(table: table, attributes: attributes)
     end
 
-    attr_accessor :attributes
-
-    def initialize(options)
-      Options.valid?(options)
-      @attributes = Options.default(options)
-    end
-
-    def from_csv(table)
-      # Options on the CSV file override the ones passed into the method
-      @attributes = Options.from_csv(table, @attributes)
-
-      self
+    def self.normalize(options)
+      validate(options)
+      default(options)
     end
   end
 end

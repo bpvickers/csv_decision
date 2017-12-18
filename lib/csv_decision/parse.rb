@@ -13,34 +13,32 @@ module CSVDecision
 
   # Parse the input data which may either be a path name, CSV string or array of arrays
   def self.parse(input, options = {})
-    # Parse and normalize user supplied options
-    options = Options.new(options)
-
+    # Parse and normalize user supplied options.
     # Parse input data, which may include overriding options specified in a CSV file
-    table = Parse.data(table: Table.new, input: input, options: options)
-
-    options = options.from_csv(table)
-
-    table.header = ParseHeader.parse(table: table, options: options)
-
-    # Set to the options hash
-    table.options = options.attributes.freeze
-
-    Parse.data_rows(table)
-
-  rescue CSVDecision::Error => exp
-    raise exp unless table.file
-    message = "error processing CSV file #{table.file}\n#{exp.inspect}"
-    raise CSVDecision::FileError, message
+    Parse.table(table: Table.new, input: input, options: Options.normalize(options))
   end
 
   # Parse the CSV file and create a new decision table object
   module Parse
-    def self.data(table:, input:, options:)
+    def self.table(table:, input:, options:)
+      # In most cases the decision table will be loaded from a CSV file.
       table.file = input if Data.input_file?(input)
-      table.rows = Data.to_array(data: input, options: options.attributes)
 
-      table
+      # Parse the input data into an array of arrays
+      table.rows = Data.to_array(data: input, options: options)
+
+      # Pick up any options specified in the CSV file before the header row.
+      # These override any options passed as parameters to the parse method.
+      table.options = Options.from_csv(table: table, attributes: options).freeze
+
+      # Parse the header row
+      table.header = ParseHeader.parse(table: table)
+
+      Parse.data_rows(table)
+    rescue CSVDecision::Error => exp
+      raise exp unless table.file
+      message = "error processing CSV file #{table.file}\n#{exp.inspect}"
+      raise CSVDecision::FileError, message
     end
 
     def self.data_rows(table)
