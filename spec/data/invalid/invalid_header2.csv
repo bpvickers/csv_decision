@@ -1,0 +1,4 @@
+#comment,
+IN :input,BAD :-
+input,#output
+,#end comment
