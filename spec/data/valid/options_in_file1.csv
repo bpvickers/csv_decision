@@ -1,0 +1,5 @@
+#comment,
+accumulate
+IN :input,OUT :output
+input,#output
+,#end comment

@@ -16,7 +16,7 @@ describe CSVDecision::Header do
   it 'parses a decision table header from a CSV file' do
     data = <<~DATA
       IN :input, OUT :output, IN : input, OUT:output
-      input0,    output0,     input1,     output1]
+      input0,    output0,     input1,     output1
     DATA
     result = CSVDecision.parse(data)
 

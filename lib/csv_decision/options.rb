@@ -4,28 +4,20 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  VALID_OPTIONS = %i[
-    force_encoding
-    ascii_only?
-    first_match
-    regexp_implict
-    text_only
-    index
-    tables
-  ].freeze
-
-  OPTION_DEFAULTS = {
+  VALID_OPTIONS = {
     force_encoding: 'UTF-8',
     ascii_only?: true,
     first_match: true,
-    regexp_implict: false,
-    text_only: false
+    regexp_implicit: false,
+    text_only: false,
+    index: nil,
+    tables: nil
   }.freeze
 
   CSV_OPTION_NAMES = {
     first_match: [:first_match, true],
-    accumulate: [:first_match, true],
-    regexp_implict: [:regexp_implict, true],
+    accumulate: [:first_match, false],
+    regexp_implicit: [:regexp_implicit, true],
     text_only: [:text_only, true]
   }.freeze
 
@@ -35,7 +27,7 @@ module CSVDecision
       result = options.deep_dup
 
       # Default any missing options that have defaults defined
-      OPTION_DEFAULTS.each_pair do |key, value|
+      VALID_OPTIONS.each_pair do |key, value|
         next if result.key?(key)
         result[key] = value
       end
@@ -44,14 +36,12 @@ module CSVDecision
     end
 
     def self.cell?(cell)
-      return false if cell == ''
-
       key = cell.downcase.to_sym
       return CSV_OPTION_NAMES[key] if CSV_OPTION_NAMES.key?(key)
     end
 
     def self.valid?(options)
-      invalid_options = options.keys - VALID_OPTIONS
+      invalid_options = options.keys - VALID_OPTIONS.keys
 
       return true if invalid_options.empty?
 
@@ -62,9 +52,11 @@ module CSVDecision
       row = table.rows.first
       return attributes if row.nil?
 
+      # Have we hit the header row?
       return attributes if ParseHeader.row?(row)
 
       row.each do |cell|
+        next if cell == ''
         key, value = Options.cell?(cell)
         attributes[key] = value if key
       end
