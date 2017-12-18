@@ -1,100 +1,56 @@
 # frozen_string_literal: true
 
-require_relative 'parse_header'
-
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Parse the CSV file's header row
-  class Header
-    # Column header looks like IN :col_name or if:
-    COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|path)
-      \s*:\s*(?<name>\S?.*)\z
-    }xi
+  # Parse the CSV file's header row. These methods are only required at table load time.
+  module Header
+    # More lenient than a Ruby method name - any spaces will have beeb replaced with underscores
+    COLUMN_NAME = %r{\A\w[\w:/!?]*\z}
 
-    attr_reader :ins
-    attr_reader :outs
-    attr_reader :defaults
+    # These column types do not need a name
+    COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
 
-    def initialize(table)
-      # The input and output columns, where the key is the row's array
-      # column index. Note that input and output columns can be interspersed,
-      # and need not have unique names.
-      @ins = {}
-      @outs = {}
-
-      # Path for the input hash - optional
-      @path = {}
-
-      # Hash of columns that require defaults to be set
-      @defaults = {}
-
-      row = table.rows.first
-      parse(row) if row
+    # Does this row contain a recognisable header cell?
+    def self.row?(row)
+      row.find { |cell| cell.match(Columns::COLUMN_TYPE) }
     end
 
-    def parse(row)
-      index = 0
-      while index < row.count
-        cell = row[index]
-        parse_cell(cell: cell, index: index) unless cell == ''
+    # Parse the header row
+    def self.parse(table:)
+      header = CSVDecision::Columns.new(table)
 
-        index += 1
-      end
+      header.freeze
     end
 
-    def parse_cell(cell:, index:)
-      column_type, column_name = ParseHeader.column?(cell: cell)
+    def self.column?(cell:)
+      match = Columns::COLUMN_TYPE.match(cell)
+      raise CellValidationError, 'column name is not well formed' unless match
 
-      type, text_only =
-        parse_column_type(type: column_type, name: column_name, index: index)
+      column_type = match['type']&.downcase&.to_sym
+      column_name = column_name(type: column_type, name: match['name'])
 
-      column_dictionary(type: type,
-                        name: column_name,
-                        index: index,
-                        text_only: text_only)
+      [column_type, column_name]
+
+    rescue CellValidationError => exp
+      raise CellValidationError,
+            "header column '#{cell}' is not valid as #{exp.message}"
     end
 
-    # Returns the normalized column type, along with an indication if
-    # the column is text only
-    def parse_column_type(type:, name:, index:)
-      case type
-      # Header column that has a function for setting the value
-      when :set
-        @defaults[index] = { name: name, function: nil }
-        # Treat set: as an in: column which may or may not be text-only.
-        [:in, nil]
+    def self.column_name(type:, name:)
+      return format_column_name(name) if name.present?
+      return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
-      when :'in/text'
-        [:in, true]
-
-      when :'out/text'
-        [:in, true]
-
-      # Column may turn out to be text-only, or not
-      else
-        [type, nil]
-      end
+      raise CellValidationError, 'the column name is missing'
     end
 
-    # Returns the normalized column type, along with an indication if
-    # the column is text only.
-    def column_dictionary(type:, name:, index:, text_only:)
-      entry = { name: name, text_only: text_only }
+    def self.format_column_name(name)
+      column_name = name.strip.tr("\s", '_')
 
-      case type
-        # Header column that has a function for setting the value
-      when :in
-        @ins[index] = entry
+      return column_name.to_sym if COLUMN_NAME.match(column_name)
 
-      when :out
-        @outs[index] = entry
-
-      else
-        raise "internal error - column type #{type} not recognised"
-      end
+      raise CellValidationError, "column name '#{name}' contains invalid characters"
     end
   end
 end

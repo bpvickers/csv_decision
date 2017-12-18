@@ -2,13 +2,13 @@
 
 require_relative '../../lib/csv_decision'
 
-describe CSVDecision::Header do
+describe CSVDecision::Columns do
   describe '#new' do
     it 'creates a Header object' do
       table = CSVDecision::Table.new
-      header = CSVDecision::Header.new(table)
+      header = CSVDecision::Columns.new(table)
 
-      expect(header).to be_a(CSVDecision::Header)
+      expect(header).to be_a(CSVDecision::Columns)
     end
   end
 
@@ -19,7 +19,7 @@ describe CSVDecision::Header do
     DATA
     result = CSVDecision.parse(data)
 
-    expect(result.header).to be_a(CSVDecision::Header)
+    expect(result.header).to be_a(CSVDecision::Columns)
     expect(result.header.ins[0]).to eq(name: :input, text_only: nil)
     expect(result.header.ins[2]).to eq(name: :input, text_only: nil)
     expect(result.header.outs[1]).to eq(name: :output, text_only: nil)
@@ -30,7 +30,7 @@ describe CSVDecision::Header do
     file = Pathname(File.join(CSVDecision.root, 'spec/data/valid', 'valid.csv'))
     result = CSVDecision.parse(file)
 
-    expect(result.header).to be_a(CSVDecision::Header)
+    expect(result.header).to be_a(CSVDecision::Columns)
     expect(result.header.ins).to eq(0 => { name: :input, text_only: nil })
     expect(result.header.outs).to eq(1 => { name: :output, text_only: nil })
   end

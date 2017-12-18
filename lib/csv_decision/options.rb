@@ -53,7 +53,7 @@ module CSVDecision
       return attributes if row.nil?
 
       # Have we hit the header row?
-      return attributes if ParseHeader.row?(row)
+      return attributes if Header.row?(row)
 
       row.each do |cell|
         next if cell == ''

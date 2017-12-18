@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'table'
-require_relative 'parse_header'
+require_relative 'header'
 
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017 by Brett Vickers
@@ -11,10 +11,8 @@ module CSVDecision
   class CellValidationError < Error; end
   class FileError < Error; end
 
-  # Parse the input data which may either be a path name, CSV string or array of arrays
+  # Parse the input data which may either be a file, CSV string or array of arrays
   def self.parse(input, options = {})
-    # Parse and normalize user supplied options.
-    # Parse input data, which may include overriding options specified in a CSV file
     Parse.table(table: Table.new, input: input, options: Options.normalize(options))
   end
 
@@ -24,7 +22,7 @@ module CSVDecision
       # In most cases the decision table will be loaded from a CSV file.
       table.file = input if Data.input_file?(input)
 
-      # Parse the input data into an array of arrays
+      # Parse input data into an array of arrays
       table.rows = Data.to_array(data: input, options: options)
 
       # Pick up any options specified in the CSV file before the header row.
@@ -32,7 +30,7 @@ module CSVDecision
       table.options = Options.from_csv(table: table, attributes: options).freeze
 
       # Parse the header row
-      table.header = ParseHeader.parse(table: table)
+      table.header = Header.parse(table: table)
 
       Parse.data_rows(table)
     rescue CSVDecision::Error => exp
