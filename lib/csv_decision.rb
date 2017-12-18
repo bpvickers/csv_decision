@@ -5,7 +5,7 @@
 # See LICENSE and README.md for details.
 
 require 'active_support/core_ext/object'
-require_relative '../lib/csv_decision/table'
+require_relative '../lib/csv_decision/parse'
 
 module CSVDecision
   # @return [String] gem project's root directory
@@ -14,6 +14,7 @@ module CSVDecision
   end
 
   autoload :Data,     'csv_decision/data'
+  autoload :Header,   'csv_decision/header'
   autoload :Options,  'csv_decision/options'
   autoload :Parse,    'csv_decision/parse'
 end

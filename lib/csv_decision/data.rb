@@ -16,13 +16,17 @@ module CSVDecision
       strip_rows(data: data_array(data), options: options)
     end
 
+    def self.input_file?(input)
+      input.is_a?(Pathname) || input.is_a?(File)
+    end
+
     # TODO: strip empty columns
     def self.strip_columns(_data:, _empty_cols:); end
 
     # Parse the input data which may either be a file path name, CSV string or
     # array of arrays
     def self.data_array(input)
-      return CSV.read(input) if input.is_a?(Pathname)
+      return CSV.read(input) if input_file?(input)
       return input.deep_dup if input.is_a?(Array) && input[0].is_a?(Array)
       return CSV.parse(input) if input.is_a?(String)
 

@@ -22,7 +22,12 @@ module CSVDecision
     text_only: false
   }.freeze
 
-  CSV_OPTION_NAMES = %i[first_match accumulate regexp_implict text_only].freeze
+  CSV_OPTION_NAMES = {
+    first_match: [:first_match, true],
+    accumulate: [:first_match, true],
+    regexp_implict: [:regexp_implict, true],
+    text_only: [:text_only, true]
+  }.freeze
 
   # Parse the CSV file and create a new decision table object
   class Options
@@ -42,7 +47,7 @@ module CSVDecision
       return false if cell == ''
 
       key = cell.downcase.to_sym
-      return [key, true] if CSV_OPTION_NAMES.include?(key)
+      return CSV_OPTION_NAMES[key] if CSV_OPTION_NAMES.key?(key)
     end
 
     def self.valid?(options)
@@ -55,15 +60,17 @@ module CSVDecision
 
     def self.from_csv(table, attributes)
       row = table.rows.first
-      return attributes unless row
+      return attributes if row.nil?
 
-      return attributes if Header.row?(row)
+      return attributes if ParseHeader.row?(row)
 
       row.each do |cell|
         key, value = Options.cell?(cell)
         attributes[key] = value if key
       end
 
+      table.rows.shift
+      from_csv(table, attributes)
     end
 
     attr_accessor :attributes
@@ -71,11 +78,10 @@ module CSVDecision
     def initialize(options)
       Options.valid?(options)
       @attributes = Options.default(options)
-
     end
 
     def from_csv(table)
-      # Options on the CSV file override the ones passed in to the method
+      # Options on the CSV file override the ones passed into the method
       @attributes = Options.from_csv(table, @attributes)
 
       self

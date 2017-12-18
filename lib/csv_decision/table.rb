@@ -4,7 +4,7 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Decision Table that accepts input hashes and makes deciosn
+  # Decision Table that accepts input hashes and makes decision
   class Table
     attr_accessor :file
     attr_accessor :header
