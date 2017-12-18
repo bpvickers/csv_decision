@@ -15,6 +15,9 @@ module CSVDecision
     }xi
 
     attr_reader :table
+    attr_reader :ins
+    attr_reader :outs
+    attr_reader :defaults
 
     def initialize(table)
       @table = table
@@ -64,7 +67,7 @@ module CSVDecision
       # Header column that has a function for setting the value
       when :set
         @defaults[index] = { name: name, function: nil }
-        # Treat as an in column which may or may not contain functions
+        # Treat set: as an in: column which may or may not be text-only.
         [:in, nil]
 
       when :'in/text'
@@ -83,6 +86,7 @@ module CSVDecision
     # the column is text only.
     def column_dictionary(type:, name:, index:, text_only:)
       entry = { name: name, text_only: text_only }
+
       case type
         # Header column that has a function for setting the value
       when :in

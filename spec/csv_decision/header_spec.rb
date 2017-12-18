@@ -14,16 +14,28 @@ describe CSVDecision::Header do
   end
 
   it 'parses a decision table header from a CSV file' do
+    data = <<~DATA
+      IN :input, OUT :output, IN : input, OUT:output
+      input0,    output0,     input1,     output1]
+    DATA
+    result = CSVDecision.parse(data)
+
+    expect(result.header).to be_a(CSVDecision::Header)
+    expect(result.header.table).to eq(result)
+    expect(result.header.ins[0]).to eq(name: :input, text_only: nil)
+    expect(result.header.ins[2]).to eq(name: :input, text_only: nil)
+    expect(result.header.outs[1]).to eq(name: :output, text_only: nil)
+    expect(result.header.outs[3]).to eq(name: :output, text_only: nil)
+  end
+
+  it 'parses a decision table header from a CSV file' do
     file = Pathname(File.join(CSVDecision.root, 'spec/data/valid', 'valid.csv'))
     result = CSVDecision.parse(file)
 
-    expected = [
-      ['IN :input', 'OUT :output'],
-      ['input', '']
-    ]
-
     expect(result.header).to be_a(CSVDecision::Header)
-    # expect(result.header.ins).to eq expected
+    expect(result.header.table).to eq(result)
+    expect(result.header.ins).to eq(0 => { name: :input, text_only: nil })
+    expect(result.header.outs).to eq(1 => { name: :output, text_only: nil })
   end
 
   it 'rejects an invalid column header' do
