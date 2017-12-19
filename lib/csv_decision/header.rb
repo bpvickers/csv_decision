@@ -6,6 +6,12 @@
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   module Header
+    # Column header looks like IN :col_name or if:
+    COLUMN_TYPE = %r{
+      \A(?<type>in|out|in/text|out/text|set|path)
+      \s*:\s*(?<name>\S?.*)\z
+    }xi
+
     # More lenient than a Ruby method name - any spaces will have been replaced with underscores
     COLUMN_NAME = %r{\A\w[\w:/!?]*\z}
 
@@ -14,7 +20,7 @@ module CSVDecision
 
     # Does this row contain a recognisable header cell?
     def self.row?(row)
-      row.find { |cell| cell.match(Columns::COLUMN_TYPE) }
+      row.find { |cell| cell.match(Header::COLUMN_TYPE) }
     end
 
     # Parse the header row
@@ -23,7 +29,7 @@ module CSVDecision
     end
 
     def self.column?(cell:)
-      match = Columns::COLUMN_TYPE.match(cell)
+      match = Header::COLUMN_TYPE.match(cell)
       raise CellValidationError, 'column name is not well formed' unless match
 
       column_type = match['type']&.downcase&.to_sym

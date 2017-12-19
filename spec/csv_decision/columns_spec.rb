@@ -2,6 +2,9 @@
 
 require_relative '../../lib/csv_decision'
 
+SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
+SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
+
 describe CSVDecision::Columns do
   describe '#new' do
     it 'creates a columns object' do
@@ -17,17 +20,17 @@ describe CSVDecision::Columns do
       IN :input, OUT :output, IN/text : input, OUT/text:output
       input0,    output0,     input1,          output1
     DATA
-    result = CSVDecision.parse(data)
+    table = CSVDecision.parse(data)
 
-    expect(result.columns).to be_a(CSVDecision::Columns)
-    expect(result.columns.ins[0]).to eq(name: :input, text_only: nil)
-    expect(result.columns.ins[2]).to eq(name: :input, text_only: true)
-    expect(result.columns.outs[1]).to eq(name: :output, text_only: nil)
-    expect(result.columns.outs[3]).to eq(name: :output, text_only: true)
+    expect(table.columns).to be_a(CSVDecision::Columns)
+    expect(table.columns.ins[0]).to eq(name: :input, text_only: nil)
+    expect(table.columns.ins[2]).to eq(name: :input, text_only: true)
+    expect(table.columns.outs[1]).to eq(name: :output, text_only: nil)
+    expect(table.columns.outs[3]).to eq(name: :output, text_only: true)
   end
 
   it 'parses a decision table columns from a CSV file' do
-    file = Pathname(File.join(CSVDecision.root, 'spec/data/valid', 'valid.csv'))
+    file = Pathname(File.join(SPEC_DATA_VALID, 'valid.csv'))
     result = CSVDecision.parse(file)
 
     expect(result.columns).to be_a(CSVDecision::Columns)
@@ -35,7 +38,7 @@ describe CSVDecision::Columns do
     expect(result.columns.outs).to eq(1 => { name: :output, text_only: nil })
   end
 
-  it 'rejects an invalid column columns' do
+  it 'rejects an invalid header column' do
     data = [
       ['IN :input', 'BAD :output'],
       ['input', '']
@@ -70,8 +73,8 @@ describe CSVDecision::Columns do
                       "column name 'a-b' contains invalid characters")
   end
 
-  context 'rejects invalid CSV file decision table columnss' do
-    Dir[File.join(CSVDecision.root, 'spec/data/invalid/invalid_columns*.csv')].each do |file_name|
+  context 'rejects invalid CSV decision table columns' do
+    Dir[File.join(SPEC_DATA_INVALID, 'invalid_columns*.csv')].each do |file_name|
       pathname = Pathname(file_name)
 
       it "rejects CSV file #{pathname.basename}" do

@@ -6,12 +6,6 @@
 module CSVDecision
   # Parse the CSV file's header row
   class Columns
-    # Column header looks like IN :col_name or if:
-    COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|path)
-      \s*:\s*(?<name>\S?.*)\z
-    }xi
-
     attr_reader :dictionary
 
     def ins
@@ -43,7 +37,8 @@ module CSVDecision
         defaults: {}
       }
 
-      @dictionary = Header.parse_row(dictionary: @dictionary, row: table.rows.first)
+      @dictionary =
+        Header.parse_row(dictionary: @dictionary, row: table.rows.first)
 
       freeze
     end
