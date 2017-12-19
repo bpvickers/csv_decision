@@ -10,6 +10,7 @@ module CSVDecision
     attr_accessor :file
     attr_accessor :matchers
     attr_accessor :options
+    attr_accessor :outs_functions
     attr_accessor :rows
     attr_accessor :scan_rows
     attr_reader :tables
@@ -23,6 +24,7 @@ module CSVDecision
       @file = nil
       @matchers = []
       @options = nil
+      @outs_functions = nil
       @rows = []
       @scan_rows = []
       @tables = nil

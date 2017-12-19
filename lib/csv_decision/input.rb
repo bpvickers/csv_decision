@@ -32,7 +32,6 @@ module CSVDecision
 
     def self.parse_input(table:, input:)
       scan_cols = {}
-      defaults = {}
 
       # Does this table have any defaulted columns?
       # defaulted_columns = table.columns[:defaults]
@@ -43,7 +42,7 @@ module CSVDecision
         scan_cols[col] = value
       end
 
-      { hash: input, scan_cols: scan_cols, defaults: defaults.freeze }
+      { hash: input, scan_cols: scan_cols }
     end
   end
 end

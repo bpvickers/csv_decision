@@ -22,8 +22,7 @@ describe CSVDecision::Input do
     input = { 'input' => 'input0', input1: 'input1' }
     expected = {
       hash: { input: 'input0', input1: 'input1' },
-      scan_cols: { 0 => 'input0', 2 => 'input1'},
-      defaults: {}
+      scan_cols: { 0 => 'input0', 2 => 'input1'}
     }
 
     result = CSVDecision::Input.parse(table: table, input: input, symbolize_keys: true)
@@ -43,11 +42,7 @@ describe CSVDecision::Input do
 
     table = CSVDecision.parse(data)
     input = { input: 'input0', input1: 'input1' }
-    expected = {
-      hash: input,
-      scan_cols: { 0 => 'input0', 2 => 'input1'},
-      defaults: {}
-    }
+    expected = { hash: input, scan_cols: { 0 => 'input0', 2 => 'input1'} }
 
     result = CSVDecision::Input.parse(table: table, input: input, symbolize_keys: false)
 
