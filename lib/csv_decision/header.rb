@@ -105,8 +105,7 @@ module CSVDecision
       entry = { name: name, text_only: text_only }
 
       case type
-        # Header column that has a function for setting the value
-        #       # Header column that has a function for setting the value
+      # Header column that has a function for setting the value
       when :set
         dictionary[:defaults][index] = { name: name, function: nil }
         # Treat set: as an in: column which may or may not be text-only.

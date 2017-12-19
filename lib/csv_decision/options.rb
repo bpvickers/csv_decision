@@ -5,12 +5,11 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   VALID_OPTIONS = {
-    force_encoding: 'UTF-8',
-    ascii_only?: true,
     first_match: true,
     regexp_implicit: false,
     text_only: false,
     index: nil,
+    matchers: [],
     tables: nil
   }.freeze
 
@@ -21,18 +20,34 @@ module CSVDecision
     text_only: [:text_only, true]
   }.freeze
 
+  # Specialized cell value matchers beyond simple string compares.
+  # By default these matchers are tried in the specified order.
+  DEFAULT_MATCHERS = [
+    Matchers::Pattern
+  ].freeze
+
   # Parse the CSV file and create a new decision table object
   module Options
     def self.default(options)
       result = options.deep_dup
 
-      # Default any missing options that have defaults defined
+      result[:matchers] = matchers(result)
+
+      # Default any missing options with defaults
       VALID_OPTIONS.each_pair do |key, value|
         next if result.key?(key)
         result[key] = value
       end
 
       result
+    end
+
+    def self.matchers(options)
+      return [] if options.key?(:matchers) && !options[:matchers]
+      return [] if options[:text_only]
+      return DEFAULT_MATCHERS unless options.key?(:matchers)
+
+      options[:matchers]
     end
 
     def self.cell?(cell)

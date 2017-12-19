@@ -4,7 +4,7 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Parse the CSV file's header row
+  # Dictionary of all this table's columns - inputs, outputs etc.
   class Columns
     attr_reader :dictionary
 

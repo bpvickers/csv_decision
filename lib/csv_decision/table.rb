@@ -1,4 +1,4 @@
-# frozen_string_literal: true\
+# frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017 by Brett Vickers
@@ -6,10 +6,12 @@
 module CSVDecision
   # Decision Table that accepts input hashes and makes decision
   class Table
-    attr_accessor :file
     attr_accessor :columns
+    attr_accessor :file
+    attr_accessor :matchers
     attr_accessor :options
     attr_accessor :rows
+    attr_reader :scan_rows
     attr_reader :tables
 
     def decide(_input, _symbolize_keys: true)
@@ -17,10 +19,12 @@ module CSVDecision
     end
 
     def initialize
-      @file = nil
       @columns = nil
+      @file = nil
+      @matchers = []
       @options = nil
       @rows = []
+      @scan_rows = []
       @tables = nil
     end
   end

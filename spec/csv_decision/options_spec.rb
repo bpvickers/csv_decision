@@ -14,13 +14,12 @@ describe CSVDecision::Options do
     result = CSVDecision.parse(data)
 
     expected = {
-      force_encoding: 'UTF-8',
-      ascii_only?: true,
       first_match: true,
       regexp_implicit: false,
       text_only: false,
       index: nil,
-      tables: nil
+      tables: nil,
+      matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
@@ -31,16 +30,15 @@ describe CSVDecision::Options do
       input0,    output0
     DATA
 
-    result = CSVDecision.parse(data, ascii_only?: false, first_match: false)
+    result = CSVDecision.parse(data, first_match: false)
 
     expected = {
-      force_encoding: 'UTF-8',
-      ascii_only?: false,
       first_match: false,
       regexp_implicit: false,
       text_only: false,
       index: nil,
-      tables: nil
+      tables: nil,
+      matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
@@ -50,13 +48,12 @@ describe CSVDecision::Options do
     result = CSVDecision.parse(file)
 
     expected = {
-      force_encoding: 'UTF-8',
-      ascii_only?: true,
       first_match: false,
       regexp_implicit: false,
       text_only: false,
       index: nil,
-      tables: nil
+      tables: nil,
+      matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
@@ -66,13 +63,12 @@ describe CSVDecision::Options do
     result = CSVDecision.parse(file, first_match: true, regexp_implicit: nil)
 
     expected = {
-      force_encoding: 'UTF-8',
-      ascii_only?: true,
       first_match: false,
       regexp_implicit: true,
       text_only: false,
       index: nil,
-      tables: nil
+      tables: nil,
+      matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
