@@ -39,8 +39,7 @@ module CSVDecision
     end
 
     def self.data(table)
-      matchers = nil
-      # matchers = Matchers.new(table.options)
+      table.matchers = matchers(table.options).freeze
 
       data_rows(table)
 
@@ -48,8 +47,6 @@ module CSVDecision
     end
 
     def self.data_rows(table)
-      table.matchers = matchers(table.options).freeze
-
       index = 0
       while index < table.rows.count
         row = table.rows[index]

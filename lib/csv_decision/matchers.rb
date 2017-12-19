@@ -10,13 +10,9 @@ module CSVDecision
 
   # Methods to assign a matcher to data cells
   module Matchers
-    # Parent matcher class
-    class Matcher
-      def initialize(options: {})
-        @options = options
-
-        freeze
-      end
+    # All regular expressions used for matching are anchored
+    def self.regexp(value)
+      Regexp.new("\\A(#{value})\\z").freeze
     end
   end
 end

@@ -13,3 +13,9 @@ Metrics/LineLength:
 
 Layout/TrailingWhitespace:
   Enabled: false
+
+Layout/SpaceInsideArrayPercentLiteral:
+  Enabled: false
+
+Layout/AlignArray:
+  Enabled: false
