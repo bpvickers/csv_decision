@@ -8,7 +8,7 @@ module CSVDecision
   module Header
     # Column header looks like IN :col_name or if:
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|path)
+      \A(?<type>in|out|in/text|out/text|set|path|guard|if)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
@@ -62,6 +62,9 @@ module CSVDecision
       case type
       when :'in/text'
         [:in, true]
+
+      when :guard
+        [:in, false]
 
       when :'out/text'
         [:out, true]

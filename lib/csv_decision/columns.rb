@@ -38,7 +38,7 @@ module CSVDecision
       }
 
       @dictionary =
-        Header.parse_row(dictionary: @dictionary, row: table.rows.first)
+        Header.parse_row(dictionary: @dictionary, row: table.rows.shift)
 
       freeze
     end

@@ -11,11 +11,11 @@ module CSVDecision
     attr_accessor :matchers
     attr_accessor :options
     attr_accessor :rows
-    attr_reader :scan_rows
+    attr_accessor :scan_rows
     attr_reader :tables
 
-    def decide(_input, _symbolize_keys: true)
-      {}
+    def decide(input, _symbolize_keys: true)
+      Decide.decide(table: self, input: input, symbolize_keys: false).result
     end
 
     def initialize

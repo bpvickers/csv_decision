@@ -1,6 +1,5 @@
 # frozen_string_literal: true\
 
-
 require 'active_support/core_ext/object'
 require_relative '../lib/csv_decision/parse'
 
@@ -14,14 +13,17 @@ module CSVDecision
   end
 
   autoload :Data,     'csv_decision/data'
+  autoload :Decide,   'csv_decision/decide'
+  autoload :Decision, 'csv_decision/decision'
   autoload :Columns,  'csv_decision/columns'
   autoload :Header,   'csv_decision/header'
+  autoload :Input,    'csv_decision/input'
   autoload :Matchers, 'csv_decision/matchers'
   autoload :Options,  'csv_decision/options'
   autoload :Parse,    'csv_decision/parse'
   autoload :Table,    'csv_decision/table'
 
   module Matchers
-    autoload :Pattern,   'csv_decision/matchers/pattern'
+    autoload :Pattern, 'csv_decision/matchers/pattern'
   end
 end

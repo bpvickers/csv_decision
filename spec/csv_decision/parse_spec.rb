@@ -15,7 +15,6 @@ describe CSVDecision::Parse do
     result = CSVDecision.parse(file)
 
     expected = [
-      ['IN :input', 'OUT :output'],
       ['input', '']
     ]
 

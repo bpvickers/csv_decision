@@ -50,7 +50,11 @@ module CSVDecision
       index = 0
       while index < table.rows.count
         row = table.rows[index]
-        parse_inputs(table: table, row: row, index: index)
+
+        # Build an array of column indexes requiring simple matches.
+        # and a second array of columns requiring special matchers
+        table.scan_rows[index] = Matchers.parse(table: table, row: row)
+
         # parse_outputs(row, index)
 
         index += 1
@@ -60,15 +64,7 @@ module CSVDecision
     end
 
     def self.matchers(options)
-      options[:matchers].collect { |klass| klass.new(options: options) }
-    end
-
-    # Parse input columns
-    def self.parse_inputs(table:, row:, index:)
-      table.columns.ins.each_pair do |col, entry|
-        cell = row[col]
-        # type, value = matchers.scan(cell: cell, column: entry)
-      end
+      options[:matchers].collect { |klass| klass.new(options) }
     end
   end
 end
