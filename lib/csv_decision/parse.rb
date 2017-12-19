@@ -30,7 +30,7 @@ module CSVDecision
       table.options = Options.from_csv(table: table, attributes: options).freeze
 
       # Parse the header row
-      table.header = Header.parse(table: table)
+      table.columns = Header.parse(table: table)
 
       Parse.data_rows(table)
     rescue CSVDecision::Error => exp

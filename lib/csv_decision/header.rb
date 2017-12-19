@@ -6,7 +6,7 @@
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   module Header
-    # More lenient than a Ruby method name - any spaces will have beeb replaced with underscores
+    # More lenient than a Ruby method name - any spaces will have been replaced with underscores
     COLUMN_NAME = %r{\A\w[\w:/!?]*\z}
 
     # These column types do not need a name
@@ -19,9 +19,7 @@ module CSVDecision
 
     # Parse the header row
     def self.parse(table:)
-      header = CSVDecision::Columns.new(table)
-
-      header.freeze
+      CSVDecision::Columns.new(table)
     end
 
     def self.column?(cell:)
@@ -32,7 +30,6 @@ module CSVDecision
       column_name = column_name(type: column_type, name: match['name'])
 
       [column_type, column_name]
-
     rescue CellValidationError => exp
       raise CellValidationError,
             "header column '#{cell}' is not valid as #{exp.message}"
@@ -51,6 +48,75 @@ module CSVDecision
       return column_name.to_sym if COLUMN_NAME.match(column_name)
 
       raise CellValidationError, "column name '#{name}' contains invalid characters"
+    end
+
+    # Returns the normalized column type, along with an indication if
+    # the column is text only
+    def self.column_type(type)
+      case type
+      when :'in/text'
+        [:in, true]
+
+      when :'out/text'
+        [:out, true]
+
+        # Column may turn out to be text-only, or not
+      else
+        [type, nil]
+      end
+    end
+
+    def self.parse_row(dictionary:, row:)
+      return unless row
+
+      index = 0
+      while index < row.count
+        dictionary =
+          Header.parse_cell(cell: row[index], index: index, dictionary: dictionary)
+
+        index += 1
+      end
+
+      dictionary
+    end
+
+    def self.parse_cell(cell:, index:, dictionary:)
+      return if cell == ''
+      column_type, column_name = Header.column?(cell: cell)
+
+      type, text_only = Header.column_type(column_type)
+
+      dictionary_entry(dictionary: dictionary,
+                       type: type,
+                       name: column_name,
+                       index: index,
+                       text_only: text_only)
+    end
+
+    # Returns the normalized column type, along with an indication if
+    # the column is text only.
+    def self.dictionary_entry(dictionary:, type:, name:, index:, text_only:)
+      entry = { name: name, text_only: text_only }
+
+      case type
+        # Header column that has a function for setting the value
+        #       # Header column that has a function for setting the value
+      when :set
+        dictionary[:defaults][index] = { name: name, function: nil }
+        # Treat set: as an in: column which may or may not be text-only.
+        dictionary[:ins][index] = entry
+
+      when :in
+        dictionary[:ins][index] = entry
+
+      when :out
+        dictionary[:outs][index] = entry
+
+      else
+        raise "internal error - column type #{type} not recognised"
+      end
+
+      dictionary
     end
   end
 end

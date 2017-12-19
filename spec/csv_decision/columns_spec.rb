@@ -4,38 +4,38 @@ require_relative '../../lib/csv_decision'
 
 describe CSVDecision::Columns do
   describe '#new' do
-    it 'creates a Header object' do
+    it 'creates a columns object' do
       table = CSVDecision::Table.new
-      header = CSVDecision::Columns.new(table)
+      columns = CSVDecision::Columns.new(table)
 
-      expect(header).to be_a(CSVDecision::Columns)
+      expect(columns).to be_a(CSVDecision::Columns)
     end
   end
 
-  it 'parses a decision table header from a CSV file' do
+  it 'parses a decision table columns from a CSV file' do
     data = <<~DATA
-      IN :input, OUT :output, IN : input, OUT:output
-      input0,    output0,     input1,     output1
+      IN :input, OUT :output, IN/text : input, OUT/text:output
+      input0,    output0,     input1,          output1
     DATA
     result = CSVDecision.parse(data)
 
-    expect(result.header).to be_a(CSVDecision::Columns)
-    expect(result.header.ins[0]).to eq(name: :input, text_only: nil)
-    expect(result.header.ins[2]).to eq(name: :input, text_only: nil)
-    expect(result.header.outs[1]).to eq(name: :output, text_only: nil)
-    expect(result.header.outs[3]).to eq(name: :output, text_only: nil)
+    expect(result.columns).to be_a(CSVDecision::Columns)
+    expect(result.columns.ins[0]).to eq(name: :input, text_only: nil)
+    expect(result.columns.ins[2]).to eq(name: :input, text_only: true)
+    expect(result.columns.outs[1]).to eq(name: :output, text_only: nil)
+    expect(result.columns.outs[3]).to eq(name: :output, text_only: true)
   end
 
-  it 'parses a decision table header from a CSV file' do
+  it 'parses a decision table columns from a CSV file' do
     file = Pathname(File.join(CSVDecision.root, 'spec/data/valid', 'valid.csv'))
     result = CSVDecision.parse(file)
 
-    expect(result.header).to be_a(CSVDecision::Columns)
-    expect(result.header.ins).to eq(0 => { name: :input, text_only: nil })
-    expect(result.header.outs).to eq(1 => { name: :output, text_only: nil })
+    expect(result.columns).to be_a(CSVDecision::Columns)
+    expect(result.columns.ins).to eq(0 => { name: :input, text_only: nil })
+    expect(result.columns.outs).to eq(1 => { name: :output, text_only: nil })
   end
 
-  it 'rejects an invalid column header' do
+  it 'rejects an invalid column columns' do
     data = [
       ['IN :input', 'BAD :output'],
       ['input', '']
@@ -70,8 +70,8 @@ describe CSVDecision::Columns do
                       "column name 'a-b' contains invalid characters")
   end
 
-  context 'rejects invalid CSV file decision table headers' do
-    Dir[File.join(CSVDecision.root, 'spec/data/invalid/invalid_header*.csv')].each do |file_name|
+  context 'rejects invalid CSV file decision table columnss' do
+    Dir[File.join(CSVDecision.root, 'spec/data/invalid/invalid_columns*.csv')].each do |file_name|
       pathname = Pathname(file_name)
 
       it "rejects CSV file #{pathname.basename}" do
