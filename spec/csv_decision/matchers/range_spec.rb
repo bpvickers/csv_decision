@@ -10,15 +10,15 @@ describe CSVDecision::Matchers::Range do
     it { is_expected.to respond_to(:matches?).with(1).argument }
   end
 
-  context 'cell value recognition' do
-    it 'recognises various numeric range cell values' do
-      ranges = {
-        '-1..1' => { min: '-1', type: '..', max: '1', negate: '' },
-        '! -1..1' => { min: '-1', type: '..', max: '1', negate: '!' },
-        '!-1.0..1.1' => { min: '-1.0', type: '..', max: '1.1', negate: '!' },
-        '!-1.0...1.1' => { min: '-1.0', type: '...', max: '1.1', negate: '!' }
-      }
-      ranges.each_pair do |range, expected|
+  context 'cell value matching' do
+    ranges = {
+      '-1..1' => { min: '-1', type: '..', max: '1', negate: '' },
+      '! -1..1' => { min: '-1', type: '..', max: '1', negate: '!' },
+      '!-1.0..1.1' => { min: '-1.0', type: '..', max: '1.1', negate: '!' },
+      '!-1.0...1.1' => { min: '-1.0', type: '...', max: '1.1', negate: '!' }
+    }
+    ranges.each_pair do |range, expected|
+      it "matches #{range} as a numeric range" do
         match = described_class::NUMERIC_RANGE.match(range)
         expect(match['min']).to eq expected[:min]
         expect(match['max']).to eq expected[:max]
@@ -27,12 +27,12 @@ describe CSVDecision::Matchers::Range do
       end
     end
 
-    it 'recognises various alphanumeric range cell values' do
-      ranges = {
-        'a..z' => { min: 'a', type: '..', max: 'z', negate: '' },
-        '!1...9' => { min: '1', type: '...', max: '9', negate: '!' },
-      }
-      ranges.each_pair do |range, expected|
+    ranges = {
+      'a..z' => { min: 'a', type: '..', max: 'z', negate: '' },
+      '!1...9' => { min: '1', type: '...', max: '9', negate: '!' },
+    }
+    ranges.each_pair do |range, expected|
+      it "matches #{range} as an alphanumeric range" do
         match = described_class::ALNUM_RANGE.match(range)
         expect(match['min']).to eq expected[:min]
         expect(match['max']).to eq expected[:max]

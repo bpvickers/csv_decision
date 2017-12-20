@@ -49,7 +49,7 @@ module CSVDecision
       def self.proc(match:, coerce: nil)
         negate, range = range(match, coerce: coerce)
         method = coerce ? :numeric_range : :alnum_range
-        function = Range.send(method, negate, range)
+        function = Range.send(method, negate, range).freeze
         Proc.with(type: :proc, function: function)
       end
 
@@ -64,6 +64,9 @@ module CSVDecision
 
         false
       end
+
+      # This matcher does not need access to the options hash
+      def initialize(_options = nil); end
     end
   end
 end

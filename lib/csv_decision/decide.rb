@@ -59,7 +59,7 @@ module CSVDecision
       scan_cols = input[:scan_cols]
 
       proc_cells.each do |col|
-        return false unless eval_matcher(function: row[col],
+        return false unless eval_matcher(proc: row[col],
                                          value: scan_cols[col],
                                          hash: hash)
       end
@@ -67,12 +67,12 @@ module CSVDecision
       true
     end
 
-    def self.eval_matcher(function:, value:, hash:)
+    def self.eval_matcher(proc:, value:, hash:)
       # A symbol expression just needs to be pass the input hash
-      return function.proc[hash] if function.proc.type == :expression
+      return proc.function[hash] if proc.type == :expression
 
       # All other procs can take one or two args
-      function.proc.arity == 1 ? function.proc[value] : function.proc[value, hash]
+      proc.function.arity == 1 ? proc.function[value] : proc.function[value, hash]
     end
   end
 end

@@ -23,6 +23,8 @@ module CSVDecision
   # Specialized cell value matchers beyond simple string compares.
   # By default these matchers are tried in the specified order.
   DEFAULT_MATCHERS = [
+    Matchers::Range,
+    Matchers::Numeric,
     Matchers::Pattern
   ].freeze
 
