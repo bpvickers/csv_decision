@@ -58,8 +58,6 @@ module CSVDecision
       end
 
       def matches?(cell)
-        return false if cell == ''
-
         comparator, value = Pattern.regexp?(cell: cell, explicit: @regexp_explicit)
 
         # We could not find a regexp pattern - maybe it's a simple string or something else?

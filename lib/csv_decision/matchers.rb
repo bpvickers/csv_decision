@@ -10,9 +10,27 @@ module CSVDecision
 
   # Methods to assign a matcher to data cells
   module Matchers
+    NEGATE = '!'
+
     # All regular expressions used for matching are anchored
     def self.regexp(value)
       Regexp.new("\\A(#{value})\\z").freeze
+    end
+
+    NUMERIC = '[-+]?\d*(?<decimal>\.?)\d+'
+    NUMERIC_RE = regexp(NUMERIC)
+
+    def self.numeric(value)
+      return value if value.is_a?(Integer) || value.is_a?(BigDecimal)
+      return unless value.is_a?(String)
+
+      to_numeric(value)
+    end
+
+    def self.to_numeric(value)
+      return unless (match = NUMERIC_RE.match(value))
+      return value.to_i if match['decimal'] == ''
+      BigDecimal.new(value.chomp('.'))
     end
 
     def self.parse(table:, row:)

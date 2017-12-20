@@ -25,5 +25,6 @@ module CSVDecision
 
   module Matchers
     autoload :Pattern, 'csv_decision/matchers/pattern'
+    autoload :Range,   'csv_decision/matchers/range'
   end
 end
