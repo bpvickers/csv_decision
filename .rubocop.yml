@@ -20,5 +20,8 @@ Layout/SpaceInsideArrayPercentLiteral:
 Layout/AlignArray:
   Enabled: false
 
+Layout/IdentArray:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: false

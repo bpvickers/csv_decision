@@ -24,7 +24,7 @@ module CSVDecision
       ALNUM_RANGE = range_re(ALNUM)
 
       def self.convert(value, method)
-        method ? Matchers.send(method, value) :  value
+        method ? Matchers.send(method, value) : value
       end
 
       def self.range(match, coerce: nil)
@@ -36,29 +36,30 @@ module CSVDecision
         [negate, type == '...' ? min...max : min..max]
       end
 
-      # def self.numeric_range(match)
-      #   range(match, coerce: :to_numeric)
-      # end
-
-      def self.proc_numeric_range(match)
-        negate, range = range(match, coerce: :to_numeric)
+      def self.numeric_range(negate, range)
         return ->(value) { range.include?(Matchers.numeric(value)) } unless negate
         ->(value) { !range.include?(Matchers.numeric(value)) }
       end
 
-      def self.proc_alnum_range(match)
-        negate, range = range(match)
+      def self.alnum_range(negate, range)
         return ->(value) { range.include?(value) } unless negate
         ->(value) { !range.include?(value) }
       end
 
+      def self.proc(match:, coerce: nil)
+        negate, range = range(match, coerce: coerce)
+        method = coerce ? :numeric_range : :alnum_range
+        function = Range.send(method, negate, range)
+        Proc.with(type: :proc, function: function)
+      end
+
       def matches?(cell)
         if (match = NUMERIC_RANGE.match(cell))
-          return Range.proc_numeric_range(match)
+          return Range.proc(match: match, coerce: :to_numeric)
         end
 
         if (match = ALNUM_RANGE.match(cell))
-          return Range.proc_alnum_range(match)
+          return Range.proc(match: match)
         end
 
         false
