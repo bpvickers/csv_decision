@@ -18,6 +18,7 @@ module CSVDecision
   autoload :Columns,  'csv_decision/columns'
   autoload :Header,   'csv_decision/header'
   autoload :Input,    'csv_decision/input'
+  autoload :Load,     'csv_decision/load'
   autoload :Matchers, 'csv_decision/matchers'
   autoload :Options,  'csv_decision/options'
   autoload :Parse,    'csv_decision/parse'
