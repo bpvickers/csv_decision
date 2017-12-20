@@ -15,7 +15,11 @@ module CSVDecision
     attr_accessor :scan_rows
     attr_reader :tables
 
-    def decide(input, _symbolize_keys: true)
+    def decide(input, symbolize_keys: true)
+      Decide.decide(table: self, input: input, symbolize_keys: symbolize_keys).result
+    end
+
+    def decide!(input)
       Decide.decide(table: self, input: input, symbolize_keys: false).result
     end
 

@@ -34,8 +34,14 @@ module CSVDecision
     private_class_method :table_scan
 
     def self.matches?(row:, input:, scan_row:)
-      match = match_constants?(row: row, scan_cols: input[:scan_cols], constant_cells: scan_row.first)
+      match = match_constants?(row: row,
+                               scan_cols: input[:scan_cols],
+                               constant_cells: scan_row.first)
       return false unless match
+
+      return true if (proc_cells = scan_row.last).empty?
+
+      match_procs?(row: row, input: input, proc_cells: proc_cells)
     end
     private_class_method :matches?
 
@@ -46,6 +52,27 @@ module CSVDecision
       end
 
       true
+    end
+
+    def self.match_procs?(row:, input:, proc_cells:)
+      hash = input[:hash]
+      scan_cols = input[:scan_cols]
+
+      proc_cells.each do |col|
+        return false unless eval_matcher(function: row[col],
+                                         value: scan_cols[col],
+                                         hash: hash)
+      end
+
+      true
+    end
+
+    def self.eval_matcher(function:, value:, hash:)
+      # A symbol expression just needs to be pass the input hash
+      return function.proc[hash] if function.proc.type == :expression
+
+      # All other procs can take one or two args
+      function.proc.arity == 1 ? function.proc[value] : function.proc[value, hash]
     end
   end
 end
