@@ -29,15 +29,11 @@ module CSVDecision
       CSVDecision::Columns.new(table)
     end
 
-    def self.shift(table)
-      table.rows.shift
-    end
-
     def self.strip_empty_columns(table:)
       empty_columns = empty_columns?(row: table.rows.first)
-      return if empty_columns.empty?
+      Data.strip_columns(data: table.rows, empty_columns: empty_columns) unless empty_columns.empty?
 
-      Data.strip_columns(data: table.rows, empty_columns: empty_columns)
+      table.rows.shift
     end
 
     def self.empty_columns?(row:)

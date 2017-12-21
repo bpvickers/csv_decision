@@ -9,9 +9,9 @@ module CSVDecision
   class FileError < Error; end
 
   # Parse the input data which may either be a file, CSV string or array of arrays
-  def self.parse(input, options = {})
+  def self.parse(data, options = {})
     Parse.table(table: CSVDecision::Table.new,
-                input: input,
+                input: data,
                 options: Options.normalize(options))
   end
 
