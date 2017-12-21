@@ -34,8 +34,8 @@ module CSVDecision
     end
 
     def self.parse(table:, row:)
-      # Build an array of column indexes requiring simple matches.
-      # and second array of columns requiring special matchers
+      # Build an array of column indexes requiring simple constant matches,
+      # and a second array of columns requiring special matchers.
       scan_row = [[], []]
 
       table.columns.ins.each_pair do |col, column|
@@ -43,16 +43,15 @@ module CSVDecision
         next if row[col] == ''
 
         # If the column is text only then no special matchers need be invoked
-        # if column[:text_only]
-        #   scan_row.first << col
         next scan_row.first << col if column[:text_only]
 
         # Scan the cell against all the matchers
         proc = scan(matchers: table.matchers, cell: row[col])
 
         # Did we get a proc or a simple constant?
-        next scan_row.first << col if proc == :constant
+        next scan_row.first << col unless proc
 
+        # Replace the cell's string with the proc
         row[col] = proc
         scan_row.last << col
       end
@@ -67,7 +66,7 @@ module CSVDecision
       end
 
       # Must be a simple constant
-      :constant
+      false
     end
   end
 end
