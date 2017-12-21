@@ -1,4 +1,4 @@
-#comment,
-IN :input,OUT :output
-input,#output
-,#end comment
+,#input columns,#empty column,#output column,#empty column
+#header,IN :input,,OUT :output,
+#data,input,,#output,
+,,,#end comment,

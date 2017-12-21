@@ -25,20 +25,12 @@ module CSVDecision
     end
 
     def initialize(table)
-      # The input and output columns, where the key is the row's array
-      # column index. Note that input and output columns can be interspersed,
-      # and need not have unique names.
-      @dictionary = {
-        ins: {},
-        outs: {},
-        # Path for the input hash - optional
-        path: {},
-        # Hash of columns that require defaults to be set
-        defaults: {}
-      }
+      # If a column does not have a valid header cell, then it is empty of data
+      Header.strip_empty_columns(table: table)
 
-      @dictionary =
-        Header.parse_row(dictionary: @dictionary, row: table.rows.shift)
+      # Build a dictionary of all valid data columns and remove the header row,
+      # leaving just the non-empty data rows and columns.
+      @dictionary = Header.dictionary(row: Header.shift(table))
 
       freeze
     end
