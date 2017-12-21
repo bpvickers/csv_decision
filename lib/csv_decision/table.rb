@@ -15,12 +15,31 @@ module CSVDecision
     attr_accessor :scan_rows
     attr_reader :tables
 
+    # Main public method for making decisions.
+    # @param input [Hash] - input hash (keys may or may not be symbolized)
+    # @return [Hash]
     def decide(input)
       Decide.decide(table: self, input: input, symbolize_keys: true).result
     end
 
+    # Unsafe version of decide - will mutate the hash if set: option (planned feature)
+    # is used.
+    # @param input [Hash] - input hash (keys must be symbolized)
+    # @return [Hash]
     def decide!(input)
       Decide.decide(table: self, input: input, symbolize_keys: false).result
+    end
+
+    # Iterate through all data rows of the decision table.
+    # @param first [Integer] - start row
+    # @param first [Integer] - start row
+    def each(first = 0, last = @rows.count - 1)
+      index = first
+      while index <= (last || first)
+        yield(@rows[index], index)
+
+        index += 1
+      end
     end
 
     def initialize
@@ -32,15 +51,6 @@ module CSVDecision
       @rows = []
       @scan_rows = []
       @tables = nil
-    end
-
-    def each(first = 0, last = @rows.count - 1)
-      index = first
-      while index <= (last || first)
-        yield(@rows[index], index)
-
-        index += 1
-      end
     end
   end
 end

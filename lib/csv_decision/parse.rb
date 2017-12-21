@@ -8,7 +8,12 @@ module CSVDecision
   class CellValidationError < Error; end
   class FileError < Error; end
 
-  # Parse the input data which may either be a file, CSV string or array of arrays
+  # Builds a decision table from the input data - which may either be a file, CSV string
+  # or array of arrays.
+  #
+  # @param data [Pathname, File, Array<Array>, String]
+  # @param options [Hash]
+  # @return [CSVDecision::Table]
   def self.parse(data, options = {})
     Parse.table(table: CSVDecision::Table.new,
                 input: data,

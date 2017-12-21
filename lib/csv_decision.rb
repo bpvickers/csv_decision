@@ -1,7 +1,6 @@
 # frozen_string_literal: true\
 
 require 'active_support/core_ext/object'
-require_relative '../lib/csv_decision/parse'
 
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017 by Brett Vickers

@@ -9,22 +9,6 @@ describe CSVDecision::Table do
     context 'makes correct decisions for simple, text-only tables' do
       examples = [
         {
-          example: 'parses CSV string',
-          options: {},
-          data: <<~DATA
-            in :topic, in :region,  out :team member
-            sports,    Europe,      Alice
-            sports,    ,            Bob
-            finance,   America,     Charlie
-            finance,   Europe,      Donald
-            finance,   ,            Ernest
-            politics,  Asia,        Fujio
-            politics,  America,     Gilbert
-            politics,  ,            Henry
-            ,          ,            Zach
-          DATA
-        },
-        {
           example: 'parses CSV file',
           options: {},
           data: Pathname(File.join(SPEC_DATA_VALID, 'simple_example.csv'))
