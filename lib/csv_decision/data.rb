@@ -22,7 +22,6 @@ module CSVDecision
       input.is_a?(Pathname) || input.is_a?(File)
     end
 
-    # TODO: strip empty columns
     def self.strip_columns(data:, empty_columns:)
       # Adjust column indices as we delete columns the rest shift to the left by 1
       empty_columns.map!.with_index { |col, index| col - index }

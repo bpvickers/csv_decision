@@ -9,7 +9,7 @@ module CSVDecision
     Load.path(path: path, options: options)
   end
 
-  # Parse the CSV file and create a new decision table object
+  # Load all the CSV files located in the designated folder path.
   module Load
     def self.path(path:, options:)
       raise ArgumentError, 'path argument must be a Pathname' unless path.is_a?(Pathname)

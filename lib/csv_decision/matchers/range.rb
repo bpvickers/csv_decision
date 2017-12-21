@@ -13,9 +13,10 @@ module CSVDecision
 
       def self.range_re(value)
         Matchers.regexp(
-          "(?<negate>#{Matchers::NEGATE}?)\\s*(?<min>#{value})(?<type>#{TYPE})(?<max>#{value})"
+          "(?<negate>#{NEGATE}?)\\s*(?<min>#{value})(?<type>#{TYPE})(?<max>#{value})"
         )
       end
+      private_class_method :range_re
 
       NUMERIC_RANGE = range_re(Matchers::NUMERIC)
 
@@ -26,6 +27,7 @@ module CSVDecision
       def self.convert(value, method)
         method ? Matchers.send(method, value) : value
       end
+      private_class_method :convert
 
       def self.range(match, coerce: nil)
         negate = match['negate'] == Matchers::NEGATE
@@ -40,11 +42,13 @@ module CSVDecision
         return ->(value) { range.include?(Matchers.numeric(value)) } unless negate
         ->(value) { !range.include?(Matchers.numeric(value)) }
       end
+      private_class_method :numeric_range
 
       def self.alnum_range(negate, range)
         return ->(value) { range.include?(value) } unless negate
         ->(value) { !range.include?(value) }
       end
+      private_class_method :alnum_range
 
       def self.proc(match:, coerce: nil)
         negate, range = range(match, coerce: coerce)

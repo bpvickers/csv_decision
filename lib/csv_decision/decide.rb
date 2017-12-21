@@ -4,9 +4,9 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Main method for seraching the decision table looking for one or more matches
+  # Main module for searching the decision table looking for one or more matches
   module Decide
-    def self.decide(table:, input:, symbolize_keys: false)
+    def self.decide(table:, input:, symbolize_keys:)
       # Parse and transform the hash supplied as input
       parsed_input = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
 
@@ -53,6 +53,7 @@ module CSVDecision
 
       true
     end
+    private_class_method :match_constants?
 
     def self.match_procs?(row:, input:, proc_cells:)
       hash = input[:hash]
@@ -66,6 +67,7 @@ module CSVDecision
 
       true
     end
+    private_class_method :match_procs?
 
     def self.eval_matcher(proc:, value:, hash:)
       # A symbol expression just needs to be pass the input hash
@@ -74,5 +76,6 @@ module CSVDecision
       # All other procs can take one or two args
       proc.function.arity == 1 ? proc.function[value] : proc.function[value, hash]
     end
+    private_class_method :eval_matcher
   end
 end

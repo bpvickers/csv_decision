@@ -62,6 +62,7 @@ module CSVDecision
 
       table.freeze
     end
+    private_class_method :data_rows
 
     def self.matchers(options)
       options[:matchers].collect { |klass| klass.new(options) }

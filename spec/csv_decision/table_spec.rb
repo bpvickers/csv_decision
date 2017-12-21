@@ -115,15 +115,14 @@ describe CSVDecision::Table do
           it "#{method} correctly uses #{test[:example]}" do
             table = CSVDecision.parse(test[:data], test[:options])
 
-            expect(table.send(method, age: 72)).to eq(salesperson: 'Thorsten')
-            expect(table.send(method, age: 25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
-            expect(table.send(method, age: 25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
-            expect(table.send(method, age: 44, trait: 'maniac')).to eq(salesperson: 'Korolev')
+            expect(table.send(method, age:  72)).to eq(salesperson: 'Thorsten')
+            expect(table.send(method, age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
+            expect(table.send(method, age:  25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
+            expect(table.send(method, age:  44, trait: 'maniac')).to eq(salesperson: 'Korolev')
             expect(table.send(method, age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
-            expect(table.send(method, age: 45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+            expect(table.send(method, age:  45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
           end
         end
-
       end
     end
   end

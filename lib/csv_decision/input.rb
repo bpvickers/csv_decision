@@ -19,7 +19,7 @@ module CSVDecision
 
       parsed_input = parse_input(table: table, input: input)
 
-      parsed_input[:hash].deep_freeze if symbolize_keys
+      parsed_input[:hash].freeze if symbolize_keys
 
       parsed_input
     end
@@ -44,5 +44,6 @@ module CSVDecision
 
       { hash: input, scan_cols: scan_cols }
     end
+    private_class_method :parse_input
   end
 end

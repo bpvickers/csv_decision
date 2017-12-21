@@ -131,6 +131,7 @@ module CSVDecision
                        index: index,
                        text_only: text_only)
     end
+    private_class_method :parse_cell
 
     def self.dictionary_entry(dictionary:, type:, name:, index:, text_only:)
       entry = { name: name, text_only: text_only }
@@ -154,5 +155,7 @@ module CSVDecision
 
       dictionary
     end
+    private_class_method :dictionary_entry
+
   end
 end
