@@ -19,32 +19,58 @@ describe CSVDecision::Table do
       DATA
       table = CSVDecision.parse(data)
 
-      expect(table.decide(topic: 'finance', region: 'Europe')).to     eq(team_member: 'Donald')
-      expect(table.decide(topic: 'sports',  region: nil)).to          eq(team_member: 'Bob')
-      expect(table.decide(topic: 'culture', region: 'America')).to    eq(team_member: 'Zach')
+      expect(table.decide(topic: 'finance', region: 'Europe')).to eq(team_member: 'Donald')
+      expect(table.decide(topic: 'sports', region: nil)).to eq(team_member: 'Bob')
+      expect(table.decide(topic: 'culture', region: 'America')).to eq(team_member: 'Zach')
     end
 
-    it 'makes correct decisions for a table with regexps and ranges' do
-      data = <<~DATA
-        in :age,   in :trait,  out :salesperson
-        18..35,    maniac,      Adelsky
-        23..35,    bad|maniac,  Bronco
-        36..50,    bad.*,       Espadas
-        51..78,    ,            Thorsten
-        44..100,   !~ maniac,   Ojiisan
-        > 100,     maniac.*,    Chester
-        23..35,    .*rich,      Kerfelden
-        ,          cheerful,    Swanson
-        ,          maniac,      Korolev
-      DATA
-      table = CSVDecision.parse(data, regexp_implicit: true)
+    context 'makes correct decisions for a table with regexps and ranges' do
+      examples = [
+        {
+          example: 'implicit regular expressions',
+          options: { regexp_implicit: true },
+          data: <<~DATA
+            in :age,   in :trait,  out :salesperson
+            18..35,    maniac,      Adelsky
+            23..35,    bad|maniac,  Bronco
+            36..50,    bad.*,       Espadas
+            51..78,    ,            Thorsten
+            44..100,   !~ maniac,   Ojiisan
+            > 100,     maniac.*,    Chester
+            23..35,    .*rich,      Kerfelden
+            ,          cheerful,    Swanson
+            ,          maniac,      Korolev
+          DATA
+        },
+        {
+          example: 'explicit regular expressions',
+          options: { regexp_implicit: false },
+          data: <<~DATA
+            in :age,   in :trait,     out :salesperson
+            18..35,    maniac,        Adelsky
+            23..35,    =~ bad|maniac, Bronco
+            36..50,    =~ bad.*,      Espadas
+            51..78,    ,              Thorsten
+            44..100,   !~ maniac,     Ojiisan
+            > 100,     =~ maniac.*,   Chester
+            23..35,    =~ .*rich,     Kerfelden
+            ,          cheerful,      Swanson
+            ,          maniac,        Korolev
+          DATA
+        }
+      ]
+      examples.each do |test|
+        it "correctly uses #{test[:example]}" do
+          table = CSVDecision.parse(test[:data], test[:options])
 
-      expect(table.decide(age:  72)).to                     eq(salesperson: 'Thorsten')
-      expect(table.decide(age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
-      expect(table.decide(age:  25, trait: 'maniac')).to    eq(salesperson: 'Adelsky')
-      expect(table.decide(age:  44, trait: 'maniac')).to    eq(salesperson: 'Korolev')
-      expect(table.decide(age: 101, trait: 'maniacal')).to  eq(salesperson: 'Chester')
-      expect(table.decide(age:  45, trait: 'cheerful')).to  eq(salesperson: 'Ojiisan')
+          expect(table.decide(age: 72)).to eq(salesperson: 'Thorsten')
+          expect(table.decide(age: 25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
+          expect(table.decide(age: 25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
+          expect(table.decide(age: 44, trait: 'maniac')).to eq(salesperson: 'Korolev')
+          expect(table.decide(age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
+          expect(table.decide(age: 45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+        end
+      end
     end
   end
 end

@@ -9,16 +9,15 @@ complex conditional logic. Alternatively, `csv_decision` will accept data as a C
 or an array of arrays.
 
 `csv_decision` has many useful features:
- * able to parse and load into memory one or more CSV files for subsequent 
- processing
+ * able to parse and load into memory one or more CSV files for subsequent processing
  * all CSV cells are parsed for correctness, and helpful error messages generated for bad inputs
+ * fast decision-time performance
  * either returns the first matching row as a hash, or accumulates all matches as an array of 
- hashes (planed feature)
- * can use regular expressions, Ruby-style ranges and column symbol expressions (planed feature)
- * excellent decision-time performance
- * can be safely extended with user-defined Ruby functions for tailored logic (planed feature)
+ hashes (planned feature)
+ * can use regular expressions, Ruby-style ranges and column symbol expressions (planned feature)
+ * input columns may be indexed for fast lookup performance (planned feature)
+ * can be safely extended with user-defined Ruby functions for tailored logic (planned feature)
  to implement complex matching logic
- * input columns may be indexed for fast lookup performance (planed feature)
  
  ### Why use CSV Decision?
  
@@ -35,10 +34,10 @@ or an array of arrays.
  ### Simple Example
  
  A decision table can be as simple or as complex as you like (although overly complex tables 
- defeat the whole pupose).
- 
- Basic usuage will be illustrated by an example taken from 
+ defeat the whole purpose). Basic usuage will be illustrated by an example taken from:
  https://jmettraux.wordpress.com/2009/04/25/rufus-decision-11-ruby-decision-tables/.
+ 
+ ### More Complex Example
  
  
  
