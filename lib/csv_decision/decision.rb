@@ -40,6 +40,9 @@ module CSVDecision
 
       # Accumulate output rows
       @rows_picked << row
+
+      # Not done
+      false
     end
 
     def result

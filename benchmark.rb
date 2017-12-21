@@ -35,17 +35,18 @@ def benchmark_memory(test, quiet: false)
 
   name = test[:name]
   data = test[:data]
-  rufus_data = data.to_s
+  file_name = data.to_s
+  key = File.basename(file_name, '.csv').to_sym
 
   Benchmark.memory(quiet: quiet) do |x|
     GC.start
     x.report("Rufus new table - #{name}        ") do
-      rufus_tables[name] = Rufus::Decision::Table.new(rufus_data, RUFUS_OPTIONS)
+      rufus_tables[key] = Rufus::Decision::Table.new(file_name, RUFUS_OPTIONS)
     end
 
     GC.start
     x.report("CSV Decision new table - #{name} ") do
-      csv_tables[name] = CSVDecision.parse(data, CSV_OPTIONS)
+      csv_tables[key] = CSVDecision.parse(data, CSV_OPTIONS)
     end
 
     x.compare!
@@ -66,7 +67,7 @@ puts ""
 benchmarks.each do |test|
   name = test[:name]
   data = test[:data]
-  rufus_data = data.to_s
+  file_name = data.to_s
 
   Benchmark.ips do |x|
     GC.start
@@ -76,7 +77,7 @@ benchmarks.each do |test|
 
     GC.start
     x.report("Rufus new table - #{name}: ") do |count|
-      count.times { Rufus::Decision::Table.new(rufus_data, RUFUS_OPTIONS) }
+      count.times { Rufus::Decision::Table.new(file_name, RUFUS_OPTIONS) }
     end
 
     x.compare!

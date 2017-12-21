@@ -17,16 +17,14 @@ module CSVDecision
     end
 
     def self.table_scan(table:, input:, decision:)
-      first_match = table.options[:first_match]
-
       scan_rows = table.scan_rows
 
       table.each do |row, index|
         next unless matches?(row: row, input: input, scan_row: scan_rows[index])
 
-        decision.add(row)
+        done = decision.add(row)
 
-        return decision if first_match
+        return decision if done
       end
 
       decision
@@ -47,8 +45,10 @@ module CSVDecision
 
     def self.match_constants?(row:, scan_cols:, constant_cells:)
       constant_cells.each do |col|
-        next unless scan_cols.key?(col)
-        return false unless row[col] == scan_cols[col]
+        value = scan_cols.fetch(col, [])
+        # This only happens if the column is indexed
+        next if value == []
+        return false unless row[col] == value
       end
 
       true
