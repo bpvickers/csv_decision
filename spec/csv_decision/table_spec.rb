@@ -34,25 +34,27 @@ describe CSVDecision::Table do
           options: {},
           data: [
             ['in :topic', 'in :region', 'out :team member'],
-            ['sports',   'Europe',   'Alice'],
-            ['sports',   '',         'Bob'],
-            ['finance',  'America',  'Charlie'],
-            ['finance',  'Europe',   'Donald'],
-            ['finance',  '',         'Ernest'],
-            ['politics', 'Asia',     'Fujio'],
-            ['politics', 'America',  'Gilbert'],
-            ['politics', '',         'Henry'],
-            ['',         '',         'Zach']
+            ['sports', 'Europe', 'Alice'],
+            ['sports', '', 'Bob'],
+            ['finance', 'America', 'Charlie'],
+            ['finance', 'Europe', 'Donald'],
+            ['finance', '', 'Ernest'],
+            ['politics', 'Asia', 'Fujio'],
+            ['politics', 'America', 'Gilbert'],
+            ['politics', '', 'Henry'],
+            ['', '', 'Zach']
           ]
         },
       ]
       examples.each do |test|
-        it "correctly #{test[:example]}" do
-          table = CSVDecision.parse(test[:data], test[:options])
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
 
-          expect(table.decide(topic: 'finance', region: 'Europe')).to eq(team_member: 'Donald')
-          expect(table.decide(topic: 'sports',  region: nil)).to eq(team_member: 'Bob')
-          expect(table.decide(topic: 'culture', region: 'America')).to eq(team_member: 'Zach')
+            expect(table.send(method, topic: 'finance', region: 'Europe')).to eq(team_member: 'Donald')
+            expect(table.send(method, topic: 'sports',  region: nil)).to eq(team_member: 'Bob')
+            expect(table.send(method, topic: 'culture', region: 'America')).to eq(team_member: 'Zach')
+          end
         end
       end
     end
@@ -109,16 +111,19 @@ describe CSVDecision::Table do
         },
       ]
       examples.each do |test|
-        it "correctly uses #{test[:example]}" do
-          table = CSVDecision.parse(test[:data], test[:options])
+        %i[decide decide!].each do |method|
+          it "#{method} correctly uses #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
 
-          expect(table.decide(age:  72)).to eq(salesperson: 'Thorsten')
-          expect(table.decide(age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
-          expect(table.decide(age:  25, trait: 'maniac')).to    eq(salesperson: 'Adelsky')
-          expect(table.decide(age:  44, trait: 'maniac')).to    eq(salesperson: 'Korolev')
-          expect(table.decide(age: 101, trait: 'maniacal')).to  eq(salesperson: 'Chester')
-          expect(table.decide(age:  45, trait: 'cheerful')).to  eq(salesperson: 'Ojiisan')
+            expect(table.send(method, age: 72)).to eq(salesperson: 'Thorsten')
+            expect(table.send(method, age: 25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
+            expect(table.send(method, age: 25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
+            expect(table.send(method, age: 44, trait: 'maniac')).to eq(salesperson: 'Korolev')
+            expect(table.send(method, age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
+            expect(table.send(method, age: 45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+          end
         end
+
       end
     end
   end
