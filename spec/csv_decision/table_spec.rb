@@ -2,26 +2,59 @@
 
 require_relative '../../lib/csv_decision'
 
+SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
+
 describe CSVDecision::Table do
   describe '#decide' do
-    it 'makes correct decisions for a simple text-only table' do
-      data = <<~DATA
-        in :topic, in :region,  out :team member
-        sports,    Europe,      Alice
-        sports,    ,            Bob
-        finance,   America,     Charlie
-        finance,   Europe,      Donald
-        finance,   ,            Ernest
-        politics,  Asia,        Fujio
-        politics,  Americas,    Gilbert
-        politics,  ,            Henry
-        ,          ,            Zach
-      DATA
-      table = CSVDecision.parse(data)
+    context 'makes correct decisions for simple, text-only tables' do
+      examples = [
+        {
+          example: 'parses CSV string',
+          options: {},
+          data: <<~DATA
+            in :topic, in :region,  out :team member
+            sports,    Europe,      Alice
+            sports,    ,            Bob
+            finance,   America,     Charlie
+            finance,   Europe,      Donald
+            finance,   ,            Ernest
+            politics,  Asia,        Fujio
+            politics,  America,     Gilbert
+            politics,  ,            Henry
+            ,          ,            Zach
+          DATA
+        },
+        {
+          example: 'parses CSV file',
+          options: {},
+          data: Pathname(File.join(SPEC_DATA_VALID, 'simple_example.csv'))
+        },
+        {
+          example: 'parses data array',
+          options: {},
+          data: [
+            ['in :topic', 'in :region', 'out :team member'],
+            ['sports',   'Europe',   'Alice'],
+            ['sports',   '',         'Bob'],
+            ['finance',  'America',  'Charlie'],
+            ['finance',  'Europe',   'Donald'],
+            ['finance',  '',         'Ernest'],
+            ['politics', 'Asia',     'Fujio'],
+            ['politics', 'America',  'Gilbert'],
+            ['politics', '',         'Henry'],
+            ['',         '',         'Zach']
+          ]
+        },
+      ]
+      examples.each do |test|
+        it "correctly #{test[:example]}" do
+          table = CSVDecision.parse(test[:data], test[:options])
 
-      expect(table.decide(topic: 'finance', region: 'Europe')).to eq(team_member: 'Donald')
-      expect(table.decide(topic: 'sports', region: nil)).to eq(team_member: 'Bob')
-      expect(table.decide(topic: 'culture', region: 'America')).to eq(team_member: 'Zach')
+          expect(table.decide(topic: 'finance', region: 'Europe')).to eq(team_member: 'Donald')
+          expect(table.decide(topic: 'sports',  region: nil)).to eq(team_member: 'Bob')
+          expect(table.decide(topic: 'culture', region: 'America')).to eq(team_member: 'Zach')
+        end
+      end
     end
 
     context 'makes correct decisions for a table with regexps and ranges' do
@@ -73,7 +106,7 @@ describe CSVDecision::Table do
             ,         ,        cheerful,      Swanson
             ,         ,        maniac,        Korolev
           DATA
-        }
+        },
       ]
       examples.each do |test|
         it "correctly uses #{test[:example]}" do

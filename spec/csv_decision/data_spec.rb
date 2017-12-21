@@ -34,6 +34,16 @@ describe CSVDecision::Data do
       ['', 'input', '', '', '']
     ]
     expect(result).to eq(expected)
+
+    file = Pathname(File.join(CSVDecision.root, 'spec/data/valid', 'options_in_file2.csv'))
+    result = CSVDecision::Data.to_array(data: file)
+    expected = [
+      ['accumulate'],
+      ['regexp_implicit'],
+      ['IN :input', 'OUT :output'],
+      ['input', '']
+    ]
+    expect(result).to eq(expected)
   end
 
   it 'raises an error for invalid input' do
