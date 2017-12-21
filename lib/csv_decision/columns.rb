@@ -17,11 +17,11 @@ module CSVDecision
     end
 
     def defaults
-      @dictionary[:outs]
+      @dictionary[:defaults]
     end
 
     def path
-      @dictionary[:outs]
+      @dictionary[:path]
     end
 
     def initialize(table)

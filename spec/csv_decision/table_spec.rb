@@ -57,18 +57,34 @@ describe CSVDecision::Table do
             ,          cheerful,      Swanson
             ,          maniac,        Korolev
           DATA
+        },
+        {
+          example: 'multiple in column references',
+          options: { regexp_implicit: false },
+          data: <<~DATA
+            in :age,  in :age, in :trait,     out :salesperson
+            >= 18,    <= 35,   maniac,        Adelsky
+            >= 23,    <= 35,   =~ bad|maniac, Bronco
+            >= 36,    <= 50,   =~ bad.*,      Espadas
+            >= 51,    <= 78,   ,              Thorsten
+            >= 44,    <= 100,  !~ maniac,     Ojiisan
+            > 100,    ,        =~ maniac.*,   Chester
+            >= 23,    <= 35,   =~ .*rich,     Kerfelden
+            ,         ,        cheerful,      Swanson
+            ,         ,        maniac,        Korolev
+          DATA
         }
       ]
       examples.each do |test|
         it "correctly uses #{test[:example]}" do
           table = CSVDecision.parse(test[:data], test[:options])
 
-          expect(table.decide(age: 72)).to eq(salesperson: 'Thorsten')
-          expect(table.decide(age: 25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
-          expect(table.decide(age: 25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
-          expect(table.decide(age: 44, trait: 'maniac')).to eq(salesperson: 'Korolev')
-          expect(table.decide(age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
-          expect(table.decide(age: 45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+          expect(table.decide(age:  72)).to eq(salesperson: 'Thorsten')
+          expect(table.decide(age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
+          expect(table.decide(age:  25, trait: 'maniac')).to    eq(salesperson: 'Adelsky')
+          expect(table.decide(age:  44, trait: 'maniac')).to    eq(salesperson: 'Korolev')
+          expect(table.decide(age: 101, trait: 'maniacal')).to  eq(salesperson: 'Chester')
+          expect(table.decide(age:  45, trait: 'cheerful')).to  eq(salesperson: 'Ojiisan')
         end
       end
     end

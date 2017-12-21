@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision/parse'
+require_relative '../../lib/csv_decision'
 
 describe CSVDecision::Parse do
   it 'loads an empty decision table' do
@@ -26,7 +26,7 @@ describe CSVDecision::Parse do
     Dir[File.join(CSVDecision.root, 'spec/data/valid/*.csv')].each do |file_name|
       pathname = Pathname(file_name)
 
-      it "loads CSV file #{pathname.basename}" do
+      it "loads CSV file: #{pathname.basename}" do
         expect { CSVDecision.parse(pathname) }.not_to raise_error
         expect(CSVDecision.parse(pathname)).to be_a CSVDecision::Table
       end

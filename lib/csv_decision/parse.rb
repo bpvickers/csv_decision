@@ -42,8 +42,6 @@ module CSVDecision
       table.matchers = matchers(table.options).freeze
 
       data_rows(table)
-
-      table.freeze
     end
 
     def self.data_rows(table)
@@ -61,6 +59,8 @@ module CSVDecision
       end
 
       table.columns.freeze
+
+      table.freeze
     end
 
     def self.matchers(options)
