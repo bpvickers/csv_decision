@@ -57,15 +57,18 @@ module CSVDecision
     # Non string values treated as empty cells.
     # Non-ascii strings treated as empty cells by default.
     def self.strip_cells(row:)
-      row.map! do |cell|
-        next '' unless cell.is_a?(String)
-        cell = cell.force_encoding('UTF-8')
-        next '' unless cell.ascii_only?
-        next '' if cell.lstrip[0] == COMMENT_CHARACTER
-
-        cell.strip
-      end
+      row.map! { |cell| strip_cell(cell) }
     end
     private_class_method :strip_cells
+
+    def self.strip_cell(cell)
+      return '' unless cell.is_a?(String)
+      cell = cell.force_encoding('UTF-8')
+      return '' unless cell.ascii_only?
+      return '' if cell.lstrip[0] == COMMENT_CHARACTER
+
+      cell.strip
+    end
+    private_class_method :strip_cell
   end
 end

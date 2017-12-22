@@ -42,10 +42,10 @@ module CSVDecision
     def self.matches?(row:, input:, scan_row:)
       match = match_constants?(row: row,
                                scan_cols: input[:scan_cols],
-                               constant_cells: scan_row.first)
+                               constant_cells: scan_row.constants)
       return false unless match
 
-      return true if (proc_cells = scan_row.last).empty?
+      return true if (proc_cells = scan_row.procs).empty?
 
       match_procs?(row: row, input: input, proc_cells: proc_cells)
     end

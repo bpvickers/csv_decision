@@ -6,7 +6,11 @@ require 'values'
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  class Proc < Value.new(:type, :function); end
+  # Value object for a cell proc
+  Proc = Value.new(:type, :function)
+
+  # Value object for a data row indicating which columns are constants versus procs.
+  ScanRow = Struct.new(:constants, :procs)
 
   # Methods to assign a matcher to data cells
   module Matchers
@@ -48,34 +52,40 @@ module CSVDecision
 
     # Parse the supplied input columns for the row supplied using an array of matchers.
     #
-    # @param columns []
+    # @param columns [Hash] - Input columns hash
+    # @param matchers [Array]
+    # @param row [Array]
     def self.parse(columns:, matchers:, row:)
       # Build an array of column indexes requiring simple constant matches,
       # and a second array of columns requiring special matchers.
-      scan_row = [[], []]
+      scan_row = ScanRow.new([], [])
 
       columns.each_pair do |col, column|
         # Empty cell matches everything, and so never needs to be scanned
         next if row[col] == ''
-
         # If the column is text only then no special matchers need be invoked
-        next scan_row.first << col if column.text_only
+        next scan_row.constants << col if column.text_only
 
-        # Scan the cell against all the matchers
-        proc = scan(matchers: matchers, cell: row[col])
-
-        # Did we get a proc or a simple constant?
-        next scan_row.first << col unless proc
-
-        # Replace the cell's string value with the proc
-        row[col] = proc
-        scan_row.last << col
+        # Need to scan the cell against all matchers
+        scan_column(col: col, matchers: matchers, row: row, scan_row: scan_row)
       end
 
       scan_row
     end
 
-    def self.scan(matchers:, cell:)
+    def self.scan_column(col:, matchers:, row:, scan_row:)
+      # Scan the cell against all the matchers
+      proc = scan_matchers(matchers: matchers, cell: row[col])
+
+      if proc
+        scan_row.procs << col
+        row[col] = proc if proc
+      else
+        scan_row.constants << col
+      end
+    end
+
+    def self.scan_matchers(matchers:, cell:)
       matchers.each do |matcher|
         proc = matcher.matches?(cell)
         return proc if proc
