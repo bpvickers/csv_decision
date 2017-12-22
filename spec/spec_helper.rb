@@ -12,6 +12,8 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 #
+require 'active_support'
+require 'active_support/core_ext'
 require 'json'
 require 'coveralls'
 Coveralls.wear!
