@@ -25,12 +25,19 @@ module CSVDecision
   # @return [CSVDecision::Table] - resulting decision table
   module Parse
     def self.table(input:, options:)
-      # Initialize the table object that this method will eventually return.
       table = CSVDecision::Table.new
 
       # In most cases the decision table will be loaded from a CSV file.
       table.file = input if Data.input_file?(input)
 
+      parse_table(table: table, input: input, options: options)
+    rescue CSVDecision::Error => exp
+      raise exp unless table.file
+      message = "error processing CSV file #{table.file}\n#{exp.inspect}"
+      raise CSVDecision::FileError, message
+    end
+
+    def self.parse_table(table:, input:, options:)
       # Parse input data into an array of arrays
       table.rows = Data.to_array(data: input)
 
@@ -42,11 +49,8 @@ module CSVDecision
       table.columns = CSVDecision::Columns.new(table)
 
       parse_data(table: table, matchers: matchers(table.options).freeze)
-    rescue CSVDecision::Error => exp
-      raise exp unless table.file
-      message = "error processing CSV file #{table.file}\n#{exp.inspect}"
-      raise CSVDecision::FileError, message
     end
+    private_class_method :parse_table
 
     def self.parse_data(table:, matchers:)
       index = 0

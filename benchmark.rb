@@ -10,8 +10,8 @@ require_relative 'lib/csv_decision'
 
 SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
 
-CSV_OPTIONS = { regexp_implicit: true }
-RUFUS_OPTIONS = { open_uri: false, ruby_eval: false }
+CSV_OPTIONS = { regexp_implicit: true }.freeze
+RUFUS_OPTIONS = { open_uri: false, ruby_eval: false }.freeze
 
 benchmarks = [
   {

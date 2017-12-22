@@ -55,6 +55,14 @@ module CSVDecision
       return options if Header.row?(row)
 
       # Scan each cell looking for valid option values
+      options = scan_cells(row: row, options: options)
+
+      rows.shift
+      from_csv(rows: rows, options: options)
+    end
+
+    def self.scan_cells(row:, options:)
+      # Scan each cell looking for valid option values
       row.each do |cell|
         next if cell == ''
 
@@ -62,8 +70,7 @@ module CSVDecision
         options[key] = value if key
       end
 
-      rows.shift
-      from_csv(rows: rows, options: options)
+      options
     end
 
     def self.default(options)

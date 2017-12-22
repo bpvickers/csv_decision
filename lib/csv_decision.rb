@@ -22,6 +22,7 @@ module CSVDecision
   autoload :Matchers, 'csv_decision/matchers'
   autoload :Options,  'csv_decision/options'
   autoload :Parse,    'csv_decision/parse'
+  autoload :ScanRow,  'csv_decision/scan_row'
   autoload :Table,    'csv_decision/table'
 
   module Matchers

@@ -21,61 +21,18 @@ module CSVDecision
       # calculates the final result
       decision = Decision.new(table: table, input: parsed_input)
 
-      table_scan(table: table, input: parsed_input, decision: decision)
+      # table_scan(table: table, input: parsed_input, decision: decision)
+      decision.scan(table: table, input: parsed_input)
     end
-
-    def self.table_scan(table:, input:, decision:)
-      scan_rows = table.scan_rows
-
-      table.each do |row, index|
-        next unless matches?(row: row, input: input, scan_row: scan_rows[index])
-
-        done = decision.add(row)
-
-        return decision if done
-      end
-
-      decision
-    end
-    private_class_method :table_scan
 
     def self.matches?(row:, input:, scan_row:)
-      match = match_constants?(row: row,
-                               scan_cols: input[:scan_cols],
-                               constant_cells: scan_row.constants)
+      match = scan_row.match_constants?(row: row, scan_cols: input[:scan_cols])
       return false unless match
 
-      return true if (proc_cells = scan_row.procs).empty?
+      return true if scan_row.procs.empty?
 
-      match_procs?(row: row, input: input, proc_cells: proc_cells)
+      scan_row.match_procs?(row: row, input: input)
     end
-    private_class_method :matches?
-
-    def self.match_constants?(row:, scan_cols:, constant_cells:)
-      constant_cells.each do |col|
-        value = scan_cols.fetch(col, [])
-        # This only happens if the column is indexed
-        next if value == []
-        return false unless row[col] == value
-      end
-
-      true
-    end
-    private_class_method :match_constants?
-
-    def self.match_procs?(row:, input:, proc_cells:)
-      hash = input[:hash]
-      scan_cols = input[:scan_cols]
-
-      proc_cells.each do |col|
-        return false unless eval_matcher(proc: row[col],
-                                         value: scan_cols[col],
-                                         hash: hash)
-      end
-
-      true
-    end
-    private_class_method :match_procs?
 
     def self.eval_matcher(proc:, value:, hash:)
       function = proc.function
@@ -86,6 +43,5 @@ module CSVDecision
       # All other procs can take one or two args
       function.arity == 1 ? function[value] : function[value, hash]
     end
-    private_class_method :eval_matcher
   end
 end

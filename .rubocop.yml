@@ -5,9 +5,6 @@ Metrics/MethodLength:
   CountComments: false
   Max: 15
 
-Metrics/AbcSize:
-  Max: 18
-
 Metrics/LineLength:
   Max: 100
 

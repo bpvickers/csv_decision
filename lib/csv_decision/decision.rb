@@ -35,6 +35,25 @@ module CSVDecision
       !empty?
     end
 
+    def result
+      return {} if empty?
+      return final_result unless @outs_functions
+
+      nil
+    end
+
+    def scan(table:, input:)
+      scan_rows = table.scan_rows
+
+      table.each do |row, index|
+        done = row_scan(input: input, row: row, scan_row: scan_rows[index])
+
+        return self if done
+      end
+
+      self
+    end
+
     def add(row)
       return add_first_match(row) if @first_match
 
@@ -45,14 +64,13 @@ module CSVDecision
       false
     end
 
-    def result
-      return {} if empty?
-      return final_result unless @outs_functions
-
-      nil
-    end
-
     private
+
+    def row_scan(input:, row:, scan_row:)
+      return unless Decide.matches?(row: row, input: input, scan_row: scan_row)
+
+      add(row)
+    end
 
     def final_result
       @result

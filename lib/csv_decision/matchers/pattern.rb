@@ -40,16 +40,18 @@ module CSVDecision
         return if value[0] == ':'
 
         # If no comparator then the implicit option must be on
-        if comparator.nil?
-          # rubocop: disable Style/CaseEquality
-          return unless /\W/ === value
-          # rubocop: enable Style/CaseEquality
-
-          # Make the implict comparator explict
-          comparator = '=~'
-        end
+        comparator = regexp_implicit(value) if comparator.nil?
 
         [comparator, value]
+      end
+
+      def self.regexp_implicit(value)
+        # rubocop: disable Style/CaseEquality
+        return unless /\W/ === value
+        # rubocop: enable Style/CaseEquality
+
+        # Make the implict comparator explict
+        '=~'
       end
 
       def initialize(options = {})
