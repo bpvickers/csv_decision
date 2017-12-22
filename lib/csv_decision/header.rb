@@ -125,14 +125,14 @@ module CSVDecision
 
     def self.dictionary_entry(dictionary:, type:, entry:, index:)
       case type
-      # Header column that has a function for setting the value
-      when :set, :'set/nil', :'set/blank'
-        # Default function will set the input value unconditionally or conditionally
-        dictionary.defaults[index] =
-          Columns::Default.new(entry.name, nil, default_if(type))
-
-        # Treat set: as an in: column
-        dictionary.ins[index] = entry
+      # Header column that has a function for setting the value (planned feature)
+      # when :set, :'set/nil', :'set/blank'
+      #   # Default function will set the input value unconditionally or conditionally
+      #   dictionary.defaults[index] =
+      #     Columns::Default.new(entry.name, nil, default_if(type))
+      #
+      #   # Treat set: as an in: column
+      #   dictionary.ins[index] = entry
 
       when :in
         dictionary.ins[index] = entry
@@ -148,11 +148,11 @@ module CSVDecision
     end
     private_class_method :dictionary_entry
 
-    def self.default_if(type)
-      return nil if type == :set
-      return :nil? if type == :'set/nil'
-      :blank?
-    end
-    private_class_method :default_if
+    # def self.default_if(type)
+    #   return nil if type == :set
+    #   return :nil? if type == :'set/nil'
+    #   :blank?
+    # end
+    # private_class_method :default_if
   end
 end

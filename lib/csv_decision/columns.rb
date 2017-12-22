@@ -45,15 +45,15 @@ module CSVDecision
       @dictionary.outs
     end
 
-    # Input columns with defaults specified
-    def defaults
-      @dictionary.defaults
-    end
+    # Input columns with defaults specified (planned feature)
+    # def defaults
+    #   @dictionary.defaults
+    # end
 
     # Input hash path (planned feature)
-    def path
-      @dictionary.path
-    end
+    # def path
+    #   @dictionary.path
+    # end
 
     def initialize(table)
       # If a column does not have a valid header cell, then it's empty of data.

@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'coveralls', require: false
+
 gemspec
 
-gem 'coveralls', require: false
 
