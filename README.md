@@ -1,5 +1,7 @@
 csv_decision
 ============
+<a href="https://codeclimate.com/github/bpvickers/csv_decision/maintainability"><img src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability" /></a>
+<a href="https://codeclimate.com/github/bpvickers/csv_decision/test_coverage"><img src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/test_coverage" /></a>
 
 # CSV based Ruby decision tables
 
