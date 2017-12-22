@@ -8,7 +8,6 @@ module CSVDecision
   class Table
     attr_accessor :columns
     attr_accessor :file
-    attr_accessor :matchers
     attr_accessor :options
     attr_accessor :outs_functions
     attr_accessor :rows
@@ -32,7 +31,7 @@ module CSVDecision
 
     # Iterate through all data rows of the decision table.
     # @param first [Integer] - start row
-    # @param first [Integer] - start row
+    # @param last [Integer] - last row
     def each(first = 0, last = @rows.count - 1)
       index = first
       while index <= (last || first)

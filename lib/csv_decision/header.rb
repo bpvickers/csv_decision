@@ -6,14 +6,14 @@
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   module Header
-    # Column header looks like IN :col_name or if:
+    # Column header looks like IN :col_name or cond:
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|path|guard|if)
+      \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|cond|if)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
     # These column types do not need a name
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
+    COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if cond]).freeze
 
     # More lenient than a Ruby method name -
     # any spaces will have been replaced with underscores
@@ -24,14 +24,9 @@ module CSVDecision
       row.find { |cell| cell.match(COLUMN_TYPE) }
     end
 
-    # Parse the header row
-    def self.parse(table:)
-      CSVDecision::Columns.new(table)
-    end
-
     def self.strip_empty_columns(table:)
-      empty_columns = empty_columns?(row: table.rows.first)
-      Data.strip_columns(data: table.rows, empty_columns: empty_columns) unless empty_columns.empty?
+      empty_cols = empty_columns?(row: table.rows.first)
+      Data.strip_columns(data: table.rows, empty_columns: empty_cols) unless empty_cols.empty?
 
       table.rows.shift
     end
@@ -40,11 +35,7 @@ module CSVDecision
       return [] unless row
 
       result = []
-      index = 0
-      while index < row.count
-        result << index if row[index] == ''
-        index += 1
-      end
+      row.each_with_index { |cell, index| result << index if cell == '' }
 
       result
     end
@@ -84,7 +75,7 @@ module CSVDecision
       when :'in/text'
         [:in, true]
 
-      when :guard
+      when :cond
         [:in, false]
 
       when :'out/text'
@@ -110,11 +101,8 @@ module CSVDecision
       }
       return dictionary unless row
 
-      index = 0
-      while index < row.count
-        dictionary = parse_cell(cell: row[index], index: index, dictionary: dictionary)
-
-        index += 1
+      row.each_with_index do |cell, index|
+        dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
       dictionary
@@ -127,20 +115,20 @@ module CSVDecision
 
       dictionary_entry(dictionary: dictionary,
                        type: type,
-                       name: column_name,
-                       index: index,
-                       text_only: text_only)
+                       entry: { name: column_name, text_only: text_only },
+                       index: index)
     end
     private_class_method :parse_cell
 
-    def self.dictionary_entry(dictionary:, type:, name:, index:, text_only:)
-      entry = { name: name, text_only: text_only }
-
+    def self.dictionary_entry(dictionary:, type:, entry:, index:)
       case type
       # Header column that has a function for setting the value
-      when :set
-        dictionary[:defaults][index] = { name: name, function: nil }
-        # Treat set: as an in: column which may or may not be text-only.
+      when :set, :'set/nil', :'set/blank'
+        # Default function will set the input value unconditionally or conditionally
+        dictionary[:defaults][index] =
+          { name: entry[:name], function: nil, if: default_if(type) }
+
+        # Treat set: as an in: column
         dictionary[:ins][index] = entry
 
       when :in
@@ -157,5 +145,10 @@ module CSVDecision
     end
     private_class_method :dictionary_entry
 
+    def self.default_if(type)
+      return nil if type == :set
+      return :nil? if type == :'set/nil'
+      :blank?
+    end
   end
 end

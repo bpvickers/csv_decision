@@ -10,7 +10,8 @@ module CSVDecision
       # Parse and transform the hash supplied as input
       parsed_input = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
 
-      # The decision object collects the results of the search and calculates the final result
+      # The decision object collects the results of the search and
+      # calculates the final result
       decision = Decision.new(table: table, input: parsed_input)
 
       table_scan(table: table, input: parsed_input, decision: decision)
@@ -70,11 +71,13 @@ module CSVDecision
     private_class_method :match_procs?
 
     def self.eval_matcher(proc:, value:, hash:)
-      # A symbol expression just needs to be pass the input hash
-      return proc.function[hash] if proc.type == :expression
+      function = proc.function
+
+      # A symbol expression just needs to be passed the input hash
+      return function[hash] if proc.type == :expression
 
       # All other procs can take one or two args
-      proc.function.arity == 1 ? proc.function[value] : proc.function[value, hash]
+      function.arity == 1 ? function[value] : function[value, hash]
     end
     private_class_method :eval_matcher
   end

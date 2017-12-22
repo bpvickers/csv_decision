@@ -18,15 +18,15 @@ describe CSVDecision::Table do
           options: {},
           data: [
             ['in :topic', 'in :region', 'out :team member'],
-            ['sports', 'Europe', 'Alice'],
-            ['sports', '', 'Bob'],
-            ['finance', 'America', 'Charlie'],
-            ['finance', 'Europe', 'Donald'],
-            ['finance', '', 'Ernest'],
-            ['politics', 'Asia', 'Fujio'],
-            ['politics', 'America', 'Gilbert'],
-            ['politics', '', 'Henry'],
-            ['', '', 'Zach']
+            ['sports',    'Europe',     'Alice'],
+            ['sports',    '',           'Bob'],
+            ['finance',   'America',    'Charlie'],
+            ['finance',   'Europe',     'Donald'],
+            ['finance',   '',           'Ernest'],
+            ['politics',  'Asia',       'Fujio'],
+            ['politics',  'America',    'Gilbert'],
+            ['politics',   '',          'Henry'],
+            ['',           '',          'Zach']
           ]
         },
       ]
@@ -51,7 +51,7 @@ describe CSVDecision::Table do
           data: <<~DATA
             in :age,   in :trait,  out :salesperson
             18..35,    maniac,      Adelsky
-            23..35,    bad|maniac,  Bronco
+            23..40,    bad|maniac,  Bronco
             36..50,    bad.*,       Espadas
             51..78,    ,            Thorsten
             44..100,   !~ maniac,   Ojiisan
@@ -67,7 +67,7 @@ describe CSVDecision::Table do
           data: <<~DATA
             in :age,   in :trait,     out :salesperson
             18..35,    maniac,        Adelsky
-            23..35,    =~ bad|maniac, Bronco
+            23..40,    =~ bad|maniac, Bronco
             36..50,    =~ bad.*,      Espadas
             51..78,    ,              Thorsten
             44..100,   !~ maniac,     Ojiisan
@@ -83,10 +83,10 @@ describe CSVDecision::Table do
           data: <<~DATA
             in :age,  in :age, in :trait,     out :salesperson
             >= 18,    <= 35,   maniac,        Adelsky
-            >= 23,    <= 35,   =~ bad|maniac, Bronco
+            >= 23,    <= 40,   =~ bad|maniac, Bronco
             >= 36,    <= 50,   =~ bad.*,      Espadas
             >= 51,    <= 78,   ,              Thorsten
-            >= 44,    <= 100,  !~ maniac,     Ojiisan
+            >= 44,    <= 100,  != maniac,     Ojiisan
             > 100,    ,        =~ maniac.*,   Chester
             >= 23,    <= 35,   =~ .*rich,     Kerfelden
             ,         ,        cheerful,      Swanson
@@ -105,6 +105,8 @@ describe CSVDecision::Table do
             expect(table.send(method, age:  44, trait: 'maniac')).to eq(salesperson: 'Korolev')
             expect(table.send(method, age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
             expect(table.send(method, age:  45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+            expect(table.send(method, age:  49, trait: 'bad')).to eq(salesperson: 'Espadas')
+            expect(table.send(method, age:  40, trait: 'maniac')).to eq(salesperson: 'Bronco')
           end
         end
       end

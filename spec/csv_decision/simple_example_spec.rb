@@ -16,7 +16,6 @@ context 'simple example' do
     ,          ,            Zach
   DATA
 
-
   it 'makes correct decisions for CSV string' do
     table = CSVDecision.parse(data)
 

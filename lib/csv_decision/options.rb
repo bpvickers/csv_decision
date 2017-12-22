@@ -4,12 +4,20 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
+  # Specialized cell value matchers beyond simple string compares.
+  # By default these matchers are tried in the specified order.
+  DEFAULT_MATCHERS = [
+    Matchers::Range,
+    Matchers::Numeric,
+    Matchers::Pattern
+  ].freeze
+
   VALID_OPTIONS = {
     first_match: true,
     regexp_implicit: false,
     text_only: false,
     index: nil,
-    matchers: [],
+    matchers: DEFAULT_MATCHERS,
     tables: nil
   }.freeze
 
@@ -20,18 +28,11 @@ module CSVDecision
     text_only: [:text_only, true]
   }.freeze
 
-  # Specialized cell value matchers beyond simple string compares.
-  # By default these matchers are tried in the specified order.
-  DEFAULT_MATCHERS = [
-    Matchers::Range,
-    Matchers::Numeric,
-    Matchers::Pattern
-  ].freeze
 
-  # Parse the CSV file and create a new decision table object
+  # Validate and normalize the options passed
   module Options
     def self.default(options)
-      result = options.deep_dup
+      result = options.dup
 
       result[:matchers] = matchers(result)
 

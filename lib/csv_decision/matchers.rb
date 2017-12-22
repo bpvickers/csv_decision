@@ -33,12 +33,12 @@ module CSVDecision
       BigDecimal.new(value.chomp('.'))
     end
 
-    def self.parse(table:, row:)
+    def self.parse(columns:, matchers:, row:)
       # Build an array of column indexes requiring simple constant matches,
       # and a second array of columns requiring special matchers.
       scan_row = [[], []]
 
-      table.columns.ins.each_pair do |col, column|
+      columns.each_pair do |col, column|
         # Empty cell matches everything, and so never needs to be scanned
         next if row[col] == ''
 
@@ -46,12 +46,12 @@ module CSVDecision
         next scan_row.first << col if column[:text_only]
 
         # Scan the cell against all the matchers
-        proc = scan(matchers: table.matchers, cell: row[col])
+        proc = scan(matchers: matchers, cell: row[col])
 
         # Did we get a proc or a simple constant?
         next scan_row.first << col unless proc
 
-        # Replace the cell's string with the proc
+        # Replace the cell's string value with the proc
         row[col] = proc
         scan_row.last << col
       end
