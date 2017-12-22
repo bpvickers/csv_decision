@@ -24,7 +24,8 @@ module CSVDecision
         # If the column is text only then no special matchers need be invoked
         next constants << col if column.text_only
 
-        # Need to scan the cell against all matchers
+        # Need to scan the cell against all matchers, and possibly overwrite
+        # the cell contents with a proc.
         row[col] = scan_cell(col: col, matchers: matchers, cell: cell)
       end
     end

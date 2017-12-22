@@ -32,8 +32,12 @@ module CSVDecision
 
       parse_table(table: table, input: input, options: options)
     rescue CSVDecision::Error => exp
-      raise exp unless table.file
-      message = "error processing CSV file #{table.file}\n#{exp.inspect}"
+      raise_error(file: table.file, exception: exp)
+    end
+
+    def self.raise_error(file:, exception:)
+      raise exception unless file
+      message = "error processing CSV file #{table.file}\n#{exception.inspect}"
       raise CSVDecision::FileError, message
     end
 
