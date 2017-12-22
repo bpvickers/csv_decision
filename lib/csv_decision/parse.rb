@@ -49,14 +49,13 @@ module CSVDecision
       table.columns = CSVDecision::Columns.new(table)
 
       parse_data(table: table, matchers: matchers(table.options).freeze)
+
+      table.freeze
     end
     private_class_method :parse_table
 
     def self.parse_data(table:, matchers:)
-      index = 0
-      while index < table.rows.count
-        row = table.rows[index]
-
+      table.rows.each_with_index do |row, index|
         # Build an array of column indexes requiring simple matches.
         # and a second array of columns requiring special matchers
         table.scan_rows[index] = Matchers.parse(columns: table.columns.ins,
@@ -67,14 +66,11 @@ module CSVDecision
 
         row.freeze
         table.scan_rows[index].freeze
-
-        index += 1
       end
 
       table.columns.freeze
-
-      table.freeze
     end
+
     private_class_method :parse_data
 
     def self.matchers(options)

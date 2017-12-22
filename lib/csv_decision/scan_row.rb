@@ -19,22 +19,19 @@ module CSVDecision
     def scan_columns(columns:, matchers:, row:)
       columns.each_pair do |col, column|
         # Empty cell matches everything, and so never needs to be scanned
-        next if row[col] == ''
+        next if (cell = row[col]) == ''
 
         # If the column is text only then no special matchers need be invoked
         next constants << col if column.text_only
 
         # Need to scan the cell against all matchers
-        row[col] = scan_cell(col: col, matchers: matchers, cell: row[col])
+        row[col] = scan_cell(col: col, matchers: matchers, cell: cell)
       end
     end
 
     def match_constants?(row:, scan_cols:)
       constants.each do |col|
-        value = scan_cols.fetch(col, [])
-        # This only happens if the column is indexed
-        next if value == []
-        return false unless row[col] == value
+        return false unless row[col] == scan_cols[col]
       end
 
       true
