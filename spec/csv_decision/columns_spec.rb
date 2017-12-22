@@ -34,8 +34,8 @@ describe CSVDecision::Columns do
     result = CSVDecision.parse(file)
 
     expect(result.columns).to be_a(CSVDecision::Columns)
-    expect(result.columns.ins).to eq(0 => CSVDecision::Columns::Entry.with(name: :input, text_only: nil))
-    expect(result.columns.outs).to eq(1 => CSVDecision::Columns::Entry.with(name: :output, text_only: nil))
+    expect(result.columns.ins).to eq(0 => CSVDecision::Columns::Entry.new(:input, nil))
+    expect(result.columns.outs).to eq(1 => CSVDecision::Columns::Entry.new(:output, nil))
   end
 
   it 'rejects an invalid header column' do
