@@ -62,7 +62,7 @@ module CSVDecision
       @row_picked = row
 
       # Common case if just copying output column values to the final result
-      @outs.each_pair { |col, column| @result[column[:name]] = row[col] }
+      @outs.each_pair { |col, column| @result[column.name] = row[col] }
     end
   end
 end

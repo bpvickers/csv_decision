@@ -5,6 +5,10 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Load all the CSV files located in the designated folder path.
+  #
+  # @param path [Pathname] - directiory containing CSV files
+  # @param options [Hash] - supplied options hash for table creation
+  # @return [Hash<CSVDecision::Table>]
   def self.load(path, options = {})
     Load.path(path: path, options: options)
   end

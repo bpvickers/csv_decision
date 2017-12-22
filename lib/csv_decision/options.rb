@@ -5,13 +5,14 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Specialized cell value matchers beyond simple string compares.
-  # By default these matchers are tried in the specified order.
+  # By default all these matchers are tried in the specified order.
   DEFAULT_MATCHERS = [
     Matchers::Range,
     Matchers::Numeric,
     Matchers::Pattern
   ].freeze
 
+  # All valid options with their default values.
   VALID_OPTIONS = {
     first_match: true,
     regexp_implicit: false,
@@ -21,6 +22,8 @@ module CSVDecision
     tables: nil
   }.freeze
 
+  # These options may appear in the CSV file before the header row.
+  # Convert them to a normalized option key value pair.
   CSV_OPTION_NAMES = {
     first_match: [:first_match, true],
     accumulate: [:first_match, false],
@@ -28,15 +31,48 @@ module CSVDecision
     text_only: [:text_only, true]
   }.freeze
 
-
-  # Validate and normalize the options passed
+  # Validate and normalize the options hash supplied.
   module Options
+    # Validate options and supply default values for any options not explicitly set.
+    #
+    # @param options [Hash] - input options hash supplied
+    # @return [Hash] - options hash filled in with all required default values
+    def self.normalize(options)
+      validate(options)
+      default(options)
+    end
+
+    # Read any options supplied in the CSV file placed before the header row.
+    #
+    # @param rows [Array<Array<String>>] - table data rows
+    # @param options [Hash] - input options hash built so far
+    # @return [Hash] - options hash overridden with any options values in the CSV file
+    def self.from_csv(rows:, options:)
+      row = rows.first
+      return options if row.nil?
+
+      # Have we hit the header row?
+      return options if Header.row?(row)
+
+      # Scan each cell looking for valid option values
+      row.each do |cell|
+        next if cell == ''
+
+        key, value = option?(cell)
+        options[key] = value if key
+      end
+
+      rows.shift
+      from_csv(rows: rows, options: options)
+    end
+
     def self.default(options)
       result = options.dup
 
+      # The user may override the list of matchers to be used
       result[:matchers] = matchers(result)
 
-      # Default any missing options with defaults
+      # Supply any missing options with default values
       VALID_OPTIONS.each_pair do |key, value|
         next if result.key?(key)
         result[key] = value
@@ -44,6 +80,7 @@ module CSVDecision
 
       result
     end
+    private_class_method :default
 
     def self.matchers(options)
       return [] if options.key?(:matchers) && !options[:matchers]
@@ -52,11 +89,13 @@ module CSVDecision
 
       options[:matchers]
     end
+    private_class_method :matchers
 
-    def self.cell?(cell)
+    def self.option?(cell)
       key = cell.downcase.to_sym
       return CSV_OPTION_NAMES[key] if CSV_OPTION_NAMES.key?(key)
     end
+    private_class_method :option?
 
     def self.validate(options)
       invalid_options = options.keys - VALID_OPTIONS.keys
@@ -65,27 +104,6 @@ module CSVDecision
 
       raise ArgumentError, "invalid option(s) supplied: #{invalid_options.inspect}"
     end
-
-    def self.from_csv(table:, attributes:)
-      row = table.rows.first
-      return attributes if row.nil?
-
-      # Have we hit the header row?
-      return attributes if Header.row?(row)
-
-      row.each do |cell|
-        next if cell == ''
-        key, value = Options.cell?(cell)
-        attributes[key] = value if key
-      end
-
-      table.rows.shift
-      from_csv(table: table, attributes: attributes)
-    end
-
-    def self.normalize(options)
-      validate(options)
-      default(options)
-    end
+    private_class_method :validate
   end
 end

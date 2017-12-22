@@ -37,7 +37,7 @@ module CSVDecision
       # defaulted_columns = table.columns[:defaults]
 
       table.columns.ins.each_pair do |col, column|
-        value = input[column[:name]]
+        value = input[column.name]
 
         scan_cols[col] = value
       end

@@ -113,7 +113,7 @@ module CSVDecision
 
       dictionary_entry(dictionary: dictionary,
                        type: type,
-                       entry: { name: column_name, text_only: text_only },
+                       entry: Columns::Entry.with(name: column_name, text_only: text_only),
                        index: index)
     end
     private_class_method :parse_cell
@@ -124,7 +124,7 @@ module CSVDecision
       when :set, :'set/nil', :'set/blank'
         # Default function will set the input value unconditionally or conditionally
         dictionary[:defaults][index] =
-          { name: entry[:name], function: nil, if: default_if(type) }
+          { name: entry.name, function: nil, if: default_if(type) }
 
         # Treat set: as an in: column
         dictionary[:ins][index] = entry

@@ -11,7 +11,7 @@ module CSVDecision
   # Builds a decision table from the input data - which may either be a file, CSV string
   # or array of arrays.
   #
-  # @param input [Pathname, File, Array<Array<String>>, String] - input data
+  # @param data [Pathname, File, Array<Array<String>>, String] - input data
   # @param options [Hash] - options hash supplied by the user
   # @return [CSVDecision::Table] - resulting decision table
   def self.parse(data, options = {})
@@ -19,6 +19,7 @@ module CSVDecision
   end
 
   # Parse the CSV file and create a new decision table object.
+  #
   # @param input [Pathname, File, Array<Array<String>>, String] - input data
   # @param options [Hash] - normalized options hash
   # @return [CSVDecision::Table] - resulting decision table
@@ -35,7 +36,7 @@ module CSVDecision
 
       # Pick up any options specified in the CSV file before the header row.
       # These override any options passed as parameters to the parse method.
-      table.options = Options.from_csv(table: table, attributes: options).freeze
+      table.options = Options.from_csv(rows: table.rows, options: options).freeze
 
       # Parse the header row
       table.columns = CSVDecision::Columns.new(table)

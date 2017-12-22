@@ -6,6 +6,8 @@
 module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   class Columns
+    class Entry < Value.new(:name, :text_only); end
+
     attr_reader :dictionary
 
     def ins

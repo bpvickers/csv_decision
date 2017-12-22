@@ -23,10 +23,10 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns).to be_a(CSVDecision::Columns)
-    expect(table.columns.ins[0]).to eq(name: :input, text_only: nil)
-    expect(table.columns.ins[2]).to eq(name: :input, text_only: true)
-    expect(table.columns.outs[1]).to eq(name: :output, text_only: nil)
-    expect(table.columns.outs[3]).to eq(name: :output, text_only: true)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, text_only: nil)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, text_only: true)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, text_only: nil)
+    expect(table.columns.outs[3].to_h).to eq(name: :output, text_only: true)
   end
 
   it 'parses a decision table columns from a CSV file' do
@@ -34,8 +34,8 @@ describe CSVDecision::Columns do
     result = CSVDecision.parse(file)
 
     expect(result.columns).to be_a(CSVDecision::Columns)
-    expect(result.columns.ins).to eq(0 => { name: :input, text_only: nil })
-    expect(result.columns.outs).to eq(1 => { name: :output, text_only: nil })
+    expect(result.columns.ins).to eq(0 => CSVDecision::Columns::Entry.with(name: :input, text_only: nil))
+    expect(result.columns.outs).to eq(1 => CSVDecision::Columns::Entry.with(name: :output, text_only: nil))
   end
 
   it 'rejects an invalid header column' do
