@@ -24,18 +24,16 @@ module CSVDecision
       row.find { |cell| cell.match(COLUMN_TYPE) }
     end
 
-    def self.strip_empty_columns(table:)
-      empty_cols = empty_columns?(row: table.rows.first)
-      Data.strip_columns(data: table.rows, empty_columns: empty_cols) unless empty_cols.empty?
+    def self.strip_empty_columns(rows:)
+      empty_cols = empty_columns?(row: rows.first)
+      Data.strip_columns(data: rows, empty_columns: empty_cols) unless empty_cols.empty?
 
-      table.rows.shift
+      rows.shift
     end
 
     def self.empty_columns?(row:)
-      return [] unless row
-
       result = []
-      row.each_with_index { |cell, index| result << index if cell == '' }
+      row&.each_with_index { |cell, index| result << index if cell == '' }
 
       result
     end
@@ -50,14 +48,14 @@ module CSVDecision
       [column_type, column_name]
     rescue CellValidationError => exp
       raise CellValidationError,
-            "header column '#{cell}' is not valid as #{exp.message}"
+            "header column '#{cell}' is not valid as the #{exp.message}"
     end
 
     def self.column_name(type:, name:)
       return format_column_name(name) if name.present?
       return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
-      raise CellValidationError, 'the column name is missing'
+      raise CellValidationError, 'column name is missing'
     end
 
     def self.format_column_name(name)

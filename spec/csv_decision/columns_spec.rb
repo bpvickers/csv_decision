@@ -47,7 +47,7 @@ describe CSVDecision::Columns do
     expect { CSVDecision.parse(data) }
       .to raise_error(CSVDecision::CellValidationError,
                       "header column 'BAD :output' is not valid as " \
-                      'column name is not well formed')
+                      'the column name is not well formed')
   end
 
   it 'rejects a missing column name' do
@@ -70,7 +70,7 @@ describe CSVDecision::Columns do
     expect { CSVDecision.parse(data) }
       .to raise_error(CSVDecision::CellValidationError,
                       "header column 'IN: a-b' is not valid as " \
-                      "column name 'a-b' contains invalid characters")
+                      "the column name 'a-b' contains invalid characters")
   end
 
   context 'rejects invalid CSV decision table columns' do
