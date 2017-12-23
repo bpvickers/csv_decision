@@ -19,7 +19,8 @@ benchmarks = [
     data: 'simple_example.csv',
     input: { 'topic' => 'culture', 'region' => 'America' },
     # Expected results for first_match and accumulate
-    first_match: { 'team_member' => 'Zach' }
+    first_match: { 'team_member' => 'Zach' },
+    accumulate: { 'team_member' => 'Zach' }
   }
 ].deep_freeze
 
@@ -31,7 +32,7 @@ puts '=' * tag_width
 puts ""
 
 # First match true and false run options
-[true].each do |first_match|
+[true, false].each do |first_match|
   puts "Table Decision Option: first_match: #{first_match}"
   puts '-' * tag_width
 
