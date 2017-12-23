@@ -10,9 +10,10 @@ CSV Decision
 
 `csv_decision` is a RubyGem for CSV (comma separated values) based 
 [decision tables](https://en.wikipedia.org/wiki/Decision_table). 
-It accepts decision tables implemented as a CSV file, which can then be used to 
-execute complex conditional logic against an input hash, producing a decision as an 
-output hash.
+It accepts decision tables implemented as a 
+[CSV file](https://en.wikipedia.org/wiki/Comma-separated_values), 
+which can then be used to execute complex conditional logic against an input hash, 
+producing a decision as an output hash.
 
  ### `csv_decision` features
  * Fast decision-time performance (see `benchmark.rb`).
