@@ -9,7 +9,8 @@ module CSVDecision
   DEFAULT_MATCHERS = [
     Matchers::Range,
     Matchers::Numeric,
-    Matchers::Pattern
+    Matchers::Pattern,
+    Matchers::Function
   ].freeze
 
   # All valid options with their default values.

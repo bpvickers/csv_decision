@@ -11,16 +11,16 @@ describe CSVDecision::Matchers::Numeric do
   end
 
   context 'cell value recognition' do
-    ranges = {
+    cells = {
       '> -1' => { comparator: '>', value: '-1' },
       '>= 10.0' => { comparator: '>=', value: '10.0' },
       '< .0' => { comparator: '<', value: '.0' },
       '<= +1' => { comparator: '<=', value: '+1' },
       '!=0.0' => { comparator: '!=', value: '0.0' },
       ':= 0.0' => { comparator: ':=', value: '0.0' },
-      '== 1.0' => { comparator: '==', value: '1.0' }
+      '= 1.0' => { comparator: '=', value: '1.0' }
     }
-    ranges.each_pair do |cell, expected|
+    cells.each_pair do |cell, expected|
       it "recognises #{cell} as a comparision" do
         match = described_class::COMPARISON.match(cell)
         expect(match['comparator']).to eq expected[:comparator]
@@ -58,7 +58,7 @@ describe CSVDecision::Matchers::Numeric do
         ['== 1',  1],
         [':= 0', 0],
         ['==1.1', BigDecimal.new('1.1')],
-        [':=-1.2', BigDecimal.new('-1.2')]
+        ['=-1.2', BigDecimal.new('-1.2')]
       ]
 
       data.each do |cell, value|

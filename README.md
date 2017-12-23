@@ -146,6 +146,30 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
  Complete documentation of all table parameters is in the code - see 
  `lib/csv_decision/parse.rb` and `lib/csv_decision/table.rb`.
  
+ ### Constants other than strings
+ Although `csv_decision` is string oriented, it does recognise other types of constant
+ present in the input hash. Specifically, the following classes are recognized: 
+ `Integer`, `BigDecimal` and `NilClass`. 
+ 
+ This is accomplished by prefixing the value with one of the operators `=`, `==` or `:=`. 
+ (The syntax is intentionally lax.)
+ 
+ For example:
+ ```ruby
+    data = <<~DATA
+      in :constant, out :type
+      :=nil,        NilClass
+      ==false,      FALSE
+      =true,        TRUE
+      = 0,          Zero
+      :=100.0,      100%
+    DATA
+          
+  table = CSVDecision.parse(data)
+  table.decide(constant: nil) # returns type: 'NilClass'        
+  table.decide(constant: 0) # returns type: 'Zero'        
+  table.decide(constant: BigDecimal.new('100.0')) # returns type: '100%'        
+```
  
  ### Testing
  

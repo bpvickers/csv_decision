@@ -56,6 +56,42 @@ describe CSVDecision::Table do
       end
     end
 
+    context 'makes correct decisions for simple non-string constants' do
+      examples = [
+        {
+          example: 'parses CSV file',
+          options: {},
+          data: Pathname(File.join(SPEC_DATA_VALID, 'simple_constants.csv'))
+        },
+        {
+          example: 'parses CSV string',
+          options: {},
+          data: <<~DATA
+            in :constant, out :type
+            :=nil,        NilClass
+            = 0,          Zero
+            :=100.0,      100%
+            ,             Unrecognized
+          DATA
+        },
+      ]
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]} with first_match: true" do
+            options = test[:options].merge(first_match: true)
+            table = CSVDecision.parse(test[:data], options)
+
+            expect(table.send(method, constant: nil)).to eq(type: 'NilClass')
+            expect(table.send(method, constant: 0)).to eq(type: 'Zero')
+            expect(table.send(method, constant: BigDecimal.new('100.0'))).to eq(type: '100%')
+            expect(table.send(method, constant: ':=nil')).to eq(type: 'Unrecognized')
+            expect(table.send(method, constant: '= 0')).to eq(type: 'Unrecognized')
+            expect(table.send(method, constant: ':=100.0')).to eq(type: 'Unrecognized')
+          end
+        end
+      end
+    end
+
     context 'makes correct decisions for a table with regexps and ranges' do
       examples = [
         {

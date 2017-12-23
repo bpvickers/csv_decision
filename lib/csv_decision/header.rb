@@ -17,7 +17,8 @@ module CSVDecision
 
     # More lenient than a Ruby method name -
     # any spaces will have been replaced with underscores
-    COLUMN_NAME = %r{\A\w[\w:/!?]*\z}
+    COLUMN_NAME = "\\w[\\w:/!?]*"
+    COLUMN_NAME_RE = Matchers.regexp(COLUMN_NAME)
 
     # Does this row contain a recognisable header cell?
     #
@@ -88,7 +89,7 @@ module CSVDecision
     def self.format_column_name(name)
       column_name = name.strip.tr("\s", '_')
 
-      return column_name.to_sym if COLUMN_NAME.match(column_name)
+      return column_name.to_sym if COLUMN_NAME_RE.match(column_name)
 
       raise CellValidationError, "column name '#{name}' contains invalid characters"
     end
