@@ -123,8 +123,6 @@ table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv'))
  Complete documentation of all table parameters is in the code - see 
  `lib/csv_decision/parse.rb`
  
- ### More complex example
- 
  
  ### Testing
  
