@@ -43,7 +43,7 @@ module CSVDecision
 
     def self.raise_error(file:, exception:)
       raise exception unless file
-      message = "error processing CSV file #{table.file}\n#{exception.inspect}"
+      message = "error processing CSV file #{file}\n#{exception.inspect}"
       raise CSVDecision::FileError, message
     end
     private_class_method :raise_error
