@@ -7,7 +7,7 @@ module CSVDecision
   # Methods to assign a matcher to data cells
   module Matchers
     # Match cell against a regular expression pattern
-    class Pattern
+    class Pattern < Matcher
       EXPLICIT_COMPARISON = /\A(?<comparator>=~|!~|!=)\s*(?<value>\S.*)\z/
       IMPLICIT_COMPARISON = /\A(?<comparator>=~|!~|!=)?\s*(?<value>\S.*)\z/
 

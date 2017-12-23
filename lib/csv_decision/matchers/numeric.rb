@@ -7,7 +7,7 @@ module CSVDecision
   # Methods to assign a matcher to data cells
   module Matchers
     # Match cell against a Ruby-like numeric comparison
-    class Numeric
+    class Numeric < Matcher
       # Range types are .. or ...
       COMPARISON = /\A(?<comparator><=|>=|<|>|!=)\s*(?<value>\S.*)\z/
 
@@ -29,9 +29,6 @@ module CSVDecision
         Proc.with(type: :proc,
                   function: COMPARATORS[match['comparator']].curry[numeric_cell])
       end
-
-      # This matcher does not need access to the options hash
-      def initialize(_options = nil); end
     end
   end
 end
