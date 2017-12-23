@@ -15,19 +15,25 @@ complex conditional logic against an input hash, producing a decision as an outp
 
  ### `csv_decision` features
  * fast decision-time performance
- * can use regular expressions, numeric comparisons and Ruby-style ranges
+ * in addition to simple string matching, can use regular expressions, 
+ numeric comparisons and Ruby-style ranges
  * accepts data as a file, CSV string or an array of arrays.
  * all CSV cells are parsed for correctness, and helpful error messages generated for bad 
  inputs
- 
- ### Planned features
- * input columns may be indexed for faster lookup performance
  * either returns the first matching row as a hash, or accumulates all matches as an 
  array of hashes.
- * use of output functions to formulate the final decision
- * can use column symbol references or built-in guard functions for matching
+ 
+ ### Planned features
+ `csv_decision` is currently a work in progress, and will be enhanced to support
+ the following features:
+ * input columns may be indexed for faster lookup performance
+ * may use functions in the output columns to formulate the final decision
+ * input hash fields may be conditionally defaulted using a constant or function
+ * use of column symbol references or built-in guard functions in the input
+ columns for matching
  * may be extended with user-defined Ruby functions for tailored logic 
- * can use if conditions to filter the results of multi-row decision output
+ * can use post-decision guard conditions to filter the results of multi-row 
+ decision output
  
  ### Why use `csv_decision`?
  
