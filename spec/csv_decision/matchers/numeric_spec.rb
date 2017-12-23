@@ -16,7 +16,9 @@ describe CSVDecision::Matchers::Numeric do
       '>= 10.0' => { comparator: '>=', value: '10.0' },
       '< .0' => { comparator: '<', value: '.0' },
       '<= +1' => { comparator: '<=', value: '+1' },
-      '!= 0.0' => { comparator: '!=', value: '0.0' },
+      '!=0.0' => { comparator: '!=', value: '0.0' },
+      ':= 0.0' => { comparator: ':=', value: '0.0' },
+      '== 1.0' => { comparator: '==', value: '1.0' }
     }
     ranges.each_pair do |cell, expected|
       it "recognises #{cell} as a comparision" do
@@ -35,6 +37,7 @@ describe CSVDecision::Matchers::Numeric do
           ['< 1',  0],
           ['< 1', '0'],
           ['> 1',  5],
+          ['!= 1',  0],
           ['> 1', '5'],
           ['>= 1.1', BigDecimal.new('1.1')],
           ['<=-1.1', BigDecimal.new('-12')]
@@ -49,28 +52,25 @@ describe CSVDecision::Matchers::Numeric do
         end
       end
     end
-  #
-  #   context 'range does not match value' do
-  #     data = [
-  #       [ '-1..+4', 5],
-  #       ['!-1..+4', 2],
-  #       %w[a...z      z],
-  #       %w[!a..z      m],
-  #       %w[-1..1     1.1],
-  #       ['-1..1', BigDecimal.new('1.1')],
-  #       ['-1..1', BigDecimal.new('1.1')]
-  #     ]
-  #
-  #     data.each do |cell, value|
-  #       it "range #{cell} does not match #{value}" do
-  #         proc = matcher.matches?(cell)
-  #         expect(proc).to be_a(CSVDecision::Proc)
-  #         expect(proc.type).to eq :proc
-  #         expect(proc.function[value]).to eq false
-  #       end
-  #     end
-  #   end
-  #
+
+    context 'numeric constant' do
+      data = [
+        ['== 1',  1],
+        [':= 0', 0],
+        ['==1.1', BigDecimal.new('1.1')],
+        [':=-1.2', BigDecimal.new('-1.2')]
+      ]
+
+      data.each do |cell, value|
+        it "constant expression #{cell} evaluates to #{value}" do
+          proc = matcher.matches?(cell)
+          expect(proc).to be_a(CSVDecision::Proc)
+          expect(proc.type).to eq :constant
+          expect(proc.function).to eq value
+        end
+      end
+    end
+
     context 'does not match a numeric comparision' do
       data = ['1', ':column', ':= nil', ':= true', 'abc', 'abc.*def', '-1..1', '0...3']
 

@@ -56,13 +56,22 @@ module CSVDecision
       # Scan the cell against all the matchers
       proc = Matchers.scan(matchers: matchers, cell: cell)
 
-      if proc
-        procs << col
-        return proc
-      end
+      return set(proc, col) if proc
 
+      # Just a plain constant
       constants << col
       cell
+    end
+
+    def set(proc, col)
+      # Unbox a constant
+      if proc.type == :constant
+        constants << col
+        return proc.function
+      end
+
+      procs << col
+      proc
     end
   end
 end
