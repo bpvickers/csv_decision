@@ -11,8 +11,16 @@ module CSVDecision
   # Builds a decision table from the input data - which may either be a file, CSV string
   # or array of arrays.
   #
-  # @param data [Pathname, File, Array<Array<String>>, String] - input data
+  # @param data [Pathname, File, Array<Array<String>>, String] - input data given as
+  #   a file, array of arrays or CSV string.
   # @param options [Hash] - options hash supplied by the user
+  #   * first_match: stop after finding the first match
+  #   * regexp_implicit: Set to make regular expressions implicit rather than requiring
+  #                      the comparator =~
+  #   * text_only:       Set to make all cells be treated as simple strings by turning
+  #                      off all special matchers.
+  #   * matchers         May be used to control the inclusion and ordering of special
+  #                      matchers.
   # @return [CSVDecision::Table] - resulting decision table
   def self.parse(data, options = {})
     Parse.table(input: data, options: Options.normalize(options))
@@ -20,9 +28,7 @@ module CSVDecision
 
   # Parse the CSV file and create a new decision table object.
   #
-  # @param input [Pathname, File, Array<Array<String>>, String] - input data
-  # @param options [Hash] - normalized options hash
-  # @return [CSVDecision::Table] - resulting decision table
+  # (see #parse)
   module Parse
     def self.table(input:, options:)
       table = CSVDecision::Table.new
@@ -40,6 +46,7 @@ module CSVDecision
       message = "error processing CSV file #{table.file}\n#{exception.inspect}"
       raise CSVDecision::FileError, message
     end
+    private_class_method :raise_error
 
     def self.parse_table(table:, input:, options:)
       # Parse input data into an array of arrays

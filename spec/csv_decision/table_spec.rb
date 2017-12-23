@@ -32,12 +32,25 @@ describe CSVDecision::Table do
       ]
       examples.each do |test|
         %i[decide decide!].each do |method|
-          it "#{method} correctly #{test[:example]}" do
-            table = CSVDecision.parse(test[:data], test[:options])
+          it "#{method} correctly #{test[:example]} with first_match: true" do
+            options = test[:options].merge(first_match: true)
+            table = CSVDecision.parse(test[:data], options)
 
             expect(table.send(method, topic: 'finance', region: 'Europe')).to eq(team_member: 'Donald')
             expect(table.send(method, topic: 'sports',  region: nil)).to eq(team_member: 'Bob')
             expect(table.send(method, topic: 'culture', region: 'America')).to eq(team_member: 'Zach')
+          end
+
+          it "#{method} correctly #{test[:example]} with first_match: false" do
+            options = test[:options].merge(first_match: false)
+            table = CSVDecision.parse(test[:data], options)
+
+            expect(table.send(method, topic: 'finance', region: 'Europe'))
+              .to eq(team_member: %w[Donald Ernest Zach])
+            expect(table.send(method, topic: 'sports',  region: nil))
+              .to eq(team_member: %w[Bob Zach])
+            expect(table.send(method, topic: 'culture', region: 'America'))
+              .to eq(team_member: 'Zach')
           end
         end
       end
@@ -96,8 +109,9 @@ describe CSVDecision::Table do
       ]
       examples.each do |test|
         %i[decide decide!].each do |method|
-          it "#{method} correctly uses #{test[:example]}" do
-            table = CSVDecision.parse(test[:data], test[:options])
+          it "#{method} correctly uses #{test[:example]} with first_match: true" do
+            options = test[:options].merge(first_match: true)
+            table = CSVDecision.parse(test[:data], options)
 
             expect(table.send(method, age:  72)).to eq(salesperson: 'Thorsten')
             expect(table.send(method, age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
@@ -107,6 +121,28 @@ describe CSVDecision::Table do
             expect(table.send(method, age:  45, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
             expect(table.send(method, age:  49, trait: 'bad')).to eq(salesperson: 'Espadas')
             expect(table.send(method, age:  40, trait: 'maniac')).to eq(salesperson: 'Bronco')
+          end
+
+          it "#{method} correctly uses #{test[:example]} with first_match: false" do
+            options = test[:options].merge(first_match: false)
+            table = CSVDecision.parse(test[:data], options)
+
+            expect(table.send(method, age:  72))
+              .to eq(salesperson: %w[Thorsten Ojiisan])
+            expect(table.send(method, age:  25, trait: 'very rich'))
+              .to eq(salesperson: 'Kerfelden')
+            expect(table.send(method, age:  25, trait: 'maniac'))
+              .to eq(salesperson: %w[Adelsky Bronco Korolev])
+            expect(table.send(method, age:  44, trait: 'maniac'))
+              .to eq(salesperson: 'Korolev')
+            expect(table.send(method, age: 101, trait: 'maniacal'))
+              .to eq(salesperson: 'Chester')
+            expect(table.send(method, age:  45, trait: 'cheerful'))
+              .to eq(salesperson: %w[Ojiisan Swanson])
+            expect(table.send(method, age:  49, trait: 'bad'))
+              .to eq(salesperson: %w[Espadas Ojiisan])
+            expect(table.send(method, age:  40, trait: 'maniac'))
+              .to eq(salesperson: %w[Bronco Korolev])
           end
         end
       end

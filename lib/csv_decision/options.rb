@@ -17,9 +17,7 @@ module CSVDecision
     first_match: true,
     regexp_implicit: false,
     text_only: false,
-    index: nil,
-    matchers: DEFAULT_MATCHERS,
-    tables: nil
+    matchers: DEFAULT_MATCHERS
   }.freeze
 
   # These options may appear in the CSV file before the header row.
@@ -44,9 +42,9 @@ module CSVDecision
 
     # Read any options supplied in the CSV file placed before the header row.
     #
-    # @param rows [Array<Array<String>>] - table data rows
+    # @param rows [Array<Array<String>>] - table data rows.
     # @param options [Hash] - input options hash built so far
-    # @return [Hash] - options hash overridden with any options values in the CSV file
+    # @return [Hash] - options hash overridden with any option values in the CSV file
     def self.from_csv(rows:, options:)
       row = rows.first
       return options if row.nil?
@@ -72,6 +70,7 @@ module CSVDecision
 
       options
     end
+    private_class_method :scan_cells
 
     def self.default(options)
       result = options.dup

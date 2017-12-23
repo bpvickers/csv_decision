@@ -17,8 +17,6 @@ describe CSVDecision::Options do
       first_match: true,
       regexp_implicit: false,
       text_only: false,
-      index: nil,
-      tables: nil,
       matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
@@ -36,8 +34,6 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: false,
       text_only: false,
-      index: nil,
-      tables: nil,
       matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
@@ -51,8 +47,6 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: false,
       text_only: false,
-      index: nil,
-      tables: nil,
       matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
@@ -66,8 +60,6 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: true,
       text_only: false,
-      index: nil,
-      tables: nil,
       matchers: CSVDecision::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected

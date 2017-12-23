@@ -59,12 +59,31 @@ module CSVDecision
 
       # Accumulate output rows
       @rows_picked << row
+      @outs.each_pair do |col, column|
+        accumulate_outs(column_name: column.name, cell: row[col])
+      end
 
       # Not done
       false
     end
 
     private
+
+    def accumulate_outs(column_name:, cell:)
+      current = @result[column_name]
+
+      case current
+      when nil
+        @result[column_name] = cell
+
+      when Array
+        @result[column_name] << cell
+
+      else
+        @result[column_name] = [current, cell]
+        @multi_result ||= true
+      end
+    end
 
     def row_scan(input:, row:, scan_row:)
       return unless Decide.matches?(row: row, input: input, scan_row: scan_row)
@@ -79,7 +98,7 @@ module CSVDecision
     def add_first_match(row)
       @row_picked = row
 
-      # Common case if just copying output column values to the final result
+      # Common case is just copying output column values to the final result
       @outs.each_pair { |col, column| @result[column.name] = row[col] }
     end
   end
