@@ -34,6 +34,7 @@ producing a decision as an output hash.
  * Input hash values may be conditionally defaulted using a constant or a function call
  * Use of column symbol references or built-in guard functions in the input
  columns for matching.
+ * Output columns may used interpolated strings referencing column symbols.
  * May be extended with user-defined Ruby functions for tailored logic.
  * Can use post-match guard conditions to filter the results of multi-row 
  decision output.
