@@ -1,8 +1,11 @@
 csv_decision
 ============
+
 <a href="https://codeclimate.com/github/bpvickers/csv_decision/maintainability"><img src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability" /></a>
 [![Build Status](https://travis-ci.org/bpvickers/csv_decision.svg?branch=master)](https://travis-ci.org/bpvickers/csv_decision)
 [![Coverage Status](https://coveralls.io/repos/github/bpvickers/csv_decision/badge.svg?branch=master)](https://coveralls.io/github/bpvickers/csv_decision?branch=master)
+[![Gem Version](https://badge.fury.io/rb/csv_decision.svg)](http://badge.fury.io/rb/csv_decision)
+
 # CSV based Ruby decision tables
 
 `csv_decision` is a Ruby gem for CSV (comma separated values) based 
