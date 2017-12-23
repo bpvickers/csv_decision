@@ -10,31 +10,32 @@ CSV Decision
 
 `csv_decision` is a RubyGem for CSV (comma separated values) based 
 [decision tables](https://en.wikipedia.org/wiki/Decision_table). 
-It accepts decision tables written implemented as a CSV file, which can then be used to 
+It accepts decision tables implemented as a CSV file, which can then be used to 
 execute complex conditional logic against an input hash, producing a decision as an 
 output hash.
 
  ### `csv_decision` features
- * fast decision-time performance (see `benchmark.rb`)
- * in addition to simple string matching, can use regular expressions, 
- numeric comparisons and Ruby-style ranges
- * accepts data as a file, CSV string or an array of arrays.
- * all CSV cells are parsed for correctness, and helpful error messages generated for bad 
- inputs
- * either returns the first matching row as a hash, or accumulates all matches as an 
+ * Fast decision-time performance (see `benchmark.rb`).
+ * In addition to simple string matching, can use regular expressions, 
+ numeric comparisons and Ruby-style ranges.
+ * Accepts data as a file, CSV string or an array of arrays. (For safety all input data is 
+ force encoded to UTF-8, and non-ascii strings are converted to empty strings.)
+ * All CSV cells are parsed for correctness, and helpful error messages generated for bad 
+ inputs.
+ * Either returns the first matching row as a hash, or accumulates all matches as an 
  array of hashes.
  
  ### Planned features
  `csv_decision` is currently a work in progress, and will be enhanced to support
  the following features:
- * input columns may be indexed for faster lookup performance
- * may use functions in the output columns to formulate the final decision
- * input hash fields may be conditionally defaulted using a constant or function
- * use of column symbol references or built-in guard functions in the input
- columns for matching
- * may be extended with user-defined Ruby functions for tailored logic 
- * can use post-decision guard conditions to filter the results of multi-row 
- decision output
+ * Input columns may be indexed for faster lookup performance.
+ * May use functions in the output columns to formulate the final decision.
+ * Input hash values may be conditionally defaulted using a constant or a function call
+ * Use of column symbol references or built-in guard functions in the input
+ columns for matching.
+ * May be extended with user-defined Ruby functions for tailored logic.
+ * Can use post-match guard conditions to filter the results of multi-row 
+ decision output.
  
  ### Why use `csv_decision`?
  
@@ -55,6 +56,11 @@ output hash.
  
  ```ruby
  gem 'csv_decision', '~> 0.0.1'
+ ```
+ 
+ or simply
+ ```bash
+ gem install csv_decision
  ```
  
  ### Simple example
@@ -96,6 +102,7 @@ politics  |             | Henry
  Now for some code.
  
  ```ruby
+  # Valid CSV string
   data = <<~DATA
     in :topic, in :region,  out :team_member
     sports,    Europe,      Alice
@@ -125,6 +132,14 @@ politics  |             | Henry
 table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv'))
 ```
  
+ We can also load this same table using the option: `first_match: false`.
+ 
+ ```ruby
+table = CSVDecision.parse(data, first_match: false)
+table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donald Ernest Zach] 
+```
+
+
  For more examples see `spec/csv_decision/table_spec.rb`. 
  Complete documentation of all table parameters is in the code - see 
  `lib/csv_decision/parse.rb` and `lib/csv_decision/table.rb`.
