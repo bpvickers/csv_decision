@@ -30,6 +30,9 @@ module CSVDecision
     end
     private_class_method :constant?
 
+    # Function signature
+    Signature = Value.new(:type, :name, :args, :negate)
+
     # Match cell against a function call or symbolic expression.
     class Function < Matcher
       # Looks like a function call or symbol expressions, e.g.,
@@ -48,6 +51,10 @@ module CSVDecision
       #   '!=' => proc { |numeric_cell, value| Matchers.numeric(value) &.!= numeric_cell }
       # }.freeze
 
+      def initialize(options = {})
+        @options = options
+      end
+
       def matches?(cell)
         match = FUNCTION_RE.match(cell)
         return false unless match
@@ -55,6 +62,14 @@ module CSVDecision
         # Check if the guard condition is a cell constant
         proc = Matchers.input_cell_constant?(match)
         return proc if proc
+
+        function?(match, cell)
+      end
+
+      private
+
+      def function?(match, cell)
+
 
         false
       end
