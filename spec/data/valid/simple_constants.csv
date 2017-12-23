@@ -1,0 +1,5 @@
+in :constant,out :type
+:=nil,        NilClass
+==0,          Zero
+:=100.0,      100%
+,             Unrecognized

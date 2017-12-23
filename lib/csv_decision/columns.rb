@@ -9,25 +9,29 @@ module CSVDecision
     # Value object used for column dictionary entries
     Entry = Struct.new(:name, :text_only)
 
-    # Value object used for columns with defaults
+    # Value object used for any columns with defaults
     Default = Struct.new(:name, :function, :default_if)
 
     # Dictionary of all data columns.
     # # Note that the key of each hash is the header cell's array column index.
     # Note that input and output columns can be interspersed and need not have unique names.
     class Dictionary
+      # Input columns
       attr_accessor :ins
+
+      # Output columns
       attr_accessor :outs
+
+      # Input hash path - optional (planned feature)
       attr_accessor :path
+
+      # Input columns with a default value (planned feature)
       attr_accessor :defaults
 
       def initialize
         @ins = {}
         @outs = {}
-
-        # Path for the input hash - optional
         @path = {}
-        # Hash of columns that require defaults to be set
         @defaults = {}
       end
     end
@@ -57,7 +61,7 @@ module CSVDecision
 
     def initialize(table)
       # If a column does not have a valid header cell, then it's empty of data.
-      # Return the stripped header row, removing it from the data array.
+      # Return the stripped header row, and remove it from the data array.
       row = Header.strip_empty_columns(rows: table.rows)
 
       # Build a dictionary of all valid data columns from the header row.

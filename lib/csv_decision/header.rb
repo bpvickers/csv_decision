@@ -17,12 +17,13 @@ module CSVDecision
 
     # More lenient than a Ruby method name -
     # any spaces will have been replaced with underscores
-    COLUMN_NAME = %r{\A\w[\w:/!?]*\z}
+    COLUMN_NAME = "\\w[\\w:/!?]*"
+    COLUMN_NAME_RE = Matchers.regexp(COLUMN_NAME)
 
     # Does this row contain a recognisable header cell?
     #
-    # @param row [Array<String>]
-    # @return [true, false]
+    # @param row [Array<String>] header row
+    # @return [Boolean] true if the row looks like a header
     def self.row?(row)
       row.find { |cell| cell.match(COLUMN_TYPE) }
     end
@@ -34,9 +35,9 @@ module CSVDecision
     #   header row.
     def self.strip_empty_columns(rows:)
       empty_cols = empty_columns?(row: rows.first)
-      Data.strip_columns(data: rows, empty_columns: empty_cols) unless empty_cols.empty?
+      Data.strip_columns(data: rows, empty_columns: empty_cols) if empty_cols
 
-      # Remove the header row from the data array.
+      # Remove header row from the data array.
       rows.shift
     end
 
@@ -54,7 +55,7 @@ module CSVDecision
       dictionary
     end
 
-    def self.header_column?(cell:)
+    def self.validate_header_column(cell:)
       match = COLUMN_TYPE.match(cell)
       raise CellValidationError, 'column name is not well formed' unless match
 
@@ -66,14 +67,14 @@ module CSVDecision
       raise CellValidationError,
             "header column '#{cell}' is not valid as the #{exp.message}"
     end
-    private_class_method :header_column?
+    private_class_method :validate_header_column
 
     # Array of all empty column indices.
     def self.empty_columns?(row:)
       result = []
       row&.each_with_index { |cell, index| result << index if cell == '' }
 
-      result
+      result.empty? ? false : result
     end
     private_class_method :empty_columns?
 
@@ -83,14 +84,16 @@ module CSVDecision
 
       raise CellValidationError, 'column name is missing'
     end
+    private_class_method :column_name
 
     def self.format_column_name(name)
       column_name = name.strip.tr("\s", '_')
 
-      return column_name.to_sym if COLUMN_NAME.match(column_name)
+      return column_name.to_sym if COLUMN_NAME_RE.match(column_name)
 
       raise CellValidationError, "column name '#{name}' contains invalid characters"
     end
+    private_class_method :format_column_name
 
     # Returns the normalized column type, along with an indication if
     # the column is text only
@@ -110,11 +113,12 @@ module CSVDecision
         [type, nil]
       end
     end
+    private_class_method :column_type
 
     def self.parse_cell(cell:, index:, dictionary:)
-      column_type, column_name = header_column?(cell: cell)
+      column_type, column_name = validate_header_column(cell: cell)
 
-      type, text_only = Header.column_type(column_type)
+      type, text_only = column_type(column_type)
 
       dictionary_entry(dictionary: dictionary,
                        type: type,

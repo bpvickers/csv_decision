@@ -9,61 +9,6 @@ module CSVDecision
   # Value object for a cell proc
   Proc = Value.new(:type, :function)
 
-  # Value object for a data row indicating which columns are constants versus procs.
-  # ScanRow = Struct.new(:constants, :procs) do
-  #   def scan_columns(columns:, matchers:, row:)
-  #     columns.each_pair do |col, column|
-  #       # Empty cell matches everything, and so never needs to be scanned
-  #       next if row[col] == ''
-  #
-  #       # If the column is text only then no special matchers need be invoked
-  #       next constants << col if column.text_only
-  #
-  #       # Need to scan the cell against all matchers
-  #       row[col] = scan_cell(col: col, matchers: matchers, cell: row[col])
-  #     end
-  #   end
-  #
-  #   def match_constants?(row:, scan_cols:)
-  #     constants.each do |col|
-  #       value = scan_cols.fetch(col, [])
-  #       # This only happens if the column is indexed
-  #       next if value == []
-  #       return false unless row[col] == value
-  #     end
-  #
-  #     true
-  #   end
-  #
-  #   def match_procs?(row:, input:)
-  #     hash = input[:hash]
-  #     scan_cols = input[:scan_cols]
-  #
-  #     procs.each do |col|
-  #       return false unless Decide.eval_matcher(proc: row[col],
-  #                                               value: scan_cols[col],
-  #                                               hash: hash)
-  #     end
-  #
-  #     true
-  #   end
-  #
-  #   private
-  #
-  #   def scan_cell(col:, matchers:, cell:)
-  #     # Scan the cell against all the matchers
-  #     proc = Matchers.scan(matchers: matchers, cell: cell)
-  #
-  #     if proc
-  #       procs << col
-  #       return proc
-  #     end
-  #
-  #     constants << col
-  #     cell
-  #   end
-  # end
-
   # Methods to assign a matcher to data cells
   module Matchers
     # Negation sign for ranges and functions
@@ -126,6 +71,14 @@ module CSVDecision
 
       # Must be a simple constant
       false
+    end
+
+    # @abstract Subclass and override {#matches?} to implement
+    #   a custom Matcher class.
+    class Matcher
+      def initialize(_options = nil); end
+
+      def matches?(_cell); end
     end
   end
 end

@@ -7,7 +7,7 @@ module CSVDecision
   # Methods to assign a matcher to data cells
   module Matchers
     # Match cell against a Ruby-like range
-    class Range
+    class Range < Matcher
       # Range types are .. or ...
       TYPE = '(\.\.\.|\.\.)'
 
@@ -68,9 +68,6 @@ module CSVDecision
 
         false
       end
-
-      # This matcher does not need access to the options hash
-      def initialize(_options = nil); end
     end
   end
 end
