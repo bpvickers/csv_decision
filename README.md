@@ -1,20 +1,21 @@
 CSV Decision
 ============
 
-<a href="https://codeclimate.com/github/bpvickers/csv_decision/maintainability"><img src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability" /></a>
+[![Gem Version](https://badge.fury.io/rb/csv_decision.svg)](https://badge.fury.io/rb/csv_decision)
 [![Build Status](https://travis-ci.org/bpvickers/csv_decision.svg?branch=master)](https://travis-ci.org/bpvickers/csv_decision)
 [![Coverage Status](https://coveralls.io/repos/github/bpvickers/csv_decision/badge.svg?branch=master)](https://coveralls.io/github/bpvickers/csv_decision?branch=master)
-[![Gem Version](https://badge.fury.io/rb/csv_decision.svg)](http://badge.fury.io/rb/csv_decision)
+<a href="https://codeclimate.com/github/bpvickers/csv_decision/maintainability"><img src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability" /></a>
 
-# CSV based Ruby decision tables
+### CSV based Ruby decision tables (a lightweight Hash transformation gem)
 
-`csv_decision` is a Ruby gem for CSV (comma separated values) based 
+`csv_decision` is a RubyGem for CSV (comma separated values) based 
 [decision tables](https://en.wikipedia.org/wiki/Decision_table). 
-It accepts decision tables written in a CSV file, which can then be used to execute 
-complex conditional logic against an input hash, producing a decision as an output hash.
+It accepts decision tables written implemented as a CSV file, which can then be used to 
+execute complex conditional logic against an input hash, producing a decision as an 
+output hash.
 
  ### `csv_decision` features
- * fast decision-time performance
+ * fast decision-time performance (see `benchmark.rb`)
  * in addition to simple string matching, can use regular expressions, 
  numeric comparisons and Ruby-style ranges
  * accepts data as a file, CSV string or an array of arrays.
