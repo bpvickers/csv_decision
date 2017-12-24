@@ -14,22 +14,6 @@ module CSVDecision
     }.freeze
     # rubocop: enable Lint/BooleanSymbol
 
-    def self.cell_constant?(match)
-      return false unless Constant::OPERATOR.member?(match['operator'])
-      return false unless match['args'] == ''
-      return false unless match['negate'] == ''
-
-      constant?(match)
-    end
-
-    def self.constant?(match)
-      name = match['name'].to_sym
-      return false unless NON_NUMERIC_CONSTANTS.key?(name)
-
-      Proc.with(type: :constant, function: NON_NUMERIC_CONSTANTS[name])
-    end
-    private_class_method :constant?
-
     # Match cell against a function call or symbolic expression.
     class Function < Matcher
       # Looks like a function call or symbol expressions, e.g.,

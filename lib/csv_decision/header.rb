@@ -8,7 +8,7 @@ module CSVDecision
   module Header
     # Column header looks like IN :col_name or cond:
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|cond|if)
+      \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|guard|if)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
@@ -102,8 +102,9 @@ module CSVDecision
       when :'in/text'
         [:in, true]
 
-      when :cond
-        [:in, false]
+      # TODO: planned feature
+      # when :guard
+      #   [:in, false]
 
       when :'out/text'
         [:out, true]
@@ -143,9 +144,6 @@ module CSVDecision
 
       when :out
         dictionary.outs[index] = entry
-
-      else
-        raise "internal error - column type #{type} not recognised"
       end
 
       dictionary
