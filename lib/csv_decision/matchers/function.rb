@@ -14,11 +14,8 @@ module CSVDecision
     }.freeze
     # rubocop: enable Lint/BooleanSymbol
 
-    # Function signature
-    Signature = Value.new(:operator, :type, :name, :args, :negate)
-
     def self.cell_constant?(match)
-      return false unless CELL_CONSTANT.member?(match['operator'])
+      return false unless Constant::OPERATOR.member?(match['operator'])
       return false unless match['args'] == ''
       return false unless match['negate'] == ''
 
@@ -33,18 +30,6 @@ module CSVDecision
     end
     private_class_method :constant?
 
-    def self.function?(match:, cell:)
-      operator = match['operator']&.gsub(/\s+/, '')
-      name = match['name'].to_sym
-      args = match['args'].strip
-      negate = match['negate'] == Matchers::NEGATE
-
-      function = Symbol.function?(operator: operator, name: name, args: args)
-      return function if function
-
-      false
-    end
-
     # Match cell against a function call or symbolic expression.
     class Function < Matcher
       # Looks like a function call or symbol expressions, e.g.,
@@ -52,7 +37,10 @@ module CSVDecision
       # := function(arg: symbol)
       # == :column_name
       FUNCTION_CALL =
-        "(?<operator>=|:=|==|=|<|>|!=|>=|<=|:|!\\s*:)\s*(?<negate>!?)\\s*(?<name>#{Header::COLUMN_NAME}|:)(?<args>.*)"
+        "(?<operator>=|:=|==|=|<|>|!=|>=|<=|:|!\\s*:)\\s*" \
+        "(?<negate>!?)\\s*" \
+        "(?<name>#{Header::COLUMN_NAME}|:)(?<args>.*)"
+
       FUNCTION_RE = Matchers.regexp(FUNCTION_CALL)
 
       def initialize(options = {})
@@ -60,14 +48,14 @@ module CSVDecision
       end
 
       def matches?(cell)
-        match = FUNCTION_RE.match(cell)
+        match = Expression::FUNCTION.match(cell)
         return false unless match
 
         # Check if the guard condition is a cell constant
-        proc = Matchers.cell_constant?(match)
+        proc = Constant.match?(match)
         return proc if proc
 
-        Matchers.function?(match: match, cell: cell)
+        Expression.function?(match: match, cell: cell)
       end
     end
   end
