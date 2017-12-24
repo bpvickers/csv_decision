@@ -28,13 +28,13 @@ describe CSVDecision::Options do
       input0,    output0
     DATA
 
-    result = CSVDecision.parse(data, first_match: false)
+    result = CSVDecision.parse(data, first_match: false, matchers: false)
 
     expected = {
       first_match: false,
       regexp_implicit: false,
       text_only: false,
-      matchers: CSVDecision::DEFAULT_MATCHERS
+      matchers: []
     }
     expect(result.options).to eql expected
   end
