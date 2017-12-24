@@ -14,7 +14,7 @@ module CSVDecision
     }.freeze
     # rubocop: enable Lint/BooleanSymbol
 
-    def self.input_cell_constant?(match)
+    def self.cell_constant?(match)
       return false unless CELL_CONSTANT.member?(match['operator'])
       return false unless match['args'] == ''
       return false unless match['negate'] == ''
@@ -29,6 +29,23 @@ module CSVDecision
       Proc.with(type: :constant, function: NON_NUMERIC_CONSTANTS[name])
     end
     private_class_method :constant?
+
+    def self.function?(match, cell)
+      operator = match['operator']
+      name = match['name']
+      args = match['args'].strip
+      negate = match['negate'] == Matchers::NEGATE
+
+      signature = symbol_function(operator, name, args)
+      return signature if signature
+
+      false
+    end
+
+    def self.symbol_function(operator, name, args)
+
+      false
+    end
 
     # Function signature
     Signature = Value.new(:type, :name, :args, :negate)
@@ -60,19 +77,12 @@ module CSVDecision
         return false unless match
 
         # Check if the guard condition is a cell constant
-        proc = Matchers.input_cell_constant?(match)
+        proc = Matchers.cell_constant?(match)
         return proc if proc
 
-        function?(match, cell)
+        Matchers.function?(match, cell)
       end
 
-      private
-
-      def function?(match, cell)
-
-
-        false
-      end
     end
   end
 end
