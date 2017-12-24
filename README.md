@@ -149,7 +149,7 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
  ### Constants other than strings
  Although `csv_decision` is string oriented, it does recognise other types of constant
  present in the input hash. Specifically, the following classes are recognized: 
- `Integer`, `BigDecimal` and `NilClass`. 
+ `Integer`, `BigDecimal`, `NilClass`, `TrueClass` and `FalseClass`. 
  
  This is accomplished by prefixing the value with one of the operators `=`, `==` or `:=`. 
  (The syntax is intentionally lax.)
@@ -170,6 +170,37 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
   table.decide(constant: 0) # returns type: 'Zero'        
   table.decide(constant: BigDecimal.new('100.0')) # returns type: '100%'        
 ```
+ 
+ ### Column header symbols
+ All input and output column names are symbolized, and can be used to form simple
+ expressions that refer to values in the input hash.
+ 
+ For example:
+ ```ruby
+    data = <<~DATA
+      in :node, in :parent, out :top?
+      ,         == :node,   yes
+      ,         ,           no
+    DATA
+    
+    table = CSVDecision.parse(data)
+    table.decide(node: 0, parent: 0) # returns top?: 'yes'
+    table.decide(node: 1, parent: 0) # returns top?: 'no'
+ ```
+ 
+ Note that there is no need to include an input column for `:node` in the decision 
+ table - it just needs to be present in the input hash. Also, `== :node` can be 
+ shortened to just `:node`, so the above decision table may be simplified to:
+ 
+ ```ruby
+    data = <<~DATA
+      in :parent, out :top?
+         :node,   yes
+      ,           no
+    DATA
+ ```
+ These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
+ For more simple examples see `spec/csv_decision/examples_spec.rb`.
  
  ### Testing
  
