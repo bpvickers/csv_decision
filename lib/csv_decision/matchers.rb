@@ -26,12 +26,30 @@ module CSVDecision
     NUMERIC = '[-+]?\d*(?<decimal>\.?)\d+'
     NUMERIC_RE = regexp(NUMERIC)
 
+    def self.numeric?(value)
+      value.is_a?(Integer) || value.is_a?(BigDecimal)
+    end
+
+    # def self.decimal?(value)
+    #   return match if value.is_a?(String) && (match = NUMERIC_RE.match(value))
+    #   return value if numeric?(value)
+    #
+    #   false
+    # end
+    #
+    # def self.to_decimal(value)
+    #   return value if numeric?(value)
+    #
+    #   return false unless value.is_a?(String) && (match = NUMERIC_RE.match(value))
+    #   coerce_decimal(match, value)
+    # end
+
     # Validate a numeric value and convert it to an Integer or BigDecimal if a valid string.
     #
     # @param value [nil, String, Integer, BigDecimal]
     # @return [nil, Integer, BigDecimal]
     def self.numeric(value)
-      return value if value.is_a?(Integer) || value.is_a?(BigDecimal)
+      return value if numeric?(value)
       return unless value.is_a?(String)
 
       to_numeric(value)
@@ -43,6 +61,10 @@ module CSVDecision
     # @return [nil, Integer, BigDecimal]
     def self.to_numeric(value)
       return unless (match = NUMERIC_RE.match(value))
+      coerce_decimal(match, value)
+    end
+
+    def self.coerce_decimal(match, value)
       return value.to_i if match['decimal'] == ''
       BigDecimal.new(value.chomp('.'))
     end

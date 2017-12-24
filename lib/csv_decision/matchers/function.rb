@@ -14,6 +14,9 @@ module CSVDecision
     }.freeze
     # rubocop: enable Lint/BooleanSymbol
 
+    # Function signature
+    Signature = Value.new(:operator, :type, :name, :args, :negate)
+
     def self.cell_constant?(match)
       return false unless CELL_CONSTANT.member?(match['operator'])
       return false unless match['args'] == ''
@@ -30,25 +33,17 @@ module CSVDecision
     end
     private_class_method :constant?
 
-    def self.function?(match, cell)
-      operator = match['operator']
-      name = match['name']
+    def self.function?(match:, cell:)
+      operator = match['operator']&.gsub(/\s+/, '')
+      name = match['name'].to_sym
       args = match['args'].strip
       negate = match['negate'] == Matchers::NEGATE
 
-      signature = symbol_function(operator, name, args)
-      return signature if signature
+      function = Symbol.function?(operator: operator, name: name, args: args)
+      return function if function
 
       false
     end
-
-    def self.symbol_function(operator, name, args)
-
-      false
-    end
-
-    # Function signature
-    Signature = Value.new(:type, :name, :args, :negate)
 
     # Match cell against a function call or symbolic expression.
     class Function < Matcher
@@ -59,14 +54,6 @@ module CSVDecision
       FUNCTION_CALL =
         "(?<operator>=|:=|==|=|<|>|!=|>=|<=|:|!\\s*:)\s*(?<negate>!?)\\s*(?<name>#{Header::COLUMN_NAME}|:)(?<args>.*)"
       FUNCTION_RE = Matchers.regexp(FUNCTION_CALL)
-
-      # COMPARATORS = {
-      #   '>'  => proc { |numeric_cell, value| Matchers.numeric(value) &.>  numeric_cell },
-      #   '>=' => proc { |numeric_cell, value| Matchers.numeric(value) &.>= numeric_cell },
-      #   '<'  => proc { |numeric_cell, value| Matchers.numeric(value) &.<  numeric_cell },
-      #   '<=' => proc { |numeric_cell, value| Matchers.numeric(value) &.<= numeric_cell },
-      #   '!=' => proc { |numeric_cell, value| Matchers.numeric(value) &.!= numeric_cell }
-      # }.freeze
 
       def initialize(options = {})
         @options = options
@@ -80,9 +67,8 @@ module CSVDecision
         proc = Matchers.cell_constant?(match)
         return proc if proc
 
-        Matchers.function?(match, cell)
+        Matchers.function?(match: match, cell: cell)
       end
-
     end
   end
 end

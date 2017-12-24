@@ -20,6 +20,7 @@ describe CSVDecision::Matchers::Function do
       ':=false' => { operator: ':=', name: 'false' },
       '=false' => { operator: '=', name: 'false' },
       ':false' => { operator: ':', name: 'false' },
+      '!:false' => { operator: '!:', name: 'false' },
       '> :col' => { operator: '>', name: ':', args: 'col' },
       '= :col' => { operator: '=', name: ':', args: 'col' },
       '<= :col' => { operator: '<=', name: ':', args: 'col' },
@@ -60,28 +61,50 @@ describe CSVDecision::Matchers::Function do
       end
     end
 
-    context 'function matches signature' do
-      data = [
-        ['= nil', nil],
-        [':= false', false],
-        ['==true', true]
+    context 'symbol expression matches value to hash data' do
+      examples = [
+        { cell:  ':col',   value:  0,  hash: { col:  0 },  result: true },
+        { cell:  ':col',   value: '0', hash: { col: '0' }, result: true },
+        { cell:  ':col',   value:  0,  hash: { col: '0' }, result: false },
+        { cell:  ':col',   value: '0', hash: { col:  0 },  result: false },
+        { cell:  ':col',   value:  1,  hash: { col:  0 },  result: false },
+        { cell:  ':key',   value:  0,  hash: { col:  0 },  result: false },
+        { cell: '!:col',   value:  0,  hash: { col:  0 },  result: false },
+        { cell: '!:col',   value: '0', hash: { col: '0' }, result: false },
+        { cell: '!:col',   value:  0,  hash: { col: '0' }, result: true },
+        { cell: '!:col',   value: '0', hash: { col:  0 },  result: true },
+        { cell: '!:col',   value:  1,  hash: { col:  0 },  result: true },
+        { cell: '!:key',   value:  0,  hash: { col:  0 },  result: true },
+        { cell:  '>:col',  value:  1,  hash: { col:  0 },  result: true },
+        { cell:  '>:col',  value:  0,  hash: { col:  1 },  result: false },
+        { cell:  '<:col',  value:  0,  hash: { col:  1 },  result: true },
+        { cell:  '<:col',  value:  1,  hash: { col:  0 },  result: false },
+        { cell:  '= :col', value:  0,  hash: { col:  0 },  result: true },
+        { cell:  '==:col', value:  0,  hash: { col:  0 },  result: true },
+        { cell:  ':=:col', value:  0,  hash: { col:  0 },  result: true },
+        { cell: '!= :col', value: '0', hash: { col:  0 },  result: true },
+        { cell: '= :col',  value: '0', hash: { col:  0 },  result: false },
+        { cell: '>=:col',  value:  1,  hash: { col:  0 },  result: true },
+        { cell: '>=:col',  value:  0,  hash: { col:  1 },  result: false },
+        { cell: '<=:col',  value:  0,  hash: { col:  1 },  result: true },
+        { cell: '<=:col',  value:  1,  hash: { col:  0 },  result: false },
+        { cell: '<=:col',  value: '1', hash: { col:  1 },  result: false },
       ]
 
-      data.each do |cell, value|
-        it "comparision #{cell} matches #{value}" do
-          proc = matcher.matches?(cell)
+      examples.each do |ex|
+        it "cell #{ex[:cell]} matches value: #{ex[:value]} to hash: #{ex[:hash]}" do
+          proc = matcher.matches?(ex[:cell])
           expect(proc).to be_a(CSVDecision::Proc)
-          expect(proc.type).to eq :constant
-          expect(proc.function).to eq value
+          expect(proc.function.call(ex[:value], ex[:hash])).to eq ex[:result]
         end
       end
     end
 
-    context 'does not match a function constant' do
-      data = ['1', ':column', ':= 1.1', ':= abc', 'abc', 'abc.*def', '-1..1', '0...3']
+    context 'does not match a function' do
+      data = ['1', ':= 1.1', 'abc', 'abc.*def', '-1..1', '0...3']
 
       data.each do |cell|
-        it "cell #{cell} is not a comparision}" do
+        it "cell #{cell} is not a function" do
           expect(matcher.matches?(cell)).to eq false
         end
       end

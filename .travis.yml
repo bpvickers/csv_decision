@@ -1,12 +1,8 @@
 language: ruby
 sudo: false
-env:
-  global:
-    - 'JRUBY_OPTS=--debug'
 rvm:
   - 2.3.0
   - 2.3.6
   - 2.4.3
-  - 'jruby-9'
 script:
   - bundle exec rspec
