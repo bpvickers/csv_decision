@@ -17,13 +17,16 @@ module CSVDecision
 
     FUNCTION = Matchers.regexp(FUNCTION_CALL)
 
-    def self.function?(match:, cell:)
+    def self.matches?(cell)
+      match = FUNCTION.match(cell)
+      return false unless match
+
       operator = match['operator']&.gsub(/\s+/, '')
       name = match['name'].to_sym
       args = match['args'].strip
       negate = match['negate'] == Matchers::NEGATE
 
-      function = Symbol.function?(operator: operator, name: name, args: args)
+      function = Symbol.comparison(comparator: operator, name: name)
       return function if function
 
       false

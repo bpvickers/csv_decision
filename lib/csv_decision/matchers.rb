@@ -23,7 +23,7 @@ module CSVDecision
     end
 
     # Regular expression used to recognise a numeric string with or without a decimal point.
-    NUMERIC = '[-+]?\d*(?<decimal>\.?)\d+'
+    NUMERIC = '[-+]?\d*(?<decimal>\.?)\d*'
     NUMERIC_RE = regexp(NUMERIC)
 
     def self.numeric?(value)
@@ -61,12 +61,12 @@ module CSVDecision
     # @return [nil, Integer, BigDecimal]
     def self.to_numeric(value)
       return unless (match = NUMERIC_RE.match(value))
-      coerce_decimal(match, value)
+      coerce_numeric(match, value)
     end
 
-    def self.coerce_decimal(match, value)
+    def self.coerce_numeric(match, value)
       return value.to_i if match['decimal'] == ''
-      BigDecimal.new(value.chomp('.'))
+      BigDecimal(value.chomp('.'))
     end
 
     # Parse the supplied input columns for the row supplied using an array of matchers.

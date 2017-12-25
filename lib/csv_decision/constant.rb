@@ -6,8 +6,8 @@
 module CSVDecision
   # Methods to recognise constant expressions
   module Constant
-    # Cell constant specified by prefixing the value with these symbols
-    OPERATOR = Set.new(%w[== := =]).freeze
+    # Cell constant specified by prefixing the value with one of these 3 symbols
+    EXPRESSION = /\A(?<operator>==|:=|=)\s*(?<value>\S.*)\z/
 
     # rubocop: disable Lint/BooleanSymbol
     NON_NUMERIC = {
@@ -17,33 +17,32 @@ module CSVDecision
     }.freeze
     # rubocop: enable Lint/BooleanSymbol
 
-    def self.operator?(operator)
-      OPERATOR.member?(operator)
+    def self.matches?(cell)
+      return false unless (match = EXPRESSION.match(cell))
+
+      proc = non_numeric?(match)
+      return proc if proc
+
+      numeric?(match)
     end
 
     def self.proc(function:)
       Proc.with(type: :constant, function: function)
     end
 
-    def self.numeric?(operator:, cell:)
-      return false unless operator?(operator)
-      proc(function: cell)
+    def self.numeric?(match)
+      value = Matchers.to_numeric(match['value'])
+      return false unless value
+
+      proc(function: value)
     end
 
-    def self.match?(match)
-      return false unless OPERATOR.member?(match['operator'])
-      return false unless match['args'] == ''
-      return false unless match['negate'] == ''
-
-      proc?(match)
-    end
-
-    def self.proc?(match)
-      name = match['name'].to_sym
+    def self.non_numeric?(match)
+      name = match['value'].to_sym
       return false unless NON_NUMERIC.key?(name)
 
       proc(function: NON_NUMERIC[name])
     end
-    private_class_method :proc?
+    private_class_method :non_numeric?
   end
 end

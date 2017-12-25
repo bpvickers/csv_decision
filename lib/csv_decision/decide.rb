@@ -37,7 +37,7 @@ module CSVDecision
     def self.eval_matcher(proc:, value:, hash:)
       function = proc.function
 
-      # A symbol expression just needs to be passed the input hash
+      # A symbol guard expression just needs to be passed the input hash
       return function[hash] if proc.type == :expression
 
       # All other procs can take one or two args

@@ -10,7 +10,9 @@ module CSVDecision
     Matchers::Range,
     Matchers::Numeric,
     Matchers::Pattern,
-    Matchers::Function
+    Matchers::Constant,
+    Matchers::SymbolCompare
+    # Matchers::Function
   ].freeze
 
   # All valid options with their default values.

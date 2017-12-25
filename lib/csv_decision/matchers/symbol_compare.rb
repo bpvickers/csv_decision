@@ -9,16 +9,12 @@ module CSVDecision
     # Match cell against a
     #   * cell constant - e.g., := true, = nil
     #   * symbolic expression - e.g., :column, > :column
-    class Function < Matcher
-      def initialize(options = {})
-        @options = options
-      end
-
+    class SymbolCompare < Matcher
       # Looks like a function call or symbol expressions, e.g.,
       # := function(arg: symbol)
       # == :column_name
       def matches?(cell)
-        CSVDecision::Expression.matches?(cell)
+        CSVDecision::Symbol.matches?(cell)
       end
     end
   end

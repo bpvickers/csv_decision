@@ -29,9 +29,11 @@ module CSVDecision
   autoload :Table,      'csv_decision/table'
 
   module Matchers
-    autoload :Function, 'csv_decision/matchers/function'
-    autoload :Numeric,  'csv_decision/matchers/numeric'
-    autoload :Pattern,  'csv_decision/matchers/pattern'
-    autoload :Range,    'csv_decision/matchers/range'
+    autoload :Constant,      'csv_decision/matchers/constant'
+    autoload :Function,      'csv_decision/matchers/function'
+    autoload :Numeric,       'csv_decision/matchers/numeric'
+    autoload :Pattern,       'csv_decision/matchers/pattern'
+    autoload :Range,         'csv_decision/matchers/range'
+    autoload :SymbolCompare, 'csv_decision/matchers/symbol_compare'
   end
 end

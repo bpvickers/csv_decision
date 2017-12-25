@@ -6,14 +6,20 @@
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   module Header
-    # Column header looks like IN :col_name or cond:
+    # TODO: implement all column types
+    # COLUMN_TYPE = %r{
+    #   \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|guard|if)
+    #   \s*:\s*(?<name>\S?.*)\z
+    # }xi
+
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|guard|if)
+      \A(?<type>in|out|in/text|out/text)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
     # These column types do not need a name
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if cond]).freeze
+    # TODO: implement anonymous column types
+    # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
 
     # More lenient than a Ruby method name -
     # any spaces will have been replaced with underscores
@@ -80,7 +86,9 @@ module CSVDecision
 
     def self.column_name(type:, name:)
       return format_column_name(name) if name.present?
-      return if COLUMN_TYPE_ANONYMOUS.member?(type)
+
+      # TODO: implement anonymous column types
+      # return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
       raise CellValidationError, 'column name is missing'
     end
