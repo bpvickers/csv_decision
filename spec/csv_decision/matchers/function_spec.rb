@@ -21,7 +21,7 @@ describe CSVDecision::Matchers::Function do
     }
     cells.each_pair do |cell, expected|
       it "recognises #{cell} as a function" do
-        match = CSVDecision::Expression::FUNCTION.match(cell)
+        match = CSVDecision::Function::FUNCTION.match(cell)
         expect(match['operator']).to eq expected[:operator]
         expect(match['name']).to eq expected[:name]
       end

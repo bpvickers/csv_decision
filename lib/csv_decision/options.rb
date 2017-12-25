@@ -11,7 +11,7 @@ module CSVDecision
     Matchers::Numeric,
     Matchers::Pattern,
     Matchers::Constant,
-    Matchers::SymbolCompare
+    Matchers::Symbol
     # Matchers::Function
   ].freeze
 

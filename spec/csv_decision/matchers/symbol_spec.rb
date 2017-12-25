@@ -2,11 +2,11 @@
 
 require_relative '../../../lib/csv_decision'
 
-describe CSVDecision::Matchers::SymbolCompare do
+describe CSVDecision::Matchers::Symbol do
   subject { described_class.new }
 
   describe '#new' do
-    it { is_expected.to be_a CSVDecision::Matchers::SymbolCompare }
+    it { is_expected.to be_a CSVDecision::Matchers::Symbol }
     it { is_expected.to be_a CSVDecision::Matchers::Matcher }
     it { is_expected.to respond_to(:matches?).with(1).argument }
   end

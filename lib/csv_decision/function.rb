@@ -5,7 +5,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to recognise various function expressions
-  module Expression
+  module Function
     # Looks like a function call or symbol expressions, e.g.,
     # == true
     # := function(arg: symbol)

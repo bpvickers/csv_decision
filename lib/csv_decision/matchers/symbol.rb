@@ -9,7 +9,7 @@ module CSVDecision
     # Match cell against a
     #   * cell constant - e.g., := true, = nil
     #   * symbolic expression - e.g., :column, > :column
-    class SymbolCompare < Matcher
+    class Symbol < Matcher
       # Looks like a function call or symbol expressions, e.g.,
       # := function(arg: symbol)
       # == :column_name

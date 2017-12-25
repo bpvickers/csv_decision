@@ -6,9 +6,9 @@
 module CSVDecision
   # Methods to assign a matcher to data cells
   module Matchers
-    # Match cell against a
-    #   * cell constant - e.g., := true, = nil
-    #   * symbolic expression - e.g., :column, > :column
+    # Match cell against a function call
+    #   * no arguments - e.g., := present?
+    #   * with arguments - e.g., :=lookup?(:table)
     class Function < Matcher
       def initialize(options = {})
         @options = options
@@ -18,7 +18,7 @@ module CSVDecision
       # := function(arg: symbol)
       # == :column_name
       def matches?(cell)
-        CSVDecision::Expression.matches?(cell)
+        CSVDecision::Function.matches?(cell)
       end
     end
   end

@@ -17,7 +17,7 @@ module CSVDecision
   autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'
   autoload :Columns,    'csv_decision/columns'
-  autoload :Expression, 'csv_decision/expression'
+  autoload :Function,   'csv_decision/function'
   autoload :Header,     'csv_decision/header'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
@@ -34,6 +34,6 @@ module CSVDecision
     autoload :Numeric,       'csv_decision/matchers/numeric'
     autoload :Pattern,       'csv_decision/matchers/pattern'
     autoload :Range,         'csv_decision/matchers/range'
-    autoload :SymbolCompare, 'csv_decision/matchers/symbol_compare'
+    autoload :Symbol,        'csv_decision/matchers/symbol'
   end
 end
