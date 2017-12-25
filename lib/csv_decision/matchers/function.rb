@@ -9,6 +9,7 @@ module CSVDecision
     # Match cell against a function call
     #   * no arguments - e.g., := present?
     #   * with arguments - e.g., :=lookup?(:table)
+    # TODO: fully implement
     class Function < Matcher
       def initialize(options = {})
         @options = options

@@ -5,6 +5,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to recognise various function expressions
+  # TODO: fully implement
   module Function
     # Looks like a function call or symbol expressions, e.g.,
     # == true
@@ -26,10 +27,7 @@ module CSVDecision
       args = match['args'].strip
       negate = match['negate'] == Matchers::NEGATE
 
-      function = Symbol.comparison(comparator: operator, name: name)
-      return function if function
-
-      false
+      raise 'functions not implemented'
     end
   end
 end
