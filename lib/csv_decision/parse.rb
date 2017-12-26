@@ -1,42 +1,49 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers.
 # See LICENSE and README.md for details.
 module CSVDecision
+  # All CSVDecision specific errors
   class Error < StandardError; end
+
+  # Error validating a cell when parsing input table data.
   class CellValidationError < Error; end
+
+  # Table parsing error message enhanced to include the file being processed
   class FileError < Error; end
 
   # Builds a decision table from the input data - which may either be a file, CSV string
   # or an array of arrays.
   #
-  # @param data [Pathname, File, Array<Array<String>>, String] - input data given as
-  #   a file, array of arrays or CSV string.
-  # @param options [Hash] - options hash supplied by the user
+  # @param data [Pathname, File, Array<Array<String>>, String] input data given as
+  #   a CSV file, array of arrays or CSV string.
+  # @param options [Hash] options hash supplied by the user
   #   * first_match:     Stop after finding the first match.
-  #   * regexp_implicit: Set to make regular expressions implicit rather than requiring
-  #                      the comparator =~. (Insidious, use with care.)
-  #   * text_only:       Set to make all cells be treated as simple strings by turning
-  #                      off all special matchers.
-  #   * matchers         May be used to control the inclusion and ordering of special
-  #                      matchers. (Advanced feature, use with care.)
-  # @return [CSVDecision::Table] - resulting decision table
+  #   * regexp_implicit: Make regular expressions implicit rather than requiring the comparator =~. (Use with care.)
+  #   * text_only:       All cells treated as simple strings by turning off all special matchers.
+  #   * matchers         May be used to control the inclusion and ordering of special matchers. (Advanced feature, use with care.)
+  # @return [CSVDecision::Table] resulting decision table
+  # @raise [CSVDecision::Error]
+  # @raise [CSVDecision::FileError]
   def self.parse(data, options = {})
-    Parse.table(input: data, options: Options.normalize(options))
+    Parse.table(data: data, options: Options.normalize(options))
   end
 
-  # Parse the CSV file and create a new decision table object.
-  #
-  # (see #parse)
+  # Methods to parse the decision table a return a CSVDecision::Table object.
   module Parse
-    def self.table(input:, options:)
+    # Parse the CSV file or input data and create a new decision table object.
+    #
+    # @param (see CSVDecision.parse)
+    # @return (see CSVDecision.parse)
+    def self.table(data:, options:)
       table = CSVDecision::Table.new
 
       # In most cases the decision table will be loaded from a CSV file.
-      table.file = input if Data.input_file?(input)
+      table.file = data if Data.input_file?(data)
 
-      parse_table(table: table, input: input, options: options)
+      parse_table(table: table, input: data, options: options)
 
       table.freeze
     rescue CSVDecision::Error => exp
