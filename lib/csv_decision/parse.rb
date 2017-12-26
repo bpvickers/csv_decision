@@ -9,18 +9,18 @@ module CSVDecision
   class FileError < Error; end
 
   # Builds a decision table from the input data - which may either be a file, CSV string
-  # or array of arrays.
+  # or an array of arrays.
   #
   # @param data [Pathname, File, Array<Array<String>>, String] - input data given as
   #   a file, array of arrays or CSV string.
   # @param options [Hash] - options hash supplied by the user
-  #   * first_match: stop after finding the first match
+  #   * first_match:     Stop after finding the first match.
   #   * regexp_implicit: Set to make regular expressions implicit rather than requiring
-  #                      the comparator =~
+  #                      the comparator =~. (Insidious, use with care.)
   #   * text_only:       Set to make all cells be treated as simple strings by turning
   #                      off all special matchers.
   #   * matchers         May be used to control the inclusion and ordering of special
-  #                      matchers.
+  #                      matchers. (Advanced feature, use with care.)
   # @return [CSVDecision::Table] - resulting decision table
   def self.parse(data, options = {})
     Parse.table(input: data, options: Options.normalize(options))
@@ -37,6 +37,7 @@ module CSVDecision
       table.file = input if Data.input_file?(input)
 
       parse_table(table: table, input: input, options: options)
+
       table.freeze
     rescue CSVDecision::Error => exp
       raise_error(file: table.file, exception: exp)
@@ -44,8 +45,9 @@ module CSVDecision
 
     def self.raise_error(file:, exception:)
       raise exception unless file
-      message = "error processing CSV file #{file}\n#{exception.inspect}"
-      raise CSVDecision::FileError, message
+
+      raise CSVDecision::FileError,
+            "error processing CSV file #{file}\n#{exception.inspect}"
     end
     private_class_method :raise_error
 
@@ -68,6 +70,7 @@ module CSVDecision
       table.rows.each_with_index do |row, index|
         table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
         table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
+
         row.freeze
       end
 

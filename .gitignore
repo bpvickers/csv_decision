@@ -11,3 +11,4 @@ pkg/*
 .idea
 .DS_Store
 coverage/
+.yardoc/
