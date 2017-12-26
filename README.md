@@ -157,18 +157,18 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
  For example:
  ```ruby
     data = <<~DATA
-      in :constant, out :type
-      :=nil,        NilClass
-      ==false,      FALSE
-      =true,        TRUE
-      = 0,          Zero
-      :=100.0,      100%
+      in :constant, out :value
+      :=nil,        :=nil
+      ==false,      ==false
+      =true,        =true
+      = 0,          = 0
+      :=100.0,      :=100.0
     DATA
           
   table = CSVDecision.parse(data)
-  table.decide(constant: nil) # returns type: 'NilClass'        
-  table.decide(constant: 0) # returns type: 'Zero'        
-  table.decide(constant: BigDecimal.new('100.0')) # returns type: '100%'        
+  table.decide(constant: nil) # returns value: nil      
+  table.decide(constant: 0) # returns value: 0        
+  table.decide(constant: BigDecimal('100.0')) # returns value: BigDecimal('100.0')       
 ```
  
  ### Column header symbols

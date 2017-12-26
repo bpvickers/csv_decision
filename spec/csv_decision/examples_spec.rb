@@ -46,31 +46,31 @@ context 'simple examples' do
 
   context 'simple example - constants' do
     data = <<~DATA
-      in :constant, out :type
-      :=nil,        NilClass
-      ==false,      FALSE
-      =true,        TRUE
-      = 0,          Zero
-      :=100.0,      100%
+      in :constant, out :value
+      :=nil,        :=nil
+      ==false,      ==false
+      =true,        =true
+      = 0,          = 0
+      :=100.0,      :=100.0
     DATA
 
     it 'makes correct decisions for CSV string' do
       table = CSVDecision.parse(data)
 
       result = table.decide(constant: nil)
-      expect(result).to eq(type: 'NilClass')
+      expect(result).to eq(value: nil)
 
       result = table.decide(constant: true)
-      expect(result).to eq(type: 'TRUE')
+      expect(result).to eq(value: true)
 
       result = table.decide(constant: false)
-      expect(result).to eq(type: 'FALSE')
+      expect(result).to eq(value: false)
 
       result = table.decide(constant: 0)
-      expect(result).to eq(type: 'Zero')
+      expect(result).to eq(value: 0)
 
-      result = table.decide(constant: BigDecimal.new('100.0'))
-      expect(result).to eq(type: '100%')
+      result = table.decide(constant: BigDecimal('100.0'))
+      expect(result).to eq(value: BigDecimal('100.0'))
     end
   end
 
