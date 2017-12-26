@@ -208,7 +208,7 @@ them to a normalized option key value pair.</p>
         <div class="docstring">
   <div class="discussion">
     
-<p>Value object for a cell proc</p>
+<p>Value object for a cell proc.</p>
 
 
   </div>
@@ -463,24 +463,77 @@ CSV string or an array of arrays.</p>
       
         &mdash;
         <div class='inline'>
-<p>options hash supplied by the user</p>
-<ul><li>
-<p>first_match:     Stop after finding the first match.</p>
-</li><li>
-<p>regexp_implicit: Make regular expressions implicit rather than requiring
-the comparator =~. (Use with care.)</p>
-</li><li>
-<p>text_only:       All cells treated as simple strings by turning off all
-special matchers.</p>
-</li><li>
-<p>matchers         May be used to control the inclusion and ordering of
-special matchers. (Advanced feature, use with care.)</p>
-</li></ul>
+<p>Options hash supplied by the user.</p>
 </div>
       
     </li>
   
 </ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:first_match</span>
+          <span class="type">(<tt>Boolean</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Stop scanning after find the first row match.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:regexp_implicit</span>
+          <span class="type">(<tt>Boolean</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Make regular expressions implicit rather than requiring the comparator =~.
+(Use with care.)</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:text_only</span>
+          <span class="type">(<tt>Boolean</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>All cells treated as simple strings by turning off all special matchers.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:matchers</span>
+          <span class="type">(<tt>Array&lt;<span class='object_link'><a href="CSVDecision/Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matchers::Matcher</a></span>&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>May be used to control the inclusion and ordering of special matchers.
+(Advanced feature, use with care.)</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -494,7 +547,7 @@ special matchers. (Advanced feature, use with care.)</p>
       
         &mdash;
         <div class='inline'>
-<p>resulting decision table</p>
+<p>Resulting decision table.</p>
 </div>
       
     </li>
@@ -506,9 +559,14 @@ special matchers. (Advanced feature, use with care.)</p>
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="CSVDecision/Error.html" title="CSVDecision::Error (class)">CSVDecision::Error</a></span></tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="CSVDecision/CellValidationError.html" title="CSVDecision::CellValidationError (class)">CSVDecision::CellValidationError</a></span></tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Table parsing cell validation error.</p>
+</div>
       
     </li>
   
@@ -518,6 +576,11 @@ special matchers. (Advanced feature, use with care.)</p>
         <span class='type'>(<tt><span class='object_link'><a href="CSVDecision/FileError.html" title="CSVDecision::FileError (class)">CSVDecision::FileError</a></span></tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Table parsing error for a named CSV file.</p>
+</div>
       
     </li>
   
@@ -529,12 +592,12 @@ special matchers. (Advanced feature, use with care.)</p>
       <pre class="lines">
 
 
-30
-31
-32</pre>
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="CSVDecision/Parse.html" title="CSVDecision::Parse (module)">Parse</a></span></span><span class='period'>.</span><span class='id identifier rubyid_table'><span class='object_link'><a href="CSVDecision/Parse.html#table-class_method" title="CSVDecision::Parse.table (method)">table</a></span></span><span class='lparen'>(</span><span class='label'>data:</span> <span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>options:</span> <span class='const'><span class='object_link'><a href="CSVDecision/Options.html" title="CSVDecision::Options (module)">Options</a></span></span><span class='period'>.</span><span class='id identifier rubyid_normalize'><span class='object_link'><a href="CSVDecision/Options.html#normalize-class_method" title="CSVDecision::Options.normalize (method)">normalize</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -588,12 +651,12 @@ special matchers. (Advanced feature, use with care.)</p>
       <pre class="lines">
 
 
-11
 12
-13</pre>
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision.rb', line 12</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_root'><span class='object_link'><a href="top-level-namespace.html" title="Top Level Namespace (root)">root</a></span></span>
   <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span> <span class='id identifier rubyid___dir__'>__dir__</span>
@@ -608,7 +671,7 @@ special matchers. (Advanced feature, use with care.)</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 13:08:09 2017 by
+  Generated on Tue Dec 26 15:19:37 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

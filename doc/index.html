@@ -69,7 +69,9 @@ href="https://coveralls.io/github/bpvickers/csv_decision?branch=master"><img
 src="https://coveralls.io/repos/github/bpvickers/csv_decision/badge.svg?branch=master"></a>
 <a
 href="https://codeclimate.com/github/bpvickers/csv_decision/maintainability"><img
-src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability"></a></p>
+src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability"></a>
+<a href="#license"><img
+src="http://img.shields.io/badge/license-MIT-yellowgreen.svg"></a></p>
 
 <h3 id="label-CSV+based+Ruby+decision+tables+-28a+lightweight+Hash+transformation+gem-29">CSV based Ruby decision tables (a lightweight Hash transformation gem)</h3>
 
@@ -80,10 +82,10 @@ href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a>,
 which can then be used to execute complex conditional logic against an
 input hash, producing a decision as an output hash.</p>
 
-<p>### <code>csv_decision</code> features  * Fast decision-time performance
-(see <code>benchmark.rb</code>).  * In addition to simple string matching,
-can match common Ruby constants,  regular expressions, numeric comparisons
-and Ruby-style ranges.  * Can use column symbols in comparisons for guard
+<p>### CSV Decision features  * Fast decision-time performance (see
+<code>benchmark.rb</code>).  * In addition to simple string matching, can
+match common Ruby constants,  regular expressions, numeric comparisons and
+Ruby-style ranges.  * Can use column symbols in comparisons for guard
 conditions – e.g., &gt; :column.  * Accepts data as a file, CSV string or
 an array of arrays. (For safety all input data is  force encoded to UTF-8,
 and non-ascii strings are converted to empty strings.)  * All CSV cells are
@@ -252,7 +254,7 @@ bundle install  rspec </code></p>
 </div></div>
 
       <div id="footer">
-  Generated on Tue Dec 26 13:08:09 2017 by
+  Generated on Tue Dec 26 15:19:36 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

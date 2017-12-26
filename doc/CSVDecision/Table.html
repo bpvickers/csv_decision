@@ -120,7 +120,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#columns-instance_method" title="#columns (instance method)">#<strong>columns</strong>  &#x21d2; Object </a>
+      <a href="#columns-instance_method" title="#columns (instance method)">#<strong>columns</strong>  &#x21d2; CSVDecision::Columns </a>
     
 
     
@@ -138,7 +138,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>CSVDecision::Columns object - dictionary of all input and output columns.</p>
+<p>Dictionary of all input and output columns.</p>
 </div></span>
   
 </li>
@@ -147,7 +147,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#file-instance_method" title="#file (instance method)">#<strong>file</strong>  &#x21d2; Object </a>
+      <a href="#file-instance_method" title="#file (instance method)">#<strong>file</strong>  &#x21d2; File, ... </a>
     
 
     
@@ -165,7 +165,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>File path name if decision table loaded from a CSV file.</p>
+<p>File path name if decision table was loaded from a CSV file.</p>
 </div></span>
   
 </li>
@@ -174,7 +174,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#options-instance_method" title="#options (instance method)">#<strong>options</strong>  &#x21d2; Object </a>
+      <a href="#options-instance_method" title="#options (instance method)">#<strong>options</strong>  &#x21d2; Hash </a>
     
 
     
@@ -192,7 +192,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>All options used to parse the table.</p>
+<p>All options, explicitly set or defaulted, used to parse the table.</p>
 </div></span>
   
 </li>
@@ -201,7 +201,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#outs_functions-instance_method" title="#outs_functions (instance method)">#<strong>outs_functions</strong>  &#x21d2; Object </a>
+      <a href="#outs_rows-instance_method" title="#outs_rows (instance method)">#<strong>outs_rows</strong>  &#x21d2; Array&lt;CSVDecision::ScanRow&gt; </a>
     
 
     
@@ -219,7 +219,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Set if the table row has any output functions (planned feature).</p>
+<p>Used to implement outputting of final results.</p>
 </div></span>
   
 </li>
@@ -228,7 +228,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#outs_rows-instance_method" title="#outs_rows (instance method)">#<strong>outs_rows</strong>  &#x21d2; Object </a>
+      <a href="#rows-instance_method" title="#rows (instance method)">#<strong>rows</strong>  &#x21d2; Array&lt;Array&gt; </a>
     
 
     
@@ -246,8 +246,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Array of CSVDecision::ScanRow objects used to implement outputing final
-results.</p>
+<p>Data rows after parsing.</p>
 </div></span>
   
 </li>
@@ -256,7 +255,7 @@ results.</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#rows-instance_method" title="#rows (instance method)">#<strong>rows</strong>  &#x21d2; Object </a>
+      <a href="#scan_rows-instance_method" title="#scan_rows (instance method)">#<strong>scan_rows</strong>  &#x21d2; Array&lt;CSVDecision::ScanRow&gt; </a>
     
 
     
@@ -274,64 +273,7 @@ results.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Data rows - an array of arrays.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#scan_rows-instance_method" title="#scan_rows (instance method)">#<strong>scan_rows</strong>  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Array of CSVDecision::ScanRow objects used to implement matching logic.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#tables-instance_method" title="#tables (instance method)">#<strong>tables</strong>  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Any array of CSVDecision::Table pre-loaded tables passed to this decision
-table at load time.</p>
+<p>Scanning objects used to implement input matching logic.</p>
 </div></span>
   
 </li>
@@ -392,8 +334,8 @@ table at load time.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Unsafe version of decide - will mutate the hash if set: column type is used
-(planned feature).</p>
+<p>Unsafe version of decide - will mutate the hash if <tt>set: column</tt> type is
+used (planned feature).</p>
 </div></span>
   
 </li>
@@ -482,8 +424,6 @@ and last row index given.</p>
       <pre class="lines">
 
 
-66
-67
 68
 69
 70
@@ -492,10 +432,12 @@ and last row index given.</p>
 73
 74
 75
-76</pre>
+76
+77
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 66</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='kw'>nil</span>
@@ -523,7 +465,7 @@ and last row index given.</p>
       <div class="method_details first">
   <h3 class="signature first" id="columns-instance_method">
   
-    #<strong>columns</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>columns</strong>  &#x21d2; <tt><span class='object_link'><a href="Columns.html" title="CSVDecision::Columns (class)">CSVDecision::Columns</a></span></tt> 
   
 
   
@@ -532,13 +474,31 @@ and last row index given.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>CSVDecision::Columns object - dictionary of all input and output columns</p>
+<p>Returns Dictionary of all input and output columns.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Columns.html" title="CSVDecision::Columns (class)">CSVDecision::Columns</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Dictionary of all input and output columns.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -566,7 +526,7 @@ and last row index given.</p>
       <div class="method_details ">
   <h3 class="signature " id="file-instance_method">
   
-    #<strong>file</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>file</strong>  &#x21d2; <tt>File</tt>, ... 
   
 
   
@@ -575,13 +535,31 @@ and last row index given.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>File path name if decision table loaded from a CSV file</p>
+<p>Returns File path name if decision table was loaded from a CSV file.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>File</tt>, <tt>Pathname</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>File path name if decision table was loaded from a CSV file.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -609,7 +587,7 @@ and last row index given.</p>
       <div class="method_details ">
   <h3 class="signature " id="options-instance_method">
   
-    #<strong>options</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>options</strong>  &#x21d2; <tt>Hash</tt> 
   
 
   
@@ -618,13 +596,31 @@ and last row index given.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>All options used to parse the table</p>
+<p>Returns All options, explicitly set or defaulted, used to parse the table.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>All options, explicitly set or defaulted, used to parse the table.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -648,54 +644,11 @@ and last row index given.</p>
 </div>
     
       
-      <span id="outs_functions=-instance_method"></span>
-      <div class="method_details ">
-  <h3 class="signature " id="outs_functions-instance_method">
-  
-    #<strong>outs_functions</strong>  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Set if the table row has any output functions (planned feature)</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-19
-20
-21</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 19</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_outs_functions'>outs_functions</span>
-  <span class='ivar'>@outs_functions</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
       <span id="outs_rows=-instance_method"></span>
       <div class="method_details ">
   <h3 class="signature " id="outs_rows-instance_method">
   
-    #<strong>outs_rows</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>outs_rows</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">CSVDecision::ScanRow</a></span>&gt;</tt> 
   
 
   
@@ -704,14 +657,31 @@ and last row index given.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Array of CSVDecision::ScanRow objects used to implement outputing final
-results</p>
+<p>Returns Used to implement outputting of final results.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">CSVDecision::ScanRow</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Used to implement outputting of final results.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -739,7 +709,7 @@ results</p>
       <div class="method_details ">
   <h3 class="signature " id="rows-instance_method">
   
-    #<strong>rows</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>rows</strong>  &#x21d2; <tt>Array&lt;Array&gt;</tt> 
   
 
   
@@ -748,13 +718,31 @@ results</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Data rows - an array of arrays</p>
+<p>Returns Data rows after parsing.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Array&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Data rows after parsing.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -782,7 +770,7 @@ results</p>
       <div class="method_details ">
   <h3 class="signature " id="scan_rows-instance_method">
   
-    #<strong>scan_rows</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>scan_rows</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">CSVDecision::ScanRow</a></span>&gt;</tt> 
   
 
   
@@ -791,13 +779,31 @@ results</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Array of CSVDecision::ScanRow objects used to implement matching logic</p>
+<p>Returns Scanning objects used to implement input matching logic.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">CSVDecision::ScanRow</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Scanning objects used to implement input matching logic.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -814,51 +820,6 @@ results</p>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scan_rows'>scan_rows</span>
   <span class='ivar'>@scan_rows</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="tables-instance_method">
-  
-    #<strong>tables</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Any array of CSVDecision::Table pre-loaded tables passed to this decision
-table at load time. Used to allow this decision table to lookup values in
-other decision tables. (Planned feature.)</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-33
-34
-35</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 33</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_tables'>tables</span>
-  <span class='ivar'>@tables</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -884,6 +845,14 @@ other decision tables. (Planned feature.)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Input hash keys may or may not be symbolized.</p>
+</div>
+  </div>
+
+
 <p>Main public method for making decisions.</p>
 
 
@@ -903,9 +872,8 @@ other decision tables. (Planned feature.)</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>input hash (keys may or may not be symbolized)</p>
-</li></ul>
+        <div class='inline'>
+<p>Input hash.</p>
 </div>
       
     </li>
@@ -924,7 +892,7 @@ other decision tables. (Planned feature.)</p>
       
         &mdash;
         <div class='inline'>
-<p>decision</p>
+<p>Decision hash.</p>
 </div>
       
     </li>
@@ -937,12 +905,12 @@ other decision tables. (Planned feature.)</p>
       <pre class="lines">
 
 
-39
 40
-41</pre>
+41
+42</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Decide.html" title="CSVDecision::Decide (module)">Decide</a></span></span><span class='period'>.</span><span class='id identifier rubyid_decide'><span class='object_link'><a href="Decide.html#decide-class_method" title="CSVDecision::Decide.decide (method)">decide</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span> <span class='kw'>true</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span>
@@ -964,8 +932,16 @@ other decision tables. (Planned feature.)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Unsafe version of decide - will mutate the hash if set: column type is used
-(planned feature).</p>
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Input hash must have its keys symbolized.</p>
+</div>
+  </div>
+
+
+<p>Unsafe version of decide - will mutate the hash if <tt>set: column</tt> type is
+used (planned feature).</p>
 
 
   </div>
@@ -979,14 +955,13 @@ other decision tables. (Planned feature.)</p>
         <span class='name'>input</span>
       
       
-        <span class='type'>(<tt>Hash{<span class='object_link'><a href="Symbol.html" title="CSVDecision::Symbol (module)">Symbol</a></span> =&gt; Object}</tt>)</span>
+        <span class='type'>(<tt>Hash</tt>)</span>
       
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>input hash (all keys must already be symbolized)</p>
-</li></ul>
+        <div class='inline'>
+<p>Input hash.</p>
 </div>
       
     </li>
@@ -1003,6 +978,11 @@ other decision tables. (Planned feature.)</p>
       
       
       
+        &mdash;
+        <div class='inline'>
+<p>Decision hash.</p>
+</div>
+      
     </li>
   
 </ul>
@@ -1013,12 +993,12 @@ other decision tables. (Planned feature.)</p>
       <pre class="lines">
 
 
-48
-49
-50</pre>
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_decide!'>decide!</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Decide.html" title="CSVDecision::Decide (module)">Decide</a></span></span><span class='period'>.</span><span class='id identifier rubyid_decide'><span class='object_link'><a href="Decide.html#decide-class_method" title="CSVDecision::Decide.decide (method)">decide</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span> <span class='kw'>false</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span>
@@ -1063,7 +1043,7 @@ and last row index given.</p>
       
         &mdash;
         <div class='inline'>
-<p>start row</p>
+<p>Start row.</p>
 </div>
       
     </li>
@@ -1081,7 +1061,7 @@ and last row index given.</p>
       
         &mdash;
         <div class='inline'>
-<p>last row</p>
+<p>Last row.</p>
 </div>
       
     </li>
@@ -1095,17 +1075,17 @@ and last row index given.</p>
       <pre class="lines">
 
 
-57
-58
 59
 60
 61
 62
 63
-64</pre>
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='id identifier rubyid_first'>first</span> <span class='op'>=</span> <span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_last'>last</span> <span class='op'>=</span> <span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_first'>first</span>
@@ -1125,7 +1105,7 @@ and last row index given.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 13:08:10 2017 by
+  Generated on Tue Dec 26 15:19:37 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>
