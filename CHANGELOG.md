@@ -1,10 +1,16 @@
-## v0.0.4, 18 December 2017.
+## v0.0.4, 26 December 2017.
 *Additions*
 - Adds symbol expressions for input columns.
+- Adds non-string constants for output columns.
+- Support Ruby 2.5.0
+- Include yard documentation.
+
+*Changes*
+- Move `benchmark.rb` to `benchmarks` folder and rename to `rufus_decision.rb`
 
 ## v0.0.3, 18 December 2017.
 *Additions*
-- Add non-string constants.
+- Add non-string constants for input columns.
 
 ## v0.0.2, 18 December 2017.
 *Additions*

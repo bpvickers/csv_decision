@@ -5,6 +5,7 @@ CSV Decision
 [![Build Status](https://travis-ci.org/bpvickers/csv_decision.svg?branch=master)](https://travis-ci.org/bpvickers/csv_decision)
 [![Coverage Status](https://coveralls.io/repos/github/bpvickers/csv_decision/badge.svg?branch=master)](https://coveralls.io/github/bpvickers/csv_decision?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability)](https://codeclimate.com/github/bpvickers/csv_decision/maintainability)
+[![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 ### CSV based Ruby decision tables (a lightweight Hash transformation gem)
 
@@ -15,7 +16,7 @@ It accepts decision tables implemented as a
 which can then be used to execute complex conditional logic against an input hash, 
 producing a decision as an output hash.
 
- ### `csv_decision` features
+ ### CSV Decision features
  * Fast decision-time performance (see `benchmark.rb`).
  * In addition to simple string matching, can match common Ruby constants, 
  regular expressions, numeric comparisons and Ruby-style ranges.

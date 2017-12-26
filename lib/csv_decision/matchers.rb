@@ -6,45 +6,34 @@ require 'values'
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Value object for a cell proc
+  # Value object for a cell proc.
   Proc = Value.new(:type, :function)
 
-  # Methods to assign a matcher to data cells
+  # Methods to assign a matcher to table data cells.
   class Matchers
-    # Negation sign for ranges and functions
+    # Negation sign prefixed to ranges and functions.
     NEGATE = '!'
 
-    # All regular expressions used for matching are anchored
+    # All regular expressions used for matching are anchored inside their own
+    # non-capturing group.
     #
-    # @param value [String]
-    # @return [Regexp]
+    # @param value [String] String used to form an anchored regular expression.
+    # @return [Regexp] Anchored, frozen regular expression.
     def self.regexp(value)
-      Regexp.new("\\A(#{value})\\z").freeze
+      Regexp.new("\\A(?:#{value})\\z").freeze
     end
 
     # Regular expression used to recognise a numeric string with or without a decimal point.
     NUMERIC = '[-+]?\d*(?<decimal>\.?)\d*'
     NUMERIC_RE = regexp(NUMERIC)
 
+    # @param value [Object] Value from the input hash.
+    # @return [Boolean] Value is an Integer or a BigDecimal.
     def self.numeric?(value)
       value.is_a?(Integer) || value.is_a?(BigDecimal)
     end
 
-    # def self.decimal?(value)
-    #   return match if value.is_a?(String) && (match = NUMERIC_RE.match(value))
-    #   return value if numeric?(value)
-    #
-    #   false
-    # end
-    #
-    # def self.to_decimal(value)
-    #   return value if numeric?(value)
-    #
-    #   return false unless value.is_a?(String) && (match = NUMERIC_RE.match(value))
-    #   coerce_decimal(match, value)
-    # end
-
-    # Validate a numeric value and convert it to an Integer or BigDecimal if a valid string.
+    # Validate a numeric value and convert it to an Integer or BigDecimal if a valid numeric string.
     #
     # @param value [nil, String, Integer, BigDecimal]
     # @return [nil, Integer, BigDecimal]
@@ -55,7 +44,7 @@ module CSVDecision
       to_numeric(value)
     end
 
-    # Validate a numeric string and convert it to an Integer or BigDecimal.
+    # Convert a numeric string into an Integer or BigDecimal.
     #
     # @param value [String]
     # @return [nil, Integer, BigDecimal]
@@ -68,12 +57,14 @@ module CSVDecision
       return value.to_i if match['decimal'] == ''
       BigDecimal(value.chomp('.'))
     end
+    private_class_method :coerce_numeric
 
     # Parse the supplied input columns for the row supplied using an array of matchers.
     #
-    # @param columns [Hash] - Input columns hash
-    # @param matchers [Array]
-    # @param row [Array]
+    # @param columns [Hash{Integer=>Columns::Entry}] Input columns hash.
+    # @param matchers [Array<Matchers::Matcher>]
+    # @param row [Array] Data row being parsed.
+    # @return [ScanRow] Used to scan a table row against an input hash for matches.
     def self.parse(columns:, matchers:, row:)
       # Build an array of column indexes requiring simple constant matches,
       # and a second array of columns requiring special matchers.
@@ -85,6 +76,11 @@ module CSVDecision
       scan_row.freeze
     end
 
+    # Scan the table cell against all matches.
+    #
+    # @param matchers [Array<Matchers::Matcher>]
+    # @param cell [String]
+    # @return [false, Matchers::Proc]
     def self.scan(matchers:, cell:)
       matchers.each do |matcher|
         proc = matcher.matches?(cell)

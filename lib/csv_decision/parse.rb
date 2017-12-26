@@ -19,14 +19,20 @@ module CSVDecision
   #
   # @param data [Pathname, File, Array<Array<String>>, String] input data given as
   #   a CSV file, array of arrays or CSV string.
-  # @param options [Hash] options hash supplied by the user
-  #   * first_match:     Stop after finding the first match.
-  #   * regexp_implicit: Make regular expressions implicit rather than requiring the comparator =~. (Use with care.)
-  #   * text_only:       All cells treated as simple strings by turning off all special matchers.
-  #   * matchers         May be used to control the inclusion and ordering of special matchers. (Advanced feature, use with care.)
-  # @return [CSVDecision::Table] resulting decision table
-  # @raise [CSVDecision::Error]
-  # @raise [CSVDecision::FileError]
+  # @param options [Hash] Options hash supplied by the user.
+  #
+  # @option options [Boolean] :first_match Stop scanning after find the first row match.
+  # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than requiring the
+  #   comparator =~. (Use with care.)
+  # @option options [Boolean] :text_only All cells treated as simple strings by turning off all special matchers.
+  # @option options [Array<Matchers::Matcher>] :matchers May be used to control the inclusion and ordering of
+  #   special matchers. (Advanced feature, use with care.)
+  #
+  # @return [CSVDecision::Table] Resulting decision table.
+  #
+  # @raise [CSVDecision::CellValidationError] Table parsing cell validation error.
+  # @raise [CSVDecision::FileError] Table parsing error for a named CSV file.
+  #
   def self.parse(data, options = {})
     Parse.table(data: data, options: Options.normalize(options))
   end

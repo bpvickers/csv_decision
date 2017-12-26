@@ -12,7 +12,9 @@ module CSVDecision
       # Relevant table attributes
       @first_match = table.options[:first_match]
       @outs = table.columns.outs
-      @outs_functions = table.outs_functions
+
+      # TODO: Planned feature
+      # @outs_functions = table.outs_functions
 
       # Partial result always includes the input hash for calculating output functions
       @partial_result = input[:hash].dup if @outs_functions
