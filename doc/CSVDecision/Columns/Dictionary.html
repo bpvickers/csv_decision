@@ -102,9 +102,9 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>Dictionary of all data columns. # Note that the key of each hash is the
-header cell&#39;s array column index. Note that input and output columns
-can be interspersed and need not have unique names.</p>
+<p>Dictionary of all data columns. The key of each hash is the header
+cell&#39;s array column index. Note that input and output columns can be
+interspersed and need not have unique names.</p>
 
 
   </div>
@@ -122,34 +122,7 @@ can be interspersed and need not have unique names.</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#defaults-instance_method" title="#defaults (instance method)">#<strong>defaults</strong>  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Input columns with a default value (planned feature).</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#ins-instance_method" title="#ins (instance method)">#<strong>ins</strong>  &#x21d2; Object </a>
+      <a href="#ins-instance_method" title="#ins (instance method)">#<strong>ins</strong>  &#x21d2; Hash{Integer=&gt;Entry} </a>
     
 
     
@@ -176,7 +149,7 @@ can be interspersed and need not have unique names.</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#outs-instance_method" title="#outs (instance method)">#<strong>outs</strong>  &#x21d2; Object </a>
+      <a href="#outs-instance_method" title="#outs (instance method)">#<strong>outs</strong>  &#x21d2; Hash{Integer=&gt;Entry} </a>
     
 
     
@@ -195,33 +168,6 @@ can be interspersed and need not have unique names.</p>
   
     <span class="summary_desc"><div class='inline'>
 <p>Output columns.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#path-instance_method" title="#path (instance method)">#<strong>path</strong>  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Input hash path - optional (planned feature).</p>
 </div></span>
   
 </li>
@@ -260,7 +206,8 @@ can be interspersed and need not have unique names.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>A new instance of Dictionary.</p>
+<p>TODO: Input columns with a default value (planned feature) attr_accessor
+:defaults.</p>
 </div></span>
   
 </li>
@@ -284,7 +231,8 @@ can be interspersed and need not have unique names.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of Dictionary</p>
+<p>TODO: Input columns with a default value (planned feature) attr_accessor
+:defaults</p>
 
 
   </div>
@@ -298,22 +246,22 @@ can be interspersed and need not have unique names.</p>
       <pre class="lines">
 
 
-31
-32
 33
 34
 35
-36</pre>
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 31</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-  <span class='ivar'>@path</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-  <span class='ivar'>@defaults</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-<span class='kw'>end</span></pre>
+  <span class='comment'># TODO: @path = {}
+</span>  <span class='comment'># TODO: @defaults = {}
+</span><span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -325,54 +273,11 @@ can be interspersed and need not have unique names.</p>
     <h2>Instance Attribute Details</h2>
     
       
-      <span id="defaults=-instance_method"></span>
-      <div class="method_details first">
-  <h3 class="signature first" id="defaults-instance_method">
-  
-    #<strong>defaults</strong>  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Input columns with a default value (planned feature)</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-29
-30
-31</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 29</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_defaults'>defaults</span>
-  <span class='ivar'>@defaults</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
       <span id="ins=-instance_method"></span>
-      <div class="method_details ">
-  <h3 class="signature " id="ins-instance_method">
+      <div class="method_details first">
+  <h3 class="signature first" id="ins-instance_method">
   
-    #<strong>ins</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>ins</strong>  &#x21d2; <tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
   
 
   
@@ -381,13 +286,31 @@ can be interspersed and need not have unique names.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Input columns</p>
+<p>Input columns.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>All input column dictionary entries.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -395,12 +318,12 @@ can be interspersed and need not have unique names.</p>
       <pre class="lines">
 
 
-20
 21
-22</pre>
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@ins</span>
@@ -415,7 +338,7 @@ can be interspersed and need not have unique names.</p>
       <div class="method_details ">
   <h3 class="signature " id="outs-instance_method">
   
-    #<strong>outs</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>outs</strong>  &#x21d2; <tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
   
 
   
@@ -424,13 +347,31 @@ can be interspersed and need not have unique names.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Output columns</p>
+<p>Output columns.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>All output column dictionary entries.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -438,58 +379,15 @@ can be interspersed and need not have unique names.</p>
       <pre class="lines">
 
 
-23
-24
-25</pre>
+25
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@outs</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id="path=-instance_method"></span>
-      <div class="method_details ">
-  <h3 class="signature " id="path-instance_method">
-  
-    #<strong>path</strong>  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Input hash path - optional (planned feature)</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-26
-27
-28</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 26</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_path'>path</span>
-  <span class='ivar'>@path</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -502,7 +400,7 @@ can be interspersed and need not have unique names.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 15:19:37 2017 by
+  Generated on Tue Dec 26 18:31:38 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

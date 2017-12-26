@@ -23,6 +23,7 @@ module CSVDecision
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
   autoload :Matchers,   'csv_decision/matchers'
+  autoload :Numeric,    'csv_decision/numeric'
   autoload :Options,    'csv_decision/options'
   autoload :Parse,      'csv_decision/parse'
   autoload :ScanRow,    'csv_decision/scan_row'

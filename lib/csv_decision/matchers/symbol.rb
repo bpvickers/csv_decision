@@ -4,15 +4,14 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Methods to assign a matcher to data cells
+  # Recognise expressions in table data cells.
   class Matchers
     # Match cell against a
     #   * cell constant - e.g., := true, = nil
     #   * symbolic expression - e.g., :column, > :column
     class Symbol < Matcher
-      # Looks like a function call or symbol expressions, e.g.,
-      # := function(arg: symbol)
-      # == :column_name
+      # @param (see Matchers::Matcher#matches?)
+      # @return (see Matchers::Matcher#matches?)
       def matches?(cell)
         CSVDecision::Symbol.matches?(cell)
       end

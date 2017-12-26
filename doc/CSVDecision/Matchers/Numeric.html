@@ -104,7 +104,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>Match cell against a Ruby-like numeric comparison</p>
+<p>Recognise numeric comparison expressions - e.g., <tt>&gt; 100</tt> or <tt>!= 0</tt></p>
 
 
   </div>
@@ -113,88 +113,12 @@
   
 
 </div>
-  <h2>Constant Summary</h2>
-  <dl class="constants">
-    
-      <dt id="COMPARISON-constant" class="">COMPARISON =
-        <div class="docstring">
-  <div class="discussion">
-    
-<p>For example: &gt;= 100 or != 0</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
-      </dt>
-      <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A(?&lt;comparator&gt;&lt;=|&gt;=|&lt;|&gt;|!=)\s*(?&lt;value&gt;\S.*)\z</span><span class='regexp_end'>/</span></span></pre></dd>
-    
-      <dt id="COMPARATORS-constant" class="">COMPARATORS =
-        <div class="docstring">
-  <div class="discussion">
-    
-<p>Coerce the input value to a numeric representation before invoking the
-comparison. If the coercion fails, it will produce a nil value which always
-fails to match.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
-      </dt>
-      <dd><pre class="code"><span class='lbrace'>{</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&gt;</span><span class='tstring_end'>&#39;</span></span>  <span class='op'>=&gt;</span> <span class='id identifier rubyid_proc'>proc</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_numeric_cell'>numeric_cell</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_numeric'><span class='object_link'><a href="../Matchers.html#numeric-class_method" title="CSVDecision::Matchers.numeric (method)">numeric</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='op'>&amp;.</span><span class='op'>&gt;</span>  <span class='id identifier rubyid_numeric_cell'>numeric_cell</span> <span class='rbrace'>}</span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&gt;=</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_proc'>proc</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_numeric_cell'>numeric_cell</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_numeric'><span class='object_link'><a href="../Matchers.html#numeric-class_method" title="CSVDecision::Matchers.numeric (method)">numeric</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='op'>&amp;.</span><span class='op'>&gt;=</span> <span class='id identifier rubyid_numeric_cell'>numeric_cell</span> <span class='rbrace'>}</span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&lt;</span><span class='tstring_end'>&#39;</span></span>  <span class='op'>=&gt;</span> <span class='id identifier rubyid_proc'>proc</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_numeric_cell'>numeric_cell</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_numeric'><span class='object_link'><a href="../Matchers.html#numeric-class_method" title="CSVDecision::Matchers.numeric (method)">numeric</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='op'>&amp;.</span><span class='op'>&lt;</span>  <span class='id identifier rubyid_numeric_cell'>numeric_cell</span> <span class='rbrace'>}</span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&lt;=</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_proc'>proc</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_numeric_cell'>numeric_cell</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_numeric'><span class='object_link'><a href="../Matchers.html#numeric-class_method" title="CSVDecision::Matchers.numeric (method)">numeric</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='op'>&amp;.</span><span class='op'>&lt;=</span> <span class='id identifier rubyid_numeric_cell'>numeric_cell</span> <span class='rbrace'>}</span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>!=</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_proc'>proc</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_numeric_cell'>numeric_cell</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_numeric'><span class='object_link'><a href="../Matchers.html#numeric-class_method" title="CSVDecision::Matchers.numeric (method)">numeric</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='op'>&amp;.</span><span class='op'>!=</span> <span class='id identifier rubyid_numeric_cell'>numeric_cell</span> <span class='rbrace'>}</span>
-<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
-    
-  </dl>
 
 
 
 
 
 
-
-  
-    <h2>
-      Class Method Summary
-      <small><a href="#" class="summary_toggle">collapse</a></small>
-    </h2>
-
-    <ul class="summary">
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#match%3F-class_method" title="match? (class method)">.<strong>match?</strong>(cell)  &#x21d2; Boolean </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-    </ul>
   
     <h2>
       Instance Method Summary
@@ -206,7 +130,7 @@ fails to match.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#matches%3F-instance_method" title="#matches? (instance method)">#<strong>matches?</strong>(cell)  &#x21d2; Boolean </a>
+      <a href="#matches%3F-instance_method" title="#matches? (instance method)">#<strong>matches?</strong>(cell)  &#x21d2; false, CSVDecision::Proc </a>
     
 
     
@@ -220,7 +144,11 @@ fails to match.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+</div></span>
   
 </li>
 
@@ -247,80 +175,6 @@ fails to match.</p>
 </div>
 
 
-  <div id="class_method_details" class="method_details_list">
-    <h2>Class Method Details</h2>
-
-    
-      <div class="method_details first">
-  <h3 class="signature first" id="match?-class_method">
-  
-    .<strong>match?</strong>(cell)  &#x21d2; <tt>Boolean</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 24</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="#COMPARISON-constant" title="CSVDecision::Matchers::Numeric::COMPARISON (constant)">COMPARISON</a></span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_match'>match</span>
-
-  <span class='id identifier rubyid_numeric_cell'>numeric_cell</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_to_numeric'><span class='object_link'><a href="../Matchers.html#to_numeric-class_method" title="CSVDecision::Matchers.to_numeric (method)">to_numeric</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>value</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_numeric_cell'>numeric_cell</span>
-
-  <span class='id identifier rubyid_comparator'>comparator</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>comparator</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
-  <span class='const'><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">Proc</a></span></span><span class='period'>.</span><span class='id identifier rubyid_with'>with</span><span class='lparen'>(</span><span class='label'>type:</span> <span class='symbol'>:proc</span><span class='comma'>,</span>
-            <span class='label'>function:</span> <span class='const'><span class='object_link'><a href="#COMPARATORS-constant" title="CSVDecision::Matchers::Numeric::COMPARATORS (constant)">COMPARATORS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_comparator'>comparator</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_curry'>curry</span><span class='lbracket'>[</span><span class='id identifier rubyid_numeric_cell'>numeric_cell</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
-
   <div id="instance_method_details" class="method_details_list">
     <h2>Instance Method Details</h2>
 
@@ -328,7 +182,7 @@ fails to match.</p>
       <div class="method_details first">
   <h3 class="signature first" id="matches?-instance_method">
   
-    #<strong>matches?</strong>(cell)  &#x21d2; <tt>Boolean</tt> 
+    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt> 
   
 
   
@@ -337,20 +191,51 @@ fails to match.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>cell</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Data row cell.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>false</tt>, <tt><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+</div>
       
     </li>
   
@@ -362,15 +247,15 @@ fails to match.</p>
       <pre class="lines">
 
 
-36
-37
-38</pre>
+13
+14
+15</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 36</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span></span><span class='period'>.</span><span class='id identifier rubyid_match?'><span class='object_link'><a href="#match%3F-class_method" title="CSVDecision::Matchers::Numeric.match? (method)">match?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Numeric.html" title="CSVDecision::Numeric (module)">Numeric</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="../Numeric.html#matches%3F-class_method" title="CSVDecision::Numeric.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -382,7 +267,7 @@ fails to match.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 15:19:38 2017 by
+  Generated on Tue Dec 26 18:31:38 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

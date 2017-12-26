@@ -15,9 +15,8 @@ module CSVDecision
         @options = options
       end
 
-      # Looks like a function call or symbol expressions, e.g.,
-      # := function(arg: symbol)
-      # == :column_name
+      # @param (see Matchers::Matcher#matches?)
+      # @return (see Matchers::Matcher#matches?)
       def matches?(cell)
         CSVDecision::Function.matches?(cell)
       end

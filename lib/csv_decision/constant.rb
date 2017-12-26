@@ -4,19 +4,23 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Methods to recognise constant expressions in table cells.
+  # Recognise constant expressions in table data cells.
   module Constant
-    # Cell constant specified by prefixing the value with one of these 3 symbols
+    # Cell constant expression specified by prefixing the value with one of the three equality symbols.
     EXPRESSION = Matchers.regexp("(?<operator>#{Matchers::EQUALS})\\s*(?<value>\\S.*)")
 
     # rubocop: disable Lint/BooleanSymbol
+
+    # Non-numeric constants recognised by CSV Decision.
     NON_NUMERIC = {
+      nil: nil,
       true: true,
-      false: false,
-      nil: nil
+      false: false
     }.freeze
     # rubocop: enable Lint/BooleanSymbol
 
+    # @param (see Matchers::Matcher#matches?)
+    # @return (see Matchers::Matcher#matches?)
     def self.matches?(cell)
       return false unless (match = EXPRESSION.match(cell))
 
@@ -29,6 +33,7 @@ module CSVDecision
     def self.proc(function:)
       Proc.with(type: :constant, function: function)
     end
+    private_class_method :proc
 
     def self.numeric?(match)
       value = Matchers.to_numeric(match['value'])
@@ -36,6 +41,7 @@ module CSVDecision
 
       proc(function: value)
     end
+    private_class_method :numeric?
 
     def self.non_numeric?(match)
       name = match['value'].to_sym

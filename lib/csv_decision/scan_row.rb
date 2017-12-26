@@ -8,26 +8,38 @@ require 'values'
 module CSVDecision
   # Data row object indicating which columns are constants versus procs.
   class ScanRow
-    attr_accessor :constants
-    attr_accessor :procs
+    # @return [Array<Integer>] Column indices for simple constants.
+    attr_reader :constants
+
+    # @return [Array<Integer>] Column indices for Proc objects.
+    attr_reader :procs
 
     def initialize
       @constants = []
       @procs = []
     end
 
-    def scan_columns(columns:, matchers:, row:)
+    # Scan all the specified +columns+ (e.g., inputs) in the given +data+ row using the +matchers+
+    # array supplied.
+    #
+    # @param row [Array<String>] Data row.
+    # @param columns [Array<Columns::Entry>] Array of column dictionary entries.
+    # @param matchers [Array<Matchers::Matcher>] Array of table cell matchers.
+    # @return [Array] Data row with anything not a string constant replaced with a Proc or a non-string constant.
+    def scan_columns(row:, columns:, matchers:)
       columns.each_pair do |col, column|
         # Empty cell matches everything, and so never needs to be scanned
         next if (cell = row[col]) == ''
 
         # If the column is text only then no special matchers need be invoked
-        next constants << col if column.text_only
+        next @constants << col if column.text_only
 
         # Need to scan the cell against all matchers, and possibly overwrite
         # the cell contents with a proc.
         row[col] = scan_cell(col: col, matchers: matchers, cell: cell)
       end
+
+      row
     end
 
     def match_constants?(row:, scan_cols:)
@@ -59,18 +71,18 @@ module CSVDecision
       return set(proc, col) if proc
 
       # Just a plain constant
-      constants << col
+      @constants << col
       cell
     end
 
     def set(proc, col)
       # Unbox a constant
       if proc.type == :constant
-        constants << col
+        @constants << col
         return proc.function
       end
 
-      procs << col
+      @procs << col
       proc
     end
   end

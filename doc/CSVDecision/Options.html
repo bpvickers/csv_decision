@@ -86,7 +86,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>Validate and normalize the options hash supplied.</p>
+<p>Validate and normalize the options values supplied.</p>
 
 
   </div>
@@ -95,6 +95,54 @@
   
 
 </div>
+  <h2>Constant Summary</h2>
+  <dl class="constants">
+    
+      <dt id="VALID-constant" class="">VALID =
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>All valid CSVDecision::parse options with their default values.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='label'>first_match:</span> <span class='kw'>true</span><span class='comma'>,</span>
+  <span class='label'>regexp_implicit:</span> <span class='kw'>false</span><span class='comma'>,</span>
+  <span class='label'>text_only:</span> <span class='kw'>false</span><span class='comma'>,</span>
+  <span class='label'>matchers:</span> <span class='const'><span class='object_link'><a href="../CSVDecision.html#DEFAULT_MATCHERS-constant" title="CSVDecision::DEFAULT_MATCHERS (constant)">DEFAULT_MATCHERS</a></span></span>
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+    
+      <dt id="CSV_NAMES-constant" class="">CSV_NAMES =
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>These options may appear in the CSV file before the header row. They get
+converted to a normalized option key value pair.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='label'>first_match:</span> <span class='lbracket'>[</span><span class='symbol'>:first_match</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>accumulate:</span> <span class='lbracket'>[</span><span class='symbol'>:first_match</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>regexp_implicit:</span> <span class='lbracket'>[</span><span class='symbol'>:regexp_implicit</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>text_only:</span> <span class='lbracket'>[</span><span class='symbol'>:text_only</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span>
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+    
+  </dl>
+
 
 
 
@@ -198,9 +246,8 @@ set.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>table data rows.</p>
-</li></ul>
+        <div class='inline'>
+<p>Table data rows.</p>
 </div>
       
     </li>
@@ -215,9 +262,8 @@ set.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>input options hash built so far</p>
-</li></ul>
+        <div class='inline'>
+<p>Input options hash built so far.</p>
 </div>
       
     </li>
@@ -235,9 +281,8 @@ set.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>options hash overridden with any option values in the CSV file</p>
-</li></ul>
+        <div class='inline'>
+<p>Options hash overridden with any values found in the CSV file.</p>
 </div>
       
     </li>
@@ -250,7 +295,6 @@ set.</p>
       <pre class="lines">
 
 
-57
 58
 59
 60
@@ -262,10 +306,11 @@ set.</p>
 66
 67
 68
-69</pre>
+69
+70</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_from_csv'>from_csv</span><span class='lparen'>(</span><span class='label'>rows:</span><span class='comma'>,</span> <span class='label'>options:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_rows'>rows</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -317,9 +362,8 @@ set.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>input options hash supplied</p>
-</li></ul>
+        <div class='inline'>
+<p>Input options hash supplied by the user.</p>
 </div>
       
     </li>
@@ -337,9 +381,26 @@ set.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>options hash filled in with all required default values</p>
-</li></ul>
+        <div class='inline'>
+<p>Options hash filled in with all required values, defaulted if necessary.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>For invalid option keys.</p>
 </div>
       
     </li>
@@ -352,13 +413,13 @@ set.</p>
       <pre class="lines">
 
 
-47
 48
 49
-50</pre>
+50
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 48</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_normalize'>normalize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate'>validate</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -374,7 +435,7 @@ set.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 15:19:37 2017 by
+  Generated on Tue Dec 26 18:31:37 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

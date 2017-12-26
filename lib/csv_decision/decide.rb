@@ -8,11 +8,11 @@ module CSVDecision
   module Decide
     # Main method for making decisions.
     #
-    # @param table [CSVDecision::Table]
-    # @param input [Hash] - input hash (keys may or may not be symbolized)
-    # @param symbolize_keys [true, false] - set to true if keys are symbolized and it's
+    # @param table [CSVDecision::Table] Decision table.
+    # @param input [Hash] Input hash (keys may or may not be symbolized)
+    # @param symbolize_keys [true, false] Set to false if keys are symbolized and it's
     #   OK to mutate the input hash. Otherwise a copy of the input hash is symbolized.
-    # @return [Hash]
+    # @return [Hash] Decision result.
     def self.decide(table:, input:, symbolize_keys:)
       # Parse and transform the hash supplied as input
       parsed_input = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)

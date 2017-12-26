@@ -10,6 +10,7 @@ module CSVDecision
     class Range < Matcher
       # Range types are .. or ...
       TYPE = '(\.\.\.|\.\.)'
+      private_constant :TYPE
 
       def self.range_re(value)
         Matchers.regexp(
@@ -19,10 +20,14 @@ module CSVDecision
       private_class_method :range_re
 
       NUMERIC_RANGE = range_re(Matchers::NUMERIC)
+      private_constant :NUMERIC_RANGE
 
       # One or more alphanumeric characters
       ALNUM = '[[:alnum:]][[:alnum:]]*'
+      private_constant :ALNUM
+
       ALNUM_RANGE = range_re(ALNUM)
+      private_constant :ALNUM_RANGE
 
       def self.convert(value, method)
         method ? Matchers.send(method, value) : value
@@ -37,6 +42,7 @@ module CSVDecision
 
         [negate, type == '...' ? min...max : min..max]
       end
+      private_class_method :range
 
       def self.numeric_range(negate, range)
         return ->(value) { range.include?(Matchers.numeric(value)) } unless negate
@@ -50,23 +56,33 @@ module CSVDecision
       end
       private_class_method :alnum_range
 
-      def self.proc(match:, coerce: nil)
+      def self.range_proc(match:, coerce: nil)
         negate, range = range(match, coerce: coerce)
         method = coerce ? :numeric_range : :alnum_range
         function = Range.send(method, negate, range).freeze
         Proc.with(type: :proc, function: function)
       end
+      private_class_method :range_proc
 
-      def matches?(cell)
+      # @param (see Matchers::Matcher#matches?)
+      # @return (see Matchers::Matcher#matches?)
+      def self.matches?(cell)
         if (match = NUMERIC_RANGE.match(cell))
-          return Range.proc(match: match, coerce: :to_numeric)
+          return range_proc(match: match, coerce: :to_numeric)
         end
 
         if (match = ALNUM_RANGE.match(cell))
-          return Range.proc(match: match)
+          return range_proc(match: match)
         end
 
         false
+      end
+
+      # Range expression - e.g., +0...10+ or +a..z+
+      # @param (see Matchers::Matcher#matches?)
+      # @return (see Matchers::Matcher#matches?)
+      def matches?(cell)
+        Range.matches?(cell)
       end
     end
   end

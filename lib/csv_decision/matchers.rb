@@ -66,17 +66,18 @@ module CSVDecision
     #
     # @param columns [Hash{Integer=>Columns::Entry}] Input columns hash.
     # @param matchers [Array<Matchers::Matcher>]
-    # @param row [Array] Data row being parsed.
-    # @return [ScanRow] Used to scan a table row against an input hash for matches.
+    # @param row [Array<String>] Data row being parsed.
+    # @return [Array<(Array, ScanRow)>] Used to scan a table row against an input hash for matches.
     def self.parse(columns:, matchers:, row:)
       # Build an array of column indexes requiring simple constant matches,
       # and a second array of columns requiring special matchers.
       scan_row = ScanRow.new
 
-      # scan_columns(columns: columns, matchers: matchers, row: row, scan_row: scan_row)
-      scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
+      row = scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
 
       scan_row.freeze
+
+      [row, scan_row.freeze]
     end
 
     # Scan the table cell against all matches.
@@ -137,7 +138,12 @@ module CSVDecision
     class Matcher
       def initialize(_options = nil); end
 
-      def matches?(_cell); end
+      # Determine if the input cell string is recognised by this Matcher.
+      #
+      # @param cell [String] Data row cell.
+      # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise returns the
+      #   +CSVDecision::Proc+ object indicating if this is a constant or some type of function.
+      def matches?(cell); end
     end
   end
 end

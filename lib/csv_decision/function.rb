@@ -15,11 +15,12 @@ module CSVDecision
       "(?<operator>=|:=|==|=|<|>|!=|>=|<=|:|!\\s*:)\\s*" \
         "(?<negate>!?)\\s*" \
         "(?<name>#{Header::COLUMN_NAME}|:)(?<args>.*)"
+    private_constant :FUNCTION_CALL
 
-    FUNCTION = Matchers.regexp(FUNCTION_CALL)
+    FUNCTION_RE = Matchers.regexp(FUNCTION_CALL)
 
     def self.matches?(cell)
-      match = FUNCTION.match(cell)
+      match = FUNCTION_RE.match(cell)
       return false unless match
 
       # operator = match['operator']&.gsub(/\s+/, '')

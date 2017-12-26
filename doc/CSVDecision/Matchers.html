@@ -142,6 +142,23 @@
       </dt>
       <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>!</span><span class='tstring_end'>&#39;</span></span></pre></dd>
     
+      <dt id="EQUALS-constant" class="">EQUALS =
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Cell constants and functions specified by prefixing the value with one of
+these 3 symbols</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>==|:=|=</span><span class='tstring_end'>&#39;</span></span></pre></dd>
+    
       <dt id="NUMERIC-constant" class="">NUMERIC =
         <div class="docstring">
   <div class="discussion">
@@ -175,7 +192,7 @@ decimal point.</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#ins-instance_method" title="#ins (instance method)">#<strong>ins</strong>  &#x21d2; Object </a>
+      <a href="#ins-instance_method" title="#ins (instance method)">#<strong>ins</strong>  &#x21d2; Array&lt;Matchers::Matcher&gt; </a>
     
 
     
@@ -195,7 +212,7 @@ decimal point.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute ins.</p>
+<p>Matchers for the input columns.</p>
 </div></span>
   
 </li>
@@ -204,7 +221,7 @@ decimal point.</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#outs-instance_method" title="#outs (instance method)">#<strong>outs</strong>  &#x21d2; Object </a>
+      <a href="#outs-instance_method" title="#outs (instance method)">#<strong>outs</strong>  &#x21d2; Array&lt;Matchers::Matcher&gt; </a>
     
 
     
@@ -224,7 +241,7 @@ decimal point.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute outs.</p>
+<p>Matchers for the output columns.</p>
 </div></span>
   
 </li>
@@ -339,7 +356,7 @@ valid numeric string.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#parse-class_method" title="parse (class method)">.<strong>parse</strong>(columns:, matchers:, row:)  &#x21d2; ScanRow </a>
+      <a href="#parse-class_method" title="parse (class method)">.<strong>parse</strong>(columns:, matchers:, row:)  &#x21d2; Array&lt;(Array, ScanRow)&gt; </a>
     
 
     
@@ -472,7 +489,7 @@ non-capturing group.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#parse_ins-instance_method" title="#parse_ins (instance method)">#<strong>parse_ins</strong>(columns:, row:)  &#x21d2; Object </a>
+      <a href="#parse_ins-instance_method" title="#parse_ins (instance method)">#<strong>parse_ins</strong>(columns:, row:)  &#x21d2; Array&lt;(Array, ScanRow)&gt; </a>
     
 
     
@@ -486,7 +503,9 @@ non-capturing group.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Parse the row&#39;s input columns using the input matchers.</p>
+</div></span>
   
 </li>
 
@@ -494,7 +513,7 @@ non-capturing group.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#parse_outs-instance_method" title="#parse_outs (instance method)">#<strong>parse_outs</strong>(columns:, row:)  &#x21d2; Object </a>
+      <a href="#parse_outs-instance_method" title="#parse_outs (instance method)">#<strong>parse_outs</strong>(columns:, row:)  &#x21d2; Array&lt;(Array, ScanRow)&gt; </a>
     
 
     
@@ -508,7 +527,9 @@ non-capturing group.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Parse the row&#39;s output columns using the output matchers.</p>
+</div></span>
   
 </li>
 
@@ -537,7 +558,27 @@ non-capturing group.</p>
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Options hash supplied by the user.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -545,13 +586,13 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-105
-106
-107
-108</pre>
+113
+114
+115
+116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 105</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ins_matchers'><span class='object_link'><a href="#ins_matchers-class_method" title="CSVDecision::Matchers.ins_matchers (method)">ins_matchers</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -572,7 +613,7 @@ non-capturing group.</p>
       <div class="method_details first">
   <h3 class="signature first" id="ins-instance_method">
   
-    #<strong>ins</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+    #<strong>ins</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matchers::Matcher</a></span>&gt;</tt>  <span class="extras">(readonly)</span>
   
 
   
@@ -581,13 +622,31 @@ non-capturing group.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute ins</p>
+<p>Returns Matchers for the input columns.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matchers::Matcher</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Matchers for the input columns.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -595,12 +654,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-102
-103
-104</pre>
+107
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 107</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@ins</span>
@@ -615,7 +674,7 @@ non-capturing group.</p>
       <div class="method_details ">
   <h3 class="signature " id="outs-instance_method">
   
-    #<strong>outs</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+    #<strong>outs</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matchers::Matcher</a></span>&gt;</tt>  <span class="extras">(readonly)</span>
   
 
   
@@ -624,13 +683,31 @@ non-capturing group.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute outs</p>
+<p>Returns Matchers for the output columns.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matchers::Matcher</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Matchers for the output columns.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -638,12 +715,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-103
-104
-105</pre>
+110
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 103</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 110</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@outs</span>
@@ -675,12 +752,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-94
-95
-96</pre>
+98
+99
+100</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 98</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ins_matchers'>ins_matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:matchers</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_klass'>klass</span><span class='op'>|</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -745,15 +822,15 @@ valid numeric string.</p>
       <pre class="lines">
 
 
-40
-41
-42
 43
 44
-45</pre>
+45
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_numeric'>numeric</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span> <span class='kw'>if</span> <span class='id identifier rubyid_numeric?'>numeric?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -830,12 +907,12 @@ valid numeric string.</p>
       <pre class="lines">
 
 
-32
-33
-34</pre>
+35
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 35</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_numeric?'>numeric?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Integer</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>BigDecimal</span><span class='rparen'>)</span>
@@ -860,12 +937,12 @@ valid numeric string.</p>
       <pre class="lines">
 
 
-98
-99
-100</pre>
+102
+103
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 98</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_outs_matchers'>outs_matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_matchers'>matchers</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_matchers'>matchers</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_obj'>obj</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../CSVDecision.html#OUTS_MATCHERS-constant" title="CSVDecision::OUTS_MATCHERS (constant)">OUTS_MATCHERS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -878,7 +955,7 @@ valid numeric string.</p>
       <div class="method_details ">
   <h3 class="signature " id="parse-class_method">
   
-    .<strong>parse</strong>(columns:, matchers:, row:)  &#x21d2; <tt><span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span></tt> 
+    .<strong>parse</strong>(columns:, matchers:, row:)  &#x21d2; <tt>Array&lt;(Array, <span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>)&gt;</tt> 
   
 
   
@@ -929,7 +1006,7 @@ matchers.</p>
         <span class='name'>row</span>
       
       
-        <span class='type'>(<tt>Array</tt>)</span>
+        <span class='type'>(<tt>Array&lt;String&gt;</tt>)</span>
       
       
       
@@ -948,7 +1025,7 @@ matchers.</p>
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span></tt>)</span>
+        <span class='type'>(<tt>Array&lt;(Array, <span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>)&gt;</tt>)</span>
       
       
       
@@ -967,29 +1044,31 @@ matchers.</p>
       <pre class="lines">
 
 
-68
-69
-70
 71
 72
 73
 74
 75
 76
-77</pre>
+77
+78
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 68</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>matchers:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='comment'># Build an array of column indexes requiring simple constant matches,
 </span>  <span class='comment'># and a second array of columns requiring special matchers.
 </span>  <span class='id identifier rubyid_scan_row'>scan_row</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ScanRow.html#initialize-instance_method" title="CSVDecision::ScanRow#initialize (method)">new</a></span></span>
 
-  <span class='comment'># scan_columns(columns: columns, matchers: matchers, row: row, scan_row: scan_row)
-</span>  <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_scan_columns'>scan_columns</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_scan_columns'>scan_columns</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+
+  <span class='lbracket'>[</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1061,12 +1140,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-22
-23
-24</pre>
+25
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_regexp'>regexp</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\A(?:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='embexpr_end'>}</span><span class='tstring_content'>)\\z</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
@@ -1141,18 +1220,18 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-84
-85
-86
-87
 88
 89
 90
 91
-92</pre>
+92
+93
+94
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 84</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>matchers:</span><span class='comma'>,</span> <span class='label'>cell:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_matchers'>matchers</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_matcher'>matcher</span><span class='op'>|</span>
@@ -1222,13 +1301,13 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-51
-52
-53
-54</pre>
+54
+55
+56
+57</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_numeric'>to_numeric</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="#NUMERIC_RE-constant" title="CSVDecision::Matchers::NUMERIC_RE (constant)">NUMERIC_RE</a></span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -1248,24 +1327,89 @@ non-capturing group.</p>
       <div class="method_details first">
   <h3 class="signature first" id="parse_ins-instance_method">
   
-    #<strong>parse_ins</strong>(columns:, row:)  &#x21d2; <tt>Object</tt> 
+    #<strong>parse_ins</strong>(columns:, row:)  &#x21d2; <tt>Array&lt;(Array, <span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>)&gt;</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Parse the row&#39;s input columns using the input matchers.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>columns</span>
+      
+      
+        <span class='type'>(<tt>Hash{Integer=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Columns::Entry</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Input columns hash.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>row</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;String&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Data row being parsed.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;(Array, <span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>)&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Used to scan a table row against an input hash for matches.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-110
-111
-112</pre>
+123
+124
+125</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 110</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_ins'>parse_ins</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@ins</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1278,24 +1422,89 @@ non-capturing group.</p>
       <div class="method_details ">
   <h3 class="signature " id="parse_outs-instance_method">
   
-    #<strong>parse_outs</strong>(columns:, row:)  &#x21d2; <tt>Object</tt> 
+    #<strong>parse_outs</strong>(columns:, row:)  &#x21d2; <tt>Array&lt;(Array, <span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>)&gt;</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Parse the row&#39;s output columns using the output matchers.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>columns</span>
+      
+      
+        <span class='type'>(<tt>Hash{Integer=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Columns::Entry</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Input columns hash.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>row</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;String&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Data row being parsed.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;(Array, <span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>)&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Used to scan a table row against an input hash for matches.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-114
-115
-116</pre>
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 114</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_outs'>parse_outs</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@outs</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1310,7 +1519,7 @@ non-capturing group.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 15:19:37 2017 by
+  Generated on Tue Dec 26 18:31:37 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

@@ -116,7 +116,7 @@
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Columns/Default.html" title="CSVDecision::Columns::Default (class)">Default</a></span>, <span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Dictionary</a></span>, <span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Dictionary</a></span>, <span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>
     
   
 </p>
@@ -189,7 +189,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Input hash path (planned feature) def path   @dictionary.path end.</p>
+<p>A new instance of Columns.</p>
 </div></span>
   
 </li>
@@ -261,18 +261,33 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Input hash path (planned feature) def path</p>
-
-<pre class="code ruby"><code class="ruby"><span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span>
-</code></pre>
-
-<p>end</p>
+<p>Returns a new instance of Columns</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>table</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Table.html" title="CSVDecision::Table (class)">Table</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Decision table being constructed.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -280,19 +295,19 @@
       <pre class="lines">
 
 
-62
-63
-64
 65
 66
 67
 68
 69
 70
-71</pre>
+71
+72
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span>
   <span class='comment'># If a column does not have a valid header cell, then it&#39;s empty of data.
@@ -342,12 +357,12 @@
       <pre class="lines">
 
 
-40
-41
-42</pre>
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dictionary'>dictionary</span>
   <span class='ivar'>@dictionary</span>
@@ -390,12 +405,12 @@
       <pre class="lines">
 
 
-43
-44
-45</pre>
+45
+46
+47</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_ins'>ins</span>
@@ -431,12 +446,12 @@
       <pre class="lines">
 
 
-48
-49
-50</pre>
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_outs'>outs</span>
@@ -451,7 +466,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 15:19:37 2017 by
+  Generated on Tue Dec 26 18:31:38 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

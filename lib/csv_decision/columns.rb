@@ -6,7 +6,7 @@
 module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   class Columns
-    # Value object used for column dictionary entries.
+    # Value object to hold column dictionary entries.
     Entry = Struct.new(:name, :text_only)
 
     # TODO: Value object used for any columns with defaults
@@ -33,8 +33,8 @@ module CSVDecision
       def initialize
         @ins = {}
         @outs = {}
-        # @path = {}
-        # @defaults = {}
+        # TODO: @path = {}
+        # TODO: @defaults = {}
       end
     end
 

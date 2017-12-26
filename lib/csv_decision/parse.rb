@@ -17,6 +17,11 @@ module CSVDecision
   # Builds a decision table from the input data - which may either be a file, CSV string
   # or an array of arrays.
   #
+  # @example Simple Example
+  #   If you have cloned the gem's git repo, then you can run:
+  #   table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv')) #=> CSVDecision::Table
+  #   table.decide(topic: 'finance', region: 'Europe') #=> team_member: 'Donald'
+  #
   # @param data [Pathname, File, Array<Array<String>>, String] input data given as
   #   a CSV file, array of arrays or CSV string.
   # @param options [Hash] Options hash supplied by the user.
@@ -81,8 +86,8 @@ module CSVDecision
 
     def self.parse_data(table:, matchers:)
       table.rows.each_with_index do |row, index|
-        table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
-        table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
+        row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
+        row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
 
         row.freeze
       end

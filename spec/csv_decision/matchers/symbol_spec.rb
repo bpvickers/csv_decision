@@ -11,22 +11,6 @@ describe CSVDecision::Matchers::Symbol do
     it { is_expected.to respond_to(:matches?).with(1).argument }
   end
 
-  context 'cell value recognition' do
-    cells = {
-      ':col' => { operator: nil, name: 'col' },
-      '> :col' => { operator: '>', name: 'col' },
-      '= :col' => { operator: '=', name: 'col' },
-      '<= :col' => { operator: '<=', name: 'col' }
-    }
-    cells.each_pair do |cell, expected|
-      it "recognises #{cell} as a constant" do
-        match = CSVDecision::Symbol::SYMBOL_COMPARE_RE.match(cell)
-        expect(match['comparator']).to eq expected[:operator]
-        expect(match['name']).to eq expected[:name]
-      end
-    end
-  end
-
   describe '#matches?' do
     matcher = described_class.new
 
