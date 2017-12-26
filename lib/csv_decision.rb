@@ -5,7 +5,7 @@ require 'csv_decision/parse'
 
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017.
-# @author Brett Vickers.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # @return [String] gem project's root directory

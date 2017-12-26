@@ -7,7 +7,7 @@ module CSVDecision
   # Methods dealing with column symbol comparisons in cells
   module Symbol
     SYMBOL_COMPARE =
-      "(?<comparator>=|:=|==|=|<|>|!=|>=|<=)?\\s*:(?<name>#{Header::COLUMN_NAME})"
+      "(?<comparator>#{Matchers::EQUALS}|!=|<|>|>=|<=)?\\s*:(?<name>#{Header::COLUMN_NAME})"
 
     SYMBOL_COMPARE_RE = Matchers.regexp(SYMBOL_COMPARE)
 

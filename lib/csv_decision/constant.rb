@@ -4,10 +4,10 @@
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Methods to recognise constant expressions
+  # Methods to recognise constant expressions in table cells.
   module Constant
     # Cell constant specified by prefixing the value with one of these 3 symbols
-    EXPRESSION = /\A(?<operator>==|:=|=)\s*(?<value>\S.*)\z/
+    EXPRESSION = Matchers.regexp("(?<operator>#{Matchers::EQUALS})\\s*(?<value>\\S.*)")
 
     # rubocop: disable Lint/BooleanSymbol
     NON_NUMERIC = {

@@ -37,7 +37,7 @@ module CSVDecision
     Parse.table(data: data, options: Options.normalize(options))
   end
 
-  # Methods to parse the decision table a return a CSVDecision::Table object.
+  # Methods to parse the decision table and return CSVDecision::Table object.
   module Parse
     # Parse the CSV file or input data and create a new decision table object.
     #

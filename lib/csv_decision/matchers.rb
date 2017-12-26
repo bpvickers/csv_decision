@@ -14,6 +14,9 @@ module CSVDecision
     # Negation sign prefixed to ranges and functions.
     NEGATE = '!'
 
+    # Cell constants and functions specified by prefixing the value with one of these 3 symbols
+    EQUALS = '==|:=|='
+
     # All regular expressions used for matching are anchored inside their own
     # non-capturing group.
     #
@@ -99,18 +102,32 @@ module CSVDecision
       matchers.select { |obj| OUTS_MATCHERS.include?(obj.class) }
     end
 
+    # @return [Array<Matchers::Matcher>] Matchers for the input columns.
     attr_reader :ins
+
+    # @return [Array<Matchers::Matcher>] Matchers for the output columns.
     attr_reader :outs
 
+    # @param options (see CSVDecision.parse)
     def initialize(options)
       @ins = Matchers.ins_matchers(options)
       @outs = Matchers.outs_matchers(@ins)
     end
 
+    # Parse the row's input columns using the input matchers.
+    #
+    # @param columns (see Matchers.parse)
+    # @param row (see Matchers.parse)
+    # @return (see Matchers.parse)
     def parse_ins(columns:, row:)
       Matchers.parse(columns: columns, matchers: @ins, row: row)
     end
 
+    # Parse the row's output columns using the output matchers.
+    #
+    # @param columns (see Matchers.parse)
+    # @param row (see Matchers.parse)
+    # @return (see Matchers.parse)
     def parse_outs(columns:, row:)
       Matchers.parse(columns: columns, matchers: @outs, row: row)
     end
