@@ -5,7 +5,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to assign a matcher to data cells
-  module Matchers
+  class Matchers
     # Match cell against a Ruby-like range
     class Range < Matcher
       # Range types are .. or ...

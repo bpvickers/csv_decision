@@ -22,12 +22,10 @@ module CSVDecision
       match = FUNCTION.match(cell)
       return false unless match
 
-      operator = match['operator']&.gsub(/\s+/, '')
-      name = match['name'].to_sym
-      args = match['args'].strip
-      negate = match['negate'] == Matchers::NEGATE
-
-      raise 'functions not implemented'
+      # operator = match['operator']&.gsub(/\s+/, '')
+      # name = match['name'].to_sym
+      # args = match['args'].strip
+      # negate = match['negate'] == Matchers::NEGATE
     end
   end
 end

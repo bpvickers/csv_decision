@@ -10,7 +10,7 @@ module CSVDecision
   Proc = Value.new(:type, :function)
 
   # Methods to assign a matcher to data cells
-  module Matchers
+  class Matchers
     # Negation sign for ranges and functions
     NEGATE = '!'
 
@@ -82,7 +82,7 @@ module CSVDecision
       # scan_columns(columns: columns, matchers: matchers, row: row, scan_row: scan_row)
       scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
 
-      scan_row
+      scan_row.freeze
     end
 
     def self.scan(matchers:, cell:)
@@ -93,6 +93,30 @@ module CSVDecision
 
       # Must be a simple constant
       false
+    end
+
+    def self.ins_matchers(options)
+      options[:matchers].collect { |klass| klass.new(options) }
+    end
+
+    def self.outs_matchers(matchers)
+      matchers.select { |obj| OUTS_MATCHERS.include?(obj.class) }
+    end
+
+    attr_reader :ins
+    attr_reader :outs
+
+    def initialize(options)
+      @ins = Matchers.ins_matchers(options)
+      @outs = Matchers.outs_matchers(@ins)
+    end
+
+    def parse_ins(columns:, row:)
+      Matchers.parse(columns: columns, matchers: @ins, row: row)
+    end
+
+    def parse_outs(columns:, row:)
+      Matchers.parse(columns: columns, matchers: @outs, row: row)
     end
 
     # @abstract Subclass and override {#matches?} to implement

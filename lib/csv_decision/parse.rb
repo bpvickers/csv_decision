@@ -37,6 +37,7 @@ module CSVDecision
       table.file = input if Data.input_file?(input)
 
       parse_table(table: table, input: input, options: options)
+      table.freeze
     rescue CSVDecision::Error => exp
       raise_error(file: table.file, exception: exp)
     end
@@ -59,34 +60,19 @@ module CSVDecision
       # Parse the header row
       table.columns = CSVDecision::Columns.new(table)
 
-      parse_data(table: table, matchers: matchers(table.options).freeze)
-
-      table.freeze
+      parse_data(table: table, matchers: Matchers.new(options))
     end
     private_class_method :parse_table
 
     def self.parse_data(table:, matchers:)
       table.rows.each_with_index do |row, index|
-        # Build an array of column indexes requiring simple matches.
-        # and a second array of columns requiring special matchers
-        table.scan_rows[index] = Matchers.parse(columns: table.columns.ins,
-                                                matchers: matchers,
-                                                row: row)
-
-        # parse_outputs(row, index)
-
+        table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
+        table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
         row.freeze
-        table.scan_rows[index].freeze
       end
 
       table.columns.freeze
     end
-
     private_class_method :parse_data
-
-    def self.matchers(options)
-      options[:matchers].collect { |klass| klass.new(options) }
-    end
-    private_class_method :matchers
   end
 end

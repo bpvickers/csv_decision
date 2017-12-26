@@ -15,6 +15,12 @@ module CSVDecision
     # Matchers::Function
   ].freeze
 
+  # Subset of matchers that apply to output cells
+  OUTS_MATCHERS = [
+    Matchers::Constant
+  # Matchers::Function
+  ].freeze
+
   # All valid options with their default values.
   VALID_OPTIONS = {
     first_match: true,

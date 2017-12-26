@@ -28,7 +28,7 @@ module CSVDecision
   autoload :Symbol,     'csv_decision/symbol'
   autoload :Table,      'csv_decision/table'
 
-  module Matchers
+  class Matchers
     autoload :Constant,      'csv_decision/matchers/constant'
     autoload :Function,      'csv_decision/matchers/function'
     autoload :Numeric,       'csv_decision/matchers/numeric'

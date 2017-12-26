@@ -68,9 +68,9 @@ describe CSVDecision::Table do
           options: {},
           data: <<~DATA
             in :constant, out :type
-            :=nil,        NilClass
-            = 0,          Zero
-            :=100.0,      100%
+            :=nil,        :=nil
+            = 0,          = 0
+            :=100.0,      :=100
             ,             Unrecognized
           DATA
         },
@@ -81,9 +81,9 @@ describe CSVDecision::Table do
             options = test[:options].merge(first_match: true)
             table = CSVDecision.parse(test[:data], options)
 
-            expect(table.send(method, constant: nil)).to eq(type: 'NilClass')
-            expect(table.send(method, constant: 0)).to eq(type: 'Zero')
-            expect(table.send(method, constant: BigDecimal.new('100.0'))).to eq(type: '100%')
+            expect(table.send(method, constant: nil)).to eq(type: nil)
+            expect(table.send(method, constant: 0)).to eq(type: 0)
+            expect(table.send(method, constant: BigDecimal.new('100.0'))).to eq(type: BigDecimal('100.0'))
             expect(table.send(method, constant: ':=nil')).to eq(type: 'Unrecognized')
             expect(table.send(method, constant: '= 0')).to eq(type: 'Unrecognized')
             expect(table.send(method, constant: ':=100.0')).to eq(type: 'Unrecognized')

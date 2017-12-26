@@ -15,7 +15,7 @@ module CSVDecision
     # All options used to parse the table
     attr_accessor :options
 
-    # Set if the table has any output functions (planned feature)
+    # Set if the table row has any output functions (planned feature)
     attr_accessor :outs_functions
 
     # Data rows - an array of arrays
@@ -23,6 +23,9 @@ module CSVDecision
 
     # Array of CSVDecision::ScanRow objects used to implement matching logic
     attr_accessor :scan_rows
+
+    # Array of CSVDecision::ScanRow objects used to implement outputing final results
+    attr_accessor :outs_rows
 
     # Any array of CSVDecision::Table pre-loaded tables passed to this decision table
     # at load time. Used to allow this decision table to lookup values in other
@@ -66,6 +69,7 @@ module CSVDecision
       @matchers = []
       @options = nil
       @outs_functions = nil
+      @outs_rows = []
       @rows = []
       @scan_rows = []
       @tables = nil
