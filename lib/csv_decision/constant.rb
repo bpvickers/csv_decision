@@ -8,6 +8,7 @@ module CSVDecision
   module Constant
     # Cell constant expression specified by prefixing the value with one of the three equality symbols.
     EXPRESSION = Matchers.regexp("(?<operator>#{Matchers::EQUALS})\\s*(?<value>\\S.*)")
+    private_constant :EXPRESSION
 
     # rubocop: disable Lint/BooleanSymbol
 
@@ -17,6 +18,7 @@ module CSVDecision
       true: true,
       false: false
     }.freeze
+    private_constant :NON_NUMERIC
     # rubocop: enable Lint/BooleanSymbol
 
     # @param (see Matchers::Matcher#matches?)

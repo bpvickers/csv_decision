@@ -3,30 +3,6 @@
 require_relative '../../lib/csv_decision'
 
 describe CSVDecision::Constant do
-  context 'cell string value recognition' do
-    cells = {
-      ':= 0.0' => { operator: ':=', value: '0.0' },
-      ':= 0.'  => { operator: ':=', value: '0.' },
-      ':= .0'  => { operator: ':=', value:  '.0' },
-      '==0.0'  => { operator: '==', value: '0.0' },
-      '== 0.'  => { operator: '==', value: '0.' },
-      '==.0'   => { operator: '==', value:  '.0' },
-      '=0.0'   => { operator: '=',  value: '0.0' },
-      '= 0.'   => { operator: '=',  value: '0.' },
-      '=.0'    => { operator: '=',  value:  '.0' },
-      '= nil'  => { operator: '=',  value: 'nil' },
-      ':= nil' => { operator: ':=', value: 'nil' },
-      '==nil'  => { operator: '==', value:  'nil' }
-    }
-    cells.each_pair do |cell, expected|
-      it "recognises #{cell} as a constant" do
-        match = described_class::EXPRESSION.match(cell)
-        expect(match['operator']).to eq expected[:operator]
-        expect(match['value']).to eq expected[:value]
-      end
-    end
-  end
-
   describe '#matches?' do
     context 'constant matches value' do
       data = [

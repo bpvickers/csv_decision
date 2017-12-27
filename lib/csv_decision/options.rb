@@ -30,6 +30,7 @@ module CSVDecision
       text_only: false,
       matchers: DEFAULT_MATCHERS
     }.freeze
+    private_constant :VALID
 
     # These options may appear in the CSV file before the header row.
     # They get converted to a normalized option key value pair.
@@ -39,6 +40,7 @@ module CSVDecision
       regexp_implicit: [:regexp_implicit, true],
       text_only: [:text_only, true]
     }.freeze
+    private_constant :CSV_NAMES
 
     # Validate options and supply default values for any options not explicitly set.
     #
@@ -89,7 +91,7 @@ module CSVDecision
       result[:matchers] = matchers(result)
 
       # Supply any missing options with default values
-      Options::VALID.each_pair do |key, value|
+      VALID.each_pair do |key, value|
         next if result.key?(key)
         result[key] = value
       end
@@ -109,12 +111,12 @@ module CSVDecision
 
     def self.option?(cell)
       key = cell.downcase.to_sym
-      return Options::CSV_NAMES[key] if Options::CSV_NAMES.key?(key)
+      return CSV_NAMES[key] if CSV_NAMES.key?(key)
     end
     private_class_method :option?
 
     def self.validate(options)
-      invalid_options = options.keys - Options::VALID.keys
+      invalid_options = options.keys - VALID.keys
 
       return if invalid_options.empty?
 

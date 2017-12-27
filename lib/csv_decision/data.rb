@@ -11,6 +11,7 @@ module CSVDecision
   # Methods to load data from a file, CSV string or array of arrays
   module Data
     CSV_OPTIONS = { encoding: 'UTF-8', skip_blanks: true }.freeze
+    private_constant :CSV_OPTIONS
 
     # Parse the input data which may either be a file path name, CSV string or
     # array of arrays. Strips out empty columns/rows and comment cells

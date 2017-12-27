@@ -12,7 +12,7 @@ module CSVDecision
     #   \s*:\s*(?<name>\S?.*)\z
     # }xi
 
-    # Column types recognise din the header row.
+    # Column types recognised in the header row.
     COLUMN_TYPE = %r{
       \A(?<type>in|out|in/text|out/text)
       \s*:\s*(?<name>\S?.*)\z
@@ -28,6 +28,7 @@ module CSVDecision
 
     # Column name regular expression.
     COLUMN_NAME_RE = Matchers.regexp(COLUMN_NAME)
+    private_constant :COLUMN_NAME_RE
 
     # Check if the given row contains a recognisable header cell.
     #

@@ -28,7 +28,9 @@ module CSVDecision
 
     # Regular expression used to recognise a numeric string with or without a decimal point.
     NUMERIC = '[-+]?\d*(?<decimal>\.?)\d*'
+
     NUMERIC_RE = regexp(NUMERIC)
+    private_constant :NUMERIC_RE
 
     # @param value [Object] Value from the input hash.
     # @return [Boolean] Value is an Integer or a BigDecimal.
