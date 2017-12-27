@@ -16,7 +16,7 @@ It accepts decision tables implemented as a
 which can then be used to execute complex conditional logic against an input hash, 
 producing a decision as an output hash.
 
- ### CSV Decision features
+### CSV Decision features
  * Fast decision-time performance (see `benchmark.rb`).
  * In addition to simple string matching, can match common Ruby constants, 
  regular expressions, numeric comparisons and Ruby-style ranges.
@@ -28,7 +28,7 @@ producing a decision as an output hash.
  * Either returns the first matching row as a hash, or accumulates all matches as an 
  array of hashes.
  
- ### Planned features
+### Planned features
  `csv_decision` is still a work in progress, and will be enhanced to support
  the following features:
  * Input columns may be indexed for faster lookup performance.

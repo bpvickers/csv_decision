@@ -82,27 +82,39 @@ href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a>,
 which can then be used to execute complex conditional logic against an
 input hash, producing a decision as an output hash.</p>
 
-<p>### CSV Decision features  * Fast decision-time performance (see
-<code>benchmark.rb</code>).  * In addition to simple string matching, can
-match common Ruby constants,  regular expressions, numeric comparisons and
-Ruby-style ranges.  * Can use column symbols in comparisons for guard
-conditions – e.g., &gt; :column.  * Accepts data as a file, CSV string or
-an array of arrays. (For safety all input data is  force encoded to UTF-8,
-and non-ascii strings are converted to empty strings.)  * All CSV cells are
-parsed for correctness, and helpful error messages generated for bad 
-inputs.  * Either returns the first matching row as a hash, or accumulates
-all matches as an  array of hashes.</p>
+<h3 id="label-CSV+Decision+features">CSV Decision features</h3>
+<ul><li>
+<p>Fast decision-time performance (see <code>benchmark.rb</code>).</p>
+</li><li>
+<p>In addition to simple string matching, can match common Ruby constants, 
+regular expressions, numeric comparisons and Ruby-style ranges.</p>
+</li><li>
+<p>Can use column symbols in comparisons for guard conditions – e.g., &gt;
+:column.</p>
+</li><li>
+<p>Accepts data as a file, CSV string or an array of arrays. (For safety all
+input data is  force encoded to UTF-8, and non-ascii strings are converted
+to empty strings.)</p>
+</li><li>
+<p>All CSV cells are parsed for correctness, and helpful error messages
+generated for bad  inputs.</p>
+</li><li>
+<p>Either returns the first matching row as a hash, or accumulates all matches
+as an  array of hashes.</p>
+</li></ul>
 
-<p>### Planned features  <code>csv_decision</code> is still a work in
-progress, and will be enhanced to support  the following features:  * Input
-columns may be indexed for faster lookup performance.  * May use functions
-in the output columns to formulate the final decision.  * Input hash values
-may be conditionally defaulted using a constant or a function call  * Use
-of column symbol references or built-in guard functions in the input 
-columns for matching.  * Output columns may use interpolated strings
-referencing column symbols.  * May be extended with user-defined Ruby
-functions for tailored logic.  * Can use post-match guard conditions to
-filter the results of multi-row  decision output.</p>
+<h3 id="label-Planned+features">Planned features</h3>
+
+<p><code>csv_decision</code> is still a work in progress, and will be enhanced
+to support  the following features:  * Input columns may be indexed for
+faster lookup performance.  * May use functions in the output columns to
+formulate the final decision.  * Input hash values may be conditionally
+defaulted using a constant or a function call  * Use of column symbol
+references or built-in guard functions in the input  columns for matching. 
+* Output columns may use interpolated strings referencing column symbols. 
+* May be extended with user-defined Ruby functions for tailored logic.  *
+Can use post-match guard conditions to filter the results of multi-row 
+decision output.</p>
 
 <p>### Why use <code>csv_decision</code>?</p>
 
@@ -254,7 +266,7 @@ bundle install  rspec </code></p>
 </div></div>
 
       <div id="footer">
-  Generated on Tue Dec 26 18:31:36 2017 by
+  Generated on Tue Dec 26 21:20:19 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>
