@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.

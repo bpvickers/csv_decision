@@ -134,50 +134,6 @@ matches</p>
 </li>
 
       
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#eval_matcher-class_method" title="eval_matcher (class method)">.<strong>eval_matcher</strong>(proc:, value:, hash:)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#matches%3F-class_method" title="matches? (class method)">.<strong>matches?</strong>(row:, input:, scan_row:)  &#x21d2; Boolean </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
     </ul>
   
 
@@ -284,7 +240,6 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
       <pre class="lines">
 
 
-16
 17
 18
 19
@@ -294,10 +249,11 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 23
 24
 25
-26</pre>
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decide.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/decide.rb', line 17</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span><span class='rparen'>)</span>
   <span class='comment'># Parse and transform the hash supplied as input
@@ -315,116 +271,12 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 </table>
 </div>
     
-      <div class="method_details ">
-  <h3 class="signature " id="eval_matcher-class_method">
-  
-    .<strong>eval_matcher</strong>(proc:, value:, hash:)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-37
-38
-39
-40
-41
-42
-43
-44
-45</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decide.rb', line 37</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_eval_matcher'>eval_matcher</span><span class='lparen'>(</span><span class='label'>proc:</span><span class='comma'>,</span> <span class='label'>value:</span><span class='comma'>,</span> <span class='label'>hash:</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_function'>function</span> <span class='op'>=</span> <span class='id identifier rubyid_proc'>proc</span><span class='period'>.</span><span class='id identifier rubyid_function'>function</span>
-
-  <span class='comment'># A symbol guard expression just needs to be passed the input hash
-</span>  <span class='kw'>return</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_hash'>hash</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_proc'>proc</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:expression</span>
-
-  <span class='comment'># All other procs can take one or two args
-</span>  <span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_arity'>arity</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>?</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='rbracket'>]</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="matches?-class_method">
-  
-    .<strong>matches?</strong>(row:, input:, scan_row:)  &#x21d2; <tt>Boolean</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-28
-29
-30
-31
-32
-33
-34
-35</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decide.rb', line 28</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='label'>row:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>scan_row:</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_match_constants?'>match_constants?</span><span class='lparen'>(</span><span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:scan_cols</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_match'>match</span>
-
-  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_procs'>procs</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-
-  <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_match_procs?'>match_procs?</span><span class='lparen'>(</span><span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:14 2017 by
+  Generated on Wed Dec 27 12:27:33 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

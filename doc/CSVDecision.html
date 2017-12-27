@@ -88,14 +88,30 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>CSV Decision: CSV based Ruby decision tables. Created December 2017 by
-Brett Vickers See LICENSE and README.md for details.</p>
+<p>CSV Decision: CSV based Ruby decision tables. Created December 2017. See
+LICENSE and README.md for details.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Author:</p>
+<ul class="author">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>Brett Vickers &lt;brett@phillips-vickers.com&gt;</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><h2>Defined Under Namespace</h2>
 <p class="children">
@@ -112,23 +128,6 @@ Brett Vickers See LICENSE and README.md for details.</p>
 
   <h2>Constant Summary</h2>
   <dl class="constants">
-    
-      <dt id="COMMENT_CHARACTER-constant" class="">COMMENT_CHARACTER =
-        <div class="docstring">
-  <div class="discussion">
-    
-<p>All cells starting with this character are comments, and treated as a blank
-cell.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
-      </dt>
-      <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#</span><span class='tstring_end'>&#39;</span></span></pre></dd>
     
       <dt id="DEFAULT_MATCHERS-constant" class="">DEFAULT_MATCHERS =
         <div class="docstring">
@@ -318,9 +317,8 @@ CSV string or an array of arrays.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>directiory containing CSV files</p>
-</li></ul>
+        <div class='inline'>
+<p>Directory containing CSV files.</p>
 </div>
       
     </li>
@@ -337,9 +335,8 @@ CSV string or an array of arrays.</p>
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>supplied options hash for table creation</p>
-</li></ul>
+        <div class='inline'>
+<p>Supplied options hash for table creation.</p>
 </div>
       
     </li>
@@ -359,6 +356,24 @@ CSV string or an array of arrays.</p>
     </li>
   
 </ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Invalid folder.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -366,12 +381,12 @@ CSV string or an array of arrays.</p>
       <pre class="lines">
 
 
-12
-13
-14</pre>
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/load.rb', line 12</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/load.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="CSVDecision/Load.html" title="CSVDecision::Load (module)">Load</a></span></span><span class='period'>.</span><span class='id identifier rubyid_path'><span class='object_link'><a href="CSVDecision/Load.html#path-class_method" title="CSVDecision::Load.path (method)">path</a></span></span><span class='lparen'>(</span><span class='label'>path:</span> <span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='label'>options:</span> <span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -654,7 +669,7 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:14 2017 by
+  Generated on Wed Dec 27 12:27:32 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

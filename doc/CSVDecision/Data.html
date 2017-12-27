@@ -255,12 +255,12 @@ array of arrays.</p>
       <pre class="lines">
 
 
-31
-32
-33</pre>
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/data.rb', line 31</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/data.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_input_file?'>input_file?</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Pathname</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>File</span><span class='rparen'>)</span>
@@ -345,16 +345,16 @@ array of arrays.</p>
       <pre class="lines">
 
 
-40
-41
 42
 43
 44
 45
-46</pre>
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/data.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/data.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_strip_columns'>strip_columns</span><span class='lparen'>(</span><span class='label'>data:</span><span class='comma'>,</span> <span class='label'>empty_columns:</span><span class='rparen'>)</span>
   <span class='comment'># Adjust column indices as we delete columns the rest shift to the left by 1
@@ -433,12 +433,12 @@ array of arrays. Strips out empty columns/rows and comment cells.</p>
       <pre class="lines">
 
 
-23
-24
-25</pre>
+25
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/data.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/data.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_array'>to_array</span><span class='lparen'>(</span><span class='label'>data:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_strip_rows'>strip_rows</span><span class='lparen'>(</span><span class='label'>data:</span> <span class='id identifier rubyid_data_array'>data_array</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -453,7 +453,7 @@ array of arrays. Strips out empty columns/rows and comment cells.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:14 2017 by
+  Generated on Wed Dec 27 12:27:33 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

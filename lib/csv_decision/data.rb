@@ -3,8 +3,9 @@
 require 'csv'
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
-# See LICENSE and README.md for details.
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
+# See LICENSE and README.md for details..
 module CSVDecision
   # All cells starting with this character are comments, and treated as a blank cell.
   COMMENT_CHARACTER = '#'

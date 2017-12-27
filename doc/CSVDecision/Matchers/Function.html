@@ -214,7 +214,29 @@ some type of function.</p>
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Options hash supplied by the user.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -222,12 +244,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-14
-15
-16</pre>
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/function.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/function.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span>
@@ -312,12 +334,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-20
-21
-22</pre>
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/function.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/function.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Function.html" title="CSVDecision::Function (module)">Function</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="../Function.html#matches%3F-class_method" title="CSVDecision::Function.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
@@ -332,7 +354,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:15 2017 by
+  Generated on Wed Dec 27 12:27:34 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

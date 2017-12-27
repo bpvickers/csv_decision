@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers.
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # Accumulate the matching row(s) and calculate the final result
@@ -21,6 +22,8 @@ module CSVDecision
       scan_row.match_procs?(row: row, input: input)
     end
 
+    # @param table [CSVDecision::Table] Decision table being processed.
+    # @param input [Hash{Symbol=>Object}] Input hash data structure.
     def initialize(table:, input:)
       @result = {}
 
@@ -43,15 +46,20 @@ module CSVDecision
     end
 
     # Is the result set empty? That is, nothing matched?
+    # @return [Boolean] True if no result, false otherwise.
     def empty?
       return @row_picked.nil? if @first_match
       @rows_picked.empty?
     end
 
+    # Does the result exist?
+    # @return [Boolean] True if result exists, false otherwise.
     def exist?
       !empty?
     end
 
+    # Calculate the final result.
+    # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
     def result
       return {} if empty?
       return final_result unless @outs_functions
@@ -59,6 +67,11 @@ module CSVDecision
       nil
     end
 
+    # Scan the decision table up against the input hash.
+    #
+    # @param table [CSVDecision::Table] Decision table being processed.
+    # @param input (see #initialize)
+    # @return [self] Decision object built so far.
     def scan(table:, input:)
       scan_rows = table.scan_rows
 
@@ -73,6 +86,9 @@ module CSVDecision
 
     private
 
+    # Add a matched row to the decision object being built.
+    #
+    # @param row [Array]
     def add(row)
       return add_first_match(row) if @first_match
 

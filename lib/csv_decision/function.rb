@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
-# See LICENSE and README.md for details.
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
+# See LICENSE and README.md for details..
 module CSVDecision
-  # Methods to recognise various function expressions
+  # Methods to recognise various function expressions.
   # TODO: fully implement
   module Function
     # Looks like a function call or symbol expressions, e.g.,

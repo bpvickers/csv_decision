@@ -3,7 +3,8 @@
 require 'values'
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers .
 # See LICENSE and README.md for details.
 module CSVDecision
   # Value object for a cell proc.

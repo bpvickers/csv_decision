@@ -253,7 +253,6 @@ column. Defaults to nil if the key is missing in the input hash.</p>
       <pre class="lines">
 
 
-15
 16
 17
 18
@@ -266,10 +265,11 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 25
 26
 27
-28</pre>
+28
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/input.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/input.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate'>validate</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
@@ -283,7 +283,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
   <span class='comment'># Freeze the copy of the input hash we just created.
 </span>  <span class='id identifier rubyid_parsed_input'>parsed_input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span> <span class='kw'>if</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
 
-  <span class='id identifier rubyid_parsed_input'>parsed_input</span>
+  <span class='id identifier rubyid_parsed_input'>parsed_input</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -295,7 +295,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:14 2017 by
+  Generated on Wed Dec 27 12:27:33 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

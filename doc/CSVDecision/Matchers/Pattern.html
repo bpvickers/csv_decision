@@ -313,13 +313,13 @@
       <pre class="lines">
 
 
-76
 77
 78
-79</pre>
+79
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 76</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 77</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='comment'># By default regexp&#39;s must have an explicit comparator
@@ -374,7 +374,6 @@
       <pre class="lines">
 
 
-62
 63
 64
 65
@@ -385,10 +384,11 @@
 70
 71
 72
-73</pre>
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>regexp_explicit:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_comparator'>comparator</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_regexp?'>regexp?</span><span class='lparen'>(</span><span class='label'>cell:</span> <span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>explicit:</span> <span class='id identifier rubyid_regexp_explicit'>regexp_explicit</span><span class='rparen'>)</span>
@@ -422,7 +422,6 @@
       <pre class="lines">
 
 
-40
 41
 42
 43
@@ -433,10 +432,11 @@
 48
 49
 50
-51</pre>
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>comparator:</span><span class='comma'>,</span> <span class='label'>value:</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
@@ -470,17 +470,17 @@
       <pre class="lines">
 
 
-53
 54
 55
 56
 57
 58
 59
-60</pre>
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_regexp_implicit'>regexp_implicit</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='comment'># rubocop: disable Style/CaseEquality
@@ -570,12 +570,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-86
 87
-88</pre>
+88
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Pattern.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>regexp_explicit:</span> <span class='ivar'>@regexp_explicit</span><span class='rparen'>)</span>
@@ -590,7 +590,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:15 2017 by
+  Generated on Wed Dec 27 12:27:34 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>
