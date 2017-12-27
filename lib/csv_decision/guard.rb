@@ -8,7 +8,7 @@ module CSVDecision
   # Recognise guard column symbol expressions in input column data cells -
   # e.g., +> :column.present?+ or +:column == 100.0+.
   module Guard
-    # Symbol guard expression - e.g., +> :column.present?+ or +:column == 100.0+.
+    # Column symbol guard expression - e.g., +> :column.present?+ or +:column == 100.0+.
     GUARD =
       "(?<negate>#{Matchers::NEGATE}?)\\s*" \
       ":(?<name>#{Header::COLUMN_NAME})\\s*" \
@@ -16,11 +16,10 @@ module CSVDecision
       "(?<param>\\S.*)"
     private_constant :GUARD
 
-    # Symbol comparision regular expression.
     GUARD_RE = Matchers.regexp(GUARD)
     private_constant :GUARD_RE
 
-    # Negated method
+    # Negated methods
     NEGATION = {
       '='  => '!=',
       '==' => '!=',
@@ -34,6 +33,7 @@ module CSVDecision
     }.freeze
     private_constant :NEGATION
 
+    # Note: value has already been converted to an Integer or BigDecimal.
     NUMERIC_COMPARE = {
       '=='  => proc { |symbol, value, hash| Matchers.numeric(hash[symbol])   == value },
       '!='  => proc { |symbol, value, hash| Matchers.numeric(hash[symbol])   != value },
@@ -65,22 +65,23 @@ module CSVDecision
       return proc { |symbol, value, hash| compare?(lhs: hash[symbol], compare: method, rhs: value) }
     end
 
-    def self.guard_proc(match)
-      negate = match['negate'].present?
+    def self.method(match)
       method = match['method']
-      method = negate ? NEGATION[method] : Matchers.normalize_operator(method)
+      match['negate'].present? ? NEGATION[method] : Matchers.normalize_operator(method)
+    end
+
+    def self.guard_proc(match)
+      method = method(match)
       param =  match['param']
 
       # If the parameter is a numeric value then use numeric compares
       # rather than string compares.
       if (value = Matchers.to_numeric(param))
-        proc = NUMERIC_COMPARE[method]
-      else
-        proc = non_numeric(method)
-        value = param
+        return [NUMERIC_COMPARE[method], value]
       end
 
-      [proc, value]
+      # Process a non-numeric method where the param is just a string
+      [non_numeric(method), param]
     end
 
     # (see Matchers::Matcher#matches?)
