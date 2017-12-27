@@ -8,7 +8,7 @@ module CSVDecision
   # Recognise guard column symbol expressions in input column data cells -
   # e.g., +> :column.present?+ or +:column == 100.0+.
   module Guard
-    # Column symbol guard expression - e.g., +> :column.present?+ or +:column == 100.0+.
+    # Column symbol guard expression - e.g., +>:column.present?+ or +:column == 100.0+.
     GUARD =
       "(?<negate>#{Matchers::NEGATE}?)\\s*" \
       ":(?<name>#{Header::COLUMN_NAME})\\s*" \
@@ -64,18 +64,19 @@ module CSVDecision
 
       return proc { |symbol, value, hash| compare?(lhs: hash[symbol], compare: method, rhs: value) }
     end
+    private_class_method :non_numeric
 
     def self.method(match)
       method = match['method']
       match['negate'].present? ? NEGATION[method] : Matchers.normalize_operator(method)
     end
+    private_class_method :method
 
     def self.guard_proc(match)
       method = method(match)
       param =  match['param']
 
-      # If the parameter is a numeric value then use numeric compares
-      # rather than string compares.
+      # If the parameter is a numeric value then use numeric compares rather than string compares.
       if (value = Matchers.to_numeric(param))
         return [NUMERIC_COMPARE[method], value]
       end
@@ -83,6 +84,7 @@ module CSVDecision
       # Process a non-numeric method where the param is just a string
       [non_numeric(method), param]
     end
+    private_class_method :guard_proc
 
     # (see Matchers::Matcher#matches?)
     def self.matches?(cell)
