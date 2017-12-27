@@ -32,4 +32,14 @@ describe CSVDecision::Parse do
       end
     end
   end
+
+  context 'it rejects invalid CSV files' do
+    Dir[File.join(CSVDecision.root, 'spec/data/invalid/*.csv')].each do |file_name|
+      pathname = Pathname(file_name)
+
+      it "rejects CSV file: #{pathname.basename}" do
+        expect { CSVDecision.parse(pathname) }.to raise_error(CSVDecision::FileError)
+      end
+    end
+  end
 end

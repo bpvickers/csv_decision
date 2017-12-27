@@ -68,9 +68,9 @@ describe CSVDecision::Table do
           options: {},
           data: <<~DATA
             in :constant, out :type
-            :=nil,        NilClass
-            = 0,          Zero
-            :=100.0,      100%
+            :=nil,        :=nil
+            = 0,          = 0
+            :=100.0,      :=100
             ,             Unrecognized
           DATA
         },
@@ -81,9 +81,9 @@ describe CSVDecision::Table do
             options = test[:options].merge(first_match: true)
             table = CSVDecision.parse(test[:data], options)
 
-            expect(table.send(method, constant: nil)).to eq(type: 'NilClass')
-            expect(table.send(method, constant: 0)).to eq(type: 'Zero')
-            expect(table.send(method, constant: BigDecimal.new('100.0'))).to eq(type: '100%')
+            expect(table.send(method, constant: nil)).to eq(type: nil)
+            expect(table.send(method, constant: 0)).to eq(type: 0)
+            expect(table.send(method, constant: BigDecimal.new('100.0'))).to eq(type: BigDecimal('100.0'))
             expect(table.send(method, constant: ':=nil')).to eq(type: 'Unrecognized')
             expect(table.send(method, constant: '= 0')).to eq(type: 'Unrecognized')
             expect(table.send(method, constant: ':=100.0')).to eq(type: 'Unrecognized')
@@ -179,6 +179,112 @@ describe CSVDecision::Table do
               .to eq(salesperson: %w[Espadas Ojiisan])
             expect(table.send(method, age:  40, trait: 'maniac'))
               .to eq(salesperson: %w[Bronco Korolev])
+          end
+        end
+      end
+    end
+
+    context 'makes correct decision for table with symbol equality compares' do
+      examples = [
+        { example: 'uses == :node',
+          options: {},
+          data: <<~DATA
+            in :node, in :parent, out :top?
+            ,          ==:node,   yes
+            ,          ,          no
+          DATA
+        },
+        { example: 'uses :node',
+          options: {},
+          data: <<~DATA
+            in :node, in :parent, out :top?
+            ,         :node,      yes
+            ,         ,           no
+          DATA
+        },
+        { example: 'uses := :node',
+          options: {},
+          data: <<~DATA
+            in :node, in :parent, out :top?
+            ,         := :node,   yes
+            ,         ,           no
+          DATA
+        },
+        { example: 'uses = :node',
+          options: {},
+          data: <<~DATA
+            in :node, in :parent, out :top?
+            ,         = :node,    yes
+            ,         ,           no
+          DATA
+        },
+        { example: 'uses :node, drops :node input column',
+          options: {},
+          data: <<~DATA
+            in :parent, out :top?
+            :node,      yes
+            ,           no
+          DATA
+        },
+        { example: 'uses :parent, drops :parent input column',
+          options: {},
+          data: <<~DATA
+            in :node, out :top?
+            :parent,  yes
+            ,         no
+          DATA
+        },
+        { example: 'uses != :parent, drops :parent input column',
+          options: {},
+          data: <<~DATA
+            in :node,    out :top?
+            != :parent,  no
+            ,            yes
+          DATA
+        }
+      ]
+
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            options = test[:options]
+            table = CSVDecision.parse(test[:data], options)
+
+            expect(table.send(method, node:  0,  parent: 0)).to eq(top?: 'yes')
+            expect(table.send(method, node:  1,  parent: 0)).to eq(top?: 'no')
+            expect(table.send(method, node: '0', parent: 0)).to eq(top?: 'no')
+          end
+        end
+      end
+    end
+
+    context 'makes correct decision for table with symbol ordered compares' do
+      examples = [
+        { example: 'uses == :node',
+          options: {},
+          data: <<~DATA
+            in :traded, in :settled, out :status
+            ,            :traded,    same day
+            ,           >:traded,    pending
+            ,           <:traded,    invalid trade
+            ,                   ,    invalid data
+          DATA
+        },
+      ]
+
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            options = test[:options]
+            table = CSVDecision.parse(test[:data], options)
+
+            expect(table.send(method, traded: '20171227',  settled: '20171227')).to eq(status: 'same day')
+            expect(table.send(method, traded:  20171227,   settled:  20171227 )).to eq(status: 'same day')
+            expect(table.send(method, traded: '20171227',  settled: '20171228')).to eq(status: 'pending')
+            expect(table.send(method, traded:  20171227,   settled:  20171228 )).to eq(status: 'pending')
+            expect(table.send(method, traded: '20171228',  settled: '20171227')).to eq(status: 'invalid trade')
+            expect(table.send(method, traded:  20171228,   settled:  20171227 )).to eq(status: 'invalid trade')
+            expect(table.send(method, traded: '20171227',   settled: 20171228 )).to eq(status: 'invalid data')
           end
         end
       end

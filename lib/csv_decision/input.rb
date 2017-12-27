@@ -1,24 +1,27 @@
 # frozen_string_literal: true
 
-require 'ice_nine'
-require 'ice_nine/core_ext/object'
-
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017 by Brett Vickers
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Parse the input hash
+  # Parse the input hash.
   module Input
+    # @param (see Decide.decide)
+    # @return [Hash{Symbol => Hash{Symbol=>Object}, Hash{Integer=>Object}}]
+    #   Returns  a hash of two hashes:
+    #   * hash: either a copy with keys symbolized or the original input object
+    #   * scan_cols: Picks out the value in the input hash for each table input column.
+    #     Defaults to nil if the key is missing in the input hash.
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
       # For safety the default is to symbolize keys and make a copy of the hash.
-      # However, if this is turned off assume keys are symbolized
-      # TODO: Is it OK to mutate the hash in this case?
-      input = symbolize_keys ? input.deep_symbolize_keys : input
+      # However, if this is turned off then the keys must already symbolized.
+      input = symbolize_keys ? input.symbolize_keys : input
 
       parsed_input = parse_input(table: table, input: input)
 
+      # Freeze the copy of the input hash we just created.
       parsed_input[:hash].freeze if symbolize_keys
 
       parsed_input
@@ -33,7 +36,7 @@ module CSVDecision
     def self.parse_input(table:, input:)
       scan_cols = {}
 
-      # Does this table have any defaulted columns?
+      # TODO: Does this table have any defaulted columns?
       # defaulted_columns = table.columns[:defaults]
 
       table.columns.ins.each_pair do |col, column|

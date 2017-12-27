@@ -10,32 +10,41 @@ module CSVDecision
     Matchers::Range,
     Matchers::Numeric,
     Matchers::Pattern,
-    Matchers::Function
+    Matchers::Constant,
+    Matchers::Symbol
+    # Matchers::Function
   ].freeze
 
-  # All valid options with their default values.
-  VALID_OPTIONS = {
-    first_match: true,
-    regexp_implicit: false,
-    text_only: false,
-    matchers: DEFAULT_MATCHERS
-  }.freeze
+  # Subset of matchers that apply to output cells
+  OUTS_MATCHERS = [
+    Matchers::Constant
+  # Matchers::Function
+  ].freeze
 
-  # These options may appear in the CSV file before the header row.
-  # Convert them to a normalized option key value pair.
-  CSV_OPTION_NAMES = {
-    first_match: [:first_match, true],
-    accumulate: [:first_match, false],
-    regexp_implicit: [:regexp_implicit, true],
-    text_only: [:text_only, true]
-  }.freeze
-
-  # Validate and normalize the options hash supplied.
+  # Validate and normalize the options values supplied.
   module Options
+    # All valid CSVDecision::parse options with their default values.
+    VALID = {
+      first_match: true,
+      regexp_implicit: false,
+      text_only: false,
+      matchers: DEFAULT_MATCHERS
+    }.freeze
+
+    # These options may appear in the CSV file before the header row.
+    # They get converted to a normalized option key value pair.
+    CSV_NAMES = {
+      first_match: [:first_match, true],
+      accumulate: [:first_match, false],
+      regexp_implicit: [:regexp_implicit, true],
+      text_only: [:text_only, true]
+    }.freeze
+
     # Validate options and supply default values for any options not explicitly set.
     #
-    # @param options [Hash] - input options hash supplied
-    # @return [Hash] - options hash filled in with all required default values
+    # @param options [Hash] Input options hash supplied by the user.
+    # @return [Hash] Options hash filled in with all required values, defaulted if necessary.
+    # @raise [ArgumentError] For invalid option keys.
     def self.normalize(options)
       validate(options)
       default(options)
@@ -43,9 +52,9 @@ module CSVDecision
 
     # Read any options supplied in the CSV file placed before the header row.
     #
-    # @param rows [Array<Array<String>>] - table data rows.
-    # @param options [Hash] - input options hash built so far
-    # @return [Hash] - options hash overridden with any option values in the CSV file
+    # @param rows [Array<Array<String>>] Table data rows.
+    # @param options [Hash] Input options hash built so far.
+    # @return [Hash] Options hash overridden with any values found in the CSV file.
     def self.from_csv(rows:, options:)
       row = rows.first
       return options if row.nil?
@@ -80,7 +89,7 @@ module CSVDecision
       result[:matchers] = matchers(result)
 
       # Supply any missing options with default values
-      VALID_OPTIONS.each_pair do |key, value|
+      Options::VALID.each_pair do |key, value|
         next if result.key?(key)
         result[key] = value
       end
@@ -100,12 +109,12 @@ module CSVDecision
 
     def self.option?(cell)
       key = cell.downcase.to_sym
-      return CSV_OPTION_NAMES[key] if CSV_OPTION_NAMES.key?(key)
+      return Options::CSV_NAMES[key] if Options::CSV_NAMES.key?(key)
     end
     private_class_method :option?
 
     def self.validate(options)
-      invalid_options = options.keys - VALID_OPTIONS.keys
+      invalid_options = options.keys - Options::VALID.keys
 
       return if invalid_options.empty?
 

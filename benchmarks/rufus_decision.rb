@@ -6,7 +6,7 @@ require 'rufus/decision'
 require 'ice_nine'
 require 'ice_nine/core_ext/object'
 
-require_relative 'lib/csv_decision'
+require_relative '../lib/csv_decision'
 
 SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
 

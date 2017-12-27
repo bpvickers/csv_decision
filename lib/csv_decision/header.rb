@@ -6,32 +6,41 @@
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   module Header
-    # Column header looks like IN :col_name or cond:
+    # TODO: implement all column types
+    # COLUMN_TYPE = %r{
+    #   \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|guard|if)
+    #   \s*:\s*(?<name>\S?.*)\z
+    # }xi
+
+    # Column types recognise din the header row.
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|cond|if)
+      \A(?<type>in|out|in/text|out/text)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
     # These column types do not need a name
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if cond]).freeze
+    # TODO: implement anonymous column types
+    # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
 
-    # More lenient than a Ruby method name -
-    # any spaces will have been replaced with underscores
+    # Regular expression string for a column name.
+    # More lenient than a Ruby method name - note any spaces will have been replaced with underscores.
     COLUMN_NAME = "\\w[\\w:/!?]*"
+
+    # Column name regular expression.
     COLUMN_NAME_RE = Matchers.regexp(COLUMN_NAME)
 
-    # Does this row contain a recognisable header cell?
+    # Check if the given row contains a recognisable header cell.
     #
-    # @param row [Array<String>] header row
-    # @return [Boolean] true if the row looks like a header
+    # @param row [Array<String>] Header row.
+    # @return [Boolean] Return true if the row looks like a header.
     def self.row?(row)
       row.find { |cell| cell.match(COLUMN_TYPE) }
     end
 
     # Strip empty columns from all data rows.
     #
-    # @param rows [Array<Array<String>>]
-    # @return [Array<Array<String>>] - data array after removing any empty columns and the
+    # @param rows [Array<Array<String>>] Data rows.
+    # @return [Array<Array<String>>] Data array after removing any empty columns and the
     #   header row.
     def self.strip_empty_columns(rows:)
       empty_cols = empty_columns?(row: rows.first)
@@ -43,8 +52,8 @@ module CSVDecision
 
     # Classify and build a dictionary of all input and output columns.
     #
-    # @param row [Array<String>] - the header row after removing any empty columns.
-    # @return [Hash<Hash>] - Column dictionary if a hash of hashes.
+    # @param row [Array<String>] The header row after removing any empty columns.
+    # @return [Hash<Hash>] Column dictionary is a hash of hashes.
     def self.dictionary(row:)
       dictionary = Columns::Dictionary.new
 
@@ -80,7 +89,9 @@ module CSVDecision
 
     def self.column_name(type:, name:)
       return format_column_name(name) if name.present?
-      return if COLUMN_TYPE_ANONYMOUS.member?(type)
+
+      # TODO: implement anonymous column types
+      # return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
       raise CellValidationError, 'column name is missing'
     end
@@ -102,8 +113,9 @@ module CSVDecision
       when :'in/text'
         [:in, true]
 
-      when :cond
-        [:in, false]
+      # TODO: planned feature
+      # when :guard
+      #   [:in, false]
 
       when :'out/text'
         [:out, true]
@@ -143,9 +155,6 @@ module CSVDecision
 
       when :out
         dictionary.outs[index] = entry
-
-      else
-        raise "internal error - column type #{type} not recognised"
       end
 
       dictionary

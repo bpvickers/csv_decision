@@ -28,15 +28,27 @@ describe CSVDecision::Options do
       input0,    output0
     DATA
 
-    result = CSVDecision.parse(data, first_match: false)
+    result = CSVDecision.parse(data,
+                               first_match: false,
+                               matchers: [CSVDecision::Matchers::Pattern])
 
     expected = {
       first_match: false,
       regexp_implicit: false,
       text_only: false,
-      matchers: CSVDecision::DEFAULT_MATCHERS
+      matchers: [CSVDecision::Matchers::Pattern]
     }
     expect(result.options).to eql expected
+  end
+
+  it 'rejects an invalid option argument' do
+    data = <<~DATA
+      IN :input, OUT :output
+      input0,    output0
+    DATA
+
+    expect { CSVDecision.parse(data, bad_option: false) }
+      .to raise_error(ArgumentError, "invalid option(s) supplied: [:bad_option]")
   end
 
   it 'parses options from a CSV file' do

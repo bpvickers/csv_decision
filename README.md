@@ -4,7 +4,8 @@ CSV Decision
 [![Gem Version](https://badge.fury.io/rb/csv_decision.svg)](https://badge.fury.io/rb/csv_decision)
 [![Build Status](https://travis-ci.org/bpvickers/csv_decision.svg?branch=master)](https://travis-ci.org/bpvickers/csv_decision)
 [![Coverage Status](https://coveralls.io/repos/github/bpvickers/csv_decision/badge.svg?branch=master)](https://coveralls.io/github/bpvickers/csv_decision?branch=master)
-<a href="https://codeclimate.com/github/bpvickers/csv_decision/maintainability"><img src="https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability)](https://codeclimate.com/github/bpvickers/csv_decision/maintainability)
+[![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 ### CSV based Ruby decision tables (a lightweight Hash transformation gem)
 
@@ -15,10 +16,11 @@ It accepts decision tables implemented as a
 which can then be used to execute complex conditional logic against an input hash, 
 producing a decision as an output hash.
 
- ### `csv_decision` features
+ ### CSV Decision features
  * Fast decision-time performance (see `benchmark.rb`).
- * In addition to simple string matching, can use regular expressions, 
- numeric comparisons and Ruby-style ranges.
+ * In addition to simple string matching, can match common Ruby constants, 
+ regular expressions, numeric comparisons and Ruby-style ranges.
+ * Can use column symbols in comparisons for guard conditions -- e.g., > :column.
  * Accepts data as a file, CSV string or an array of arrays. (For safety all input data is 
  force encoded to UTF-8, and non-ascii strings are converted to empty strings.)
  * All CSV cells are parsed for correctness, and helpful error messages generated for bad 
@@ -27,14 +29,14 @@ producing a decision as an output hash.
  array of hashes.
  
  ### Planned features
- `csv_decision` is currently a work in progress, and will be enhanced to support
+ `csv_decision` is still a work in progress, and will be enhanced to support
  the following features:
  * Input columns may be indexed for faster lookup performance.
  * May use functions in the output columns to formulate the final decision.
  * Input hash values may be conditionally defaulted using a constant or a function call
  * Use of column symbol references or built-in guard functions in the input
  columns for matching.
- * Output columns may used interpolated strings referencing column symbols.
+ * Output columns may use interpolated strings referencing column symbols.
  * May be extended with user-defined Ruby functions for tailored logic.
  * Can use post-match guard conditions to filter the results of multi-row 
  decision output.
@@ -149,7 +151,7 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
  ### Constants other than strings
  Although `csv_decision` is string oriented, it does recognise other types of constant
  present in the input hash. Specifically, the following classes are recognized: 
- `Integer`, `BigDecimal` and `NilClass`. 
+ `Integer`, `BigDecimal`, `NilClass`, `TrueClass` and `FalseClass`. 
  
  This is accomplished by prefixing the value with one of the operators `=`, `==` or `:=`. 
  (The syntax is intentionally lax.)
@@ -157,19 +159,50 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
  For example:
  ```ruby
     data = <<~DATA
-      in :constant, out :type
-      :=nil,        NilClass
-      ==false,      FALSE
-      =true,        TRUE
-      = 0,          Zero
-      :=100.0,      100%
+      in :constant, out :value
+      :=nil,        :=nil
+      ==false,      ==false
+      =true,        =true
+      = 0,          = 0
+      :=100.0,      :=100.0
     DATA
           
   table = CSVDecision.parse(data)
-  table.decide(constant: nil) # returns type: 'NilClass'        
-  table.decide(constant: 0) # returns type: 'Zero'        
-  table.decide(constant: BigDecimal.new('100.0')) # returns type: '100%'        
+  table.decide(constant: nil) # returns value: nil      
+  table.decide(constant: 0) # returns value: 0        
+  table.decide(constant: BigDecimal('100.0')) # returns value: BigDecimal('100.0')       
 ```
+ 
+ ### Column header symbols
+ All input and output column names are symbolized, and can be used to form simple
+ expressions that refer to values in the input hash.
+ 
+ For example:
+ ```ruby
+    data = <<~DATA
+      in :node, in :parent, out :top?
+      ,         == :node,   yes
+      ,         ,           no
+    DATA
+    
+    table = CSVDecision.parse(data)
+    table.decide(node: 0, parent: 0) # returns top?: 'yes'
+    table.decide(node: 1, parent: 0) # returns top?: 'no'
+ ```
+ 
+ Note that there is no need to include an input column for `:node` in the decision 
+ table - it just needs to be present in the input hash. Also, `== :node` can be 
+ shortened to just `:node`, so the above decision table may be simplified to:
+ 
+ ```ruby
+    data = <<~DATA
+      in :parent, out :top?
+         :node,   yes
+      ,           no
+    DATA
+ ```
+ These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
+ For more simple examples see `spec/csv_decision/examples_spec.rb`.
  
  ### Testing
  

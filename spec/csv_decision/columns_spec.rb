@@ -74,7 +74,7 @@ describe CSVDecision::Columns do
   end
 
   context 'rejects invalid CSV decision table columns' do
-    Dir[File.join(SPEC_DATA_INVALID, 'invalid_columns*.csv')].each do |file_name|
+    Dir[File.join(SPEC_DATA_INVALID, 'invalid_header*.csv')].each do |file_name|
       pathname = Pathname(file_name)
 
       it "rejects CSV file #{pathname.basename}" do
