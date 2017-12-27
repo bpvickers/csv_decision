@@ -7,12 +7,30 @@
 module CSVDecision
   # Methods to assign a matcher to data cells
   class Matchers
-    # Match cell against a Ruby-like range
+    # Match cells against Ruby-like range expressions or their negation - e.g., +0...10+ or +!a..z+.
     class Range < Matcher
-      # Range types are .. or ...
+      # Match a table data cell string against a Ruby-like range expression.
+      #
+      # @param (see Matcher#matches?)
+      # @return (see Matcher#matches?)
+      def self.matches?(cell)
+        if (match = NUMERIC_RANGE.match(cell))
+          return range_proc(match: match, coerce: :to_numeric)
+        end
+
+        if (match = ALNUM_RANGE.match(cell))
+          return range_proc(match: match)
+        end
+
+        false
+      end
+
+      # Range types are +..+ or +...+.
       TYPE = '(\.\.\.|\.\.)'
       private_constant :TYPE
 
+      # Range expression looks like +0...10+ or +a..z+.
+      # Can also be negated - e.g., +! 0..10+ or +!a..z+.
       def self.range_re(value)
         Matchers.regexp(
           "(?<negate>#{NEGATE}?)\\s*(?<min>#{value})(?<type>#{TYPE})(?<max>#{value})"
@@ -23,13 +41,11 @@ module CSVDecision
       NUMERIC_RANGE = range_re(Matchers::NUMERIC)
       private_constant :NUMERIC_RANGE
 
-      # One or more alphanumeric characters
-      ALNUM = '[[:alnum:]][[:alnum:]]*'
-      private_constant :ALNUM
-
-      ALNUM_RANGE = range_re(ALNUM)
+      # Alphanumeric range, e.g., +a...z+ or +!a..c+.
+      ALNUM_RANGE = range_re('[[:alnum:]][[:alnum:]]*')
       private_constant :ALNUM_RANGE
 
+      # Coerce the string into a numeric value if required.
       def self.convert(value, method)
         method ? Matchers.send(method, value) : value
       end
@@ -45,12 +61,14 @@ module CSVDecision
       end
       private_class_method :range
 
+      # Build the lambda proc for a numeric range.
       def self.numeric_range(negate, range)
         return ->(value) { range.include?(Matchers.numeric(value)) } unless negate
         ->(value) { !range.include?(Matchers.numeric(value)) }
       end
       private_class_method :numeric_range
 
+      # Build the lambda proc for an alphanumeric range.
       def self.alnum_range(negate, range)
         return ->(value) { range.include?(value) } unless negate
         ->(value) { !range.include?(value) }
@@ -65,23 +83,10 @@ module CSVDecision
       end
       private_class_method :range_proc
 
-      # @param (see Matchers::Matcher#matches?)
-      # @return (see Matchers::Matcher#matches?)
-      def self.matches?(cell)
-        if (match = NUMERIC_RANGE.match(cell))
-          return range_proc(match: match, coerce: :to_numeric)
-        end
-
-        if (match = ALNUM_RANGE.match(cell))
-          return range_proc(match: match)
-        end
-
-        false
-      end
-
-      # Range expression - e.g., +0...10+ or +a..z+
-      # @param (see Matchers::Matcher#matches?)
-      # @return (see Matchers::Matcher#matches?)
+      # Ruby-like range expressions or their negation - e.g., +0...10+ or +!a..z+.
+      #
+      # @param (see Matcher#matches?)
+      # @return (see Matcher#matches?)
       def matches?(cell)
         Range.matches?(cell)
       end
