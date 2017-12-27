@@ -38,15 +38,18 @@ module CSVDecision
       end
     end
 
-    # Dictionary of all data columns
+    # Dictionary of all data columns.
+    # @return [Columns::Dictionary]
     attr_reader :dictionary
 
-    # Input columns
+    # Input columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
     def ins
       @dictionary.ins
     end
 
-    # Output columns
+    # Output columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
     def outs
       @dictionary.outs
     end

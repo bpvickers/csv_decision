@@ -11,6 +11,7 @@ module CSVDecision
     #   * with arguments - e.g., :=lookup?(:table)
     # TODO: fully implement
     class Function < Matcher
+      # @param options (see Parse.parse)
       def initialize(options = {})
         @options = options
       end

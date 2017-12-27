@@ -8,6 +8,7 @@ require 'csv'
 module CSVDecision
   # All cells starting with this character are comments, and treated as a blank cell.
   COMMENT_CHARACTER = '#'
+  private_constant :COMMENT_CHARACTER
 
   # Methods to load data from a file, CSV string or an array of arrays.
   module Data

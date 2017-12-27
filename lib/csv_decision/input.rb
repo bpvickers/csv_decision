@@ -24,7 +24,7 @@ module CSVDecision
       # Freeze the copy of the input hash we just created.
       parsed_input[:hash].freeze if symbolize_keys
 
-      parsed_input
+      parsed_input.freeze
     end
 
     def self.validate(input)

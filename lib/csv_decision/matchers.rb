@@ -82,21 +82,6 @@ module CSVDecision
       [row, scan_row.freeze]
     end
 
-    # Scan the table cell against all matches.
-    #
-    # @param matchers [Array<Matchers::Matcher>]
-    # @param cell [String]
-    # @return [false, Matchers::Proc]
-    def self.scan(matchers:, cell:)
-      matchers.each do |matcher|
-        proc = matcher.matches?(cell)
-        return proc if proc
-      end
-
-      # Must be a simple constant
-      false
-    end
-
     def self.ins_matchers(options)
       options[:matchers].collect { |klass| klass.new(options) }
     end

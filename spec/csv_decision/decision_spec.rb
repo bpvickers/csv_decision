@@ -19,12 +19,5 @@ describe CSVDecision::Decision do
     expect(decision).to be_a(CSVDecision::Decision)
     expect(decision.empty?).to eq true
     expect(decision.exist?).to eq false
-
-    row = table.rows[0]
-    decision.add(row)
-
-    expect(decision.empty?).to eq false
-    expect(decision.exist?).to eq true
-    expect(decision.result).to eq(output: 'output0')
   end
 end

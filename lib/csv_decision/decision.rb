@@ -1,11 +1,26 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017 by Brett Vickers.
 # See LICENSE and README.md for details.
 module CSVDecision
   # Accumulate the matching row(s) and calculate the final result
   class Decision
+    # Match the table row against the input hash.
+    #
+    # @param row [Array] Table row.
+    # @param input [Hash{Symbol=>Object}] Input hash data structure.
+    # @param scan_row [ScanRow]
+    # @return [Boolean] Returns true if a match, false otherwise.
+    def self.matches?(row:, input:, scan_row:)
+      match = scan_row.match_constants?(row: row, scan_cols: input[:scan_cols])
+      return false unless match
+
+      return true if scan_row.procs.empty?
+
+      scan_row.match_procs?(row: row, input: input)
+    end
+
     def initialize(table:, input:)
       @result = {}
 
@@ -17,7 +32,7 @@ module CSVDecision
       # @outs_functions = table.outs_functions
 
       # Partial result always includes the input hash for calculating output functions
-      @partial_result = input[:hash].dup if @outs_functions
+      # @partial_result = input[:hash].dup if @outs_functions
 
       @row_picked = nil
       return if @first_match
@@ -56,6 +71,8 @@ module CSVDecision
       self
     end
 
+    private
+
     def add(row)
       return add_first_match(row) if @first_match
 
@@ -68,8 +85,6 @@ module CSVDecision
       # Not done
       false
     end
-
-    private
 
     def accumulate_outs(column_name:, cell:)
       current = @result[column_name]
@@ -88,7 +103,7 @@ module CSVDecision
     end
 
     def row_scan(input:, row:, scan_row:)
-      return unless Decide.matches?(row: row, input: input, scan_row: scan_row)
+      return unless Decision.matches?(row: row, input: input, scan_row: scan_row)
 
       add(row)
     end
