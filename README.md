@@ -7,7 +7,7 @@ CSV Decision
 [![Maintainability](https://api.codeclimate.com/v1/badges/466a6c52e8f6a3840967/maintainability)](https://codeclimate.com/github/bpvickers/csv_decision/maintainability)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
-### CSV based Ruby decision tables (a lightweight Hash transformation gem)
+### CSV based Ruby decision tables
 
 `csv_decision` is a RubyGem for CSV (comma separated values) based 
 [decision tables](https://en.wikipedia.org/wiki/Decision_table). 
@@ -28,35 +28,22 @@ producing a decision as an output hash.
  * Either returns the first matching row as a hash, or accumulates all matches as an 
  array of hashes.
  
-### Planned features
- `csv_decision` is still a work in progress, and will be enhanced to support
- the following features:
- * Input columns may be indexed for faster lookup performance.
- * May use functions in the output columns to formulate the final decision.
- * Input hash values may be conditionally defaulted using a constant or a function call
- * Use of column symbol references or built-in guard functions in the input
- columns for matching.
- * Output columns may use interpolated strings referencing column symbols.
- * May be extended with user-defined Ruby functions for tailored logic.
- * Can use post-match guard conditions to filter the results of multi-row 
- decision output.
+### Why use `csv_decision`?
  
- ### Why use `csv_decision`?
+Typical "business logic" is notoriously illogical -- full of corner cases and one-off 
+exceptions. 
+A decision table can capture data-based decisions in a way that comes more naturally 
+to subject matter experts, who typically prefer spreadsheet models. 
+Business logic may then be encapsulated, avoiding the need to write tortuous 
+conditional expressions in Ruby that draw the ire of `rubocop` and its ilk.
+
+This gem takes its inspiration from 
+[rufus/decision](https://github.com/jmettraux/rufus-decision).
+(That gem is no longer maintained and has issues with execution performance.)
  
- Typical "business logic" is notoriously illogical -- full of corner cases and one-off 
- exceptions. 
- A decision table can capture data-based decisions in a way that comes more naturally 
- to subject matter experts, who typically prefer spreadsheet models. 
- Business logic may then be encapsulated, avoiding the need to write tortuous 
- conditional expressions in Ruby that draw the ire of `rubocop` and its ilk.
+### Installation
  
- This gem takes its inspiration from 
- [rufus/decision](https://github.com/jmettraux/rufus-decision).
- (That gem is no longer maintained and has issues with execution performance.)
- 
- ### Installation
- 
- To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`:
+To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`:
  
  ```ruby
  gem 'csv_decision', '~> 0.0.1'
@@ -67,16 +54,16 @@ producing a decision as an output hash.
  gem install csv_decision
  ```
  
- ### Simple example
+### Simple example
  
- A decision table may be as simple or as complex as you like (although very complex 
- tables defeat the whole purpose). 
- Basic usage will be illustrated by an example taken from:
- https://jmettraux.wordpress.com/2009/04/25/rufus-decision-11-ruby-decision-tables/.
- 
- This example considers two input conditions: `topic` and `region`.
- These are labeled `in`. Certain combinations yield an output value for `team_member`, 
- labeled `out`.
+A decision table may be as simple or as complex as you like (although very complex 
+tables defeat the whole purpose). 
+Basic usage will be illustrated by an example taken from:
+https://jmettraux.wordpress.com/2009/04/25/rufus-decision-11-ruby-decision-tables/.
+
+This example considers two input conditions: `topic` and `region`.
+These are labeled `in`. Certain combinations yield an output value for `team_member`, 
+labeled `out`.
  
 ```
 in :topic | in :region  | out :team_member
@@ -92,18 +79,18 @@ politics  |             | Henry
           |             | Zach
 ```
  
- When the topic is `finance` and the region is `Europe` the team member `Donald`
- is selected.
- 
- This is a "first match" decision table in that as soon as a match is made execution
- stops and a single output value (hash) is returned. 
- 
- The ordering of rows matters. `Ernest`, who is in charge of `finance` for the rest of 
- the world, except for `America` and `Europe`, *must* come after his colleagues 
- `Charlie` and `Donald`. `Zach` has been placed last, catching all the input combos
- not matching any other row.
- 
- Now for some code.
+When the topic is `finance` and the region is `Europe` the team member `Donald`
+is selected.
+
+This is a "first match" decision table in that as soon as a match is made execution
+stops and a single output value (hash) is returned. 
+
+The ordering of rows matters. `Ernest`, who is in charge of `finance` for the rest of 
+the world, except for `America` and `Europe`, *must* come after his colleagues 
+`Charlie` and `Donald`. `Zach` has been placed last, catching all the input combos
+not matching any other row.
+
+Now for some code.
  
  ```ruby
   # Valid CSV string
@@ -127,10 +114,10 @@ politics  |             | Henry
   table.decide(topic: 'culture', region: 'America') # team_member: 'Zach'
 ```
  
- An empty `in` cell means "matches any value".
- 
- If you have cloned this gem's git repo, then this example can also be run by loading
- the table from a CSV file:
+An empty `in` cell means "matches any value".
+
+If you have cloned this gem's git repo, then this example can also be run by loading
+the table from a CSV file:
  
  ```ruby
 table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv'))
@@ -144,19 +131,19 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
 ```
 
 
- For more examples see `spec/csv_decision/table_spec.rb`. 
- Complete documentation of all table parameters is in the code - see 
- `lib/csv_decision/parse.rb` and `lib/csv_decision/table.rb`.
+For more examples see `spec/csv_decision/table_spec.rb`. 
+Complete documentation of all table parameters is in the code - see 
+`lib/csv_decision/parse.rb` and `lib/csv_decision/table.rb`.
  
- ### Constants other than strings
- Although `csv_decision` is string oriented, it does recognise other types of constant
- present in the input hash. Specifically, the following classes are recognized: 
- `Integer`, `BigDecimal`, `NilClass`, `TrueClass` and `FalseClass`. 
- 
- This is accomplished by prefixing the value with one of the operators `=`, `==` or `:=`. 
- (The syntax is intentionally lax.)
- 
- For example:
+### Constants other than strings
+Although `csv_decision` is string oriented, it does recognise other types of constant
+present in the input hash. Specifically, the following classes are recognized: 
+`Integer`, `BigDecimal`, `NilClass`, `TrueClass` and `FalseClass`. 
+
+This is accomplished by prefixing the value with one of the operators `=`, `==` or `:=`. 
+(The syntax is intentionally lax.)
+
+For example:
  ```ruby
     data = <<~DATA
       in :constant, out :value
@@ -173,11 +160,11 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
   table.decide(constant: BigDecimal('100.0')) # returns value: BigDecimal('100.0')       
 ```
  
- ### Column header symbols
- All input and output column names are symbolized, and can be used to form simple
- expressions that refer to values in the input hash.
- 
- For example:
+### Column header symbols
+All input and output column names are symbolized, and can be used to form simple
+expressions that refer to values in the input hash.
+
+For example:
  ```ruby
     data = <<~DATA
       in :node, in :parent, out :top?
@@ -190,10 +177,10 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
     table.decide(node: 1, parent: 0) # returns top?: 'no'
  ```
  
- Note that there is no need to include an input column for `:node` in the decision 
- table - it just needs to be present in the input hash. Also, `== :node` can be 
- shortened to just `:node`, so the above decision table may be simplified to:
- 
+Note that there is no need to include an input column for `:node` in the decision 
+table - it just needs to be present in the input hash. Also, `== :node` can be 
+shortened to just `:node`, so the above decision table may be simplified to:
+
  ```ruby
     data = <<~DATA
       in :parent, out :top?
@@ -201,10 +188,10 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
       ,           no
     DATA
  ```
- These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
- For more simple examples see `spec/csv_decision/examples_spec.rb`.
+These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
+For more simple examples see `spec/csv_decision/examples_spec.rb`.
  
- ### Testing
+### Testing
  
  `csv_decision` includes thorough [RSpec](http://rspec.info) tests:
  
@@ -213,3 +200,16 @@ table.decide(topic: 'finance', region: 'Europe') # returns team_member: %w[Donal
  bundle install
  rspec
  ```
+
+### Planned features
+ `csv_decision` is still a work in progress, and will be enhanced to support
+ the following features:
+ * Input columns may be indexed for faster lookup performance.
+ * May use functions in the output columns to formulate the final decision.
+ * Input hash values may be conditionally defaulted using a constant or a function call
+ * Use of column symbol references or built-in guard functions in the input
+ columns for matching.
+ * Output columns may use interpolated strings referencing column symbols.
+ * May be extended with user-defined Ruby functions for tailored logic.
+ * Can use post-match guard conditions to filter the results of multi-row 
+ decision output.
