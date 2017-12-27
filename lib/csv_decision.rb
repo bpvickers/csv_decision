@@ -19,6 +19,7 @@ module CSVDecision
   autoload :Decision,   'csv_decision/decision'
   autoload :Columns,    'csv_decision/columns'
   autoload :Function,   'csv_decision/function'
+  autoload :Guard,      'csv_decision/guard'
   autoload :Header,     'csv_decision/header'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
@@ -33,6 +34,7 @@ module CSVDecision
   class Matchers
     autoload :Constant,      'csv_decision/matchers/constant'
     autoload :Function,      'csv_decision/matchers/function'
+    autoload :Guard,         'csv_decision/matchers/guard'
     autoload :Numeric,       'csv_decision/matchers/numeric'
     autoload :Pattern,       'csv_decision/matchers/pattern'
     autoload :Range,         'csv_decision/matchers/range'

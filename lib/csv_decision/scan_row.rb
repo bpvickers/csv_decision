@@ -33,7 +33,7 @@ module CSVDecision
       function = proc.function
 
       # A symbol guard expression just needs to be passed the input hash
-      return function[hash] if proc.type == :expression
+      return function[hash] if proc.type == :guard
 
       # All other procs can take one or two args
       function.arity == 1 ? function[value] : function[value, hash]
