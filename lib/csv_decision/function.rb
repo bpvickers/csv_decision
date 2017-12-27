@@ -17,6 +17,7 @@ module CSVDecision
         "(?<name>#{Header::COLUMN_NAME}|:)(?<args>.*)"
     private_constant :FUNCTION_CALL
 
+    # Function call regular expression.
     FUNCTION_RE = Matchers.regexp(FUNCTION_CALL)
 
     def self.matches?(cell)
