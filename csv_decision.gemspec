@@ -9,7 +9,11 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Brett Vickers']
   spec.email         = ['brett@phillips-vickers.com']
   spec.description   = 'CSV based Ruby decision tables.'
-  spec.summary       = spec.description
+  spec.summary       = <<~DESC
+    CSV Decision implements CSV file based Ruby decision tables.  It accepts decision tables implemented as a 
+    which can then be used to execute complex conditional logic against an input hash, 
+    producing a decision as an output hash.
+  DESC
   spec.homepage      = 'https://github.com/bpvickers/csv_decision.git'
   spec.license       = 'MIT'
 
