@@ -109,6 +109,7 @@ module CSVDecision
       symbol = match['name'].to_sym
       Proc.with(type: :guard, function: proc.curry[symbol].freeze)
     end
+    private_class_method :symbol_proc
 
     def self.symbol_guard(cell)
       match = GUARD_RE.match(cell)
@@ -118,6 +119,7 @@ module CSVDecision
       symbol = match['name'].to_sym
       Proc.with(type: :guard, function: proc.curry[symbol][value].freeze)
     end
+    private_class_method :symbol_guard
 
     # (see Matchers::Matcher#matches?)
     def self.matches?(cell)
