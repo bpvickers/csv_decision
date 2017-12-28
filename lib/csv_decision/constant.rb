@@ -7,12 +7,12 @@
 module CSVDecision
   # Recognise constant expressions in table data cells.
   module Constant
-    # Cell constant expression specified by prefixing the value with one of the three equality symbols.
+    # Cell constant expression specified by prefixing the value with one of the three
+    # equality symbols.
     EXPRESSION = Matchers.regexp("(?<operator>#{Matchers::EQUALS})\\s*(?<value>\\S.*)")
     private_constant :EXPRESSION
 
     # rubocop: disable Lint/BooleanSymbol
-
     # Non-numeric constants recognised by CSV Decision.
     NON_NUMERIC = {
       nil: nil,

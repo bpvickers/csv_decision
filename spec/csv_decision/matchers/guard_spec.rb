@@ -14,7 +14,7 @@ describe CSVDecision::Matchers::Guard do
   describe '#matches?' do
     matcher = described_class.new
 
-    context 'symbol expression matches value to hash data' do
+    context 'symbol expression matches hash data' do
       examples = [
         # Integer equality
         { cell: ':col == 0',   hash: { col:   0  }, result: true },
