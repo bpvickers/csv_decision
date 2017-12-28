@@ -17,7 +17,7 @@ module CSVDecision
     attr_accessor :options
 
     # Set if the table row has any output functions (planned feature)
-    # attr_accessor :outs_functions
+    attr_accessor :outs_functions
 
     # @return [Array<Array>] Data rows after parsing.
     attr_accessor :rows

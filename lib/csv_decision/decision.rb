@@ -30,12 +30,11 @@ module CSVDecision
       # Relevant table attributes
       @first_match = table.options[:first_match]
       @outs = table.columns.outs
-
-      # TODO: Planned feature
-      # @outs_functions = table.outs_functions
+      @outs_functions = table.outs_functions
+      @outs_rows = table.outs_rows
 
       # Partial result always includes the input hash for calculating output functions
-      # @partial_result = input[:hash].dup if @outs_functions
+      @partial_result = input[:hash].dup if @outs_functions
 
       @row_picked = nil
       return if @first_match
@@ -62,9 +61,16 @@ module CSVDecision
     # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
     def result
       return {} if empty?
+      return final_result if @first_match
+
+      accumulated_result
+    end
+
+    # TODO: stub
+    def accumulated_result
       return final_result unless @outs_functions
 
-      nil
+      raise 'accumulate option does not support functions'
     end
 
     # Scan the decision table up against the input hash.
@@ -131,8 +137,40 @@ module CSVDecision
     def add_first_match(row)
       @row_picked = row
 
+      return eval_outs(row) if @outs_functions
+
       # Common case is just copying output column values to the final result
       @outs.each_pair { |col, column| @result[column.name] = row[col] }
+    end
+
+    def eval_outs(row)
+      # Set the constants first, in case the functions refer to them
+      eval_outs_constants(row)
+
+      # Then evaluate the functions, left to right
+      eval_outs_procs(row)
+    end
+
+    def eval_outs_constants(row)
+      @outs.each_pair do |col, column|
+        value = row[col]
+        next if value.is_a?(CSVDecision::Proc)
+
+        @partial_result[column.name] = value
+        @result[column.name] = value
+      end
+    end
+
+    def eval_outs_procs(row)
+      @outs.each_pair do |col, column|
+        proc = row[col]
+        next unless proc.is_a?(CSVDecision::Proc)
+
+        value = proc.function[@partial_result]
+
+        @partial_result[column.name] = value
+        @result[column.name] = value
+      end
     end
   end
 end

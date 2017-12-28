@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'ice_nine'
+require 'ice_nine/core_ext/object'
+
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017.
 # @author Brett Vickers.
@@ -89,11 +92,25 @@ module CSVDecision
         row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
         row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
 
+        # Does the table have any output functions?
+        outs_functions(table: table, index: index)
+
         row.freeze
       end
 
-      table.columns.freeze
+      table.columns.deep_freeze
     end
     private_class_method :parse_data
+
+    def self.outs_functions(table:, index:)
+      return if table.outs_rows[index].procs.empty?
+
+      # Set this flag as the table has output functions
+      table.outs_functions ||= true
+
+      outs = table.columns.outs
+      table.outs_rows[index].procs.each { |col| outs[col].eval = true }
+    end
+    private_class_method :outs_functions
   end
 end

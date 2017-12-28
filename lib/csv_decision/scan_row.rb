@@ -34,7 +34,7 @@ module CSVDecision
     # @param proc [CSVDecision::Proc] Proc in the table cell.
     # @param value [Object] Value supplied in the input hash corresponding to this column.
     # @param hash [{Symbol=>Obhect}] Input hash with symbolized keys.
-    def self.eval_matcher(proc:, value:, hash:)
+    def self.eval_matcher(proc:, hash:,  value: nil)
       function = proc.function
 
       # A symbol guard expression just needs to be passed the input hash
@@ -68,7 +68,7 @@ module CSVDecision
         next if (cell = row[col]) == '' && column.ins?
 
         # If the column is text only then no special matchers need be invoked
-        next @constants << col if column.text_only
+        next @constants << col if column.eval == false
 
         # Need to scan the cell against all matchers, and possibly overwrite
         # the cell contents with a proc.

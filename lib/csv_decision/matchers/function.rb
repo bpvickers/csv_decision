@@ -24,9 +24,9 @@ module CSVDecision
       end
 
       # (see Matcher#outs?)
-      def outs?
-        true
-      end
+      # def outs?
+      #   true
+      # end
     end
   end
 end

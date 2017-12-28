@@ -23,10 +23,10 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns).to be_a(CSVDecision::Columns)
-    expect(table.columns.ins[0].to_h).to eq(name: :input, text_only: nil, type: :in)
-    expect(table.columns.ins[2].to_h).to eq(name: :input, text_only: true, type: :in)
-    expect(table.columns.outs[1].to_h).to eq(name: :output, text_only: nil, type: :out)
-    expect(table.columns.outs[3].to_h).to eq(name: :output, text_only: true, type: :out)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
+    expect(table.columns.outs[3].to_h).to eq(name: :output, eval: false, type: :out)
   end
 
   it 'parses a decision table columns from a CSV file' do
@@ -96,7 +96,7 @@ describe CSVDecision::Columns do
 
     it 'recognises the guard column' do
       expect(table.columns.ins[1].to_h)
-        .to eq(name: nil, text_only: false, type: :guard)
+        .to eq(name: nil, eval: true, type: :guard)
     end
   end
 end

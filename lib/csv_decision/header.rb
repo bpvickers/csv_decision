@@ -110,19 +110,19 @@ module CSVDecision
     private_class_method :format_column_name
 
     # Returns the normalized column type, along with an indication if
-    # the column is text only
+    # the column requires evaluation
     def self.column_type(column_name, type)
       case type
       when :'in/text'
-        Columns::Entry.new(column_name, true, :in)
+        Columns::Entry.new(column_name, false, :in)
 
       when :guard
-        Columns::Entry.new(column_name, false, :guard)
+        Columns::Entry.new(column_name, true, :guard)
 
       when :'out/text'
-        Columns::Entry.new(column_name, true, :out)
+        Columns::Entry.new(column_name, false, :out)
 
-      # Column may turn out to be text-only, or not
+      # Column may turn out to be constants only, or not
       else
         Columns::Entry.new(column_name, nil, type.to_sym)
       end
