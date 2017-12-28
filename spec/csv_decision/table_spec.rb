@@ -271,7 +271,6 @@ describe CSVDecision::Table do
           DATA
         },
       ]
-
       examples.each do |test|
         %i[decide decide!].each do |method|
           it "#{method} correctly #{test[:example]}" do
@@ -289,5 +288,36 @@ describe CSVDecision::Table do
         end
       end
     end
+
+    # context 'makes correct decision for table with column symbol guards' do
+    #   examples = [
+    #     { example: 'uses == :node',
+    #       options: {},
+    #       data: <<~DATA
+    #         in :traded, in :settled, out :status
+    #         ,            :traded,    same day
+    #         ,           >:traded,    pending
+    #         ,           <:traded,    invalid trade
+    #         ,                   ,    invalid data
+    #       DATA
+    #     },
+    #   ]
+    #   examples.each do |test|
+    #     %i[decide decide!].each do |method|
+    #       it "#{method} correctly #{test[:example]}" do
+    #         options = test[:options]
+    #         table = CSVDecision.parse(test[:data], options)
+    #
+    #         expect(table.send(method, traded: '20171227',  settled: '20171227')).to eq(status: 'same day')
+    #         expect(table.send(method, traded:  20171227,   settled:  20171227 )).to eq(status: 'same day')
+    #         expect(table.send(method, traded: '20171227',  settled: '20171228')).to eq(status: 'pending')
+    #         expect(table.send(method, traded:  20171227,   settled:  20171228 )).to eq(status: 'pending')
+    #         expect(table.send(method, traded: '20171228',  settled: '20171227')).to eq(status: 'invalid trade')
+    #         expect(table.send(method, traded:  20171228,   settled:  20171227 )).to eq(status: 'invalid trade')
+    #         expect(table.send(method, traded: '20171227',   settled: 20171228 )).to eq(status: 'invalid data')
+    #       end
+    #     end
+    #   end
+    # end
   end
 end

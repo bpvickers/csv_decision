@@ -15,13 +15,15 @@ module CSVDecision
 
     # Column types recognised in the header row.
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text)
+      \A(?<type>in|out|in/text|out/text|guard)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
-    # These column types do not need a name
-    # TODO: implement anonymous column types
+    # TODO: implement all anonymous column types
     # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
+    # These column types do not need a name
+    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard]).freeze
+    private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Regular expression string for a column name.
     # More lenient than a Ruby method name - note any spaces will have been replaced with underscores.
@@ -92,8 +94,7 @@ module CSVDecision
     def self.column_name(type:, name:)
       return format_column_name(name) if name.present?
 
-      # TODO: implement anonymous column types
-      # return if COLUMN_TYPE_ANONYMOUS.member?(type)
+      return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
       raise CellValidationError, 'column name is missing'
     end
@@ -110,21 +111,20 @@ module CSVDecision
 
     # Returns the normalized column type, along with an indication if
     # the column is text only
-    def self.column_type(type)
+    def self.column_type(column_name, type)
       case type
       when :'in/text'
-        [:in, true]
+        Columns::Entry.new(column_name, true, :in)
 
-      # TODO: planned feature
-      # when :guard
-      #   [:in, false]
+      when :guard
+        Columns::Entry.new(column_name, false, :guard)
 
       when :'out/text'
-        [:out, true]
+        Columns::Entry.new(column_name, true, :out)
 
       # Column may turn out to be text-only, or not
       else
-        [type, nil]
+        Columns::Entry.new(column_name, nil, type.to_sym)
       end
     end
     private_class_method :column_type
@@ -132,11 +132,11 @@ module CSVDecision
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = validate_header_column(cell: cell)
 
-      type, text_only = column_type(column_type)
+      entry = column_type(column_name, column_type)
 
       dictionary_entry(dictionary: dictionary,
-                       type: type,
-                       entry: Columns::Entry.new(column_name, text_only),
+                       type: entry.type,
+                       entry: entry,
                        index: index)
     end
     private_class_method :parse_cell

@@ -14,8 +14,11 @@ module CSVDecision
     # @param matchers [Array<Matchers::Matcher>]
     # @param cell [String]
     # @return [false, Matchers::Proc]
-    def self.scan(matchers:, cell:)
+    def self.scan(column:, matchers:, cell:)
       matchers.each do |matcher|
+        # Guard function only accepts the same matchers as an output column
+        next if column.type == :guard && !OUTS_MATCHERS.member?(matcher.class)
+
         proc = matcher.matches?(cell)
         return proc if proc
       end
@@ -59,15 +62,15 @@ module CSVDecision
     # @return [Array] Data row with anything not a string constant replaced with a Proc or a non-string constant.
     def scan_columns(row:, columns:, matchers:)
       columns.each_pair do |col, column|
-        # Empty cell matches everything, and so never needs to be scanned
-        next if (cell = row[col]) == ''
+        # An empty input cell matches everything, and so never needs to be scanned
+        next if (cell = row[col]) == '' && column.ins?
 
         # If the column is text only then no special matchers need be invoked
         next @constants << col if column.text_only
 
         # Need to scan the cell against all matchers, and possibly overwrite
         # the cell contents with a proc.
-        row[col] = scan_cell(col: col, matchers: matchers, cell: cell)
+        row[col] = scan_cell(column: column, col: col, matchers: matchers, cell: cell)
       end
 
       row
@@ -103,9 +106,9 @@ module CSVDecision
 
     private
 
-    def scan_cell(col:, matchers:, cell:)
+    def scan_cell(column:, col:, matchers:, cell:)
       # Scan the cell against all the matchers
-      proc = ScanRow.scan(matchers: matchers, cell: cell)
+      proc = ScanRow.scan(column: column, matchers: matchers, cell: cell)
 
       return set(proc, col) if proc
 

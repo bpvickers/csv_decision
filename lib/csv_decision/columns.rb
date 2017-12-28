@@ -8,7 +8,11 @@ module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   class Columns
     # Value object to hold column dictionary entries.
-    Entry = Struct.new(:name, :text_only)
+    Entry = Struct.new(:name, :text_only, :type) do
+      def ins?
+        %i[in guard].member?(type) ? true : false
+      end
+    end
 
     # TODO: Value object used for any columns with defaults
     # Default = Struct.new(:name, :function, :default_if)

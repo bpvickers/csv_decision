@@ -12,13 +12,15 @@ module CSVDecision
     Matchers::Numeric,
     Matchers::Pattern,
     Matchers::Constant,
-    Matchers::Symbol
+    Matchers::Symbol,
+    Matchers::Guard
     # Matchers::Function
   ].freeze
 
   # Subset of matchers that apply to output cells
   OUTS_MATCHERS = [
-    Matchers::Constant
+    Matchers::Constant,
+    Matchers::Guard
   # Matchers::Function
   ].freeze
 

@@ -15,7 +15,7 @@ describe CSVDecision::Columns do
     end
   end
 
-  it 'parses a decision table columns from a CSV file' do
+  it 'parses a decision table columns from a CSV string' do
     data = <<~DATA
       IN :input, OUT :output, IN/text : input, OUT/text:output
       input0,    output0,     input1,          output1
@@ -23,10 +23,10 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns).to be_a(CSVDecision::Columns)
-    expect(table.columns.ins[0].to_h).to eq(name: :input, text_only: nil)
-    expect(table.columns.ins[2].to_h).to eq(name: :input, text_only: true)
-    expect(table.columns.outs[1].to_h).to eq(name: :output, text_only: nil)
-    expect(table.columns.outs[3].to_h).to eq(name: :output, text_only: true)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, text_only: nil, type: :in)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, text_only: true, type: :in)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, text_only: nil, type: :out)
+    expect(table.columns.outs[3].to_h).to eq(name: :output, text_only: true, type: :out)
   end
 
   it 'parses a decision table columns from a CSV file' do
@@ -34,8 +34,10 @@ describe CSVDecision::Columns do
     result = CSVDecision.parse(file)
 
     expect(result.columns).to be_a(CSVDecision::Columns)
-    expect(result.columns.ins).to eq(0 => CSVDecision::Columns::Entry.new(:input, nil))
-    expect(result.columns.outs).to eq(1 => CSVDecision::Columns::Entry.new(:output, nil))
+    expect(result.columns.ins)
+      .to eq(0 => CSVDecision::Columns::Entry.new(:input, nil, :in))
+    expect(result.columns.outs)
+      .to eq(1 => CSVDecision::Columns::Entry.new(:output, nil, :out))
   end
 
   it 'rejects an invalid header column' do
@@ -81,6 +83,19 @@ describe CSVDecision::Columns do
         expect { CSVDecision.parse(pathname) }
           .to raise_error(CSVDecision::FileError, /\Aerror processing CSV file/)
       end
+    end
+  end
+
+  context 'recognises guard column' do
+    data = <<~DATA
+      IN :country, guard:,          out :PAID, out :PAID_type
+      US,          :CUSIP.present?, :CUSIP,    CUSUP
+      GB,          :SEDOL.present?, :SEDOL,    SEDOL
+    DATA
+    table = CSVDecision.parse(data)
+
+    it 'recognises guard condition' do
+      expect(table.columns.ins[1]).to eq nil
     end
   end
 end

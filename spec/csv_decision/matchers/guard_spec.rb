@@ -67,15 +67,16 @@ describe CSVDecision::Matchers::Guard do
         { cell: ':col < m',   hash: { col:  'n' }, result: false },
         { cell: ':col < m',   hash: { col:  nil }, result: nil },
         # Method calls
-        { cell:   ':col.nil?',   hash: { col:  nil }, result: true },
-        { cell:   ':col.nil?',   hash: { col:  0 },   result: false },
-        { cell:  '!:col.nil?',   hash: { col:  nil }, result: false },
-        { cell:  '!:col.nil?',   hash: { col:  0 },   result: true },
-        { cell:   ':col.blank?', hash: { col:  nil }, result: true },
-        { cell:   ':col.blank?', hash: { col:  0 },   result: false },
-        { cell:  '!:col.blank?', hash: { col:  nil }, result: false },
-        { cell:   ':col.zero?',  hash: { col:  0 },   result: true },
-        { cell:   ':col.zero?',  hash: { col:  nil }, result: false }
+        { cell:   ':col.nil?',   hash: { col:  nil },  result: true },
+        { cell:   ':col.nil?',   hash: { col:  0 },    result: false },
+        { cell:  '!:col.nil?',   hash: { col:  nil },  result: false },
+        { cell:  '!:col.nil?',   hash: { col:  0 },    result: true },
+        { cell:   ':col.upcase', hash: { col:  'u' },  result: 'U' },
+        { cell:   ':col.next',   hash: { col:  -1 },   result: 0 },
+        { cell:   ':col.first',  hash: { col:  '98' }, result: '9' },
+        { cell:   ':col.last',   hash: { col:  '98' }, result: '8' },
+        { cell:   ':col.zero?',  hash: { col:  0 },    result: true },
+        { cell:   ':col.zero?',  hash: { col:  nil },  result: false }
       ]
 
       examples.each do |ex|
