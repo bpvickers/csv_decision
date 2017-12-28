@@ -14,6 +14,11 @@ module CSVDecision
       def matches?(cell)
         CSVDecision::Guard.matches?(cell)
       end
+
+      # @return (see Matcher#outs?)
+      def outs?
+        true
+      end
     end
   end
 end

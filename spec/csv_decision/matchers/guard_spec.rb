@@ -34,12 +34,27 @@ describe CSVDecision::Matchers::Guard do
         { cell: '!:col = 0',   hash: { col:   1 },  result: true },
         { cell: '!:col = 0',   hash: { col:  '1' }, result: true },
         { cell: '!:col = 0',   hash: { col:  nil }, result: true },
-        # Integer compare
+        # Integer compares
         { cell: ':col > 0',   hash: { col:   0  }, result: false },
         { cell: ':col > 0',   hash: { col:  '0' }, result: false },
         { cell: ':col > 0',   hash: { col:   1 },  result: true },
         { cell: ':col > 0',   hash: { col:  '1' }, result: true },
         { cell: ':col > 0',   hash: { col:  nil }, result: nil },
+        { cell: ':col >=0',   hash: { col:   0  }, result: true },
+        { cell: ':col >=0',   hash: { col:  '0' }, result: true },
+        { cell: ':col >=0',   hash: { col:  -1 },  result: false },
+        { cell: ':col >=0',   hash: { col: '-1' }, result: false },
+        { cell: ':col >=0',   hash: { col:  nil }, result: nil },
+        { cell: ':col < 0',   hash: { col:   0  }, result: false },
+        { cell: ':col < 0',   hash: { col:  '0' }, result: false },
+        { cell: ':col < 0',   hash: { col:  -1 },  result: true },
+        { cell: ':col < 0',   hash: { col: '-1' }, result: true },
+        { cell: ':col < 0',   hash: { col:  nil }, result: nil },
+        { cell: ':col <=0',   hash: { col:   0  }, result: true },
+        { cell: ':col <=0',   hash: { col:  '0' }, result: true },
+        { cell: ':col <=0',   hash: { col:   1 },  result: false },
+        { cell: ':col <=0',   hash: { col:  '1' }, result: false },
+        { cell: ':col <=0',   hash: { col:  nil }, result: nil },
         # BigDecimal equality
         { cell: ':col == 0.0', hash: { col: BigDecimal('0.0') }, result: true },
         { cell: ':col == 0.0', hash: { col: '0.0' },             result: true },
@@ -57,15 +72,29 @@ describe CSVDecision::Matchers::Guard do
         { cell: ':col != 0.0', hash: { col:  0.0 },              result: true },
         { cell: ':col != 0.0', hash: { col:  nil },              result: true },
         # String compare
-        { cell: ':col > m',   hash: { col:   0  }, result: nil },
-        { cell: ':col > m',   hash: { col:  'a' }, result: false },
-        { cell: ':col > m',   hash: { col:  'n' }, result: true },
-        { cell: ':col > m',   hash: { col:  nil }, result: nil },
-        # String compare
-        { cell: ':col < m',   hash: { col:   0  }, result: nil },
-        { cell: ':col < m',   hash: { col:  'a' }, result: true },
-        { cell: ':col < m',   hash: { col:  'n' }, result: false },
-        { cell: ':col < m',   hash: { col:  nil }, result: nil },
+        { cell:  ':col > m',  hash: { col:   0  }, result: nil },
+        { cell:  ':col > m',  hash: { col:  'a' }, result: false },
+        { cell:  ':col > m',  hash: { col:  'n' }, result: true },
+        { cell:  ':col > m',  hash: { col:  nil }, result: nil },
+        { cell:  ':col >=m',  hash: { col:   0  }, result: nil },
+        { cell:  ':col >=m',  hash: { col:  'a' }, result: false },
+        { cell:  ':col >=m',  hash: { col:  'n' }, result: true },
+        { cell:  ':col >=m',  hash: { col:  'm' }, result: true },
+        { cell:  ':col >=m',  hash: { col:  nil }, result: nil },
+        { cell:  ':col < m',  hash: { col:   0  }, result: nil },
+        { cell:  ':col < m',  hash: { col:  'a' }, result: true },
+        { cell:  ':col < m',  hash: { col:  'n' }, result: false },
+        { cell:  ':col < m',  hash: { col:  nil }, result: nil },
+        { cell:  ':col <=m',  hash: { col:   0  }, result: nil },
+        { cell:  ':col <=m',  hash: { col:  'a' }, result: true },
+        { cell:  ':col <=m',  hash: { col:  'n' }, result: false },
+        { cell:  ':col <=n',  hash: { col:  'n' }, result: true },
+        { cell:  ':col <=m',  hash: { col:  nil }, result: nil },
+        { cell: '!:col <=m',  hash: { col:   0  }, result: nil },
+        { cell: '!:col <=m',  hash: { col:  'a' }, result: false },
+        { cell: '!:col <=m',  hash: { col:  'n' }, result: true },
+        { cell: '!:col <=n',  hash: { col:  'n' }, result: false },
+        { cell: '!:col <=m',  hash: { col:  nil }, result: nil },
         # Method calls
         { cell:   ':col.nil?',   hash: { col:  nil },  result: true },
         { cell:   ':col.nil?',   hash: { col:  0 },    result: false },
@@ -76,11 +105,16 @@ describe CSVDecision::Matchers::Guard do
         { cell:   ':col.first',  hash: { col:  '98' }, result: '9' },
         { cell:   ':col.last',   hash: { col:  '98' }, result: '8' },
         { cell:   ':col.zero?',  hash: { col:  0 },    result: true },
-        { cell:   ':col.zero?',  hash: { col:  nil },  result: false }
+        { cell:   ':col.zero?',  hash: { col:  nil },  result: false },
+        # Symbol
+        { cell: ':col',  hash: { col: true }, result: true },
+        { cell: ':col',  hash: { col: nil }, result: nil },
+        { cell: '!:col', hash: { col: nil }, result: true },
+        { cell: '!:col', hash: { col: true }, result: false },
       ]
 
       examples.each do |ex|
-        it "cell #{ex[:cell]} matches value: #{ex[:value]} to hash: #{ex[:hash]}" do
+        it "cell #{ex[:cell]} matches to hash: #{ex[:hash]}" do
           proc = matcher.matches?(ex[:cell])
           expect(proc).to be_a(CSVDecision::Proc)
           expect(proc.type).to eq :guard
@@ -89,8 +123,8 @@ describe CSVDecision::Matchers::Guard do
       end
     end
 
-    context 'does not match a non-function string' do
-      data = ['1', 'abc', 'abc.*def', '-1..1', '0...3', ':= true', ':= lookup(:table)', '>= :col', ':col']
+    context 'does not match a symbol guard condition' do
+      data = ['1', 'abc', 'abc.*def', '-1..1', '0...3', ':= true', ':= lookup(:table)', '>= :col']
 
       data.each do |cell|
         it "cell #{cell} is not a function" do

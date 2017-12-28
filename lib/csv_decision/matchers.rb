@@ -138,6 +138,14 @@ module CSVDecision
       # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise returns the
       #   +CSVDecision::Proc+ object indicating if this is a constant or some type of function.
       def matches?(cell); end
+
+      # Does this matcher apply to output cells?
+      #
+      # @return [Boolean] Return true if this matcher also applies to output cells,
+      #   false otherwise.
+      def outs?
+        false
+      end
     end
   end
 end

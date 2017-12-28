@@ -8,11 +8,19 @@ module CSVDecision
   # Recognise guard column symbol expressions in input column data cells -
   # e.g., +> :column.present?+ or +:column == 100.0+.
   module Guard
+    # Column symbol expression - e.g., +>:column+ or +:!column+.
+    SYMBOL =
+      "(?<negate>#{Matchers::NEGATE}?)\\s*:(?<name>#{Header::COLUMN_NAME})"
+    private_constant :SYMBOL
+
+    SYMBOL_RE = Matchers.regexp(SYMBOL)
+    private_constant :SYMBOL_RE
+
     # Column symbol guard expression - e.g., +>:column.present?+ or +:column == 100.0+.
     GUARD =
       "(?<negate>#{Matchers::NEGATE}?)\\s*" \
       ":(?<name>#{Header::COLUMN_NAME})\\s*" \
-      "(?<method>#{Matchers::EQUALS}|!=|<|>|>=|<=|\\.)\\s*" \
+      "(?<method>#{Matchers::EQUALS}|!=|<=|>=|>|<|\\.)\\s*" \
       "(?<param>\\S.*)"
     private_constant :GUARD
 
@@ -50,6 +58,12 @@ module CSVDecision
     }.freeze
     private_constant :FUNCTION
 
+    SYMBOL_PROC = {
+      ':'  => proc { |symbol, hash|  hash[symbol] },
+      '!:' => proc { |symbol, hash| !hash[symbol] },
+    }.freeze
+    private_constant :SYMBOL_PROC
+
     def self.compare?(lhs:, compare:, rhs:)
       # Is the rhs the same class or a superclass of lhs, and does rhs respond to the compare method?
       return lhs.send(compare, rhs) if lhs.is_a?(rhs.class) && rhs.respond_to?(compare)
@@ -86,14 +100,31 @@ module CSVDecision
     end
     private_class_method :guard_proc
 
-    # (see Matchers::Matcher#matches?)
-    def self.matches?(cell)
+    def self.symbol_proc(cell)
+      match = SYMBOL_RE.match(cell)
+      return false unless match
+
+      method = match['negate'].present? ? '!:' : ':'
+      proc = SYMBOL_PROC[method]
+      symbol = match['name'].to_sym
+      Proc.with(type: :guard, function: proc.curry[symbol].freeze)
+    end
+
+    def self.symbol_guard(cell)
       match = GUARD_RE.match(cell)
       return false unless match
 
       proc, value = guard_proc(match)
       symbol = match['name'].to_sym
       Proc.with(type: :guard, function: proc.curry[symbol][value].freeze)
+    end
+
+    # (see Matchers::Matcher#matches?)
+    def self.matches?(cell)
+      proc = symbol_proc(cell)
+      return proc if proc
+
+      symbol_guard(cell)
     end
   end
 end

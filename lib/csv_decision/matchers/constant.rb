@@ -9,10 +9,18 @@ module CSVDecision
   class Matchers
     # Cell constant matcher - e.g., := true, = nil.
     class Constant < Matcher
-      # @param (see Matchers::Matcher)
-      # @return (see Matchers::Matcher)
+      # If a constant expression returns a Proc of type :constant,
+      #   otherwise return false.
+      #
+      # @param (see Matcher#matches?)
+      # @return (see Matcher#matches?)
       def matches?(cell)
         CSVDecision::Constant.matches?(cell)
+      end
+
+      # (see Matcher#outs?)
+      def outs?
+        true
       end
     end
   end

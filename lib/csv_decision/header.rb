@@ -152,7 +152,7 @@ module CSVDecision
       #   # Treat set: as an in: column
       #   dictionary.ins[index] = entry
 
-      when :in
+      when :in, :guard
         dictionary.ins[index] = entry
 
       when :out

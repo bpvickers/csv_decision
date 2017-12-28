@@ -17,14 +17,16 @@ module CSVDecision
     def self.scan(column:, matchers:, cell:)
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column
-        next if column.type == :guard && !OUTS_MATCHERS.member?(matcher.class)
+        next if column.type == :guard && !matcher.outs?
 
         proc = matcher.matches?(cell)
         return proc if proc
       end
 
       # Must be a simple constant
-      false
+      return false unless column.type == :guard
+
+      raise CellValidationError, 'guard column cannot contain constants'
     end
 
     # Evaluate the cell proc against the column's input value and/or input hash.

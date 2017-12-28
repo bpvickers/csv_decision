@@ -22,6 +22,11 @@ module CSVDecision
       def matches?(cell)
         CSVDecision::Function.matches?(cell)
       end
+
+      # (see Matcher#outs?)
+      def outs?
+        true
+      end
     end
   end
 end

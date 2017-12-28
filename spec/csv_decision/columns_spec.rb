@@ -94,8 +94,9 @@ describe CSVDecision::Columns do
     DATA
     table = CSVDecision.parse(data)
 
-    it 'recognises guard condition' do
-      expect(table.columns.ins[1]).to eq nil
+    it 'recognises the guard column' do
+      expect(table.columns.ins[1].to_h)
+        .to eq(name: nil, text_only: false, type: :guard)
     end
   end
 end
