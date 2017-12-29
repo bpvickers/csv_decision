@@ -154,7 +154,7 @@ module CSVDecision
     def eval_outs_constants(row)
       @outs.each_pair do |col, column|
         value = row[col]
-        next if value.is_a?(CSVDecision::Proc)
+        next if value.is_a?(Matchers::Proc)
 
         @partial_result[column.name] = value
         @result[column.name] = value
@@ -164,7 +164,7 @@ module CSVDecision
     def eval_outs_procs(row)
       @outs.each_pair do |col, column|
         proc = row[col]
-        next unless proc.is_a?(CSVDecision::Proc)
+        next unless proc.is_a?(Matchers::Proc)
 
         value = proc.function[@partial_result]
 

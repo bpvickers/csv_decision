@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
+  # @api private
   class Columns
     # Value object to hold column dictionary entries.
     Entry = Struct.new(:name, :eval, :type) do

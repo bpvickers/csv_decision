@@ -107,7 +107,7 @@ module CSVDecision
       method = match['negate'].present? ? '!:' : ':'
       proc = SYMBOL_PROC[method]
       symbol = match['name'].to_sym
-      Proc.with(type: :guard, function: proc.curry[symbol].freeze)
+      Matchers::Proc.with(type: :guard, function: proc.curry[symbol].freeze)
     end
     private_class_method :symbol_proc
 
@@ -117,7 +117,7 @@ module CSVDecision
 
       proc, value = guard_proc(match)
       symbol = match['name'].to_sym
-      Proc.with(type: :guard, function: proc.curry[symbol][value].freeze)
+      Matchers::Proc.with(type: :guard, function: proc.curry[symbol][value].freeze)
     end
     private_class_method :symbol_guard
 

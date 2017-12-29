@@ -6,7 +6,8 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Specialized cell value matchers beyond simple string compares.
-  # By default all these matchers are tried in the specified order.
+  # By default all these matchers are tried in the specified order on all
+  # input data cells.
   DEFAULT_MATCHERS = [
     Matchers::Range,
     Matchers::Numeric,
@@ -17,14 +18,8 @@ module CSVDecision
     # Matchers::Function
   ].freeze
 
-  # Subset of matchers that apply to output cells
-  OUTS_MATCHERS = [
-    Matchers::Constant,
-    Matchers::Guard
-  # Matchers::Function
-  ].freeze
-
   # Validate and normalize the options values supplied.
+  # @api private
   module Options
     # All valid CSVDecision::parse options with their default values.
     VALID = {
@@ -50,6 +45,7 @@ module CSVDecision
     # @param options [Hash] Input options hash supplied by the user.
     # @return [Hash] Options hash filled in with all required values, defaulted if necessary.
     # @raise [ArgumentError] For invalid option keys.
+    # @api private
     def self.normalize(options)
       validate(options)
       default(options)

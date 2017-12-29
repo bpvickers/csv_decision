@@ -12,6 +12,7 @@ module CSVDecision
   private_constant :COMMENT_CHARACTER
 
   # Methods to load data from a file, CSV string or an array of arrays.
+  # @api private
   module Data
     # Options passed to CSV.parse and CSV.read.
     CSV_OPTIONS = { encoding: 'UTF-8', skip_blanks: true }.freeze

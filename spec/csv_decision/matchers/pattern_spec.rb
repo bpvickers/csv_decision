@@ -27,7 +27,7 @@ describe CSVDecision::Matchers::Pattern do
       expressions.each do |cell|
         it "recognises regexp #{cell}" do
           proc = matcher.matches?(cell)
-          expect(proc).to be_a CSVDecision::Proc
+          expect(proc).to be_a CSVDecision::Matchers::Proc
           expect(proc.type).to eq :proc
           expect(proc.function).to be_a ::Proc
           expect(proc.function.arity).to eq -1
@@ -50,7 +50,7 @@ describe CSVDecision::Matchers::Pattern do
       expressions.each do |cell|
         it "recognises regexp #{cell}" do
           proc = matcher.matches?(cell)
-          expect(proc).to be_a CSVDecision::Proc
+          expect(proc).to be_a CSVDecision::Matchers::Proc
           expect(proc.type).to eq :proc
           expect(proc.function).to be_a ::Proc
           expect(proc.function.arity).to eq -1

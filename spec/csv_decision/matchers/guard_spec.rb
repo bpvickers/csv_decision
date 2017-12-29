@@ -116,7 +116,7 @@ describe CSVDecision::Matchers::Guard do
       examples.each do |ex|
         it "cell #{ex[:cell]} matches to hash: #{ex[:hash]}" do
           proc = matcher.matches?(ex[:cell])
-          expect(proc).to be_a(CSVDecision::Proc)
+          expect(proc).to be_a(CSVDecision::Matchers::Proc)
           expect(proc.type).to eq :guard
           expect(proc.function.call(ex[:hash])).to eq ex[:result]
         end

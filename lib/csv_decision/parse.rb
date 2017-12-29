@@ -46,6 +46,7 @@ module CSVDecision
   end
 
   # Methods to parse the decision table and return CSVDecision::Table object.
+  # @api private
   module Parse
     # Parse the CSV file or input data and create a new decision table object.
     #

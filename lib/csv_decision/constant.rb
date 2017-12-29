@@ -5,7 +5,7 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Recognise constant expressions in table data cells.
+  # Recognise constant expressions in table data cells - e.g., += nil+, +:=true+.
   module Constant
     # Cell constant expression specified by prefixing the value with one of the three
     # equality symbols.
@@ -34,7 +34,7 @@ module CSVDecision
     end
 
     def self.proc(function:)
-      Proc.with(type: :constant, function: function)
+      Matchers::Proc.with(type: :constant, function: function)
     end
     private_class_method :proc
 

@@ -32,8 +32,8 @@ module CSVDecision
       return false unless numeric_cell
 
       comparator = match['comparator']
-      Proc.with(type: :proc,
-                function: COMPARATORS[comparator].curry[numeric_cell].freeze)
+      Matchers::Proc.with(type: :proc,
+                          function: COMPARATORS[comparator].curry[numeric_cell].freeze)
     end
   end
 end

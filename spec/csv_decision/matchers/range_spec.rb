@@ -61,7 +61,7 @@ describe CSVDecision::Matchers::Range do
       data.each do |cell, value|
         it "range #{cell} matches #{value}" do
           proc = matcher.matches?(cell)
-          expect(proc).to be_a(CSVDecision::Proc)
+          expect(proc).to be_a(CSVDecision::Matchers::Proc)
           expect(proc.type).to eq :proc
           expect(proc.function[value]).to eq true
         end
@@ -82,7 +82,7 @@ describe CSVDecision::Matchers::Range do
       data.each do |cell, value|
         it "range #{cell} does not match #{value}" do
           proc = matcher.matches?(cell)
-          expect(proc).to be_a(CSVDecision::Proc)
+          expect(proc).to be_a(CSVDecision::Matchers::Proc)
           expect(proc.type).to eq :proc
           expect(proc.function[value]).to eq false
         end

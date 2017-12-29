@@ -7,11 +7,13 @@ require 'values'
 # @author Brett Vickers.
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Value object for a data cell proc.
-  Proc = Value.new(:type, :function)
 
   # Match table data cells against a valid decision table expression or a simple constant.
   class Matchers
+    # Value object for a data cell proc.
+    # @api private
+    Proc = Value.new(:type, :function)
+
     # Negation sign prefixed to ranges and functions.
     NEGATE = '!'
 
@@ -30,7 +32,10 @@ module CSVDecision
     EQUALS_RE = regexp(EQUALS)
     private_constant :EQUALS_RE
 
-    # Normalize the operators which are a variation on equals/assignment
+    # Normalize the operators which are a variation on equals/assignment.
+    #
+    # @param operator [String]
+    # @return [String]
     def self.normalize_operator(operator)
       EQUALS_RE.match(operator) ? '==' : operator
     end
@@ -95,6 +100,7 @@ module CSVDecision
 
     # @param options (see CSVDecision.parse)
     def initialize(options)
+      @matchers = matchers(options)
       @ins = ins_matchers(options)
       @outs = outs_matchers(@ins)
     end
@@ -119,12 +125,16 @@ module CSVDecision
 
     private
 
-    def ins_matchers(options)
+    def matchers(options)
       options[:matchers].collect { |klass| klass.new(options) }
     end
 
+    def ins_matchers(matchers)
+      @matchers.select { |obj| obj.ins? }
+    end
+
     def outs_matchers(matchers)
-      matchers.select { |obj| OUTS_MATCHERS.include?(obj.class) }
+      @matchers.select { |obj| obj.outs? }
     end
 
     # @abstract Subclass and override {#matches?} to implement
@@ -141,10 +151,18 @@ module CSVDecision
 
       # Does this matcher apply to output cells?
       #
-      # @return [Boolean] Return true if this matcher also applies to output cells,
+      # @return [Boolean] Return true if this matcher applies to output cells,
       #   false otherwise.
       def outs?
         false
+      end
+
+      # Does this matcher apply to output cells?
+      #
+      # @return [Boolean] Return true if this matcher applies to input cells,
+      #   false otherwise.
+      def ins?
+        true
       end
     end
   end
