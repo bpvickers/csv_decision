@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to assign a matcher to data cells
+  # @api private
   class Matchers
     # Match cell against a regular expression pattern - e.g., +=~ hot|col+ or +.*OPT.*+
     class Pattern < Matcher
@@ -50,6 +51,7 @@ module CSVDecision
 
         [comparator, value]
       end
+      private_class_method :parse
 
       def self.regexp_implicit(value)
         # rubocop: disable Style/CaseEquality
@@ -59,7 +61,10 @@ module CSVDecision
         # Make the implict comparator explict
         '=~'
       end
+      private_class_method :regexp_implicit
 
+      # @api private
+      # (see Pattern#matches)
       def self.matches?(cell, regexp_explicit:)
         comparator, value = regexp?(cell: cell, explicit: regexp_explicit)
 

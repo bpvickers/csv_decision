@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Recognise expressions in table data cells.
+  # @api private
   class Matchers
     # Match cell against a column symbol guard expression - e.g., +>:column.present?+ or +:column == 100.0+.
     class Guard < Matcher

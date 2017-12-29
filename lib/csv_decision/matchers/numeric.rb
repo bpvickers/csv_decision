@@ -5,7 +5,8 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Methods to assign a matcher to data cells
+  # Methods to assign a matcher to data cells.
+  # @api private
   class Matchers
     # Recognise numeric comparison expressions - e.g., +> 100+ or +!= 0+
     class Numeric < Matcher

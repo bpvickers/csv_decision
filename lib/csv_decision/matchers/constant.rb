@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to assign a matcher to data cells
+  # @api private
   class Matchers
     # Cell constant matcher - e.g., := true, = nil.
     class Constant < Matcher
@@ -63,7 +64,7 @@ module CSVDecision
       # @param (see Matcher#matches?)
       # @return (see Matcher#matches?)
       def matches?(cell)
-        CSVDecision::Matchers::Constant.matches?(cell)
+        Matchers::Constant.matches?(cell)
       end
 
       # (see Matcher#outs?)

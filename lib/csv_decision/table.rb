@@ -5,9 +5,9 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Decision Table that accepts input hashes and makes decisions
+  # Decision table that accepts an input hashe and outputs a decision (hash).
   class Table
-    # Main public method for making decisions.
+    # Make a decision based off an input hash.
     #
     # @note Input hash keys may or may not be symbolized.
     # @param input [Hash] Input hash.

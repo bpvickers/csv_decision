@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Recognise expressions in table data cells.
+  # @api private
   class Matchers
     # Match cell against a symbolic expression - e.g., :column, > :column
     class Symbol < Matcher

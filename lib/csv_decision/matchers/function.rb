@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to assign a matcher to data cells
+  # @api private
   class Matchers
     # Match cell against a function call
     #   * no arguments - e.g., := present?
