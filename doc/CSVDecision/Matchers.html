@@ -62,7 +62,7 @@
       <div id="content"><h1>Class: CSVDecision::Matchers
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -95,7 +95,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/csv_decision/matchers.rb<span class="defines">,<br />
-  lib/csv_decision.rb,<br /> lib/csv_decision/matchers/range.rb,<br /> lib/csv_decision/matchers/symbol.rb,<br /> lib/csv_decision/matchers/numeric.rb,<br /> lib/csv_decision/matchers/pattern.rb,<br /> lib/csv_decision/matchers/constant.rb,<br /> lib/csv_decision/matchers/function.rb</span>
+  lib/csv_decision.rb,<br /> lib/csv_decision/matchers/guard.rb,<br /> lib/csv_decision/matchers/range.rb,<br /> lib/csv_decision/matchers/symbol.rb,<br /> lib/csv_decision/matchers/numeric.rb,<br /> lib/csv_decision/matchers/pattern.rb,<br /> lib/csv_decision/matchers/constant.rb,<br /> lib/csv_decision/matchers/function.rb</span>
 </dd>
   </dl>
   
@@ -103,7 +103,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This class is part of a private API.</strong>
+  You should avoid using this class if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Methods to assign a matcher to data cells</p>
 
 
@@ -118,7 +122,7 @@
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Matchers/Constant.html" title="CSVDecision::Matchers::Constant (class)">Constant</a></span>, <span class='object_link'><a href="Matchers/Function.html" title="CSVDecision::Matchers::Function (class)">Function</a></span>, <span class='object_link'><a href="Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span>, <span class='object_link'><a href="Matchers/Numeric.html" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span>, <span class='object_link'><a href="Matchers/Pattern.html" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span>, <span class='object_link'><a href="Matchers/Range.html" title="CSVDecision::Matchers::Range (class)">Range</a></span>, <span class='object_link'><a href="Matchers/Symbol.html" title="CSVDecision::Matchers::Symbol (class)">Symbol</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Matchers/Constant.html" title="CSVDecision::Matchers::Constant (class)">Constant</a></span>, <span class='object_link'><a href="Matchers/Function.html" title="CSVDecision::Matchers::Function (class)">Function</a></span>, <span class='object_link'><a href="Matchers/Guard.html" title="CSVDecision::Matchers::Guard (class)">Guard</a></span>, <span class='object_link'><a href="Matchers/Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span>, <span class='object_link'><a href="Matchers/Numeric.html" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span>, <span class='object_link'><a href="Matchers/Pattern.html" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span>, <span class='object_link'><a href="Matchers/Range.html" title="CSVDecision::Matchers::Range (class)">Range</a></span>, <span class='object_link'><a href="Matchers/Symbol.html" title="CSVDecision::Matchers::Symbol (class)">Symbol</a></span>
     
   
 </p>
@@ -126,10 +130,34 @@
   <h2>Constant Summary</h2>
   <dl class="constants">
     
+      <dt id="Proc-constant" class="">Proc =
+        <div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Value object for a data cell proc.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='const'>Value</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='symbol'>:type</span><span class='comma'>,</span> <span class='symbol'>:function</span><span class='rparen'>)</span></pre></dd>
+    
       <dt id="NEGATE-constant" class="">NEGATE =
         <div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Negation sign prefixed to ranges and functions.</p>
 
 
@@ -145,9 +173,13 @@
       <dt id="EQUALS-constant" class="">EQUALS =
         <div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Cell constants and functions specified by prefixing the value with one of
-these 3 symbols</p>
+these 3 symbols.</p>
 
 
   </div>
@@ -162,7 +194,11 @@ these 3 symbols</p>
       <dt id="NUMERIC-constant" class="">NUMERIC =
         <div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Regular expression used to recognise a numeric string with or without a
 decimal point.</p>
 
@@ -203,7 +239,7 @@ decimal point.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -232,7 +268,7 @@ decimal point.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -258,7 +294,7 @@ decimal point.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#ins_matchers-class_method" title="ins_matchers (class method)">.<strong>ins_matchers</strong>(options)  &#x21d2; Object </a>
+      <a href="#normalize_operator-class_method" title="normalize_operator (class method)">.<strong>normalize_operator</strong>(operator)  &#x21d2; String </a>
     
 
     
@@ -269,10 +305,12 @@ decimal point.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Normalize the operators which are a variation on equals/assignment.</p>
+</div></span>
   
 </li>
 
@@ -291,7 +329,7 @@ decimal point.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -316,34 +354,12 @@ valid numeric string.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Value is an Integer or a BigDecimal.</p>
+<p>Return true if value is an Integer or a BigDecimal, false otherwise.</p>
 </div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#outs_matchers-class_method" title="outs_matchers (class method)">.<strong>outs_matchers</strong>(matchers)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -362,7 +378,7 @@ valid numeric string.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -387,7 +403,7 @@ matchers.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -412,11 +428,12 @@ non-capturing group.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Convert a numeric string into an Integer or BigDecimal.</p>
+<p>Convert a numeric string into an Integer or BigDecimal, otherwise return
+nil.</p>
 </div></span>
   
 </li>
@@ -447,7 +464,7 @@ non-capturing group.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -471,7 +488,7 @@ non-capturing group.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -495,7 +512,7 @@ non-capturing group.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -522,7 +539,11 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns a new instance of Matchers</p>
 
 
@@ -557,17 +578,19 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-101
 102
 103
-104</pre>
+104
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ins_matchers'><span class='object_link'><a href="#ins_matchers-class_method" title="CSVDecision::Matchers.ins_matchers (method)">ins_matchers</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_outs_matchers'><span class='object_link'><a href="#outs_matchers-class_method" title="CSVDecision::Matchers.outs_matchers (method)">outs_matchers</a></span></span><span class='lparen'>(</span><span class='ivar'>@ins</span><span class='rparen'>)</span>
+  <span class='ivar'>@matchers</span> <span class='op'>=</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='id identifier rubyid_ins_matchers'>ins_matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='id identifier rubyid_outs_matchers'>outs_matchers</span><span class='lparen'>(</span><span class='ivar'>@ins</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -592,7 +615,11 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns Matchers for the input columns.</p>
 
 
@@ -625,12 +652,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-95
 96
-97</pre>
+97
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 95</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@ins</span>
@@ -653,7 +680,11 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns Matchers for the output columns.</p>
 
 
@@ -686,12 +717,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-98
 99
-100</pre>
+100
+101</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 98</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@outs</span>
@@ -709,29 +740,72 @@ non-capturing group.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="ins_matchers-class_method">
+  <h3 class="signature first" id="normalize_operator-class_method">
   
-    .<strong>ins_matchers</strong>(options)  &#x21d2; <tt>Object</tt> 
-  
-
+    .<strong>normalize_operator</strong>(operator)  &#x21d2; <tt>String</tt> 
   
 
   
-</h3><table class="source_code">
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Normalize the operators which are a variation on equals/assignment.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>operator</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-86
-87
-88</pre>
+39
+40
+41</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 39</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ins_matchers'>ins_matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:matchers</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_klass'>klass</span><span class='op'>|</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_normalize_operator'>normalize_operator</span><span class='lparen'>(</span><span class='id identifier rubyid_operator'>operator</span><span class='rparen'>)</span>
+  <span class='const'>EQUALS_RE</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_operator'>operator</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>==</span><span class='tstring_end'>&#39;</span></span> <span class='op'>:</span> <span class='id identifier rubyid_operator'>operator</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -749,7 +823,11 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Validate a numeric value and convert it to an Integer or BigDecimal if a
 valid numeric string.</p>
 
@@ -793,15 +871,15 @@ valid numeric string.</p>
       <pre class="lines">
 
 
-46
-47
-48
-49
-50
-51</pre>
+59
+60
+61
+62
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_numeric'>numeric</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span> <span class='kw'>if</span> <span class='id identifier rubyid_numeric?'>numeric?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -825,8 +903,12 @@ valid numeric string.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns Value is an Integer or a BigDecimal.</p>
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Return true if value is an Integer or a BigDecimal, false otherwise.</p>
 
 
   </div>
@@ -865,7 +947,7 @@ valid numeric string.</p>
       
         &mdash;
         <div class='inline'>
-<p>Value is an Integer or a BigDecimal.</p>
+<p>Return true if value is an Integer or a BigDecimal, false otherwise.</p>
 </div>
       
     </li>
@@ -878,45 +960,15 @@ valid numeric string.</p>
       <pre class="lines">
 
 
-38
-39
-40</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_numeric?'>numeric?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Integer</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>BigDecimal</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="outs_matchers-class_method">
-  
-    .<strong>outs_matchers</strong>(matchers)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-90
-91
-92</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 90</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_outs_matchers'>outs_matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_matchers'>matchers</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_matchers'>matchers</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_obj'>obj</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../CSVDecision.html#OUTS_MATCHERS-constant" title="CSVDecision::OUTS_MATCHERS (constant)">OUTS_MATCHERS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -934,7 +986,11 @@ valid numeric string.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Parse the supplied input columns for the row supplied using an array of
 matchers.</p>
 
@@ -1015,29 +1071,29 @@ matchers.</p>
       <pre class="lines">
 
 
-74
-75
-76
-77
-78
-79
-80
-81
-82
 83
-84</pre>
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 74</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 83</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>matchers:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='comment'># Build an array of column indexes requiring simple constant matches,
 </span>  <span class='comment'># and a second array of columns requiring special matchers.
 </span>  <span class='id identifier rubyid_scan_row'>scan_row</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ScanRow.html#initialize-instance_method" title="CSVDecision::ScanRow#initialize (method)">new</a></span></span>
 
-  <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_scan_columns'>scan_columns</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
-
-  <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+  <span class='comment'># Scan the columns in the data row, and build an object to scan this row against an input hash.
+</span>  <span class='comment'># Convert values in the data row if not just a simple constant.
+</span>  <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_scan_columns'>scan_columns</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
 
   <span class='lbracket'>[</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
@@ -1057,7 +1113,11 @@ matchers.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>All regular expressions used for matching are anchored inside their own
 non-capturing group.</p>
 
@@ -1111,12 +1171,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-26
-27
-28</pre>
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_regexp'>regexp</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\A(?:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='embexpr_end'>}</span><span class='tstring_content'>)\\z</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
@@ -1137,8 +1197,13 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert a numeric string into an Integer or BigDecimal.</p>
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Convert a numeric string into an Integer or BigDecimal, otherwise return
+nil.</p>
 
 
   </div>
@@ -1180,17 +1245,21 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-57
-58
-59
-60</pre>
+70
+71
+72
+73
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_numeric'>to_numeric</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='const'>NUMERIC_RE</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_coerce_numeric'>coerce_numeric</span><span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='kw'>if</span> <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>decimal</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+  <span class='const'>BigDecimal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1214,7 +1283,11 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Parse the row&#39;s input columns using the input matchers.</p>
 
 
@@ -1283,12 +1356,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-111
-112
-113</pre>
+113
+114
+115</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_ins'>parse_ins</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@ins</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1309,7 +1382,11 @@ non-capturing group.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Parse the row&#39;s output columns using the output matchers.</p>
 
 
@@ -1378,12 +1455,12 @@ non-capturing group.</p>
       <pre class="lines">
 
 
-120
-121
-122</pre>
+122
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 120</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_outs'>parse_outs</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@outs</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1398,7 +1475,7 @@ non-capturing group.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 12:27:33 2017 by
+  Generated on Fri Dec 29 10:35:54 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

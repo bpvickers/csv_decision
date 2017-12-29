@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Class: CSVDecision::Matchers::Matcher
+  Class: CSVDecision::Matchers::Guard
   
     &mdash; Documentation by YARD 0.9.12
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "CSVDecision::Matchers::Matcher";
+  pathId = "CSVDecision::Matchers::Guard";
   relpath = '../../';
 </script>
 
@@ -36,10 +36,10 @@
       <div id="header">
         <div id="menu">
   
-    <a href="../../_index.html">Index (M)</a> &raquo;
+    <a href="../../_index.html">Index (G)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span>
      &raquo; 
-    <span class="title">Matcher</span>
+    <span class="title">Guard</span>
   
 </div>
 
@@ -59,8 +59,8 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Class: CSVDecision::Matchers::Matcher
-  <span class="abstract note title">Abstract</span>
+      <div id="content"><h1>Class: CSVDecision::Matchers::Guard
+  
   
   <span class="private note title">Private</span>
 </h1>
@@ -69,12 +69,14 @@
   <dl>
     <dt>Inherits:</dt>
     <dd>
-      <span class="inheritName">Object</span>
+      <span class="inheritName"><span class='object_link'><a href="Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span></span>
       
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next">CSVDecision::Matchers::Matcher</li>
+            <li class="next"><span class='object_link'><a href="Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span></li>
+          
+            <li class="next">CSVDecision::Matchers::Guard</li>
           
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
@@ -94,7 +96,7 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/csv_decision/matchers.rb</dd>
+    <dd>lib/csv_decision/matchers/guard.rb</dd>
   </dl>
   
 </div>
@@ -105,12 +107,9 @@
   <strong>This class is part of a private API.</strong>
   You should avoid using this class if possible, as it may be removed or be changed in the future.
 </p>
-<div class="note abstract">
-  <strong>This class is abstract.</strong>
-  <div class='inline'>
-<p>Subclass and override <span class='object_link'><a href="#matches%3F-instance_method" title="CSVDecision::Matchers::Matcher#matches? (method)">#matches?</a></span> to implement a custom Matcher class.</p>
-</div>
-</div>
+
+<p>Match cell against a column symbol guard expression - e.g.,
+<tt>&gt;:column.present?</tt> or <tt>:column == 100.0</tt>.</p>
 
 
   </div>
@@ -118,11 +117,7 @@
 <div class="tags">
   
 
-</div><div id="subclasses">
-  <h2>Direct Known Subclasses</h2>
-  <p class="children"><span class='object_link'><a href="Constant.html" title="CSVDecision::Matchers::Constant (class)">Constant</a></span>, <span class='object_link'><a href="Function.html" title="CSVDecision::Matchers::Function (class)">Function</a></span>, <span class='object_link'><a href="Guard.html" title="CSVDecision::Matchers::Guard (class)">Guard</a></span>, <span class='object_link'><a href="Numeric.html" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span>, <span class='object_link'><a href="Pattern.html" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span>, <span class='object_link'><a href="Range.html" title="CSVDecision::Matchers::Range (class)">Range</a></span>, <span class='object_link'><a href="Symbol.html" title="CSVDecision::Matchers::Symbol (class)">Symbol</a></span></p>
 </div>
-
 
 
 
@@ -131,7 +126,7 @@
 
   
     <h2>
-      Instance Method Summary
+      Class Method Summary
       <small><a href="#" class="summary_toggle">collapse</a></small>
     </h2>
 
@@ -140,14 +135,12 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(_options = nil)  &#x21d2; Matcher </a>
+      <a href="#matches%3F-class_method" title="matches? (class method)">.<strong>matches?</strong>(cell)  &#x21d2; false, CSVDecision::Proc </a>
     
 
     
   </span>
   
-  
-    <span class="note title constructor">constructor</span>
   
   
   
@@ -157,35 +150,20 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>A new instance of Matcher.</p>
+<p>Determine if the input cell string is recognised by this Matcher.</p>
 </div></span>
   
 </li>
 
       
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#ins%3F-instance_method" title="#ins? (instance method)">#<strong>ins?</strong>  &#x21d2; Boolean </a>
-    
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
 
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  <span class="private note title">private</span>
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Does this matcher apply to output cells?.</p>
-</div></span>
-  
-</li>
-
+    <ul class="summary">
       
         <li class="public ">
   <span class="summary_signature">
@@ -205,7 +183,9 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Determine if the input cell string is recognised by this Matcher.</p>
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
 </div></span>
   
 </li>
@@ -229,7 +209,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Does this matcher apply to output cells?.</p>
+<p>Return true if this matcher applies to output cells, false otherwise.</p>
 </div></span>
   
 </li>
@@ -238,124 +218,33 @@
     </ul>
   
 
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Matcher.html#initialize-instance_method" title="CSVDecision::Matchers::Matcher#initialize (method)">#initialize</a></span>, <span class='object_link'><a href="Matcher.html#ins%3F-instance_method" title="CSVDecision::Matchers::Matcher#ins? (method)">#ins?</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
-    <div class="method_details first">
-  <h3 class="signature first" id="initialize-instance_method">
-  
-    #<strong>initialize</strong>(_options = nil)  &#x21d2; <tt><span class='object_link'><a href="" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span></tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p class="note private">
-  <strong>This method is part of a private API.</strong>
-  You should avoid using this method if possible, as it may be removed or be changed in the future.
-</p>
-
-<p>Returns a new instance of Matcher</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-143</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 143</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid__options'>_options</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
+    <p class="notice">This class inherits a constructor from <span class='object_link'><a href="Matcher.html#initialize-instance_method" title="CSVDecision::Matchers::Matcher#initialize (method)">CSVDecision::Matchers::Matcher</a></span></p>
   
 </div>
 
 
-  <div id="instance_method_details" class="method_details_list">
-    <h2>Instance Method Details</h2>
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="ins?-instance_method">
+  <h3 class="signature first" id="matches?-class_method">
   
-    #<strong>ins?</strong>  &#x21d2; <tt>Boolean</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p class="note private">
-  <strong>This method is part of a private API.</strong>
-  You should avoid using this method if possible, as it may be removed or be changed in the future.
-</p>
-
-<p>Does this matcher apply to output cells?</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Return true if this matcher applies to input cells, false otherwise.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-164
-165
-166</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 164</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_ins?'>ins?</span>
-  <span class='kw'>true</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="matches?-instance_method">
-  
-    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
+    .<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
   
 
   
@@ -422,12 +311,115 @@ some type of function.</p>
       <pre class="lines">
 
 
-150</pre>
+127
+128
+129
+130
+131
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 150</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 127</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_proc'>proc</span> <span class='op'>=</span> <span class='id identifier rubyid_symbol_proc'>symbol_proc</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_proc'>proc</span> <span class='kw'>if</span> <span class='id identifier rubyid_proc'>proc</span>
+
+  <span class='id identifier rubyid_symbol_guard'>symbol_guard</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="matches?-instance_method">
+  
+    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>cell</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Data row cell.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>false</tt>, <tt>CSVDecision::Proc</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+136
+137
+138</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 136</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Guard (class)">Guard</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Guard.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -449,7 +441,7 @@ some type of function.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Does this matcher apply to output cells?</p>
+<p>Return true if this matcher applies to output cells, false otherwise.</p>
 
 
   </div>
@@ -481,15 +473,15 @@ some type of function.</p>
       <pre class="lines">
 
 
-156
-157
-158</pre>
+141
+142
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 156</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 141</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs?'>outs?</span>
-  <span class='kw'>false</span>
+  <span class='kw'>true</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>

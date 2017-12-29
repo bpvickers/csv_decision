@@ -62,7 +62,7 @@
       <div id="content"><h1>Module: CSVDecision::Parse
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -85,7 +85,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This module is part of a private API.</strong>
+  You should avoid using this module if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Methods to parse the decision table and return CSVDecision::Table object.</p>
 
 
@@ -123,7 +127,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -153,7 +157,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Parse the CSV file or input data and create a new decision table object.</p>
 
 
@@ -222,10 +230,6 @@
       <pre class="lines">
 
 
-51
-52
-53
-54
 55
 56
 57
@@ -233,10 +237,14 @@
 59
 60
 61
-62</pre>
+62
+63
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_table'>table</span><span class='lparen'>(</span><span class='label'>data:</span><span class='comma'>,</span> <span class='label'>options:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Table.html" title="CSVDecision::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Table.html#initialize-instance_method" title="CSVDecision::Table#initialize (method)">new</a></span></span>
@@ -260,7 +268,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 12:27:33 2017 by
+  Generated on Fri Dec 29 10:35:53 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

@@ -62,7 +62,7 @@
       <div id="content"><h1>Class: CSVDecision::Columns::Entry
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -103,7 +103,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This class is part of a private API.</strong>
+  You should avoid using this class if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Value object to hold column dictionary entries.</p>
 
 
@@ -118,6 +122,33 @@
 
   <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
   <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#eval-instance_method" title="#eval (instance method)">#<strong>eval</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute eval.</p>
+</div></span>
+  
+</li>
+
     
       <li class="public ">
   <span class="summary_signature">
@@ -149,7 +180,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#text_only-instance_method" title="#text_only (instance method)">#<strong>text_only</strong>  &#x21d2; Object </a>
+      <a href="#type-instance_method" title="#type (instance method)">#<strong>type</strong>  &#x21d2; Object </a>
     
 
     
@@ -167,7 +198,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute text_only.</p>
+<p>Returns the value of attribute type.</p>
 </div></span>
   
 </li>
@@ -178,15 +209,109 @@
 
 
 
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ins%3F-instance_method" title="#ins? (instance method)">#<strong>ins?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
 
   
   <div id="instance_attr_details" class="attr_details">
     <h2>Instance Attribute Details</h2>
     
       
-      <span id="name=-instance_method"></span>
+      <span id="eval=-instance_method"></span>
       <div class="method_details first">
-  <h3 class="signature first" id="name-instance_method">
+  <h3 class="signature first" id="eval-instance_method">
+  
+    #<strong>eval</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute eval</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the current value of eval</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_eval'>eval</span>
+  <span class='ivar'>@eval</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="name=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="name-instance_method">
   
     #<strong>name</strong>  &#x21d2; <tt>Object</tt> 
   
@@ -229,12 +354,12 @@
       <pre class="lines">
 
 
-11
 12
-13</pre>
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 12</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
   <span class='ivar'>@name</span>
@@ -245,11 +370,11 @@
 </div>
     
       
-      <span id="text_only=-instance_method"></span>
+      <span id="type=-instance_method"></span>
       <div class="method_details ">
-  <h3 class="signature " id="text_only-instance_method">
+  <h3 class="signature " id="type-instance_method">
   
-    #<strong>text_only</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>type</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -258,7 +383,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute text_only</p>
+<p>Returns the value of attribute type</p>
 
 
   </div>
@@ -277,7 +402,7 @@
       
         &mdash;
         <div class='inline'>
-<p>the current value of text_only</p>
+<p>the current value of type</p>
 </div>
       
     </li>
@@ -290,15 +415,15 @@
       <pre class="lines">
 
 
-11
 12
-13</pre>
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 12</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_text_only'>text_only</span>
-  <span class='ivar'>@text_only</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@type</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -308,10 +433,72 @@
   </div>
 
 
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="ins?-instance_method">
+  
+    #<strong>ins?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ins?'>ins?</span>
+  <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>in</span><span class='words_sep'> </span><span class='tstring_content'>guard</span><span class='words_sep'>]</span><span class='period'>.</span><span class='id identifier rubyid_member?'>member?</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='kw'>true</span> <span class='op'>:</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 12:27:33 2017 by
+  Generated on Fri Dec 29 10:35:54 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

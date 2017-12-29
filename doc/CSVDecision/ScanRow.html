@@ -62,7 +62,7 @@
       <div id="content"><h1>Class: CSVDecision::ScanRow
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -101,7 +101,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This class is part of a private API.</strong>
+  You should avoid using this class if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Data row object indicating which columns are constants versus procs.</p>
 
 
@@ -136,7 +140,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -165,7 +169,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -191,7 +195,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#eval_matcher-class_method" title="eval_matcher (class method)">.<strong>eval_matcher</strong>(proc:, value:, hash:)  &#x21d2; Object </a>
+      <a href="#eval_matcher-class_method" title="eval_matcher (class method)">.<strong>eval_matcher</strong>(proc:, hash:, value: nil)  &#x21d2; Object </a>
     
 
     
@@ -202,7 +206,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -216,7 +220,7 @@ hash.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#scan-class_method" title="scan (class method)">.<strong>scan</strong>(matchers:, cell:)  &#x21d2; false, Matchers::Proc </a>
+      <a href="#scan-class_method" title="scan (class method)">.<strong>scan</strong>(column:, matchers:, cell:)  &#x21d2; false, Matchers::Proc </a>
     
 
     
@@ -227,7 +231,7 @@ hash.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -262,7 +266,7 @@ hash.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -286,7 +290,7 @@ hash.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -310,7 +314,7 @@ hash.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -334,7 +338,7 @@ hash.</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -362,7 +366,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns a new instance of ScanRow</p>
 
 
@@ -377,13 +385,13 @@ hash.</p>
       <pre class="lines">
 
 
-48
-49
-50
-51</pre>
+54
+55
+56
+57</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@constants</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -412,7 +420,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns Column indices for simple constants.</p>
 
 
@@ -445,12 +457,12 @@ hash.</p>
       <pre class="lines">
 
 
-43
-44
-45</pre>
+49
+50
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 49</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_constants'>constants</span>
   <span class='ivar'>@constants</span>
@@ -473,7 +485,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns Column indices for Proc objects.</p>
 
 
@@ -506,12 +522,12 @@ hash.</p>
       <pre class="lines">
 
 
-46
-47
-48</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_procs'>procs</span>
   <span class='ivar'>@procs</span>
@@ -531,7 +547,7 @@ hash.</p>
       <div class="method_details first">
   <h3 class="signature first" id="eval_matcher-class_method">
   
-    .<strong>eval_matcher</strong>(proc:, value:, hash:)  &#x21d2; <tt>Object</tt> 
+    .<strong>eval_matcher</strong>(proc:, hash:, value: nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -539,7 +555,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Evaluate the cell proc against the column&#39;s input value and/or input
 hash.</p>
 
@@ -555,7 +575,7 @@ hash.</p>
         <span class='name'>proc</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt>)</span>
+        <span class='type'>(<tt>CSVDecision::Proc</tt>)</span>
       
       
       
@@ -587,7 +607,7 @@ hash.</p>
         <span class='name'>hash</span>
       
       
-        <span class='type'>(<tt>{<span class='object_link'><a href="Symbol.html" title="CSVDecision::Symbol (module)">Symbol</a></span>=&gt;Obhect}</tt>)</span>
+        <span class='type'>(<tt>{Symbol=&gt;Obhect}</tt>)</span>
       
       
       
@@ -607,24 +627,24 @@ hash.</p>
       <pre class="lines">
 
 
-32
-33
-34
-35
-36
-37
 38
 39
-40</pre>
+40
+41
+42
+43
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 38</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_eval_matcher'>eval_matcher</span><span class='lparen'>(</span><span class='label'>proc:</span><span class='comma'>,</span> <span class='label'>value:</span><span class='comma'>,</span> <span class='label'>hash:</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_eval_matcher'>eval_matcher</span><span class='lparen'>(</span><span class='label'>proc:</span><span class='comma'>,</span> <span class='label'>hash:</span><span class='comma'>,</span>  <span class='label'>value:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_function'>function</span> <span class='op'>=</span> <span class='id identifier rubyid_proc'>proc</span><span class='period'>.</span><span class='id identifier rubyid_function'>function</span>
 
   <span class='comment'># A symbol guard expression just needs to be passed the input hash
-</span>  <span class='kw'>return</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_hash'>hash</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_proc'>proc</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:expression</span>
+</span>  <span class='kw'>return</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_hash'>hash</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_proc'>proc</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:guard</span>
 
   <span class='comment'># All other procs can take one or two args
 </span>  <span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_arity'>arity</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>?</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='rbracket'>]</span>
@@ -637,7 +657,7 @@ hash.</p>
       <div class="method_details ">
   <h3 class="signature " id="scan-class_method">
   
-    .<strong>scan</strong>(matchers:, cell:)  &#x21d2; <tt>false</tt>, <tt>Matchers::Proc</tt> 
+    .<strong>scan</strong>(column:, matchers:, cell:)  &#x21d2; <tt>false</tt>, <tt><span class='object_link'><a href="Matchers.html#Proc-constant" title="CSVDecision::Matchers::Proc (constant)">Matchers::Proc</a></span></tt> 
   
 
   
@@ -645,7 +665,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Scan the table cell against all matches.</p>
 
 
@@ -685,7 +709,20 @@ hash.</p>
     <li>
       
       
-        <span class='type'>(<tt>false</tt>, <tt>Matchers::Proc</tt>)</span>
+        <span class='type'>(<tt>false</tt>, <tt><span class='object_link'><a href="Matchers.html#Proc-constant" title="CSVDecision::Matchers::Proc (constant)">Matchers::Proc</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="CellValidationError.html" title="CSVDecision::CellValidationError (class)">CellValidationError</a></span></tt>)</span>
       
       
       
@@ -699,7 +736,6 @@ hash.</p>
       <pre class="lines">
 
 
-17
 18
 19
 20
@@ -707,19 +743,30 @@ hash.</p>
 22
 23
 24
-25</pre>
+25
+26
+27
+28
+29
+30
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 17</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 18</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>matchers:</span><span class='comma'>,</span> <span class='label'>cell:</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>column:</span><span class='comma'>,</span> <span class='label'>matchers:</span><span class='comma'>,</span> <span class='label'>cell:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_matchers'>matchers</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_matcher'>matcher</span><span class='op'>|</span>
+    <span class='comment'># Guard function only accepts the same matchers as an output column
+</span>    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:guard</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_matcher'>matcher</span><span class='period'>.</span><span class='id identifier rubyid_outs?'>outs?</span>
+
     <span class='id identifier rubyid_proc'>proc</span> <span class='op'>=</span> <span class='id identifier rubyid_matcher'>matcher</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='id identifier rubyid_proc'>proc</span> <span class='kw'>if</span> <span class='id identifier rubyid_proc'>proc</span>
   <span class='kw'>end</span>
 
   <span class='comment'># Must be a simple constant
-</span>  <span class='kw'>false</span>
+</span>  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:guard</span>
+
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="CellValidationError.html" title="CSVDecision::CellValidationError (class)">CellValidationError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>guard column cannot contain constants</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -743,7 +790,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Match cells containing simple constants.</p>
 
 
@@ -807,16 +858,16 @@ hash.</p>
       <pre class="lines">
 
 
-80
-81
-82
-83
-84
-85
-86</pre>
+86
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 80</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_match_constants?'>match_constants?</span><span class='lparen'>(</span><span class='label'>row:</span><span class='comma'>,</span> <span class='label'>scan_cols:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_constants'>constants</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_col'>col</span><span class='op'>|</span>
@@ -841,7 +892,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Match cells containing a Proc object.</p>
 
 
@@ -856,7 +911,7 @@ hash.</p>
         <span class='name'>input</span>
       
       
-        <span class='type'>(<tt>Hash{<span class='object_link'><a href="Symbol.html" title="CSVDecision::Symbol (module)">Symbol</a></span> =&gt; Hash{<span class='object_link'><a href="Symbol.html" title="CSVDecision::Symbol (module)">Symbol</a></span>=&gt;Object}, Hash{Integer=&gt;Object}}</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol =&gt; Hash{Symbol=&gt;Object}, Hash{Integer=&gt;Object}}</tt>)</span>
       
       
       
@@ -905,20 +960,20 @@ hash.</p>
       <pre class="lines">
 
 
-92
-93
-94
-95
-96
-97
 98
 99
 100
 101
-102</pre>
+102
+103
+104
+105
+106
+107
+108</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 92</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 98</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_match_procs?'>match_procs?</span><span class='lparen'>(</span><span class='label'>row:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span>
@@ -947,7 +1002,11 @@ hash.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Scan all the specified <code>columns</code> (e.g., inputs) in the given
 <code>data</code> row using the <code>matchers</code> array supplied.</p>
 
@@ -1034,12 +1093,6 @@ non-string constant.</p>
       <pre class="lines">
 
 
-60
-61
-62
-63
-64
-65
 66
 67
 68
@@ -1048,22 +1101,28 @@ non-string constant.</p>
 71
 72
 73
-74</pre>
+74
+75
+76
+77
+78
+79
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/scan_row.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scan_columns'>scan_columns</span><span class='lparen'>(</span><span class='label'>row:</span><span class='comma'>,</span> <span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>matchers:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_each_pair'>each_pair</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_col'>col</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='op'>|</span>
-    <span class='comment'># Empty cell matches everything, and so never needs to be scanned
-</span>    <span class='kw'>next</span> <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+    <span class='comment'># An empty input cell matches everything, and so never needs to be scanned
+</span>    <span class='kw'>next</span> <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_ins?'>ins?</span>
 
     <span class='comment'># If the column is text only then no special matchers need be invoked
-</span>    <span class='kw'>next</span> <span class='ivar'>@constants</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_col'>col</span> <span class='kw'>if</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_text_only'>text_only</span>
+</span>    <span class='kw'>next</span> <span class='ivar'>@constants</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_col'>col</span> <span class='kw'>if</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='op'>==</span> <span class='kw'>false</span>
 
     <span class='comment'># Need to scan the cell against all matchers, and possibly overwrite
 </span>    <span class='comment'># the cell contents with a proc.
-</span>    <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_cell'>scan_cell</span><span class='lparen'>(</span><span class='label'>col:</span> <span class='id identifier rubyid_col'>col</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>cell:</span> <span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+</span>    <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_cell'>scan_cell</span><span class='lparen'>(</span><span class='label'>column:</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='label'>col:</span> <span class='id identifier rubyid_col'>col</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>cell:</span> <span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_row'>row</span>
@@ -1078,7 +1137,7 @@ non-string constant.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 12:27:33 2017 by
+  Generated on Fri Dec 29 10:35:54 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

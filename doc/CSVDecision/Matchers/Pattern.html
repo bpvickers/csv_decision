@@ -62,7 +62,7 @@
       <div id="content"><h1>Class: CSVDecision::Matchers::Pattern
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -103,7 +103,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This class is part of a private API.</strong>
+  You should avoid using this class if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Match cell against a regular expression pattern - e.g., <tt>=~ hot|col</tt> or
 <tt>.<strong>OPT.</strong></tt></p>
 
@@ -142,54 +146,12 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#parse-class_method" title="parse (class method)">.<strong>parse</strong>(comparator:, value:)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#regexp_implicit-class_method" title="regexp_implicit (class method)">.<strong>regexp_implicit</strong>(value)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>(see Pattern#matches).</p>
+</div></span>
   
 </li>
 
@@ -219,7 +181,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -243,7 +205,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -262,7 +224,12 @@
   
   
   
-  <div id="constructor_details" class="method_details_list">
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Matcher.html#ins%3F-instance_method" title="CSVDecision::Matchers::Matcher#ins? (method)">#ins?</a></span>, <span class='object_link'><a href="Matcher.html#outs%3F-instance_method" title="CSVDecision::Matchers::Matcher#outs? (method)">#outs?</a></span></p>
+<div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
     <div class="method_details first">
@@ -276,7 +243,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns a new instance of Pattern</p>
 
 
@@ -313,13 +284,13 @@
       <pre class="lines">
 
 
-77
-78
-79
-80</pre>
+82
+83
+84
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 82</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='comment'># By default regexp&#39;s must have an explicit comparator
@@ -348,7 +319,13 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>(see Pattern#matches)</p>
+
 
   </div>
 </div>
@@ -374,21 +351,21 @@
       <pre class="lines">
 
 
-63
-64
-65
-66
-67
 68
 69
 70
 71
 72
 73
-74</pre>
+74
+75
+76
+77
+78
+79</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>regexp_explicit:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_comparator'>comparator</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_regexp?'>regexp?</span><span class='lparen'>(</span><span class='label'>cell:</span> <span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>explicit:</span> <span class='id identifier rubyid_regexp_explicit'>regexp_explicit</span><span class='rparen'>)</span>
@@ -399,96 +376,8 @@
   <span class='comment'># No need for a regular expression if we have simple string inequality
 </span>  <span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='id identifier rubyid_comparator'>comparator</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>!=</span><span class='tstring_end'>&#39;</span></span> <span class='op'>?</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>:</span> <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_regexp'><span class='object_link'><a href="../Matchers.html#regexp-class_method" title="CSVDecision::Matchers.regexp (method)">regexp</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 
-  <span class='const'><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">Proc</a></span></span><span class='period'>.</span><span class='id identifier rubyid_with'>with</span><span class='lparen'>(</span><span class='label'>type:</span> <span class='symbol'>:proc</span><span class='comma'>,</span>
+  <span class='const'><span class='object_link'><a href="../Matchers.html#Proc-constant" title="CSVDecision::Matchers::Proc (constant)">Proc</a></span></span><span class='period'>.</span><span class='id identifier rubyid_with'>with</span><span class='lparen'>(</span><span class='label'>type:</span> <span class='symbol'>:proc</span><span class='comma'>,</span>
             <span class='label'>function:</span> <span class='const'>PATTERN_LAMBDAS</span><span class='lbracket'>[</span><span class='id identifier rubyid_comparator'>comparator</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_curry'>curry</span><span class='lbracket'>[</span><span class='id identifier rubyid_pattern'>pattern</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="parse-class_method">
-  
-    .<strong>parse</strong>(comparator:, value:)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 41</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>comparator:</span><span class='comma'>,</span> <span class='label'>value:</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
-
-  <span class='comment'># We cannot do a regexp comparison against a symbol name.
-</span>  <span class='comment'># (Maybe we should add this feature?)
-</span>  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span>
-
-  <span class='comment'># If no comparator then the implicit option must be on
-</span>  <span class='id identifier rubyid_comparator'>comparator</span> <span class='op'>=</span> <span class='id identifier rubyid_regexp_implicit'>regexp_implicit</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_comparator'>comparator</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-
-  <span class='lbracket'>[</span><span class='id identifier rubyid_comparator'>comparator</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="regexp_implicit-class_method">
-  
-    .<strong>regexp_implicit</strong>(value)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-54
-55
-56
-57
-58
-59
-60
-61</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 54</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_regexp_implicit'>regexp_implicit</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
-  <span class='comment'># rubocop: disable Style/CaseEquality
-</span>  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\W</span><span class='regexp_end'>/</span></span> <span class='op'>===</span> <span class='id identifier rubyid_value'>value</span>
-  <span class='comment'># rubocop: enable Style/CaseEquality
-</span>
-  <span class='comment'># Make the implict comparator explict
-</span>  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>=~</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -504,7 +393,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="matches?-instance_method">
   
-    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt> 
+    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
   
 
   
@@ -512,7 +401,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Recognise a regular expression pattern - e.g., <tt>=~ on|off</tt> or <tt>!~ OPT.*</tt>.
 If the option regexp_implicit: true has been set, then cells may omit the
 <tt>=~</tt> comparator so long as they contain non-word characters typically used
@@ -549,7 +442,7 @@ in regular expressions such as <tt>*</tt> and <code>.</code>.</p>
     <li>
       
       
-        <span class='type'>(<tt>false</tt>, <tt><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt>)</span>
+        <span class='type'>(<tt>false</tt>, <tt>CSVDecision::Proc</tt>)</span>
       
       
       
@@ -570,12 +463,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-87
-88
-89</pre>
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Pattern.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>regexp_explicit:</span> <span class='ivar'>@regexp_explicit</span><span class='rparen'>)</span>
@@ -590,7 +483,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 12:27:34 2017 by
+  Generated on Fri Dec 29 10:35:55 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

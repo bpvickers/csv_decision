@@ -62,7 +62,7 @@
       <div id="content"><h1>Module: CSVDecision::Decide
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -85,7 +85,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This module is part of a private API.</strong>
+  You should avoid using this module if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Main module for searching the decision table looking for one or more
 matches</p>
 
@@ -124,7 +128,7 @@ matches</p>
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -154,7 +158,11 @@ matches</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Main method for making decisions.</p>
 
 
@@ -240,7 +248,6 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
       <pre class="lines">
 
 
-17
 18
 19
 20
@@ -250,10 +257,11 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 24
 25
 26
-27</pre>
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decide.rb', line 17</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/decide.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span><span class='rparen'>)</span>
   <span class='comment'># Parse and transform the hash supplied as input
@@ -276,7 +284,7 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 12:27:33 2017 by
+  Generated on Fri Dec 29 10:35:53 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>
