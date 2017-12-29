@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Parse the input hash.
+  # @api private
   module Input
     # @param (see Decide.decide)
     # @return [Hash{Symbol => Hash{Symbol=>Object}, Hash{Integer=>Object}}]

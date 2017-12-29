@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Main module for searching the decision table looking for one or more matches
+  # @api private
   module Decide
     # Main method for making decisions.
     #

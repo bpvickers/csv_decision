@@ -15,7 +15,6 @@ module CSVDecision
     Matchers::Constant,
     Matchers::Symbol,
     Matchers::Guard
-    # Matchers::Function
   ].freeze
 
   # Validate and normalize the options values supplied.
@@ -45,7 +44,6 @@ module CSVDecision
     # @param options [Hash] Input options hash supplied by the user.
     # @return [Hash] Options hash filled in with all required values, defaulted if necessary.
     # @raise [ArgumentError] For invalid option keys.
-    # @api private
     def self.normalize(options)
       validate(options)
       default(options)

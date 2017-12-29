@@ -26,6 +26,7 @@ module CSVDecision
 
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
+      # @api private
       def self.matches?(cell)
         return false unless (match = EXPRESSION.match(cell))
 

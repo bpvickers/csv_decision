@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Accumulate the matching row(s) and calculate the final result.
+  # @api private
   class Decision
     # Match the table row against the input hash.
     #

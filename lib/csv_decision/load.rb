@@ -16,6 +16,7 @@ module CSVDecision
   end
 
   # Load all CSV files located in the specified folder.
+  # @api private
   module Load
     # (see CSVDecision.load)
     def self.path(path:, options:)

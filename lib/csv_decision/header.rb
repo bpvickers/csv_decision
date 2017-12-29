@@ -6,6 +6,7 @@
 # See LICENSE and README.md for details.
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
+  # @api private
   module Header
     # TODO: implement all column types
     # COLUMN_TYPE = %r{

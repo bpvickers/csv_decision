@@ -7,8 +7,8 @@ require 'values'
 # @author Brett Vickers.
 # See LICENSE and README.md for details.
 module CSVDecision
-
   # Match table data cells against a valid decision table expression or a simple constant.
+  # @api private
   class Matchers
     # Value object for a data cell proc.
     # @api private
