@@ -187,7 +187,23 @@ shortened to just `:node`, so the above decision table may be simplified to:
  ```
 These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
- 
+
+### Column guard conditions
+Sometimes it's more convenient to write guard conditions in a single column specialized for that purpose.
+
+For example:
+ ```ruby
+    data = <<~DATA
+      in :node, in :parent, out :top?
+      ,         == :node,   yes
+      ,         ,           no
+    DATA
+    
+    table = CSVDecision.parse(data)
+    table.decide(node: 0, parent: 0) # returns top?: 'yes'
+    table.decide(node: 1, parent: 0) # returns top?: 'no'
+ ```
+  
 ### Testing
  
  `csv_decision` includes thorough [RSpec](http://rspec.info) tests:

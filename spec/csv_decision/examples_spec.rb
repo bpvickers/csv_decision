@@ -116,4 +116,27 @@ context 'simple examples' do
       expect(table.decide(traded: '20171227',  settled:  20171228 )).to eq(status: 'invalid data')
     end
   end
+  
+  context 'makes a correct decision using a guard column' do
+    data = <<~DATA
+            IN :country, guard:,          out :PAID, out :PAID_type
+            US,          :CUSIP.present?, :CUSIP,    CUSIP
+            GB,          :SEDOL.present?, :SEDOL,    SEDOL
+            ,            :ISIN.present?,  :ISIN,     ISIN,
+            ,            :SEDOL.present?, :SEDOL,    SEDOL
+            ,            :CUSIP.present?, :CUSIP,    CUSIP
+            ,            ,                := nil,    MISSING
+    DATA
+
+    it 'decides correctly' do
+      table = CSVDecision.parse(data)
+
+      expect(table.decide(country: 'US',  CUSIP: '123456789'))
+        .to eq(PAID: '123456789', PAID_type: 'CUSIP')
+      expect(table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012'))
+        .to eq(PAID: '123456789012', PAID_type: 'ISIN')
+      expect(table.decide(country: 'AU', ISIN: ''))
+        .to eq(PAID: nil, PAID_type: 'MISSING')
+    end
+  end
 end
