@@ -24,13 +24,6 @@ module CSVDecision
       @rows_picked = []
     end
 
-    # Calculate the final result.
-    # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
-    def result
-      return {} if @rows_picked.blank?
-      @first_match ? final_result : accumulated_result
-    end
-
     # Scan the decision table up against the input hash.
     #
     # @param table [CSVDecision::Table] Decision table being processed.
@@ -45,6 +38,13 @@ module CSVDecision
     end
 
     private
+
+    # Calculate the final result.
+    # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
+    def result
+      return {} if @rows_picked.blank?
+      @first_match ? final_result : accumulated_result
+    end
 
     def row_scan(input:, row:, scan_row:)
       add(row) if Decide.matches?(row: row, input: input, scan_row: scan_row)
