@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'values'
-
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017.
 # @author Brett Vickers <brett@phillips-vickers.com>
@@ -17,18 +15,25 @@ module CSVDecision
     # @return [false, Matchers::Proc]
     def self.scan(column:, matchers:, cell:)
       matchers.each do |matcher|
-        # Guard function only accepts the same matchers as an output column
+        # Guard function only accepts the same matchers as an output column.
         next if column.type == :guard && !matcher.outs?
 
-        proc = matcher.matches?(cell)
-        return proc if proc
+        if (proc = matcher.matches?(cell))
+          guard_constant?(type: proc.type, column: column)
+          return proc
+        end
       end
 
-      # Must be a simple constant
-      return false unless column.type == :guard
+      # Must be a simple string constant - this is OK except for a guard column
+      guard_constant?(type: :constant, column: column)
+    end
+
+    def self.guard_constant?(type:, column:)
+      return false unless type == :constant && column.type == :guard
 
       raise CellValidationError, 'guard column cannot contain constants'
     end
+    private_class_method :guard_constant?
 
     # Evaluate the cell proc against the column's input value and/or input hash.
     #
@@ -72,7 +77,7 @@ module CSVDecision
         next @constants << col if column.eval == false
 
         # Need to scan the cell against all matchers, and possibly overwrite
-        # the cell contents with a proc.
+        # the cell contents with a Matchers::Proc.
         row[col] = scan_cell(column: column, col: col, matchers: matchers, cell: cell)
       end
 

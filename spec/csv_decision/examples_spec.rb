@@ -119,7 +119,7 @@ context 'simple examples' do
   
   context 'makes a correct decision using a guard column' do
     data = <<~DATA
-            IN :country, guard:,          out :PAID, out :PAID_type
+            in :country, guard:,          out :PAID, out :PAID_type
             US,          :CUSIP.present?, :CUSIP,    CUSIP
             GB,          :SEDOL.present?, :SEDOL,    SEDOL
             ,            :ISIN.present?,  :ISIN,     ISIN,

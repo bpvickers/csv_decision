@@ -27,7 +27,8 @@ module CSVDecision
     private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Regular expression string for a column name.
-    # More lenient than a Ruby method name - note any spaces will have been replaced with underscores.
+    # More lenient than a Ruby method name - note any spaces will have been replaced with
+    # underscores.
     COLUMN_NAME = "\\w[\\w:/!?]*"
 
     # Column name regular expression.

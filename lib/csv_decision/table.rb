@@ -13,7 +13,7 @@ module CSVDecision
     # @param input [Hash] Input hash.
     # @return [Hash{Symbol => Object, Array<Object>}] Decision hash.
     def decide(input)
-      Decide.decide(table: self, input: input, symbolize_keys: true).result
+      Decide.decide(table: self, input: input, symbolize_keys: true)
     end
 
     # Unsafe version of decide - will mutate the hash if +set: column+ type
@@ -23,7 +23,7 @@ module CSVDecision
     # @note Input hash must have its keys symbolized.
     # @return (see #decide)
     def decide!(input)
-      Decide.decide(table: self, input: input, symbolize_keys: false).result
+      Decide.decide(table: self, input: input, symbolize_keys: false)
     end
 
     # @return [CSVDecision::Columns] Dictionary of all input and output columns.

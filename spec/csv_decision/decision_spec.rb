@@ -17,7 +17,5 @@ describe CSVDecision::Decision do
     decision = CSVDecision::Decision.new(table: table, input: input)
 
     expect(decision).to be_a(CSVDecision::Decision)
-    expect(decision.empty?).to eq true
-    expect(decision.exist?).to eq false
   end
 end

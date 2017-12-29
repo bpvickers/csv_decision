@@ -132,5 +132,22 @@ describe CSVDecision::Matchers::Guard do
         end
       end
     end
+
+    context 'raises an error for a string in a guard column' do
+      data = <<~DATA
+            IN :country, guard : country, out :PAID, out :PAID_type, out :len
+            US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+            GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+            ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
+            ,            :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+            ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+            ,            := nil,          := nil,    MISSING,        := nil
+      DATA
+
+      specify do
+        expect { CSVDecision.parse(data) }
+          .to raise_error(CSVDecision::CellValidationError, 'guard column cannot contain constants')
+      end
+    end
   end
 end

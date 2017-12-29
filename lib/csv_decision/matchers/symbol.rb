@@ -20,7 +20,8 @@ module CSVDecision
       private_constant :SYMBOL_COMPARE_RE
 
       # These procs compare one input hash value to another, and so do not coerce numeric values.
-      # Note that we do *not* check +hash.key?(symbol)+, so a +nil+ value will match a missing hash key.
+      # Note that we do *not* check +hash.key?(symbol)+, so a +nil+ value will match a missing
+      # hash key.
       EQUALITY = {
         ':=' => proc { |symbol, value, hash| value == hash[symbol] },
         '!=' => proc { |symbol, value, hash| value != hash[symbol] }
@@ -33,17 +34,18 @@ module CSVDecision
       private_class_method :compare_proc
 
       COMPARE = {
-        # Equality and inequality - create a lambda proc by calling with the actual column name symbol
+        # Equality and inequality - create a lambda proc by calling with the actual column name
+        # symbol.
         ':=' => ->(symbol) { EQUALITY[':='].curry[symbol].freeze },
         '='  => ->(symbol) { EQUALITY[':='].curry[symbol].freeze },
         '==' => ->(symbol) { EQUALITY[':='].curry[symbol].freeze },
         '!=' => ->(symbol) { EQUALITY['!='].curry[symbol].freeze },
 
         # Comparisons - create a lambda proc by calling with the actual column name symbol.
-        '>'  => ->(symbol) { compare_proc(:'>' ).curry[symbol].freeze },
+        '>'  => ->(symbol) { compare_proc(:'>').curry[symbol].freeze },
         '>=' => ->(symbol) { compare_proc(:'>=').curry[symbol].freeze },
-        '<'  => ->(symbol) { compare_proc(:'<' ).curry[symbol].freeze },
-        '<=' => ->(symbol) { compare_proc(:'<=').curry[symbol].freeze },
+        '<'  => ->(symbol) { compare_proc(:'<').curry[symbol].freeze },
+        '<=' => ->(symbol) { compare_proc(:'<=').curry[symbol].freeze }
       }.freeze
       private_constant :COMPARE
 

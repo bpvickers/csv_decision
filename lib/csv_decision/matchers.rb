@@ -85,7 +85,8 @@ module CSVDecision
       # and a second array of columns requiring special matchers.
       scan_row = ScanRow.new
 
-      # Scan the columns in the data row, and build an object to scan this row against an input hash.
+      # Scan the columns in the data row, and build an object to scan this row against
+      # an input hash.
       # Convert values in the data row if not just a simple constant.
       row = scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
 
@@ -100,9 +101,9 @@ module CSVDecision
 
     # @param options (see CSVDecision.parse)
     def initialize(options)
-      @matchers = matchers(options)
-      @ins = ins_matchers(options)
-      @outs = outs_matchers(@ins)
+      @matchers = options[:matchers].collect { |klass| klass.new(options) }
+      @ins = @matchers.select(&:ins?)
+      @outs = @matchers.select(&:outs?)
     end
 
     # Parse the row's input columns using the input matchers.
@@ -123,20 +124,6 @@ module CSVDecision
       Matchers.parse(columns: columns, matchers: @outs, row: row)
     end
 
-    private
-
-    def matchers(options)
-      options[:matchers].collect { |klass| klass.new(options) }
-    end
-
-    def ins_matchers(matchers)
-      @matchers.select { |obj| obj.ins? }
-    end
-
-    def outs_matchers(matchers)
-      @matchers.select { |obj| obj.outs? }
-    end
-
     # @abstract Subclass and override {#matches?} to implement
     #   a custom Matcher class.
     class Matcher
@@ -145,8 +132,9 @@ module CSVDecision
       # Determine if the input cell string is recognised by this Matcher.
       #
       # @param cell [String] Data row cell.
-      # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise returns the
-      #   +CSVDecision::Proc+ object indicating if this is a constant or some type of function.
+      # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise
+      #   returns the +CSVDecision::Proc+ object indicating if this is a constant or some type of
+      #   function.
       def matches?(cell); end
 
       # Does this matcher apply to output cells?

@@ -8,11 +8,11 @@ module CSVDecision
   # Recognise expressions in table data cells.
   # @api private
   class Matchers
-    # Match cell against a column symbol guard expression - e.g., +>:column.present?+ or +:column == 100.0+.
+    # Match cell against a column symbol guard expression -
+    # e.g., +>:column.present?+ or +:column == 100.0+.
     class Guard < Matcher
       # Column symbol expression - e.g., +>:column+ or +:!column+.
-      SYMBOL =
-        "(?<negate>#{Matchers::NEGATE}?)\\s*:(?<name>#{Header::COLUMN_NAME})"
+      SYMBOL = "(?<negate>#{Matchers::NEGATE}?)\\s*:(?<name>#{Header::COLUMN_NAME})"
       private_constant :SYMBOL
 
       SYMBOL_RE = Matchers.regexp(SYMBOL)
@@ -21,26 +21,18 @@ module CSVDecision
       # Column symbol guard expression - e.g., +>:column.present?+ or +:column == 100.0+.
       GUARD =
         "(?<negate>#{Matchers::NEGATE}?)\\s*" \
-      ":(?<name>#{Header::COLUMN_NAME})\\s*" \
-      "(?<method>#{Matchers::EQUALS}|!=|<=|>=|>|<|\\.)\\s*" \
-      "(?<param>\\S.*)"
+        ":(?<name>#{Header::COLUMN_NAME})\\s*" \
+        "(?<method>#{Matchers::EQUALS}|!=|<=|>=|>|<|\\.)\\s*" \
+        "(?<param>\\S.*)"
       private_constant :GUARD
 
       GUARD_RE = Matchers.regexp(GUARD)
       private_constant :GUARD_RE
 
       # Negated methods
-      NEGATION = {
-        '='  => '!=',
-        '==' => '!=',
-        ':=' => '!=',
-        '.'  => '!.',
-        '!=' => '=',
-        '>'  => '<=',
-        '>=' => '<',
-        '<'  => '>=',
-        '<=' => '>'
-      }.freeze
+      NEGATION = { '='  => '!=', '==' => '!=', ':=' => '!=', '!=' => '=',
+                   '>'  => '<=', '>=' => '<', '<' => '>=', '<=' => '>',
+                   '.'  => '!.' }.freeze
       private_constant :NEGATION
 
       # Note: value has already been converted to an Integer or BigDecimal.
@@ -54,20 +46,25 @@ module CSVDecision
       }.freeze
       private_constant :NUMERIC_COMPARE
 
+      def self.symbol_function(symbol, value, hash)
+        hash[symbol].respond_to?(value) && hash[symbol].send(value)
+      end
+
       FUNCTION = {
-        '.'  => proc { |symbol, value, hash|   hash[symbol].respond_to?(value) && hash[symbol].send(value) },
-        '!.' => proc { |symbol, value, hash| !(hash[symbol].respond_to?(value) && hash[symbol].send(value)) },
+        '.'  => proc { |symbol, value, hash|  symbol_function(symbol, value, hash) },
+        '!.' => proc { |symbol, value, hash| !symbol_function(symbol, value, hash) }
       }.freeze
       private_constant :FUNCTION
 
       SYMBOL_PROC = {
         ':'  => proc { |symbol, hash|  hash[symbol] },
-        '!:' => proc { |symbol, hash| !hash[symbol] },
+        '!:' => proc { |symbol, hash| !hash[symbol] }
       }.freeze
       private_constant :SYMBOL_PROC
 
       def self.compare?(lhs:, compare:, rhs:)
-        # Is the rhs the same class or a superclass of lhs, and does rhs respond to the compare method?
+        # Is the rhs the same class or a superclass of lhs, and does rhs respond to the
+        # compare method?
         return lhs.send(compare, rhs) if lhs.is_a?(rhs.class) && rhs.respond_to?(compare)
 
         nil
@@ -78,7 +75,7 @@ module CSVDecision
         proc = FUNCTION[method]
         return proc if proc
 
-        return proc { |symbol, value, hash| compare?(lhs: hash[symbol], compare: method, rhs: value) }
+        proc { |symbol, value, hash| compare?(lhs: hash[symbol], compare: method, rhs: value) }
       end
       private_class_method :non_numeric
 

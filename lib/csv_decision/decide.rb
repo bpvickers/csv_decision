@@ -8,6 +8,21 @@ module CSVDecision
   # Main module for searching the decision table looking for one or more matches
   # @api private
   module Decide
+    # Match the table row against the input hash.
+    #
+    # @param row [Array] Table row.
+    # @param input [Hash{Symbol=>Object}] Input hash data structure.
+    # @param scan_row [ScanRow]
+    # @return [Boolean] Returns true if a match, false otherwise.
+    def self.matches?(row:, input:, scan_row:)
+      match = scan_row.match_constants?(row: row, scan_cols: input[:scan_cols])
+      return false unless match
+
+      return true if scan_row.procs.empty?
+
+      scan_row.match_procs?(row: row, input: input)
+    end
+
     # Main method for making decisions.
     #
     # @param table [CSVDecision::Table] Decision table.
