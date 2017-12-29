@@ -8,6 +8,7 @@ require 'values'
 # See LICENSE and README.md for details.
 module CSVDecision
   # Data row object indicating which columns are constants versus procs.
+  # @api private
   class ScanRow
     # Scan the table cell against all matches.
     #

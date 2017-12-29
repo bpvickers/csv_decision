@@ -2,7 +2,7 @@
 
 require_relative '../../lib/csv_decision'
 
-describe CSVDecision::Constant do
+describe CSVDecision::Matchers::Constant do
   describe '#matches?' do
     context 'constant matches value' do
       data = [

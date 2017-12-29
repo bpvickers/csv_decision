@@ -13,22 +13,17 @@ module CSVDecision
     File.dirname __dir__
   end
 
-  autoload :Constant,   'csv_decision/constant'
   autoload :Data,       'csv_decision/data'
   autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'
   autoload :Columns,    'csv_decision/columns'
-  autoload :Function,   'csv_decision/function'
-  autoload :Guard,      'csv_decision/guard'
   autoload :Header,     'csv_decision/header'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
   autoload :Matchers,   'csv_decision/matchers'
-  autoload :Numeric,    'csv_decision/numeric'
   autoload :Options,    'csv_decision/options'
   autoload :Parse,      'csv_decision/parse'
   autoload :ScanRow,    'csv_decision/scan_row'
-  autoload :Symbol,     'csv_decision/symbol'
   autoload :Table,      'csv_decision/table'
 
   class Matchers
