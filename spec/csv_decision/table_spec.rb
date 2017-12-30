@@ -95,6 +95,11 @@ describe CSVDecision::Table do
     context 'makes correct decisions for a table with regexps and ranges' do
       examples = [
         {
+          example: 'implicit regular expressions from CSV file',
+          options: {},
+          data: Pathname('spec/data/valid/regular_expressions.csv')
+        },
+        {
           example: 'implicit regular expressions',
           options: { regexp_implicit: true },
           data: <<~DATA
@@ -150,13 +155,13 @@ describe CSVDecision::Table do
             table = CSVDecision.parse(test[:data], options)
 
             expect(table.send(method, age: 100)).to eq(salesperson: 'Thorsten')
-            expect(table.send(method, age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
-            expect(table.send(method, age:  25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
-            expect(table.send(method, age:  44, trait: 'maniac')).to eq(salesperson: 'Korolev')
-            expect(table.send(method, age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
-            expect(table.send(method, age:  44, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
-            expect(table.send(method, age:  49, trait: 'bad')).to eq(salesperson: 'Espadas')
-            expect(table.send(method, age:  40, trait: 'maniac')).to eq(salesperson: 'Bronco')
+            expect(table.send(method, age:  25,  trait: 'very rich')).to eq(salesperson: 'Kerfelden')
+            expect(table.send(method, age:  25,  trait: 'maniac')).to eq(salesperson: 'Adelsky')
+            expect(table.send(method, age:  44,  trait: 'maniac')).to eq(salesperson: 'Korolev')
+            expect(table.send(method, age: 101,  trait: 'maniacal')).to eq(salesperson: 'Chester')
+            expect(table.send(method, age:  44,  trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+            expect(table.send(method, age:  49,  trait: 'bad')).to eq(salesperson: 'Espadas')
+            expect(table.send(method, age: '40', trait: 'maniac')).to eq(salesperson: 'Bronco')
           end
 
           it "#{method} correctly uses #{test[:example]} with first_match: false" do
@@ -177,7 +182,7 @@ describe CSVDecision::Table do
               .to eq(salesperson: %w[Ojiisan Swanson])
             expect(table.send(method, age:  49, trait: 'bad'))
               .to eq(salesperson: %w[Espadas Ojiisan])
-            expect(table.send(method, age:  40, trait: 'maniac'))
+            expect(table.send(method, age: '40', trait: 'maniac'))
               .to eq(salesperson: %w[Bronco Korolev])
           end
         end
