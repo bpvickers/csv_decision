@@ -5,21 +5,33 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Specialized cell value matchers beyond simple string compares.
-  # By default all these matchers are tried in the specified order on all
-  # input data cells.
-  DEFAULT_MATCHERS = [
-    Matchers::Range,
-    Matchers::Numeric,
-    Matchers::Pattern,
-    Matchers::Constant,
-    Matchers::Symbol,
-    Matchers::Guard
-  ].freeze
+  # # Specialized cell value matchers beyond simple string compares.
+  # # By default all these matchers are tried in the specified order on all
+  # # input data cells.
+  # DEFAULT_MATCHERS = [
+  #   Matchers::Range,
+  #   Matchers::Numeric,
+  #   Matchers::Pattern,
+  #   Matchers::Constant,
+  #   Matchers::Symbol,
+  #   Matchers::Guard
+  # ].freeze
 
   # Validate and normalize the options values supplied.
   # @api private
   module Options
+    # Specialized cell value matchers beyond simple string compares.
+    # By default all these matchers are tried in the specified order on all
+    # input data cells.
+    DEFAULT_MATCHERS = [
+      Matchers::Range,
+      Matchers::Numeric,
+      Matchers::Pattern,
+      Matchers::Constant,
+      Matchers::Symbol,
+      Matchers::Guard
+    ].freeze
+
     # All valid CSVDecision::parse options with their default values.
     VALID = {
       first_match: true,
