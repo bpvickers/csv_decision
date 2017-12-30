@@ -67,8 +67,26 @@ module CSVDecision
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
+      validate(dictionary: dictionary)
+    end
+
+    def self.validate(dictionary:)
+      dictionary.outs.each_value do |column|
+        next unless input_column?(dictionary: dictionary, column_name: column.name)
+
+        raise CellValidationError, "output column name '#{column.name}' is also an input column"
+      end
+
       dictionary
     end
+    private_class_method :validate
+
+    def self.input_column?(dictionary:, column_name:)
+      dictionary.ins.each_value { |column| return true if column_name == column.name }
+
+      false
+    end
+    private_class_method :input_column?
 
     def self.validate_header_column(cell:)
       match = COLUMN_TYPE.match(cell)
@@ -79,8 +97,7 @@ module CSVDecision
 
       [column_type, column_name]
     rescue CellValidationError => exp
-      raise CellValidationError,
-            "header column '#{cell}' is not valid as the #{exp.message}"
+      raise CellValidationError, "header column '#{cell}' is not valid as the #{exp.message}"
     end
     private_class_method :validate_header_column
 

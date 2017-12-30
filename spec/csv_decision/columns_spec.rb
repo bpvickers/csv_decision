@@ -86,17 +86,26 @@ describe CSVDecision::Columns do
     end
   end
 
-  context 'recognises guard column' do
-    it 'recognises the guard column' do
-      data = <<~DATA
-        IN :country, guard:,          out :PAID, out :PAID_type
-        US,          :CUSIP.present?, :CUSIP,    CUSUP
-        GB,          :SEDOL.present?, :SEDOL,    SEDOL
-      DATA
-      table = CSVDecision.parse(data)
+  it 'recognises the guard column' do
+    data = <<~DATA
+      IN :country, guard:,          out :PAID, out :PAID_type
+      US,          :CUSIP.present?, :CUSIP,    CUSUP
+      GB,          :SEDOL.present?, :SEDOL,    SEDOL
+    DATA
+    table = CSVDecision.parse(data)
 
-      expect(table.columns.ins[1].to_h)
-        .to eq(name: nil, eval: true, type: :guard)
-    end
+    expect(table.columns.ins[1].to_h)
+      .to eq(name: nil, eval: true, type: :guard)
+  end
+
+  it 'rejects output column being same as input column' do
+    data = <<~DATA
+      IN :country, guard:,          out :PAID, out :country
+      US,          :CUSIP.present?, :CUSIP,    CUSUP
+      GB,          :SEDOL.present?, :SEDOL,    SEDOL
+    DATA
+    expect { CSVDecision.parse(data) }
+      .to raise_error(CSVDecision::CellValidationError,
+                      "output column name 'country' is also an input column")
   end
 end
