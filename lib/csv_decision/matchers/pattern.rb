@@ -58,7 +58,7 @@ module CSVDecision
         return unless /\W/ === value
         # rubocop: enable Style/CaseEquality
 
-        # Make the implict comparator explict
+        # Make the implicit comparator explicit
         '=~'
       end
       private_class_method :regexp_implicit
@@ -85,8 +85,9 @@ module CSVDecision
       end
 
       # Recognise a regular expression pattern - e.g., +=~ on|off+ or +!~ OPT.*+.
-      # If the option regexp_implicit: true has been set, then cells may omit the +=~+ comparator so long as they
-      # contain non-word characters typically used in regular expressions such as +*+ and +.+.
+      # If the option regexp_implicit: true has been set, then cells may omit the +=~+ comparator
+      # so long as they contain non-word characters typically used in regular expressions such as
+      # +*+ and +.+.
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
       def matches?(cell)

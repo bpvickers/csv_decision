@@ -8,7 +8,8 @@ module CSVDecision
   # Methods to assign a matcher to data cells.
   # @api private
   class Matchers
-    # Match cells against Ruby-like range expressions or their negation - e.g., +0...10+ or +!a..z+.
+    # Match cells against Ruby-like range expressions or their negation -
+    # e.g., +0...10+ or +!a..z+.
     class Range < Matcher
       # Match a table data cell string against a Ruby-like range expression.
       #

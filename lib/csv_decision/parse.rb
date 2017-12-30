@@ -60,6 +60,7 @@ module CSVDecision
 
       parse_table(table: table, input: data, options: options)
 
+      table.columns.deep_freeze
       table.freeze
     rescue CSVDecision::Error => exp
       raise_error(file: table.file, exception: exp)
@@ -98,8 +99,6 @@ module CSVDecision
 
         row.freeze
       end
-
-      table.columns.deep_freeze
     end
     private_class_method :parse_data
 

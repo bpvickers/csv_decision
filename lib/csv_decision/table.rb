@@ -5,7 +5,7 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Decision table that accepts an input hashe and outputs a decision (hash).
+  # Decision table that accepts an input hash and outputs a decision (hash).
   class Table
     # Make a decision based off an input hash.
     #
@@ -46,7 +46,8 @@ module CSVDecision
     # @api private
     attr_accessor :rows
 
-    # @return [Array<CSVDecision::ScanRow>] Scanning objects used to implement input matching logic.
+    # @return [Array<CSVDecision::ScanRow>] Scanning objects used to implement input
+    #   matching logic.
     # @api private
     attr_accessor :scan_rows
 
