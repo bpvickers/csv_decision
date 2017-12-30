@@ -1,3 +1,10 @@
+## v0.0.7, 30 December 2017.
+*Additions*
+- Guard conditions using column symbols and expressions.
+- Guard columns.
+- Symbol functions (0-arity) in output columns.
+- Update YARD documentation.
+
 ## v0.0.6, 26 December 2017.
 *Additions*
 - Update YARD documentation.
