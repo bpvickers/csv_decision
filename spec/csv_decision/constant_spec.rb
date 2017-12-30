@@ -2,7 +2,7 @@
 
 require_relative '../../lib/csv_decision'
 
-describe CSVDecision::Constant do
+describe CSVDecision::Matchers::Constant do
   describe '#matches?' do
     context 'constant matches value' do
       data = [
@@ -16,7 +16,7 @@ describe CSVDecision::Constant do
       data.each do |cell, value|
         it "constant #{cell} matches #{value}" do
           proc = described_class.matches?(cell)
-          expect(proc).to be_a(CSVDecision::Proc)
+          expect(proc).to be_a(CSVDecision::Matchers::Proc)
           expect(proc.type).to eq :constant
           expect(proc.function).to eq value
         end

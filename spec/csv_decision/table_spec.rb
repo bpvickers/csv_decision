@@ -95,6 +95,11 @@ describe CSVDecision::Table do
     context 'makes correct decisions for a table with regexps and ranges' do
       examples = [
         {
+          example: 'implicit regular expressions from CSV file',
+          options: {},
+          data: Pathname('spec/data/valid/regular_expressions.csv')
+        },
+        {
           example: 'implicit regular expressions',
           options: { regexp_implicit: true },
           data: <<~DATA
@@ -150,13 +155,13 @@ describe CSVDecision::Table do
             table = CSVDecision.parse(test[:data], options)
 
             expect(table.send(method, age: 100)).to eq(salesperson: 'Thorsten')
-            expect(table.send(method, age:  25, trait: 'very rich')).to eq(salesperson: 'Kerfelden')
-            expect(table.send(method, age:  25, trait: 'maniac')).to eq(salesperson: 'Adelsky')
-            expect(table.send(method, age:  44, trait: 'maniac')).to eq(salesperson: 'Korolev')
-            expect(table.send(method, age: 101, trait: 'maniacal')).to eq(salesperson: 'Chester')
-            expect(table.send(method, age:  44, trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
-            expect(table.send(method, age:  49, trait: 'bad')).to eq(salesperson: 'Espadas')
-            expect(table.send(method, age:  40, trait: 'maniac')).to eq(salesperson: 'Bronco')
+            expect(table.send(method, age:  25,  trait: 'very rich')).to eq(salesperson: 'Kerfelden')
+            expect(table.send(method, age:  25,  trait: 'maniac')).to eq(salesperson: 'Adelsky')
+            expect(table.send(method, age:  44,  trait: 'maniac')).to eq(salesperson: 'Korolev')
+            expect(table.send(method, age: 101,  trait: 'maniacal')).to eq(salesperson: 'Chester')
+            expect(table.send(method, age:  44,  trait: 'cheerful')).to eq(salesperson: 'Ojiisan')
+            expect(table.send(method, age:  49,  trait: 'bad')).to eq(salesperson: 'Espadas')
+            expect(table.send(method, age: '40', trait: 'maniac')).to eq(salesperson: 'Bronco')
           end
 
           it "#{method} correctly uses #{test[:example]} with first_match: false" do
@@ -177,7 +182,7 @@ describe CSVDecision::Table do
               .to eq(salesperson: %w[Ojiisan Swanson])
             expect(table.send(method, age:  49, trait: 'bad'))
               .to eq(salesperson: %w[Espadas Ojiisan])
-            expect(table.send(method, age:  40, trait: 'maniac'))
+            expect(table.send(method, age: '40', trait: 'maniac'))
               .to eq(salesperson: %w[Bronco Korolev])
           end
         end
@@ -260,7 +265,7 @@ describe CSVDecision::Table do
 
     context 'makes correct decision for table with symbol ordered compares' do
       examples = [
-        { example: 'uses == :node',
+        { example: 'explicitly mentions :traded',
           options: {},
           data: <<~DATA
             in :traded, in :settled, out :status
@@ -270,13 +275,21 @@ describe CSVDecision::Table do
             ,                   ,    invalid data
           DATA
         },
+        { example: 'does not mention :traded',
+          options: {},
+          data: <<~DATA
+            in :settled, out :status
+            :traded,     same day
+            >:traded,    pending
+            <:traded,    invalid trade
+            ,            invalid data
+          DATA
+        }
       ]
-
       examples.each do |test|
         %i[decide decide!].each do |method|
           it "#{method} correctly #{test[:example]}" do
-            options = test[:options]
-            table = CSVDecision.parse(test[:data], options)
+            table = CSVDecision.parse(test[:data], test[:options])
 
             expect(table.send(method, traded: '20171227',  settled: '20171227')).to eq(status: 'same day')
             expect(table.send(method, traded:  20171227,   settled:  20171227 )).to eq(status: 'same day')
@@ -285,6 +298,77 @@ describe CSVDecision::Table do
             expect(table.send(method, traded: '20171228',  settled: '20171227')).to eq(status: 'invalid trade')
             expect(table.send(method, traded:  20171228,   settled:  20171227 )).to eq(status: 'invalid trade')
             expect(table.send(method, traded: '20171227',   settled: 20171228 )).to eq(status: 'invalid data')
+          end
+        end
+      end
+    end
+
+    context 'makes correct decisions for table with column symbol guards' do
+      examples = [
+        { example: 'evaluates guard conditions & output functions',
+          options: {},
+          data: <<~DATA
+            IN :country, guard:,          out :PAID, out :PAID_type, out :len
+            US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+            GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+            ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
+            ,            :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+            ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+            ,            ,                := nil,    MISSING,        := nil
+          DATA
+        },
+        { example: 'evaluates named guard condition',
+          options: {},
+          data: <<~DATA
+            IN :country, guard : country, out :PAID, out :PAID_type, out :len
+            US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+            GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+            ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
+            ,            :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+            ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+            ,            ,                := nil,    MISSING,        := nil
+          DATA
+        }
+      ]
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
+
+            expect(table.send(method, country: 'US',  CUSIP: '123456789'))
+              .to eq(PAID: '123456789', PAID_type: 'CUSIP', len: 9)
+            expect(table.send(method, country: 'EU',  CUSIP: '123456789', ISIN:'123456789012'))
+              .to eq(PAID: '123456789012', PAID_type: 'ISIN', len: 12)
+            expect(table.send(method, country: 'AU', ISIN: ''))
+              .to eq(PAID: nil, PAID_type: 'MISSING', len: nil)
+          end
+        end
+      end
+    end
+
+    context 'makes correct decisions for table with column symbol guards and first_match: false' do
+      examples = [
+        { example: 'evaluates guard conditions & output functions',
+          options: { first_match: false },
+          data: <<~DATA
+            IN :country, guard:,          out :ID, out :ID_type, out :len
+            US,          :CUSIP.present?, :CUSIP,    CUSIP,      :ID.length
+            GB,          :SEDOL.present?, :SEDOL,    SEDOL,      :ID.length
+            ,            :SEDOL.present?, :SEDOL,    SEDOL,      :ID.length
+            ,            :ISIN.present?,  :ISIN,     ISIN,       :ID.length
+          DATA
+        }
+      ]
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
+
+            expect(table.send(method, country: 'US',  CUSIP: '123456789'))
+              .to eq(ID: '123456789', ID_type: 'CUSIP', len: 9)
+
+            expect(table.send(method, country: 'US',  CUSIP: '123456789', ISIN: '123456789012'))
+              .to eq(ID: %w[123456789 123456789012], ID_type: %w[CUSIP ISIN], len: [9, 12])
           end
         end
       end

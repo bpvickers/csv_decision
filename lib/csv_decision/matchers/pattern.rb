@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # Methods to assign a matcher to data cells
+  # @api private
   class Matchers
     # Match cell against a regular expression pattern - e.g., +=~ hot|col+ or +.*OPT.*+
     class Pattern < Matcher
@@ -49,16 +51,20 @@ module CSVDecision
 
         [comparator, value]
       end
+      private_class_method :parse
 
       def self.regexp_implicit(value)
         # rubocop: disable Style/CaseEquality
         return unless /\W/ === value
         # rubocop: enable Style/CaseEquality
 
-        # Make the implict comparator explict
+        # Make the implicit comparator explicit
         '=~'
       end
+      private_class_method :regexp_implicit
 
+      # @api private
+      # (see Pattern#matches)
       def self.matches?(cell, regexp_explicit:)
         comparator, value = regexp?(cell: cell, explicit: regexp_explicit)
 
@@ -79,8 +85,9 @@ module CSVDecision
       end
 
       # Recognise a regular expression pattern - e.g., +=~ on|off+ or +!~ OPT.*+.
-      # If the option regexp_implicit: true has been set, then cells may omit the +=~+ comparator so long as they
-      # contain non-word characters typically used in regular expressions such as +*+ and +.+.
+      # If the option regexp_implicit: true has been set, then cells may omit the +=~+ comparator
+      # so long as they contain non-word characters typically used in regular expressions such as
+      # +*+ and +.+.
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
       def matches?(cell)

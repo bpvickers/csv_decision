@@ -3,18 +3,21 @@
 require 'values'
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers.
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Value object for a cell proc.
-  Proc = Value.new(:type, :function)
-
-  # Methods to assign a matcher to table data cells.
+  # Match table data cells against a valid decision table expression or a simple constant.
+  # @api private
   class Matchers
+    # Value object for a data cell proc.
+    # @api private
+    Proc = Value.new(:type, :function)
+
     # Negation sign prefixed to ranges and functions.
     NEGATE = '!'
 
-    # Cell constants and functions specified by prefixing the value with one of these 3 symbols
+    # Cell constants and functions specified by prefixing the value with one of these 3 symbols.
     EQUALS = '==|:=|='
 
     # All regular expressions used for matching are anchored inside their own
@@ -26,6 +29,17 @@ module CSVDecision
       Regexp.new("\\A(?:#{value})\\z").freeze
     end
 
+    EQUALS_RE = regexp(EQUALS)
+    private_constant :EQUALS_RE
+
+    # Normalize the operators which are a variation on equals/assignment.
+    #
+    # @param operator [String]
+    # @return [String]
+    def self.normalize_operator(operator)
+      EQUALS_RE.match(operator) ? '==' : operator
+    end
+
     # Regular expression used to recognise a numeric string with or without a decimal point.
     NUMERIC = '[-+]?\d*(?<decimal>\.?)\d*'
 
@@ -33,7 +47,7 @@ module CSVDecision
     private_constant :NUMERIC_RE
 
     # @param value [Object] Value from the input hash.
-    # @return [Boolean] Value is an Integer or a BigDecimal.
+    # @return [Boolean] Return true if value is an Integer or a BigDecimal, false otherwise.
     def self.numeric?(value)
       value.is_a?(Integer) || value.is_a?(BigDecimal)
     end
@@ -49,20 +63,16 @@ module CSVDecision
       to_numeric(value)
     end
 
-    # Convert a numeric string into an Integer or BigDecimal.
+    # Convert a numeric string into an Integer or BigDecimal, otherwise return nil.
     #
     # @param value [String]
     # @return [nil, Integer, BigDecimal]
     def self.to_numeric(value)
       return unless (match = NUMERIC_RE.match(value))
-      coerce_numeric(match, value)
-    end
 
-    def self.coerce_numeric(match, value)
       return value.to_i if match['decimal'] == ''
       BigDecimal(value.chomp('.'))
     end
-    private_class_method :coerce_numeric
 
     # Parse the supplied input columns for the row supplied using an array of matchers.
     #
@@ -75,34 +85,12 @@ module CSVDecision
       # and a second array of columns requiring special matchers.
       scan_row = ScanRow.new
 
+      # Scan the columns in the data row, and build an object to scan this row against
+      # an input hash.
+      # Convert values in the data row if not just a simple constant.
       row = scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
 
-      scan_row.freeze
-
       [row, scan_row.freeze]
-    end
-
-    # Scan the table cell against all matches.
-    #
-    # @param matchers [Array<Matchers::Matcher>]
-    # @param cell [String]
-    # @return [false, Matchers::Proc]
-    def self.scan(matchers:, cell:)
-      matchers.each do |matcher|
-        proc = matcher.matches?(cell)
-        return proc if proc
-      end
-
-      # Must be a simple constant
-      false
-    end
-
-    def self.ins_matchers(options)
-      options[:matchers].collect { |klass| klass.new(options) }
-    end
-
-    def self.outs_matchers(matchers)
-      matchers.select { |obj| OUTS_MATCHERS.include?(obj.class) }
     end
 
     # @return [Array<Matchers::Matcher>] Matchers for the input columns.
@@ -113,8 +101,9 @@ module CSVDecision
 
     # @param options (see CSVDecision.parse)
     def initialize(options)
-      @ins = Matchers.ins_matchers(options)
-      @outs = Matchers.outs_matchers(@ins)
+      @matchers = options[:matchers].collect { |klass| klass.new(options) }
+      @ins = @matchers.select(&:ins?)
+      @outs = @matchers.select(&:outs?)
     end
 
     # Parse the row's input columns using the input matchers.
@@ -143,9 +132,26 @@ module CSVDecision
       # Determine if the input cell string is recognised by this Matcher.
       #
       # @param cell [String] Data row cell.
-      # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise returns the
-      #   +CSVDecision::Proc+ object indicating if this is a constant or some type of function.
+      # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise
+      #   returns the +CSVDecision::Proc+ object indicating if this is a constant or some type of
+      #   function.
       def matches?(cell); end
+
+      # Does this matcher apply to output cells?
+      #
+      # @return [Boolean] Return true if this matcher applies to output cells,
+      #   false otherwise.
+      def outs?
+        false
+      end
+
+      # Does this matcher apply to output cells?
+      #
+      # @return [Boolean] Return true if this matcher applies to input cells,
+      #   false otherwise.
+      def ins?
+        true
+      end
     end
   end
 end

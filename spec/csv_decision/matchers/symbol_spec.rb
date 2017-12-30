@@ -46,7 +46,7 @@ describe CSVDecision::Matchers::Symbol do
       examples.each do |ex|
         it "cell #{ex[:cell]} matches value: #{ex[:value]} to hash: #{ex[:hash]}" do
           proc = matcher.matches?(ex[:cell])
-          expect(proc).to be_a(CSVDecision::Proc)
+          expect(proc).to be_a(CSVDecision::Matchers::Proc)
           expect(proc.function.call(ex[:value], ex[:hash])).to eq ex[:result]
         end
       end

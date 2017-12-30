@@ -21,6 +21,14 @@ benchmarks = [
     # Expected results for first_match and accumulate
     first_match: { 'team_member' => 'Zach' },
     accumulate: { 'team_member' => 'Zach' }
+  },
+  {
+    name: 'Regular expressions',
+    data: 'benchmark_regexp.csv',
+    input: { 'age' => '40', 'trait' => 'cheerful' },
+    # Expected results for first_match and accumulate
+    first_match: { 'salesperson' => 'Swanson' },
+    accumulate: { 'salesperson' => %w[Swanson Korolev] }
   }
 ].deep_freeze
 
@@ -37,7 +45,7 @@ puts ""
   puts '-' * tag_width
 
   csv_options = CSV_OPTIONS.merge(first_match: first_match)
-  rufus_options = RUFUS_OPTIONS.merge(first_match: first_match)
+  rufus_options = RUFUS_OPTIONS.merge(first_match: first_match, accumulate: !first_match)
 
   benchmarks.each do |test|
     name = test[:name]

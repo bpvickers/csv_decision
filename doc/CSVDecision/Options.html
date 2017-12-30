@@ -62,7 +62,7 @@
       <div id="content"><h1>Module: CSVDecision::Options
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -85,7 +85,11 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This module is part of a private API.</strong>
+  You should avoid using this module if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Validate and normalize the options values supplied.</p>
 
 
@@ -95,6 +99,40 @@
   
 
 </div>
+  <h2>Constant Summary</h2>
+  <dl class="constants">
+    
+      <dt id="DEFAULT_MATCHERS-constant" class="">DEFAULT_MATCHERS =
+        <div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Specialized cell value matchers beyond simple string compares. By default
+all these matchers are tried in the specified order on all input data
+cells.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='lbracket'>[</span>
+  <span class='const'><span class='object_link'><a href="Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Matchers/Range.html" title="CSVDecision::Matchers::Range (class)">Range</a></span></span><span class='comma'>,</span>
+  <span class='const'><span class='object_link'><a href="Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Matchers/Numeric.html" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span></span><span class='comma'>,</span>
+  <span class='const'><span class='object_link'><a href="Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Matchers/Pattern.html" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span></span><span class='comma'>,</span>
+  <span class='const'><span class='object_link'><a href="Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Matchers/Constant.html" title="CSVDecision::Matchers::Constant (class)">Constant</a></span></span><span class='comma'>,</span>
+  <span class='const'><span class='object_link'><a href="Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Matchers/Symbol.html" title="CSVDecision::Matchers::Symbol (class)">Symbol</a></span></span><span class='comma'>,</span>
+  <span class='const'><span class='object_link'><a href="Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Matchers/Guard.html" title="CSVDecision::Matchers::Guard (class)">Guard</a></span></span>
+<span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+    
+  </dl>
+
 
 
 
@@ -123,7 +161,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -147,7 +185,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -178,7 +216,11 @@ set.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Read any options supplied in the CSV file placed before the header row.</p>
 
 
@@ -247,22 +289,22 @@ set.</p>
       <pre class="lines">
 
 
-60
-61
-62
-63
-64
-65
-66
-67
-68
 69
 70
 71
-72</pre>
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 69</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_from_csv'>from_csv</span><span class='lparen'>(</span><span class='label'>rows:</span><span class='comma'>,</span> <span class='label'>options:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_rows'>rows</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -293,7 +335,11 @@ set.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Validate options and supply default values for any options not explicitly
 set.</p>
 
@@ -365,13 +411,13 @@ set.</p>
       <pre class="lines">
 
 
-50
-51
-52
-53</pre>
+59
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 50</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/options.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_normalize'>normalize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate'>validate</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -387,7 +433,7 @@ set.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:15 2017 by
+  Generated on Sat Dec 30 13:04:04 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

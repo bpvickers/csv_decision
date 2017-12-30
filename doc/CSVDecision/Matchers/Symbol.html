@@ -62,7 +62,7 @@
       <div id="content"><h1>Class: CSVDecision::Matchers::Symbol
   
   
-  
+  <span class="private note title">Private</span>
 </h1>
 <div class="box_info">
   
@@ -103,11 +103,12 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Match cell against a</p>
+    <p class="note private">
+  <strong>This class is part of a private API.</strong>
+  You should avoid using this class if possible, as it may be removed or be changed in the future.
+</p>
 
-<pre class="code ruby"><code class="ruby">* cell constant - e.g., := true, = nil
-* symbolic expression - e.g., :column, &gt; :column</code></pre>
+<p>Match cell against a symbolic expression - e.g., :column, &gt; :column</p>
 
 
   </div>
@@ -122,6 +123,41 @@
 
 
 
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#matches%3F-class_method" title="matches? (class method)">.<strong>matches?</strong>(cell)  &#x21d2; false, CSVDecision::Proc </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
   
     <h2>
       Instance Method Summary
@@ -144,7 +180,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'>
@@ -169,7 +205,7 @@ some type of function.</p>
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Matcher.html" title="CSVDecision::Matchers::Matcher (class)">Matcher</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Matcher.html#initialize-instance_method" title="CSVDecision::Matchers::Matcher#initialize (method)">#initialize</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Matcher.html#initialize-instance_method" title="CSVDecision::Matchers::Matcher#initialize (method)">#initialize</a></span>, <span class='object_link'><a href="Matcher.html#ins%3F-instance_method" title="CSVDecision::Matchers::Matcher#ins? (method)">#ins?</a></span>, <span class='object_link'><a href="Matcher.html#outs%3F-instance_method" title="CSVDecision::Matchers::Matcher#outs? (method)">#outs?</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -178,14 +214,14 @@ some type of function.</p>
 </div>
 
 
-  <div id="instance_method_details" class="method_details_list">
-    <h2>Instance Method Details</h2>
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="matches?-instance_method">
+  <h3 class="signature first" id="matches?-class_method">
   
-    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt> 
+    .<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
   
 
   
@@ -193,7 +229,11 @@ some type of function.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 <p>Returns false if this cell is not a match; otherwise returns the
 <code>CSVDecision::Proc</code> object indicating if this is a constant or
 some type of function.</p>
@@ -229,7 +269,7 @@ some type of function.</p>
     <li>
       
       
-        <span class='type'>(<tt>false</tt>, <tt><span class='object_link'><a href="../../CSVDecision.html#Proc-constant" title="CSVDecision::Proc (constant)">CSVDecision::Proc</a></span></tt>)</span>
+        <span class='type'>(<tt>false</tt>, <tt>CSVDecision::Proc</tt>)</span>
       
       
       
@@ -250,15 +290,120 @@ some type of function.</p>
       <pre class="lines">
 
 
-15
-16
-17</pre>
+69
+70
+71
+72
+73
+74
+75
+76
+77</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/symbol.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/symbol.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='const'>SYMBOL_COMPARE_RE</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_match'>match</span>
+
+  <span class='id identifier rubyid_comparator'>comparator</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>comparator</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>=</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>name</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
+
+  <span class='id identifier rubyid_comparison'>comparison</span><span class='lparen'>(</span><span class='label'>comparator:</span> <span class='id identifier rubyid_comparator'>comparator</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="matches?-instance_method">
+  
+    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>cell</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Data row cell.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>false</tt>, <tt>CSVDecision::Proc</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Returns false if this cell is not a match; otherwise returns the
+<code>CSVDecision::Proc</code> object indicating if this is a constant or
+some type of function.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+81
+82
+83</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/symbol.rb', line 81</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="../../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Symbol.html" title="CSVDecision::Symbol (module)">Symbol</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="../Symbol.html#matches%3F-class_method" title="CSVDecision::Symbol.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Symbol (class)">Symbol</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Symbol.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -270,7 +415,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 26 22:02:15 2017 by
+  Generated on Sat Dec 30 13:04:05 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'ice_nine'
+require 'ice_nine/core_ext/object'
+
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017.
 # @author Brett Vickers.
@@ -19,19 +22,21 @@ module CSVDecision
   #
   # @example Simple Example
   #   If you have cloned the gem's git repo, then you can run:
-  #   table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv')) #=> CSVDecision::Table
+  #   table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv'))
+  #     #=> CSVDecision::Table
   #   table.decide(topic: 'finance', region: 'Europe') #=> team_member: 'Donald'
   #
   # @param data [Pathname, File, Array<Array<String>>, String] input data given as
   #   a CSV file, array of arrays or CSV string.
   # @param options [Hash] Options hash supplied by the user.
   #
-  # @option options [Boolean] :first_match Stop scanning after find the first row match.
-  # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than requiring the
-  #   comparator =~. (Use with care.)
-  # @option options [Boolean] :text_only All cells treated as simple strings by turning off all special matchers.
-  # @option options [Array<Matchers::Matcher>] :matchers May be used to control the inclusion and ordering of
-  #   special matchers. (Advanced feature, use with care.)
+  # @option options [Boolean] :first_match Stop scanning after finding the first row match.
+  # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than
+  #   requiring the comparator =~. (Use with care.)
+  # @option options [Boolean] :text_only All cells treated as simple strings by turning off all
+  #   special matchers.
+  # @option options [Array<Matchers::Matcher>] :matchers May be used to control the inclusion and
+  #   ordering of special matchers. (Advanced feature, use with care.)
   #
   # @return [CSVDecision::Table] Resulting decision table.
   #
@@ -43,6 +48,7 @@ module CSVDecision
   end
 
   # Methods to parse the decision table and return CSVDecision::Table object.
+  # @api private
   module Parse
     # Parse the CSV file or input data and create a new decision table object.
     #
@@ -56,6 +62,7 @@ module CSVDecision
 
       parse_table(table: table, input: data, options: options)
 
+      table.columns.deep_freeze
       table.freeze
     rescue CSVDecision::Error => exp
       raise_error(file: table.file, exception: exp)
@@ -89,11 +96,23 @@ module CSVDecision
         row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
         row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
 
+        # Does the table have any output functions?
+        outs_functions(table: table, index: index)
+
         row.freeze
       end
-
-      table.columns.freeze
     end
     private_class_method :parse_data
+
+    def self.outs_functions(table:, index:)
+      return if table.outs_rows[index].procs.empty?
+
+      # Set this flag as the table has output functions
+      table.outs_functions ||= true
+
+      outs = table.columns.outs
+      table.outs_rows[index].procs.each { |col| outs[col].eval = true }
+    end
+    private_class_method :outs_functions
   end
 end

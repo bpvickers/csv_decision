@@ -17,7 +17,7 @@ describe CSVDecision::Options do
       first_match: true,
       regexp_implicit: false,
       text_only: false,
-      matchers: CSVDecision::DEFAULT_MATCHERS
+      matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
@@ -59,7 +59,7 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: false,
       text_only: false,
-      matchers: CSVDecision::DEFAULT_MATCHERS
+      matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
@@ -72,7 +72,7 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: true,
       text_only: false,
-      matchers: CSVDecision::DEFAULT_MATCHERS
+      matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end

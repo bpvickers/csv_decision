@@ -1,0 +1,11 @@
+regexp_implicit
+in:age,   in:trait,   out:salesperson
+18..35,   maniac,     Adelsky
+23..40,   bad|maniac, Bronco
+36..50,   bad.*,      Espadas
+100..100, ,           Thorsten
+44..100,  !~ maniac,  Ojiisan
+> 100,    maniac.*,   Chester
+23..35,   .*rich,     Kerfelden
+,         cheerful,   Swanson
+,         maniac,     Korolev

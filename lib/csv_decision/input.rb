@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # Parse the input hash.
+  # @api private
   module Input
     # @param (see Decide.decide)
     # @return [Hash{Symbol => Hash{Symbol=>Object}, Hash{Integer=>Object}}]
@@ -24,7 +26,7 @@ module CSVDecision
       # Freeze the copy of the input hash we just created.
       parsed_input[:hash].freeze if symbolize_keys
 
-      parsed_input
+      parsed_input.freeze
     end
 
     def self.validate(input)

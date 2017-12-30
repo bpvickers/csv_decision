@@ -95,25 +95,42 @@ context 'simple examples' do
     end
   end
 
-  context 'makes correct decision for table with symbol ordered compares' do
+  it 'makes correct decision for table with symbol ordered compares' do
     data = <<~DATA
-        in :traded, in :settled, out :status
-        ,            :traded,    same day
-        ,           >:traded,    pending
-        ,           <:traded,    invalid trade
-        ,                   ,    invalid data
+      in :traded, in :settled, out :status
+      ,            :traded,    same day
+      ,           >:traded,    pending
+      ,           <:traded,    invalid trade
+      ,                   ,    invalid data
     DATA
 
-    it 'decides correctly' do
-      table = CSVDecision.parse(data)
+    table = CSVDecision.parse(data)
 
-      expect(table.decide(traded: '20171227',  settled: '20171227')).to eq(status: 'same day')
-      expect(table.decide(traded:  20171227,   settled:  20171227 )).to eq(status: 'same day')
-      expect(table.decide(traded: '20171227',  settled: '20171228')).to eq(status: 'pending')
-      expect(table.decide(traded:  20171227,   settled:  20171228 )).to eq(status: 'pending')
-      expect(table.decide(traded: '20171228',  settled: '20171227')).to eq(status: 'invalid trade')
-      expect(table.decide(traded:  20171228,   settled:  20171227 )).to eq(status: 'invalid trade')
-      expect(table.decide(traded: '20171227',  settled:  20171228 )).to eq(status: 'invalid data')
-    end
+    expect(table.decide(traded: '20171227',  settled: '20171227')).to eq(status: 'same day')
+    expect(table.decide(traded:  20171227,   settled:  20171227 )).to eq(status: 'same day')
+    expect(table.decide(traded: '20171227',  settled: '20171228')).to eq(status: 'pending')
+    expect(table.decide(traded:  20171227,   settled:  20171228 )).to eq(status: 'pending')
+    expect(table.decide(traded: '20171228',  settled: '20171227')).to eq(status: 'invalid trade')
+    expect(table.decide(traded:  20171228,   settled:  20171227 )).to eq(status: 'invalid trade')
+    expect(table.decide(traded: '20171227',  settled:  20171228 )).to eq(status: 'invalid data')
+  end
+  
+  it 'makes a correct decision using a guard column' do
+    data = <<~DATA
+      in :country, guard:,          out :ID, out :ID_type, out :len
+      US,          :CUSIP.present?, :CUSIP,  CUSIP,        :ID.length
+      GB,          :SEDOL.present?, :SEDOL,  SEDOL,        :ID.length
+      ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length
+      ,            :SEDOL.present?, :SEDOL,  SEDOL,        :ID.length
+      ,            :CUSIP.present?, :CUSIP,  CUSIP,        :ID.length
+      ,            ,                := nil,  := nil,       := nil
+    DATA
+
+    table = CSVDecision.parse(data)
+
+    expect(table.decide(country: 'US',  CUSIP: '123456789'))
+      .to eq(ID: '123456789', ID_type: 'CUSIP', len: 9)
+    expect(table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012'))
+      .to eq(ID: '123456789012', ID_type: 'ISIN', len: 12)
   end
 end

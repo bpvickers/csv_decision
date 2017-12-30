@@ -1,13 +1,19 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
+  # @api private
   class Columns
     # Value object to hold column dictionary entries.
-    Entry = Struct.new(:name, :text_only)
+    Entry = Struct.new(:name, :eval, :type) do
+      def ins?
+        %i[in guard].member?(type) ? true : false
+      end
+    end
 
     # TODO: Value object used for any columns with defaults
     # Default = Struct.new(:name, :function, :default_if)
@@ -38,15 +44,18 @@ module CSVDecision
       end
     end
 
-    # Dictionary of all data columns
+    # Dictionary of all data columns.
+    # @return [Columns::Dictionary]
     attr_reader :dictionary
 
-    # Input columns
+    # Input columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
     def ins
       @dictionary.ins
     end
 
-    # Output columns
+    # Output columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
     def outs
       @dictionary.outs
     end

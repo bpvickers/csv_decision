@@ -1,9 +1,17 @@
+## v0.0.6, 26 December 2017.
+*Additions*
+- Update YARD documentation.
+
+## v0.0.5, 26 December 2017.
+*Additions*
+- Update YARD documentation.
+
 ## v0.0.4, 26 December 2017.
 *Additions*
 - Adds symbol expressions for input columns.
 - Adds non-string constants for output columns.
 - Support Ruby 2.5.0
-- Include yard documentation.
+- Include YARD documentation.
 
 *Changes*
 - Move `benchmark.rb` to `benchmarks` folder and rename to `rufus_decision.rb`

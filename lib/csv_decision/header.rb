@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 # CSV Decision: CSV based Ruby decision tables.
-# Created December 2017 by Brett Vickers
+# Created December 2017.
+# @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
+  # @api private
   module Header
     # TODO: implement all column types
     # COLUMN_TYPE = %r{
@@ -14,16 +16,19 @@ module CSVDecision
 
     # Column types recognised in the header row.
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text)
+      \A(?<type>in|out|in/text|out/text|guard)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
-    # These column types do not need a name
-    # TODO: implement anonymous column types
+    # TODO: implement all anonymous column types
     # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
+    # These column types do not need a name
+    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard]).freeze
+    private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Regular expression string for a column name.
-    # More lenient than a Ruby method name - note any spaces will have been replaced with underscores.
+    # More lenient than a Ruby method name - note any spaces will have been replaced with
+    # underscores.
     COLUMN_NAME = "\\w[\\w:/!?]*"
 
     # Column name regular expression.
@@ -62,8 +67,26 @@ module CSVDecision
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
+      validate(dictionary: dictionary)
+    end
+
+    def self.validate(dictionary:)
+      dictionary.outs.each_value do |column|
+        next unless input_column?(dictionary: dictionary, column_name: column.name)
+
+        raise CellValidationError, "output column name '#{column.name}' is also an input column"
+      end
+
       dictionary
     end
+    private_class_method :validate
+
+    def self.input_column?(dictionary:, column_name:)
+      dictionary.ins.each_value { |column| return true if column_name == column.name }
+
+      false
+    end
+    private_class_method :input_column?
 
     def self.validate_header_column(cell:)
       match = COLUMN_TYPE.match(cell)
@@ -74,8 +97,7 @@ module CSVDecision
 
       [column_type, column_name]
     rescue CellValidationError => exp
-      raise CellValidationError,
-            "header column '#{cell}' is not valid as the #{exp.message}"
+      raise CellValidationError, "header column '#{cell}' is not valid as the #{exp.message}"
     end
     private_class_method :validate_header_column
 
@@ -91,8 +113,7 @@ module CSVDecision
     def self.column_name(type:, name:)
       return format_column_name(name) if name.present?
 
-      # TODO: implement anonymous column types
-      # return if COLUMN_TYPE_ANONYMOUS.member?(type)
+      return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
       raise CellValidationError, 'column name is missing'
     end
@@ -108,22 +129,21 @@ module CSVDecision
     private_class_method :format_column_name
 
     # Returns the normalized column type, along with an indication if
-    # the column is text only
-    def self.column_type(type)
+    # the column requires evaluation
+    def self.column_type(column_name, type)
       case type
       when :'in/text'
-        [:in, true]
+        Columns::Entry.new(column_name, false, :in)
 
-      # TODO: planned feature
-      # when :guard
-      #   [:in, false]
+      when :guard
+        Columns::Entry.new(column_name, true, :guard)
 
       when :'out/text'
-        [:out, true]
+        Columns::Entry.new(column_name, false, :out)
 
-      # Column may turn out to be text-only, or not
+      # Column may turn out to be constants only, or not
       else
-        [type, nil]
+        Columns::Entry.new(column_name, nil, type.to_sym)
       end
     end
     private_class_method :column_type
@@ -131,11 +151,11 @@ module CSVDecision
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = validate_header_column(cell: cell)
 
-      type, text_only = column_type(column_type)
+      entry = column_type(column_name, column_type)
 
       dictionary_entry(dictionary: dictionary,
-                       type: type,
-                       entry: Columns::Entry.new(column_name, text_only),
+                       type: entry.type,
+                       entry: entry,
                        index: index)
     end
     private_class_method :parse_cell
@@ -151,7 +171,7 @@ module CSVDecision
       #   # Treat set: as an in: column
       #   dictionary.ins[index] = entry
 
-      when :in
+      when :in, :guard
         dictionary.ins[index] = entry
 
       when :out
