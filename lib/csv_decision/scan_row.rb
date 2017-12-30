@@ -24,7 +24,7 @@ module CSVDecision
     def self.scan_matchers(column:, matchers:, cell:)
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
-        next if column.type == :guard && !matcher.outs?
+        next if guard_ins_matcher?(column, matcher)
 
         proc = scan_proc(column: column, cell: cell, matcher: matcher)
         return proc if proc
@@ -34,6 +34,12 @@ module CSVDecision
       false
     end
     private_class_method :scan_matchers
+
+    # A guard column can only use output matchers
+    def self.guard_ins_matcher?(column, matcher)
+      column.type == :guard && !matcher.outs?
+    end
+    private_class_method :guard_ins_matcher?
 
     def self.scan_proc(column:, cell:, matcher:)
       proc = matcher.matches?(cell)
