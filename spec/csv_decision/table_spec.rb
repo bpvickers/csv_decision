@@ -260,7 +260,7 @@ describe CSVDecision::Table do
 
     context 'makes correct decision for table with symbol ordered compares' do
       examples = [
-        { example: 'uses == :node',
+        { example: 'explicitly mentions :traded',
           options: {},
           data: <<~DATA
             in :traded, in :settled, out :status
@@ -270,6 +270,16 @@ describe CSVDecision::Table do
             ,                   ,    invalid data
           DATA
         },
+        { example: 'does not mention :traded',
+          options: {},
+          data: <<~DATA
+            in :settled, out :status
+            :traded,     same day
+            >:traded,    pending
+            <:traded,    invalid trade
+            ,            invalid data
+          DATA
+        }
       ]
       examples.each do |test|
         %i[decide decide!].each do |method|
