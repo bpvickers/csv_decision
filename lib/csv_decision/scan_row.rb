@@ -18,15 +18,21 @@ module CSVDecision
         # Guard function only accepts the same matchers as an output column.
         next if column.type == :guard && !matcher.outs?
 
-        if (proc = matcher.matches?(cell))
-          guard_constant?(type: proc.type, column: column)
-          return proc
-        end
+        proc = scan_proc(column: column, cell: cell, matcher: matcher)
+        return proc if proc
       end
 
       # Must be a simple string constant - this is OK except for a guard column
       guard_constant?(type: :constant, column: column)
     end
+
+    def self.scan_proc(column:, cell:, matcher:)
+      proc = matcher.matches?(cell)
+      guard_constant?(type: proc.type, column: column) if proc
+
+      proc
+    end
+    private_class_method :scan_proc
 
     def self.guard_constant?(type:, column:)
       return false unless type == :constant && column.type == :guard

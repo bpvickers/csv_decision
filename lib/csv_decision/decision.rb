@@ -102,10 +102,15 @@ module CSVDecision
         proc = row[col]
         next unless proc.is_a?(Matchers::Proc)
 
-        # Update the partial result calculated so far and call the function
-        value = proc.function[partial_result(index)]
-        @multi_result ? @result[column.name][index] = value : @result[column.name] = value
+        # Evaluate the proc and update the result
+        eval_cell_proc(proc: proc, column_name: column.name, index: index)
       end
+    end
+
+    # Update the partial result calculated so far and call the function
+    def eval_cell_proc(proc:, column_name:, index:)
+      value = proc.function[partial_result(index)]
+      @multi_result ? @result[column_name][index] = value : @result[column_name] = value
     end
 
     def partial_result(index)
