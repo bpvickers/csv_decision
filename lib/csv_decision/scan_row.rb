@@ -14,6 +14,14 @@ module CSVDecision
     # @param cell [String]
     # @return [false, Matchers::Proc]
     def self.scan(column:, matchers:, cell:)
+      proc = scan_matchers(column: column, matchers: matchers, cell: cell)
+      return proc if proc
+
+      # Must be a simple string constant - this is OK except for a guard column
+      guard_constant?(type: :constant, column: column)
+    end
+
+    def self.scan_matchers(column:, matchers:, cell:)
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
         next if column.type == :guard && !matcher.outs?
@@ -22,9 +30,10 @@ module CSVDecision
         return proc if proc
       end
 
-      # Must be a simple string constant - this is OK except for a guard column
-      guard_constant?(type: :constant, column: column)
+      # Must be a string constant
+      false
     end
+    private_class_method :scan_matchers
 
     def self.scan_proc(column:, cell:, matcher:)
       proc = matcher.matches?(cell)
