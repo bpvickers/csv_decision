@@ -189,20 +189,26 @@ These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 
 ### Column guard conditions
-Sometimes it's more convenient to write guard conditions in a single column specialized for that purpose.
-
+Sometimes it's more convenient to write guard conditions in a single column specialized for that purpose. 
 For example:
- ```ruby
-    data = <<~DATA
-      in :node, in :parent, out :top?
-      ,         == :node,   yes
-      ,         ,           no
-    DATA
-    
-    table = CSVDecision.parse(data)
-    table.decide(node: 0, parent: 0) # returns top?: 'yes'
-    table.decide(node: 1, parent: 0) # returns top?: 'no'
- ```
+
+```ruby
+data = <<~DATA
+  in :country, guard:,          out :ID, out :ID_type, out :len
+  US,          :CUSIP.present?, :CUSIP,  CUSIP,        :ID.length
+  GB,          :SEDOL.present?, :SEDOL,  SEDOL,        :ID.length
+  ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length
+  ,            :SEDOL.present?, :SEDOL,  SEDOL,        :ID.length
+  ,            :CUSIP.present?, :CUSIP,  CUSIP,        :ID.length
+  ,            ,                := nil,  := nil,       := nil
+DATA
+
+table = CSVDecision.parse(data)
+table.decide(country: 'US',  CUSIP: '123456789') #=> { ID: '123456789', ID_type: 'CUSIP', len: 9 }
+table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012') 
+  #=> { ID: '123456789012', ID_type: 'ISIN', len: 12 }
+```
+Guard columns may be anonymous, and must contain non-constant expressions.  
   
 ### Testing
  

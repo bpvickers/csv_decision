@@ -126,36 +126,6 @@ LICENSE and README.md for details.</p>
   
 </p>
 
-  <h2>Constant Summary</h2>
-  <dl class="constants">
-    
-      <dt id="DEFAULT_MATCHERS-constant" class="">DEFAULT_MATCHERS =
-        <div class="docstring">
-  <div class="discussion">
-    
-<p>Specialized cell value matchers beyond simple string compares. By default
-all these matchers are tried in the specified order on all input data
-cells.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
-      </dt>
-      <dd><pre class="code"><span class='lbracket'>[</span>
-  <span class='const'><span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="CSVDecision/Matchers/Range.html" title="CSVDecision::Matchers::Range (class)">Range</a></span></span><span class='comma'>,</span>
-  <span class='const'><span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="CSVDecision/Matchers/Numeric.html" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span></span><span class='comma'>,</span>
-  <span class='const'><span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="CSVDecision/Matchers/Pattern.html" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span></span><span class='comma'>,</span>
-  <span class='const'><span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="CSVDecision/Matchers/Constant.html" title="CSVDecision::Matchers::Constant (class)">Constant</a></span></span><span class='comma'>,</span>
-  <span class='const'><span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="CSVDecision/Matchers/Symbol.html" title="CSVDecision::Matchers::Symbol (class)">Symbol</a></span></span><span class='comma'>,</span>
-  <span class='const'><span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="CSVDecision/Matchers/Guard.html" title="CSVDecision::Matchers::Guard (class)">Guard</a></span></span>
-<span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
-    
-  </dl>
-
 
 
 
@@ -302,7 +272,7 @@ CSV string or an array of arrays.</p>
       
         &mdash;
         <div class='inline'>
-<p>Supplied options hash for table creation.</p>
+<p>Options hash used for table creation.</p>
 </div>
       
     </li>
@@ -391,7 +361,8 @@ CSV string or an array of arrays.</p>
 </div></p>
       
       <pre class="example code"><code>If you have cloned the gem&#39;s git repo, then you can run:
-table = CSVDecision.parse(Pathname(&#39;spec/data/valid/simple_example.csv&#39;)) #=&gt; CSVDecision::Table
+table = CSVDecision.parse(Pathname(&#39;spec/data/valid/simple_example.csv&#39;))
+  #=&gt; CSVDecision::Table
 table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_member: &#39;Donald&#39;</code></pre>
     
   </div>
@@ -450,7 +421,7 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
           </span>
           
             &mdash; <div class='inline'>
-<p>Stop scanning after find the first row match.</p>
+<p>Stop scanning after finding the first row match.</p>
 </div>
           
         </li>
@@ -556,12 +527,12 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
       <pre class="lines">
 
 
-44
-45
-46</pre>
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="CSVDecision/Parse.html" title="CSVDecision::Parse (module)">Parse</a></span></span><span class='period'>.</span><span class='id identifier rubyid_table'><span class='object_link'><a href="CSVDecision/Parse.html#table-class_method" title="CSVDecision::Parse.table (method)">table</a></span></span><span class='lparen'>(</span><span class='label'>data:</span> <span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>options:</span> <span class='const'><span class='object_link'><a href="CSVDecision/Options.html" title="CSVDecision::Options (module)">Options</a></span></span><span class='period'>.</span><span class='id identifier rubyid_normalize'><span class='object_link'><a href="CSVDecision/Options.html#normalize-class_method" title="CSVDecision::Options.normalize (method)">normalize</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -635,7 +606,7 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
 </div>
 
       <div id="footer">
-  Generated on Fri Dec 29 10:35:53 2017 by
+  Generated on Sat Dec 30 13:04:04 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

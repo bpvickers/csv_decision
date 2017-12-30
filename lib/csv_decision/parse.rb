@@ -22,19 +22,21 @@ module CSVDecision
   #
   # @example Simple Example
   #   If you have cloned the gem's git repo, then you can run:
-  #   table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv')) #=> CSVDecision::Table
+  #   table = CSVDecision.parse(Pathname('spec/data/valid/simple_example.csv'))
+  #     #=> CSVDecision::Table
   #   table.decide(topic: 'finance', region: 'Europe') #=> team_member: 'Donald'
   #
   # @param data [Pathname, File, Array<Array<String>>, String] input data given as
   #   a CSV file, array of arrays or CSV string.
   # @param options [Hash] Options hash supplied by the user.
   #
-  # @option options [Boolean] :first_match Stop scanning after find the first row match.
-  # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than requiring the
-  #   comparator =~. (Use with care.)
-  # @option options [Boolean] :text_only All cells treated as simple strings by turning off all special matchers.
-  # @option options [Array<Matchers::Matcher>] :matchers May be used to control the inclusion and ordering of
-  #   special matchers. (Advanced feature, use with care.)
+  # @option options [Boolean] :first_match Stop scanning after finding the first row match.
+  # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than
+  #   requiring the comparator =~. (Use with care.)
+  # @option options [Boolean] :text_only All cells treated as simple strings by turning off all
+  #   special matchers.
+  # @option options [Array<Matchers::Matcher>] :matchers May be used to control the inclusion and
+  #   ordering of special matchers. (Advanced feature, use with care.)
   #
   # @return [CSVDecision::Table] Resulting decision table.
   #

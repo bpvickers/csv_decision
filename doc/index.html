@@ -243,6 +243,29 @@ operators are also supported: <code>!=</code>, <code>&gt;</code>,
 <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. For more simple
 examples see <code>spec/csv_decision/examples_spec.rb</code>.</p>
 
+<h3 id="label-Column+guard+conditions">Column guard conditions</h3>
+
+<p>Sometimes it&#39;s more convenient to write guard conditions in a single
+column specialized for that purpose. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;~DATA</span>
+<span class='tstring_content'>  in :country, guard:,          out :ID, out :ID_type, out :len
+</span><span class='tstring_content'>  US,          :CUSIP.present?, :CUSIP,  CUSIP,        :ID.length
+</span><span class='tstring_content'>  GB,          :SEDOL.present?, :SEDOL,  SEDOL,        :ID.length
+</span><span class='tstring_content'>  ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length
+</span><span class='tstring_content'>  ,            :SEDOL.present?, :SEDOL,  SEDOL,        :ID.length
+</span><span class='tstring_content'>  ,            :CUSIP.present?, :CUSIP,  CUSIP,        :ID.length
+</span><span class='tstring_content'>  ,            ,                := nil,  := nil,       := nil
+</span><span class='heredoc_end'>DATA
+</span>
+<span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="CSVDecision.html#parse-class_method" title="CSVDecision.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>country:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>US</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>  <span class='label'>CUSIP:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>123456789</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; { ID: &#39;123456789&#39;, ID_type: &#39;CUSIP&#39;, len: 9 }
+</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>country:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>EU</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>  <span class='label'>CUSIP:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>123456789</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>ISIN:</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>123456789012</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> 
+  <span class='comment'>#=&gt; { ID: &#39;123456789012&#39;, ID_type: &#39;ISIN&#39;, len: 12 }
+</span></code></pre>
+
+<p>Guard columns may be anonymous, and must contain non-constant expressions.</p>
+
 <h3 id="label-Testing">Testing</h3>
 
 <p><code>csv_decision</code> includes thorough <a
@@ -266,7 +289,7 @@ multi-row  decision output.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Fri Dec 29 10:35:53 2017 by
+  Generated on Sat Dec 30 13:04:04 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

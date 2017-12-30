@@ -578,19 +578,19 @@ nil.</p>
       <pre class="lines">
 
 
-102
 103
 104
 105
-106</pre>
+106
+107</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 103</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='ivar'>@matchers</span> <span class='op'>=</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='id identifier rubyid_ins_matchers'>ins_matchers</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='id identifier rubyid_outs_matchers'>outs_matchers</span><span class='lparen'>(</span><span class='ivar'>@ins</span><span class='rparen'>)</span>
+  <span class='ivar'>@matchers</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:matchers</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_klass'>klass</span><span class='op'>|</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='ivar'>@matchers</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:ins?</span><span class='rparen'>)</span>
+  <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='ivar'>@matchers</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:outs?</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -652,12 +652,12 @@ nil.</p>
       <pre class="lines">
 
 
-96
 97
-98</pre>
+98
+99</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 96</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 97</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@ins</span>
@@ -717,12 +717,12 @@ nil.</p>
       <pre class="lines">
 
 
-99
 100
-101</pre>
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 99</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 100</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@outs</span>
@@ -1081,7 +1081,8 @@ matchers.</p>
 90
 91
 92
-93</pre>
+93
+94</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 83</span>
@@ -1091,7 +1092,8 @@ matchers.</p>
 </span>  <span class='comment'># and a second array of columns requiring special matchers.
 </span>  <span class='id identifier rubyid_scan_row'>scan_row</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ScanRow.html#initialize-instance_method" title="CSVDecision::ScanRow#initialize (method)">new</a></span></span>
 
-  <span class='comment'># Scan the columns in the data row, and build an object to scan this row against an input hash.
+  <span class='comment'># Scan the columns in the data row, and build an object to scan this row against
+</span>  <span class='comment'># an input hash.
 </span>  <span class='comment'># Convert values in the data row if not just a simple constant.
 </span>  <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_scan_row'>scan_row</span><span class='period'>.</span><span class='id identifier rubyid_scan_columns'>scan_columns</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='id identifier rubyid_matchers'>matchers</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
 
@@ -1356,12 +1358,12 @@ nil.</p>
       <pre class="lines">
 
 
-113
 114
-115</pre>
+115
+116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 114</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_ins'>parse_ins</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@ins</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1455,12 +1457,12 @@ nil.</p>
       <pre class="lines">
 
 
-122
 123
-124</pre>
+124
+125</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_outs'>parse_outs</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@outs</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1475,7 +1477,7 @@ nil.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Dec 29 10:35:54 2017 by
+  Generated on Sat Dec 30 13:04:05 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>

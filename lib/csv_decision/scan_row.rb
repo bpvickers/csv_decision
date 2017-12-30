@@ -39,8 +39,8 @@ module CSVDecision
     #
     # @param proc [CSVDecision::Proc] Proc in the table cell.
     # @param value [Object] Value supplied in the input hash corresponding to this column.
-    # @param hash [{Symbol=>Obhect}] Input hash with symbolized keys.
-    def self.eval_matcher(proc:, hash:,  value: nil)
+    # @param hash [{Symbol=>Object}] Input hash with symbolized keys.
+    def self.eval_matcher(proc:, hash:, value: nil)
       function = proc.function
 
       # A symbol guard expression just needs to be passed the input hash
@@ -67,7 +67,8 @@ module CSVDecision
     # @param row [Array] Data row.
     # @param columns [Array<Columns::Entry>] Array of column dictionary entries.
     # @param matchers [Array<Matchers::Matcher>] Array of table cell matchers.
-    # @return [Array] Data row with anything not a string constant replaced with a Proc or a non-string constant.
+    # @return [Array] Data row with anything not a string constant replaced with a Proc or a
+    #   non-string constant.
     def scan_columns(row:, columns:, matchers:)
       columns.each_pair do |col, column|
         # An empty input cell matches everything, and so never needs to be scanned

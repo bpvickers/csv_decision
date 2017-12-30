@@ -156,6 +156,28 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#symbol_function-class_method" title="symbol_function (class method)">.<strong>symbol_function</strong>(symbol, value, hash)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
     </ul>
   
     <h2>
@@ -311,21 +333,64 @@ some type of function.</p>
       <pre class="lines">
 
 
+124
+125
+126
 127
 128
-129
-130
-131
-132</pre>
+129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_proc'>proc</span> <span class='op'>=</span> <span class='id identifier rubyid_symbol_proc'>symbol_proc</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_proc'>proc</span> <span class='kw'>if</span> <span class='id identifier rubyid_proc'>proc</span>
 
   <span class='id identifier rubyid_symbol_guard'>symbol_guard</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="symbol_function-class_method">
+  
+    .<strong>symbol_function</strong>(symbol, value, hash)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+49
+50
+51</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 49</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_symbol_function'>symbol_function</span><span class='lparen'>(</span><span class='id identifier rubyid_symbol'>symbol</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_symbol'>symbol</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_symbol'>symbol</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -410,12 +475,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-136
-137
-138</pre>
+133
+134
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 136</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 133</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Guard (class)">Guard</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Guard.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
@@ -473,12 +538,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-141
-142
-143</pre>
+138
+139
+140</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 141</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/guard.rb', line 138</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs?'>outs?</span>
   <span class='kw'>true</span>
@@ -493,7 +558,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Dec 29 10:35:54 2017 by
+  Generated on Sat Dec 30 13:04:05 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.3.0).
 </div>
