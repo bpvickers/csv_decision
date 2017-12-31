@@ -10,9 +10,9 @@ module CSVDecision
   class Matchers
     # Match cell against a symbolic expression - e.g., :column, > :column
     class Symbol < Matcher
-      # Symbol comparison - e.g., > :column or != :column
+      # Column symbol comparison - e.g., > :column or != :column
       SYMBOL_COMPARE =
-        "(?<comparator>#{Matchers::EQUALS}|!=|<|>|>=|<=)?\\s*:(?<name>#{Header::COLUMN_NAME})"
+        "(?<comparator>!=|>=|<=|<|>|#{Matchers::EQUALS})?\\s*:(?<name>#{Header::COLUMN_NAME})"
       private_constant :SYMBOL_COMPARE
 
       # Symbol comparision regular expression.

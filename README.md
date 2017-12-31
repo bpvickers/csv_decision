@@ -122,23 +122,23 @@ Complete documentation of all table parameters is in the code - see
 
 ### CSV Decision features
  * Either returns the first matching row as a hash (default), or accumulates all matches as an 
- array of hashes (i.e., `parse` option `first_match: false` or CSV file option `accumulate`.)
+ array of hashes (i.e., `parse` option `first_match: false` or CSV file option `accumulate`).
  * Fast decision-time performance (see `benchmarks` folder).
- * In addition to simple strings, `csv_decision` can match basic Ruby constants (e.g, `=nil`), 
+ * In addition to simple strings, `csv_decision` can match basic Ruby constants (e.g., `=nil`), 
  regular expressions (e.g., `=~ on|off`), comparisons (e.g., `> 100.0` ) and 
- Ruby-style ranges (e.g, `1..10`)
- * Can compare an input column versus another input hash key -- e.g., `> :column`.
+ Ruby-style ranges (e.g., `1..10`)
+ * Can compare an input column versus another input hash key - e.g., `> :column`.
  * Any cell starting with `#` is treated as a comment, and comments may appear anywhere in the
  table. (Comment cells are always interpreted as the empty string.)
  * Can use column symbol expressions or Ruby methods (0-arity) in input columns for 
- matching - e.g, `:column.zero?` or `:column == 0`.
+ matching - e.g., `:column.zero?` or `:column == 0`.
  * May also use Ruby methods in output columns - e.g., `:column.length`.
  * Accepts data as a file, CSV string or an array of arrays. (For safety all input data is 
  force encoded to UTF-8, and non-ascii strings are converted to empty strings.)
  * All CSV cells are parsed for correctness, and helpful error messages generated for bad 
  input.
   
-### Constants other than strings
+#### Constants other than strings
 Although `csv_decision` is string oriented, it does recognise other types of constant
 present in the input hash. Specifically, the following classes are recognized: 
 `Integer`, `BigDecimal`, `NilClass`, `TrueClass` and `FalseClass`. 
@@ -163,7 +163,7 @@ For example:
   table.decide(constant: BigDecimal('100.0')) # returns value: BigDecimal('100.0')       
 ```
  
-### Column header symbols
+#### Column header symbols
 All input and output column names are symbolized, and can be used to form simple
 expressions that refer to values in the input hash.
 
@@ -181,8 +181,9 @@ For example:
  ```
  
 Note that there is no need to include an input column for `:node` in the decision 
-table - it just needs to be present in the input hash. Also, `== :node` can be 
-shortened to just `:node`, so the above decision table may be simplified to:
+table - it just needs to be present in the input hash. The expression, `== :node` should be
+read as `:parent == :node`. It can also be shortened to just `:node`, so the above decision table 
+may be simplified to:
 
  ```ruby
     data = <<~DATA
@@ -194,7 +195,7 @@ shortened to just `:node`, so the above decision table may be simplified to:
 These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 
-### Column guard conditions
+#### Column guard conditions
 Sometimes it's more convenient to write guard conditions in a single column specialized for that purpose. 
 For example:
 
@@ -216,7 +217,7 @@ table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012')
 ```
 Guard columns may be anonymous, and must contain non-constant expressions. In addition to
 0-arity Ruby methods, the following comparison operators are also supported: `==`, `!=`,
-`>`, `>=`, `<` and `<=`.
+`>`, `>=`, `<` and `<=`. Also, regular expressions are supported - i.e., `=~` and `!~`.
   
 ### Testing
  

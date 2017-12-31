@@ -37,12 +37,14 @@ describe CSVDecision::Matchers::Symbol do
         { cell:  ':=:col', value:  0,  hash: { col:  0 },  result: true },
         { cell:  '= :col', value: '0', hash: { col:  0 },  result: false },
         { cell:  '>=:col', value:  1,  hash: { col:  0 },  result: true },
+        { cell:  '>=:col', value:  1,  hash: { col:  1 },  result: true },
         { cell:  '>=:col', value:  0,  hash: { col:  1 },  result: false },
         { cell:  '<=:col', value:  0,  hash: { col:  1 },  result: true },
         { cell:  '<=:col', value:  1,  hash: { col:  0 },  result: false },
+        { cell:  '<=:col', value:  1,  hash: { col:  1 },  result: true },
         { cell:  '<=:col', value: '1', hash: { col:  1 },  result: false },
+        { cell:  '<=:col', value: '1', hash: { col: '1' }, result: true },
       ]
-
       examples.each do |ex|
         it "cell #{ex[:cell]} matches value: #{ex[:value]} to hash: #{ex[:hash]}" do
           proc = matcher.matches?(ex[:cell])
