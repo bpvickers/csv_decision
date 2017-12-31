@@ -16,9 +16,19 @@ module CSVDecision
 
     # Column types recognised in the header row.
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|guard)
+      \A(?<type>in|out|in/text|out/text|guard|if)
       \s*:\s*(?<name>\S?.*)\z
     }xi
+
+    COLUMN_ENTRY = {
+      in:         { type: :in,    eval: nil },
+      'in/text':  { type: :in,    eval: false },
+      out:        { type: :out,   eval: nil },
+      'out/text': { type: :out,   eval: false },
+      guard:      { type: :guard, eval: true },
+      if:         { type: :if,    eval: true }
+    }.freeze
+    private_constant :COLUMN_ENTRY
 
     # TODO: implement all anonymous column types
     # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
@@ -88,7 +98,7 @@ module CSVDecision
     end
     private_class_method :input_column?
 
-    def self.validate_header_column(cell:)
+    def self.validate_column(cell:)
       match = COLUMN_TYPE.match(cell)
       raise CellValidationError, 'column name is not well formed' unless match
 
@@ -99,7 +109,7 @@ module CSVDecision
     rescue CellValidationError => exp
       raise CellValidationError, "header column '#{cell}' is not valid as the #{exp.message}"
     end
-    private_class_method :validate_header_column
+    private_class_method :validate_column
 
     # Array of all empty column indices.
     def self.empty_columns?(row:)
@@ -131,25 +141,13 @@ module CSVDecision
     # Returns the normalized column type, along with an indication if
     # the column requires evaluation
     def self.column_type(column_name, type)
-      case type
-      when :'in/text'
-        Columns::Entry.new(column_name, false, :in)
-
-      when :guard
-        Columns::Entry.new(column_name, true, :guard)
-
-      when :'out/text'
-        Columns::Entry.new(column_name, false, :out)
-
-      # Column may turn out to be constants only, or not
-      else
-        Columns::Entry.new(column_name, nil, type.to_sym)
-      end
+      entry = COLUMN_ENTRY[type]
+      Columns::Entry.new(column_name, entry[:eval], entry[:type])
     end
     private_class_method :column_type
 
     def self.parse_cell(cell:, index:, dictionary:)
-      column_type, column_name = validate_header_column(cell: cell)
+      column_type, column_name = validate_column(cell: cell)
 
       entry = column_type(column_name, column_type)
 

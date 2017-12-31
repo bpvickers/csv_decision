@@ -30,6 +30,10 @@ module CSVDecision
       # @return [Hash{Integer=>Entry}] All output column dictionary entries.
       attr_accessor :outs
 
+      # if: columns.
+      # @return [Hash{Integer=>Entry}] All if: column dictionary entries.
+      attr_accessor :ifs
+
       # TODO: Input hash path - optional (planned feature)
       # attr_accessor :path
 
@@ -39,6 +43,7 @@ module CSVDecision
       def initialize
         @ins = {}
         @outs = {}
+        @ifs = {}
         # TODO: @path = {}
         # TODO: @defaults = {}
       end
@@ -58,6 +63,12 @@ module CSVDecision
     # @return [Hash{Index=>Entry}]
     def outs
       @dictionary.outs
+    end
+
+    # if: columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
+    def ifs
+      @dictionary.ifs
     end
 
     # Input columns with defaults specified (planned feature)
