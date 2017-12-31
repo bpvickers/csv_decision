@@ -22,7 +22,7 @@ module CSVDecision
       GUARD =
         "(?<negate>#{Matchers::NEGATE}?)\\s*" \
         ":(?<name>#{Header::COLUMN_NAME})\\s*" \
-        "(?<method>#{Matchers::EQUALS}|!=|<=|>=|>|<|\\.)\\s*" \
+        "(?<method>!=|=~|!~|<=|>=|>|<|#{Matchers::EQUALS}|\\.)\\s*" \
         "(?<param>\\S.*)"
       private_constant :GUARD
 
@@ -30,9 +30,10 @@ module CSVDecision
       private_constant :GUARD_RE
 
       # Negated methods
-      NEGATION = { '='  => '!=', '==' => '!=', ':=' => '!=', '!=' => '=',
-                   '>'  => '<=', '>=' => '<', '<' => '>=', '<=' => '>',
-                   '.'  => '!.' }.freeze
+      NEGATION = { '=' => '!=', '==' => '!=', ':=' => '!=', '!=' => '=',
+                   '>' => '<=', '>=' => '<', '<' => '>=', '<=' => '>',
+                   '.' => '!.',
+                   '=~' => '!~', '!~' => '=~' }.freeze
       private_constant :NEGATION
 
       # Note: value has already been converted to an Integer or BigDecimal.
@@ -46,13 +47,20 @@ module CSVDecision
       }.freeze
       private_constant :NUMERIC_COMPARE
 
-      def self.symbol_function(symbol, value, hash)
-        hash[symbol].respond_to?(value) && hash[symbol].send(value)
+      def self.symbol_function(symbol, method, hash)
+        hash[symbol].respond_to?(method) && hash[symbol].send(method)
+      end
+
+      def self.regexp_match(symbol, value, hash)
+        value.is_a?(String) && hash[symbol].is_a?(String) &&
+          Matchers.regexp(value).match(hash[symbol])
       end
 
       FUNCTION = {
-        '.'  => proc { |symbol, value, hash|  symbol_function(symbol, value, hash) },
-        '!.' => proc { |symbol, value, hash| !symbol_function(symbol, value, hash) }
+        '.'  => proc { |symbol, method, hash|  symbol_function(symbol, method, hash) },
+        '!.' => proc { |symbol, method, hash| !symbol_function(symbol, method, hash) },
+        '=~' => proc { |symbol, value, hash|  regexp_match(symbol, value, hash) },
+        '!~' => proc { |symbol, value, hash| !regexp_match(symbol, value, hash) }
       }.freeze
       private_constant :FUNCTION
 
@@ -120,7 +128,7 @@ module CSVDecision
       end
       private_class_method :symbol_guard
 
-      # (see Matchers::Matcher#matches?)
+      # (see Matcher#matches?)
       def self.matches?(cell)
         proc = symbol_proc(cell)
         return proc if proc
@@ -131,7 +139,7 @@ module CSVDecision
       # @param (see Matcher#matches?)
       # @return (see Matcher#matches?)
       def matches?(cell)
-        Matchers::Guard.matches?(cell)
+        Guard.matches?(cell)
       end
 
       # @return (see Matcher#outs?)

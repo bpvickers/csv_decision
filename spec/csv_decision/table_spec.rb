@@ -132,6 +132,22 @@ describe CSVDecision::Table do
           DATA
         },
         {
+          example: 'guard condition',
+          options: { regexp_implicit: false },
+          data: <<~DATA
+            in :age,   guard:,               out :salesperson
+            18..35,    :trait == maniac,     Adelsky
+            23..40,    :trait =~ bad|maniac, Bronco
+            36..50,    :trait =~ bad.*,      Espadas
+            ==100,     ,                     Thorsten
+            44..100,   :trait !~ maniac,     Ojiisan
+            > 100,     :trait =~ maniac.*,   Chester
+            23..35,    :trait =~ .*rich,     Kerfelden
+            ,          :trait == cheerful,   Swanson
+            ,          :trait == maniac,     Korolev
+          DATA
+        },
+        {
           example: 'multiple in column references',
           options: { regexp_implicit: false },
           data: <<~DATA
