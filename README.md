@@ -181,8 +181,9 @@ For example:
  ```
  
 Note that there is no need to include an input column for `:node` in the decision 
-table - it just needs to be present in the input hash. Also, `== :node` can be 
-shortened to just `:node`, so the above decision table may be simplified to:
+table - it just needs to be present in the input hash. The expression, `== :node` should be
+read as `:parent == :node`. It can also be shortened to just `:node`, so the above decision table 
+may be simplified to:
 
  ```ruby
     data = <<~DATA
@@ -216,7 +217,7 @@ table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012')
 ```
 Guard columns may be anonymous, and must contain non-constant expressions. In addition to
 0-arity Ruby methods, the following comparison operators are also supported: `==`, `!=`,
-`>`, `>=`, `<` and `<=`.
+`>`, `>=`, `<` and `<=`. Also, regular expressions are supported - i.e., `=~` and `!~`.
   
 ### Testing
  

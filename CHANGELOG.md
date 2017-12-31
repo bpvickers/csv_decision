@@ -1,3 +1,10 @@
+## v0.0.8, 31 December 2017.
+*Additions*
+- Guard conditions can use `=~` and `!~` for regular expressions.
+
+*Fixes*
+- Bug with column symbol expression not recognising >= and <=.
+
 ## v0.0.7, 30 December 2017.
 *Additions*
 - Guard conditions using column symbols and expressions.
