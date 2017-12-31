@@ -255,12 +255,28 @@ describe CSVDecision::Table do
             ,         no
           DATA
         },
+        { example: 'uses ==:parent & != :parent',
+          options: { first_match: false },
+          data: <<~DATA
+            in :node,    out :top?
+            == :parent,  yes
+            != :parent,  no
+          DATA
+        },
         { example: 'uses != :parent, drops :parent input column',
           options: {},
           data: <<~DATA
             in :node,    out :top?
             != :parent,  no
             ,            yes
+          DATA
+        },
+        { example: 'uses != :parent and == :parent',
+          options: { first_match: false },
+          data: <<~DATA
+            in :node,    out :top?
+            != :parent,  no
+            == :parent,  yes
           DATA
         }
       ]
