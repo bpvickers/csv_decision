@@ -98,12 +98,12 @@ module CSVDecision
     end
     private_class_method :input_column?
 
-    def self.validate_column(cell:)
+    def self.validate_column(cell:, index:)
       match = COLUMN_TYPE.match(cell)
       raise CellValidationError, 'column name is not well formed' unless match
 
       column_type = match['type']&.downcase&.to_sym
-      column_name = column_name(type: column_type, name: match['name'])
+      column_name = column_name(type: column_type, name: match['name'], index: index)
 
       [column_type, column_name]
     rescue CellValidationError => exp
@@ -120,8 +120,12 @@ module CSVDecision
     end
     private_class_method :empty_columns?
 
-    def self.column_name(type:, name:)
+    def self.column_name(type:, name:, index:)
       return format_column_name(name) if name.present?
+
+      # If columns are named after their index, which is an integer and so cannot
+      # clash with any other column name, which is a symbol.
+      return index if type == :if
 
       return if COLUMN_TYPE_ANONYMOUS.member?(type)
 
@@ -147,7 +151,7 @@ module CSVDecision
     private_class_method :column_type
 
     def self.parse_cell(cell:, index:, dictionary:)
-      column_type, column_name = validate_column(cell: cell)
+      column_type, column_name = validate_column(cell: cell, index: index)
 
       entry = column_type(column_name, column_type)
 
@@ -176,6 +180,7 @@ module CSVDecision
         dictionary.outs[index] = entry
 
       when :if
+        dictionary.outs[index] = entry
         dictionary.ifs[index] = entry
       end
 

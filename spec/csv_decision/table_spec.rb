@@ -360,18 +360,18 @@ describe CSVDecision::Table do
             ,            ,                := nil,    MISSING,        := nil
           DATA
         },
-        # { example: 'evaluates named if condition',
-        #   options: {},
-        #   data: <<~DATA
-        #     in :country, out :PAID, out :PAID_type, out :len,     if:
-        #     US,          :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
-        #     GB,          :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
-        #     ,            :ISIN,     ISIN,           :PAID.length, :PAID.present?
-        #     ,            :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
-        #     ,            :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
-        #     ,            := nil,    MISSING,        := nil,
-        #   DATA
-        # }
+        { example: 'evaluates named if condition',
+          options: {},
+          data: <<~DATA
+            in :country, out :PAID, out :PAID_type, out :len,     if:
+            US,          :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
+            GB,          :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
+            ,            :ISIN,     ISIN,           :PAID.length, :PAID.present?
+            ,            :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
+            ,            :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
+            ,            := nil,    MISSING,        := nil,
+          DATA
+        }
       ]
       examples.each do |test|
         %i[decide decide!].each do |method|

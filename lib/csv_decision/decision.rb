@@ -17,7 +17,7 @@ module CSVDecision
       table_attributes(table)
 
       # Partial result always includes the input hash for calculating output functions
-      @partial_result = input[:hash].dup if table.outs_functions
+      @partial_result = input[:hash].dup if @outs_functions
 
       @rows_picked = []
     end
@@ -41,6 +41,7 @@ module CSVDecision
     def table_attributes(table)
       @first_match = table.options[:first_match]
       @outs = table.columns.outs
+      @if_columns = table.columns.ifs
       @outs_functions = table.outs_functions
     end
 
@@ -48,7 +49,7 @@ module CSVDecision
     # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
     def result
       return {} if @rows_picked.blank?
-      @first_match ? final_result : accumulated_result
+      @first_match ? @result : accumulated_result
     end
 
     def row_scan(input:, row:, scan_row:)
@@ -129,15 +130,28 @@ module CSVDecision
     end
 
     def final_result
+      return @result if @if_columns.empty?
+
+      @if_columns.each_key do |col|
+        return nil unless @result[col]
+
+        # Remove the if: column from the final result
+        @result.delete(col)
+      end
+
       @result
     end
 
     def add_first_match(row)
-      @rows_picked = row
+      if @outs_functions
+        return false unless (result = eval_outs(row))
 
-      return eval_outs(row) if @outs_functions
+        @rows_picked = row
+        return result
+      end
 
       # Common case is just copying output column values to the final result
+      @rows_picked = row
       @outs.each_pair { |col, column| @result[column.name] = row[col] }
     end
 

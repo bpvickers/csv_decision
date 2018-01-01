@@ -111,12 +111,12 @@ describe CSVDecision::Columns do
 
   it 'recognises the if: column' do
     data = <<~DATA
-      IN :country, out :PAID, out :PAID_type, if:
+      in :country, out :PAID, out :PAID_type, if:
       US,          :CUSIP,    CUSIP,          :PAID.present?
       GB,          :SEDOL,    SEDOL,          :PAID.present?
     DATA
     table = CSVDecision.parse(data)
 
-    expect(table.columns.ifs[3].to_h).to eq(name: nil, eval: true, type: :if)
+    expect(table.columns.ifs[3].to_h).to eq(name: 3, eval: true, type: :if)
   end
 end
