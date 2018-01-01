@@ -371,6 +371,18 @@ describe CSVDecision::Table do
             ,            :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
             ,            := nil,    MISSING,        := nil,
           DATA
+        },
+        { example: 'evaluates multiple if conditions',
+          options: {},
+          data: <<~DATA
+            in :country, out :PAID, if:,           out :PAID_type, out :len,     if:,            if: stupid
+            US,          :CUSIP,    !:PAID.blank?, CUSIP,          :PAID.length, :PAID.present?, :len >= 9
+            GB,          :SEDOL,    !:PAID.blank?, SEDOL,          :PAID.length, :PAID.present?, :len >= 9
+            ,            :ISIN,     !:PAID.blank?, ISIN,           :PAID.length, :PAID.present?, :len >= 9
+            ,            :SEDOL,    !:PAID.blank?, SEDOL,          :PAID.length, :PAID.present?, :len >= 9
+            ,            :CUSIP,    !:PAID.blank?, CUSIP,          :PAID.length, :PAID.present?, :len >= 9
+            ,            := nil,    ,              MISSING,        := nil,,
+          DATA
         }
       ]
       examples.each do |test|
@@ -401,16 +413,26 @@ describe CSVDecision::Table do
             ,            :ISIN.present?,  :ISIN,     ISIN,       :ID.length
           DATA
         },
-        # { example: 'evaluates if column conditions & output functions',
-        #   options: { first_match: false },
-        #   data: <<~DATA
-        #     IN :country, out :ID, out :ID_type, out :len,   if:
-        #     US,          :CUSIP,    CUSIP,      :ID.length, :ID.present?
-        #     GB,          :SEDOL,    SEDOL,      :ID.length, :ID.present?
-        #     ,            :SEDOL,    SEDOL,      :ID.length, :ID.present?
-        #     ,            :ISIN,     ISIN,       :ID.length, :ID.present?
-        #   DATA
-        # }
+        { example: 'evaluates if: column conditions & output functions',
+          options: { first_match: false },
+          data: <<~DATA
+            IN :country, out :ID, out :ID_type, out :len,   if:
+            US,          :CUSIP,  CUSIP,        :ID.length, :ID.present?
+            GB,          :SEDOL,  SEDOL,        :ID.length, :ID.present?
+            ,            :SEDOL,  SEDOL,        :ID.length, :ID.present?
+            ,            :ISIN,   ISIN,         :ID.length, :ID.present?
+          DATA
+        },
+        { example: 'evaluates multiple if: column conditions & output functions',
+          options: { first_match: false },
+          data: <<~DATA
+            IN :country, out :ID, if:,         out :ID_type, out :len,   if:,       if:
+            US,          :CUSIP,  !:ID.blank?, CUSIP,        :ID.length, :len >= 9, :ID.present?
+            GB,          :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len >= 9, :ID.present?
+            ,            :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len >= 9, :ID.present?
+            ,            :ISIN,   !:ID.blank?, ISIN,         :ID.length, :len >= 9, :ID.present?
+          DATA
+        }
       ]
       examples.each do |test|
         %i[decide decide!].each do |method|
@@ -420,8 +442,8 @@ describe CSVDecision::Table do
             expect(table.send(method, country: 'US',  CUSIP: '123456789'))
               .to eq(ID: '123456789', ID_type: 'CUSIP', len: 9)
 
-            # expect(table.send(method, country: 'US',  CUSIP: '123456789', ISIN: '123456789012'))
-            #   .to eq(ID: %w[123456789 123456789012], ID_type: %w[CUSIP ISIN], len: [9, 12])
+            expect(table.send(method, country: 'US',  CUSIP: '123456789', ISIN: '123456789012'))
+              .to eq(ID: %w[123456789 123456789012], ID_type: %w[CUSIP ISIN], len: [9, 12])
           end
         end
       end

@@ -121,11 +121,11 @@ module CSVDecision
     private_class_method :empty_columns?
 
     def self.column_name(type:, name:, index:)
-      return format_column_name(name) if name.present?
-
       # If columns are named after their index, which is an integer and so cannot
-      # clash with any other column name, which is a symbol.
+      # clash with other column name types, which are symbols.
       return index if type == :if
+
+      return format_column_name(name) if name.present?
 
       return if COLUMN_TYPE_ANONYMOUS.member?(type)
 

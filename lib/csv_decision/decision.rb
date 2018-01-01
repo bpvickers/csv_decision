@@ -11,14 +11,11 @@ module CSVDecision
     # @param table [CSVDecision::Table] Decision table being processed.
     # @param input [Hash{Symbol=>Object}] Input hash data structure.
     def initialize(table:, input:)
-      @result = Result.new(table)
+      @result = Result.new(table: table, input: input)
       @rows_picked = []
 
       # Relevant table attributes
       table_attributes(table)
-
-      # Partial result always includes the input hash for calculating output functions
-      @partial_result = input[:hash].dup if @outs_functions
     end
 
     # Scan the decision table up against the input hash.
@@ -40,7 +37,6 @@ module CSVDecision
     def table_attributes(table)
       @first_match = table.options[:first_match]
       @outs = table.columns.outs
-      @if_columns = table.columns.ifs
       @outs_functions = table.outs_functions
     end
 
@@ -70,8 +66,8 @@ module CSVDecision
     end
 
     def accumulated_result
-      return final_result unless @outs_functions
-      return eval_outs(@rows_picked.first) unless @result.multi_result
+      return @result.final unless @outs_functions
+      return @result.eval_outs(@rows_picked.first) unless @result.multi_result
 
       multi_row_result
     end
@@ -85,7 +81,7 @@ module CSVDecision
         eval_column_procs(col: col, column: column)
       end
 
-      final_result
+      @result.final
     end
 
     def eval_column_procs(col:, column:)
@@ -94,42 +90,13 @@ module CSVDecision
         next unless proc.is_a?(Matchers::Proc)
 
         # Evaluate the proc and update the result
-        eval_cell_proc(proc: proc, column_name: column.name, index: index)
+        @result.eval_cell_proc(proc: proc, column_name: column.name, index: index)
       end
-    end
-
-    # Update the partial result calculated so far and call the function
-    def eval_cell_proc(proc:, column_name:, index:)
-      value = proc.function[partial_result(index)]
-      @result.attributes[column_name][index] = value
-    end
-
-    def partial_result(index)
-      @result.each_pair do |column_name, value|
-        # Delete this column from the partial result in case there is data from a prior result row
-        next @partial_result.delete(column_name) if value[index].is_a?(Matchers::Proc)
-        @partial_result[column_name] = value[index]
-      end
-
-      @partial_result
-    end
-
-    def final_result
-      return @result.attributes if @if_columns.empty?
-
-      @if_columns.each_key do |col|
-        return nil unless @result.attributes[col]
-
-        # Remove the if: column from the final result
-        @result.delete(col)
-      end
-
-      @result.attributes
     end
 
     def add_first_match(row)
       if @outs_functions
-        return false unless (result = eval_outs(row))
+        return false unless (result = @result.eval_outs(row))
 
         @rows_picked = row
         return result
@@ -138,16 +105,6 @@ module CSVDecision
       # Common case is just copying output column values to the final result
       @rows_picked = row
       @result.add_outs(row)
-    end
-
-    def eval_outs(row)
-      # Set the constants first, in case the functions refer to them
-      @partial_result = @result.eval_outs_constants(row: row, partial_result: @partial_result)
-
-      # Then evaluate the functions, left to right
-      @partial_result = @result.eval_outs_procs(row: row, partial_result: @partial_result)
-
-      final_result
     end
   end
 end
