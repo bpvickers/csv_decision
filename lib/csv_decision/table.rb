@@ -55,6 +55,10 @@ module CSVDecision
     # @api private
     attr_accessor :outs_rows
 
+    # @return [Array<CSVDecision::ScanRow>] Used to implement filtering of final results.
+    # @api private
+    attr_accessor :if_rows
+
     # @return Array<CSVDecision::Table>] pre-loaded tables passed to this decision table
     #   at load time. Used to allow this decision table to lookup values in other
     #   decision tables. (Planned feature.)
@@ -79,13 +83,13 @@ module CSVDecision
     def initialize
       @columns = nil
       @file = nil
-      @matchers = []
       @options = nil
       @outs_functions = nil
       @outs_rows = []
+      @if_rows = []
       @rows = []
       @scan_rows = []
-      @tables = nil
+      # @tables = nil
     end
   end
 end

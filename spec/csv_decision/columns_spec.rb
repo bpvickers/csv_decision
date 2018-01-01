@@ -108,4 +108,15 @@ describe CSVDecision::Columns do
       .to raise_error(CSVDecision::CellValidationError,
                       "output column name 'country' is also an input column")
   end
+
+  it 'recognises the if: column' do
+    data = <<~DATA
+      IN :country, out :PAID, out :PAID_type, if:
+      US,          :CUSIP,    CUSIP,          :PAID.present?
+      GB,          :SEDOL,    SEDOL,          :PAID.present?
+    DATA
+    table = CSVDecision.parse(data)
+
+    expect(table.columns.ifs[3].to_h).to eq(name: nil, eval: true, type: :if)
+  end
 end

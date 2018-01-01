@@ -8,17 +8,23 @@ module CSVDecision
   # Data row object indicating which columns are constants versus procs.
   # @api private
   class ScanRow
+    # These column types cannot have constants in their data cells.
+    NO_CONSTANTS = Set.new(%i[guard if]).freeze
+    private_constant :NO_CONSTANTS
+
     # Scan the table cell against all matches.
     #
     # @param matchers [Array<Matchers::Matcher>]
     # @param cell [String]
     # @return [false, Matchers::Proc]
     def self.scan(column:, matchers:, cell:)
+      return false if cell == ''
+
       proc = scan_matchers(column: column, matchers: matchers, cell: cell)
       return proc if proc
 
-      # Must be a simple string constant - this is OK except for a guard column
-      guard_constant?(type: :constant, column: column)
+      # Must be a simple string constant - this is OK except for a certain column types.
+      invalid_constant?(type: :constant, column: column)
     end
 
     def self.scan_matchers(column:, matchers:, cell:)
@@ -43,18 +49,18 @@ module CSVDecision
 
     def self.scan_proc(column:, cell:, matcher:)
       proc = matcher.matches?(cell)
-      guard_constant?(type: proc.type, column: column) if proc
+      invalid_constant?(type: proc.type, column: column) if proc
 
       proc
     end
     private_class_method :scan_proc
 
-    def self.guard_constant?(type:, column:)
-      return false unless type == :constant && column.type == :guard
+    def self.invalid_constant?(type:, column:)
+      return false unless type == :constant && NO_CONSTANTS.member?(column.type)
 
-      raise CellValidationError, 'guard column cannot contain constants'
+      raise CellValidationError, "#{column.type}: column cannot contain constants"
     end
-    private_class_method :guard_constant?
+    private_class_method :invalid_constant?
 
     # Evaluate the cell proc against the column's input value and/or input hash.
     #

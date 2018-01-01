@@ -280,7 +280,6 @@ describe CSVDecision::Table do
           DATA
         }
       ]
-
       examples.each do |test|
         %i[decide decide!].each do |method|
           it "#{method} correctly #{test[:example]}" do
@@ -352,7 +351,7 @@ describe CSVDecision::Table do
         { example: 'evaluates named guard condition',
           options: {},
           data: <<~DATA
-            IN :country, guard : country, out :PAID, out :PAID_type, out :len
+            in :country, guard: country,  out :PAID, out :PAID_type, out :len
             US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
             GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
             ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
@@ -360,7 +359,19 @@ describe CSVDecision::Table do
             ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
             ,            ,                := nil,    MISSING,        := nil
           DATA
-        }
+        },
+        # { example: 'evaluates named if condition',
+        #   options: {},
+        #   data: <<~DATA
+        #     in :country, out :PAID, out :PAID_type, out :len,     if:
+        #     US,          :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
+        #     GB,          :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
+        #     ,            :ISIN,     ISIN,           :PAID.length, :PAID.present?
+        #     ,            :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
+        #     ,            :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
+        #     ,            := nil,    MISSING,        := nil,
+        #   DATA
+        # }
       ]
       examples.each do |test|
         %i[decide decide!].each do |method|

@@ -33,7 +33,7 @@ module CSVDecision
     # TODO: implement all anonymous column types
     # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
     # These column types do not need a name
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard]).freeze
+    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if]).freeze
     private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Regular expression string for a column name.
@@ -174,6 +174,9 @@ module CSVDecision
 
       when :out
         dictionary.outs[index] = entry
+
+      when :if
+        dictionary.ifs[index] = entry
       end
 
       dictionary

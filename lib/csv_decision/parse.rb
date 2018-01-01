@@ -14,7 +14,7 @@ module CSVDecision
   # Error validating a cell when parsing input table data.
   class CellValidationError < Error; end
 
-  # Table parsing error message enhanced to include the file being processed
+  # Table parsing error message enhanced to include the file being processed.
   class FileError < Error; end
 
   # Builds a decision table from the input data - which may either be a file, CSV string
@@ -62,6 +62,7 @@ module CSVDecision
 
       parse_table(table: table, input: data, options: options)
 
+      # The table object is now immutable.
       table.columns.deep_freeze
       table.freeze
     rescue CSVDecision::Error => exp
@@ -93,16 +94,27 @@ module CSVDecision
 
     def self.parse_data(table:, matchers:)
       table.rows.each_with_index do |row, index|
-        row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
-        row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
+        # Mutate the row if we find anything other than a simple string constant in its
+        # data cells.
+        row = parse_row(table: table, matchers: matchers, row: row, index: index)
 
-        # Does the table have any output functions?
+        # Does the row have any output functions?
         outs_functions(table: table, index: index)
 
+        # No more mutations required for this row.
         row.freeze
       end
     end
     private_class_method :parse_data
+
+    def self.parse_row(table:, matchers:, row:, index:)
+      row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
+      row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
+      row, table.if_rows[index] = matchers.parse_outs(columns: table.columns.ifs, row: row)
+
+      row
+    end
+    private_class_method :parse_row
 
     def self.outs_functions(table:, index:)
       return if table.outs_rows[index].procs.empty?
@@ -110,8 +122,8 @@ module CSVDecision
       # Set this flag as the table has output functions
       table.outs_functions ||= true
 
-      outs = table.columns.outs
-      table.outs_rows[index].procs.each { |col| outs[col].eval = true }
+      # Update the output columns that contain functions needing evaluation.
+      table.outs_rows[index].procs.each { |col| table.columns.outs[col].eval = true }
     end
     private_class_method :outs_functions
   end
