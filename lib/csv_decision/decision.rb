@@ -14,12 +14,10 @@ module CSVDecision
       @result = {}
 
       # Relevant table attributes
-      @first_match = table.options[:first_match]
-      @outs = table.columns.outs
-      @outs_functions = table.outs_functions
+      table_attributes(table)
 
       # Partial result always includes the input hash for calculating output functions
-      @partial_result = input[:hash].dup if @outs_functions
+      @partial_result = input[:hash].dup if table.outs_functions
 
       @rows_picked = []
     end
@@ -38,6 +36,13 @@ module CSVDecision
     end
 
     private
+
+    # Relevant table attributes
+    def table_attributes(table)
+      @first_match = table.options[:first_match]
+      @outs = table.columns.outs
+      @outs_functions = table.outs_functions
+    end
 
     # Calculate the final result.
     # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
