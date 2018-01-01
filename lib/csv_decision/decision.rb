@@ -11,15 +11,14 @@ module CSVDecision
     # @param table [CSVDecision::Table] Decision table being processed.
     # @param input [Hash{Symbol=>Object}] Input hash data structure.
     def initialize(table:, input:)
-      @result = {}
+      @result = Result.new(table)
+      @rows_picked = []
 
       # Relevant table attributes
       table_attributes(table)
 
       # Partial result always includes the input hash for calculating output functions
       @partial_result = input[:hash].dup if @outs_functions
-
-      @rows_picked = []
     end
 
     # Scan the decision table up against the input hash.
@@ -49,7 +48,7 @@ module CSVDecision
     # @return [nil, Hash{Symbol=>Object}] Final result hash if found, otherwise nil for no result.
     def result
       return {} if @rows_picked.blank?
-      @first_match ? @result : accumulated_result
+      @first_match ? @result.attributes : accumulated_result
     end
 
     def row_scan(input:, row:, scan_row:)
@@ -64,7 +63,7 @@ module CSVDecision
 
       # Accumulate output rows
       @rows_picked << row
-      @outs.each_pair { |col, column| accumulate_outs(column_name: column.name, cell: row[col]) }
+      @result.accumulate_outs(row)
 
       # Not done
       false
@@ -72,7 +71,7 @@ module CSVDecision
 
     def accumulated_result
       return final_result unless @outs_functions
-      return eval_outs(@rows_picked.first) unless @multi_result
+      return eval_outs(@rows_picked.first) unless @result.multi_result
 
       multi_row_result
     end
@@ -83,27 +82,13 @@ module CSVDecision
         # Does this column have any functions defined?
         next unless column.eval
 
-        eval_column_procs(col, column)
+        eval_column_procs(col: col, column: column)
       end
 
       final_result
     end
 
-    def accumulate_outs(column_name:, cell:)
-      case (current = @result[column_name])
-      when nil
-        @result[column_name] = cell
-
-      when Array
-        @result[column_name] << cell
-
-      else
-        @result[column_name] = [current, cell]
-        @multi_result ||= true
-      end
-    end
-
-    def eval_column_procs(col, column)
+    def eval_column_procs(col:, column:)
       @rows_picked.each_with_index do |row, index|
         proc = row[col]
         next unless proc.is_a?(Matchers::Proc)
@@ -116,7 +101,7 @@ module CSVDecision
     # Update the partial result calculated so far and call the function
     def eval_cell_proc(proc:, column_name:, index:)
       value = proc.function[partial_result(index)]
-      @multi_result ? @result[column_name][index] = value : @result[column_name] = value
+      @result.attributes[column_name][index] = value
     end
 
     def partial_result(index)
@@ -130,16 +115,16 @@ module CSVDecision
     end
 
     def final_result
-      return @result if @if_columns.empty?
+      return @result.attributes if @if_columns.empty?
 
       @if_columns.each_key do |col|
-        return nil unless @result[col]
+        return nil unless @result.attributes[col]
 
         # Remove the if: column from the final result
         @result.delete(col)
       end
 
-      @result
+      @result.attributes
     end
 
     def add_first_match(row)
@@ -152,39 +137,17 @@ module CSVDecision
 
       # Common case is just copying output column values to the final result
       @rows_picked = row
-      @outs.each_pair { |col, column| @result[column.name] = row[col] }
+      @result.add_outs(row)
     end
 
     def eval_outs(row)
       # Set the constants first, in case the functions refer to them
-      eval_outs_constants(row)
+      @partial_result = @result.eval_outs_constants(row: row, partial_result: @partial_result)
 
       # Then evaluate the functions, left to right
-      eval_outs_procs(row)
+      @partial_result = @result.eval_outs_procs(row: row, partial_result: @partial_result)
 
       final_result
-    end
-
-    def eval_outs_constants(row)
-      @outs.each_pair do |col, column|
-        value = row[col]
-        next if value.is_a?(Matchers::Proc)
-
-        @partial_result[column.name] = value
-        @result[column.name] = value
-      end
-    end
-
-    def eval_outs_procs(row)
-      @outs.each_pair do |col, column|
-        proc = row[col]
-        next unless proc.is_a?(Matchers::Proc)
-
-        value = proc.function[@partial_result]
-
-        @partial_result[column.name] = value
-        @result[column.name] = value
-      end
     end
   end
 end
