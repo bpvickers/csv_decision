@@ -20,6 +20,9 @@ Layout/AlignArray:
 Layout/IdentArray:
   Enabled: false
 
+Layout/ExtraSpacing:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: false
 
