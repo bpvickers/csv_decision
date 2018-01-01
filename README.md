@@ -46,22 +46,22 @@ To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`
  
 ### Simple example
   
-This table considers two input conditions: `topic` and `region`.
-These are labeled `in`. Certain combinations yield an output value for `team_member`, 
-labeled `out`.
+This table considers two input conditions: `topic` and `region`, labeled `in:`. 
+Certain combinations yield an output value for `team_member`, 
+labeled `out:`.
  
 ```
-in :topic | in :region  | out :team_member
-----------+-------------+-----------------
-sports    | Europe      | Alice
-sports    |             | Bob
-finance   | America     | Charlie
-finance   | Europe      | Donald
-finance   |             | Ernest
-politics  | Asia        | Fujio
-politics  | America     | Gilbert
-politics  |             | Henry
-          |             | Zach
+in:topic | in:region  | out:team_member
+---------+------------+----------------
+sports   | Europe     | Alice
+sports   |            | Bob
+finance  | America    | Charlie
+finance  | Europe     | Donald
+finance  |            | Ernest
+politics | Asia       | Fujio
+politics | America    | Gilbert
+politics |            | Henry
+         |            | Zach
 ```
  
 When the topic is `finance` and the region is `Europe` the team member `Donald`
@@ -99,7 +99,10 @@ Here is the example as code:
   table.decide(topic: 'culture', region: 'America') #=> { team_member: 'Zach' }
 ```
  
-An empty `in` cell means "matches any value", even nils.
+An empty `in:` cell means "matches any value", even nils. 
+
+Note that all column header names are symbolized, so it's actually more accurate to write 
+`in :topic`; however spaces before and after the `:` do not matter.
 
 If you have cloned this gem's git repo, then the example can also be run by loading
 the table from a CSV file:
@@ -248,3 +251,13 @@ understandability and maintainability. The whole point of this gem is to make de
 easier to express and comprehend as declarative, tabular logic.
 While Ruby makes it easy to execute arbitrary code embedded within a CSV file, 
 this could easily result in hard to debug logic that also poses safety risks.
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for a list of changes.
+
+## License
+
+CSV Decision &copy; 2017-2018 by [Brett Vickers](mailto:brett@phillips-vickers.com). 
+CSV Decision is licensed under the MIT license. Please see the [LICENSE](./LICENSE) 
+document for more information.
