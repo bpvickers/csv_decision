@@ -40,61 +40,7 @@ module CSVDecision
     def final
       return @attributes if @if_columns.empty?
 
-      return single_row_result unless @multi_result
-      multi_row_result
-    end
-
-    def multi_row_result
-      @if_columns.each_key { |col| check_if_column(col) }
-
-      normalize
-    end
-
-    def check_if_column(col)
-      delete_rows = []
-      @attributes[col].each_with_index { |value, index| delete_rows << index unless value }
-
-      # Remove this if: column from the final result
-      @attributes.delete(col)
-
-      # Adjust the row index as we delete rows in sequence.
-      delete_rows.each_with_index { |index, sequence| delete_row(index - sequence) }
-    end
-
-    # @return [{Symbol=>Object}] Decision result hash with any if: columns removed.
-    def normalize
-      # Peek at the first column's result and see how many rows it contains.
-      count = @attributes.values.first.count
-      @multi_result = count > 1
-
-      case count
-      when 0
-        {}
-      # Single row array values do not require arrays.
-      when 1
-        @attributes.transform_values!(&:first)
-      else
-        @attributes
-      end
-    end
-
-    # Each result "row", given by the row +index+ is a collection of column arrays.
-    # @param index [Integer] Row index.
-    # @return [{Symbol=>Object}, {Integer=>Object}]
-    def delete_row(index)
-      @attributes.transform_values { |value| value.delete_at(index) }
-    end
-
-    # Case where we have a single row result
-    def single_row_result
-      @if_columns.each_key do |col|
-        return nil unless @attributes[col]
-
-        # Remove the if: column from the final result
-        @attributes.delete(col)
-      end
-
-      @attributes
+      @multi_result ? multi_row_result : single_row_result
     end
 
     def eval_outs(row)
@@ -112,6 +58,59 @@ module CSVDecision
     end
 
     private
+
+    # Case where we have a single row result
+    def single_row_result
+      @if_columns.each_key do |col|
+        return nil unless @attributes[col]
+
+        # Remove the if: column from the final result
+        @attributes.delete(col)
+      end
+
+      @attributes
+    end
+
+    def multi_row_result
+      @if_columns.each_key { |col| check_if_column(col) }
+
+      normalize_result
+    end
+
+    def check_if_column(col)
+      delete_rows = []
+      @attributes[col].each_with_index { |value, index| delete_rows << index unless value }
+
+      # Remove this if: column from the final result
+      @attributes.delete(col)
+
+      # Adjust the row index as we delete rows in sequence.
+      delete_rows.each_with_index { |index, sequence| delete_row(index - sequence) }
+    end
+
+    # Each result "row", given by the row +index+ is a collection of column arrays.
+    # @param index [Integer] Row index.
+    # @return [{Symbol=>Object}, {Integer=>Object}]
+    def delete_row(index)
+      @attributes.transform_values { |value| value.delete_at(index) }
+    end
+
+    # @return [{Symbol=>Object}] Decision result hash with any if: columns removed.
+    def normalize_result
+      # Peek at the first column's result and see how many rows it contains.
+      count = @attributes.values.first.count
+      @multi_result = count > 1
+
+      case count
+      when 0
+        {}
+        # Single row array values do not require arrays.
+      when 1
+        @attributes.transform_values!(&:first)
+      else
+        @attributes
+      end
+    end
 
     def eval_outs_constants(row:)
       @outs.each_pair do |col, column|

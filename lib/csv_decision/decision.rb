@@ -102,7 +102,7 @@ module CSVDecision
     def add_first_match(row)
       # This decision row may contain procs, which if present will need to be evaluated.
       # If this row contains if: columns then this row may be filtered out, in which case
-      #
+      # this method call will return false.
       return eval_single_row(row) if @outs_functions
 
       # Common case is just copying output column values to the final result.
