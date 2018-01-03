@@ -81,7 +81,7 @@ module CSVDecision
       row = Header.strip_empty_columns(rows: table.rows)
 
       # Build a dictionary of all valid data columns from the header row.
-      @dictionary = CSVDecision::Dictionary.build(row: row, dictionary: Dictionary.new) if row
+      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: Dictionary.new) if row
 
       freeze
     end

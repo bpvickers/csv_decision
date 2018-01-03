@@ -8,6 +8,7 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Dictionary
+    # Table used to build a column dictionary entry.
     ENTRY = {
       in:         { type: :in,    eval: nil },
       'in/text':  { type: :in,    eval: false },
@@ -34,10 +35,10 @@ module CSVDecision
     # Classify and build a dictionary of all input and output columns by
     # parsing the header row.
     #
-    # @param row [Array<String>] The header row after removing any empty columns.
+    # @param header [Array<String>] The header row after removing any empty columns.
     # @return [Hash<Hash>] Column dictionary is a hash of hashes.
-    def self.build(row:, dictionary:)
-      row.each_with_index do |cell, index|
+    def self.build(header:, dictionary:)
+      header.each_with_index do |cell, index|
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
@@ -92,7 +93,6 @@ module CSVDecision
       column_name = name.strip.tr("\s", '_')
 
       return column_name.to_sym if Header::COLUMN_NAME_RE.match(column_name)
-
       raise CellValidationError, "column name '#{name}' contains invalid characters"
     end
     private_class_method :format_column_name

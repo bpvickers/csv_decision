@@ -110,7 +110,6 @@ module CSVDecision
     def self.parse_row(table:, matchers:, row:, index:)
       row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
       row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
-      # row, table.if_rows[index] = matchers.parse_outs(columns: table.columns.ifs, row: row)
 
       row
     end
@@ -120,7 +119,7 @@ module CSVDecision
       return if table.outs_rows[index].procs.empty?
 
       # Set this flag as the table has output functions
-      table.outs_functions ||= true
+      table.outs_functions = true
 
       # Update the output columns that contain functions needing evaluation.
       table.outs_rows[index].procs.each { |col| table.columns.outs[col].eval = true }
