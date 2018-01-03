@@ -14,6 +14,7 @@ module CSVDecision
   end
 
   autoload :Columns,    'csv_decision/columns'
+  autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Data,       'csv_decision/data'
   autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'

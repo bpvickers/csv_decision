@@ -15,9 +15,19 @@ describe CSVDecision::Columns do
     end
   end
 
-  it 'parses a decision table columns from a CSV string' do
+  it 'rejects a duplicate output column name' do
     data = <<~DATA
       IN :input, OUT :output, IN/text : input, OUT/text:output
+      input0,    output0,     input1,          output1
+    DATA
+    expect { CSVDecision.parse(data) }
+      .to raise_error(CSVDecision::CellValidationError,
+                      "output column name 'output' is duplicated")
+  end
+
+  it 'parses a decision table columns from a CSV string' do
+    data = <<~DATA
+      IN :input, OUT :output, IN/text : input, OUT/text:output2
       input0,    output0,     input1,          output1
     DATA
     table = CSVDecision.parse(data)
@@ -26,7 +36,7 @@ describe CSVDecision::Columns do
     expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
     expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
     expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
-    expect(table.columns.outs[3].to_h).to eq(name: :output, eval: false, type: :out)
+    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
   end
 
   it 'parses a decision table columns from a CSV file' do
@@ -35,9 +45,9 @@ describe CSVDecision::Columns do
 
     expect(result.columns).to be_a(CSVDecision::Columns)
     expect(result.columns.ins)
-      .to eq(0 => CSVDecision::Columns::Entry.new(:input, nil, :in))
+      .to eq(0 => CSVDecision::Dictionary::Entry.new(:input, nil, :in))
     expect(result.columns.outs)
-      .to eq(1 => CSVDecision::Columns::Entry.new(:output, nil, :out))
+      .to eq(1 => CSVDecision::Dictionary::Entry.new(:output, nil, :out))
   end
 
   it 'rejects an invalid header column' do

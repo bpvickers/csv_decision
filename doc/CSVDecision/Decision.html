@@ -259,27 +259,19 @@
 18
 19
 20
-21
-22
-23
-24
-25</pre>
+21</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='rparen'>)</span>
-  <span class='ivar'>@result</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='comment'># The result object is a hash of values, and each value will be an array if this is
+</span>  <span class='comment'># a multi-row result for the +first_match: false+ option.
+</span>  <span class='ivar'>@result</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Result.html" title="CSVDecision::Result (class)">Result</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Result.html#initialize-instance_method" title="CSVDecision::Result#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
+  <span class='ivar'>@rows_picked</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
 
   <span class='comment'># Relevant table attributes
-</span>  <span class='ivar'>@first_match</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:first_match</span><span class='rbracket'>]</span>
-  <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_outs'>outs</span>
-  <span class='ivar'>@outs_functions</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_outs_functions'>outs_functions</span>
-
-  <span class='comment'># Partial result always includes the input hash for calculating output functions
-</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='kw'>if</span> <span class='ivar'>@outs_functions</span>
-
-  <span class='ivar'>@rows_picked</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+</span>  <span class='id identifier rubyid_table_attributes'>table_attributes</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -377,20 +369,22 @@
       <pre class="lines">
 
 
+28
+29
+30
+31
 32
 33
 34
-35
-36
-37
-38</pre>
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span> <span class='kw'>if</span> <span class='id identifier rubyid_row_scan'>row_scan</span><span class='lparen'>(</span><span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>scan_row:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_scan_rows'>scan_rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='comment'># Row scan returns false if more rows need to be scanned, truthy otherwise.
+</span>    <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span> <span class='kw'>if</span> <span class='id identifier rubyid_row_scan'>row_scan</span><span class='lparen'>(</span><span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>scan_row:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_scan_rows'>scan_rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_result'>result</span>
@@ -405,9 +399,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Dec 30 13:04:05 2017 by
+  Generated on Mon Jan  1 15:30:59 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.3.0).
+  0.9.12 (ruby-2.4.0).
 </div>
 
     </div>

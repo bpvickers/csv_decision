@@ -176,6 +176,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#ifs-instance_method" title="#ifs (instance method)">#<strong>ifs</strong>  &#x21d2; Hash{Index=&gt;Entry} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>if: columns hash keyed by column index.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(table)  &#x21d2; Columns </a>
     
 
@@ -303,19 +327,19 @@
       <pre class="lines">
 
 
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83</pre>
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 74</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 85</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span>
   <span class='comment'># If a column does not have a valid header cell, then it&#39;s empty of data.
@@ -382,12 +406,12 @@
       <pre class="lines">
 
 
-49
-50
-51</pre>
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dictionary'>dictionary</span>
   <span class='ivar'>@dictionary</span>
@@ -405,7 +429,65 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="ins-instance_method">
+  <h3 class="signature first" id="ifs-instance_method">
+  
+    #<strong>ifs</strong>  &#x21d2; <tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>if: columns hash keyed by column index.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+70
+71
+72</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 70</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ifs'>ifs</span>
+  <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_ifs'>ifs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ins-instance_method">
   
     #<strong>ins</strong>  &#x21d2; <tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
   
@@ -447,12 +529,12 @@
       <pre class="lines">
 
 
-53
-54
-55</pre>
+58
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_ins'>ins</span>
@@ -505,12 +587,12 @@
       <pre class="lines">
 
 
-59
-60
-61</pre>
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_outs'>outs</span>
@@ -525,9 +607,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Dec 30 13:04:05 2017 by
+  Generated on Mon Jan  1 15:30:59 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.3.0).
+  0.9.12 (ruby-2.4.0).
 </div>
 
     </div>

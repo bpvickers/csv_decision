@@ -5,38 +5,36 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # Accumulate the matching row(s).
+  # Accumulate the matching row(s) into a result hash.
   # @api private
   class Result
+    # @return [Hash{Symbol=>Object}, Hash{Integer=>Object}] The decision result hash containing
+    #   both result values and if: columns, which eventually get evaluated and removed.
     attr_reader :attributes
+
+    # @return [Boolean] Returns true if this is a multi-row result
     attr_reader :multi_result
 
-    # @yieldparam column_name [Symbol, Index] The result column name.
-    # @yieldparam value [Object] The value for the column name, which may be an array.
-    def each_pair
-      @attributes.each_pair do |column_name, value|
-        yield(column_name, value)
-      end
-    end
-
-    # @param table [CSVDecision::Table] Decision table being processed.
+    # (see Decision.initialize)
     def initialize(table:, input:)
       @outs = table.columns.outs
       @if_columns = table.columns.ifs
 
-      # Partial result always includes the input hash for calculating output functions
+      # Partial result always includes the input hash for calculating output functions.
       @partial_result = input[:hash].dup if table.outs_functions
 
       @attributes = {}
+      @multi_result = false
     end
 
+    # Common case for building a single row result is just copying output column values to the
+    # final result hash.
     def add_outs(row)
-      # Common case is just copying output column values to the final result
       @outs.each_pair { |col, column| @attributes[column.name] = row[col] }
     end
 
     def accumulate_outs(row)
-      @outs.each_pair { |col, column| accumulate_cell(column_name: column.name, cell: row[col]) }
+      @outs.each_pair { |col, column| add_cell(column_name: column.name, cell: row[col]) }
     end
 
     def final
@@ -48,14 +46,6 @@ module CSVDecision
 
     def multi_row_result
       @if_columns.each_key { |col| check_if_column(col) }
-      #   @attributes[col].each_with_index { |value, index| delete_rows << index unless value }
-      #
-      #   # Remove the if: column from the final result
-      #   @attributes.delete(col)
-      #
-      #   # Adjust row index as we delete rows
-      #   delete_rows.each_with_index { |index, sequence| delete_row(index - sequence) }
-      # end
 
       normalize
     end
@@ -71,18 +61,26 @@ module CSVDecision
       delete_rows.each_with_index { |index, sequence| delete_row(index - sequence) }
     end
 
+    # @return [{Symbol=>Object}] Decision result hash with any if: columns removed.
     def normalize
-      value = @attributes.values.first
-      # If it's still multi-row return as is.
-      return @attributes if value.count > 1
+      # Peek at the first column's result and see how many rows it contains.
+      count = @attributes.values.first.count
+      @multi_result = count > 1
 
-      # If all rows have been deleted return the empty hash.
-      return {} if value.count.zero?
-
-      # We have a single row, so turn single row arrays into constants
-      @attributes.transform_values!(&:first)
+      case count
+      when 0
+        {}
+      # Single row array values do not require arrays.
+      when 1
+        @attributes.transform_values!(&:first)
+      else
+        @attributes
+      end
     end
 
+    # Each result "row", given by the row +index+ is a collection of column arrays.
+    # @param index [Integer] Row index.
+    # @return [{Symbol=>Object}, {Integer=>Object}]
     def delete_row(index)
       @attributes.transform_values { |value| value.delete_at(index) }
     end
@@ -101,18 +99,16 @@ module CSVDecision
 
     def eval_outs(row)
       # Set the constants first, in case the functions refer to them
-      @partial_result = eval_outs_constants(row: row)
+      eval_outs_constants(row: row)
 
-      # Then evaluate the functions, left to right
+      # Then evaluate the procs, left to right
       eval_outs_procs(row: row)
 
       final
     end
 
     def eval_cell_proc(proc:, column_name:, index:)
-      @partial_result = partial(index: index)
-      value = proc.function[@partial_result]
-      @attributes[column_name][index] = value
+      @attributes[column_name][index] = proc.function[partial_result(index)]
     end
 
     private
@@ -125,11 +121,9 @@ module CSVDecision
         @partial_result[column.name] = value
         @attributes[column.name] = value
       end
-
-      @partial_result
     end
 
-    def partial(index:)
+    def partial_result(index)
       @attributes.each_pair do |column_name, value|
         # Delete this column from the partial result in case there is data from a prior result row
         next @partial_result.delete(column_name) if value[index].is_a?(Matchers::Proc)
@@ -151,11 +145,9 @@ module CSVDecision
         @partial_result[column.name] = value
         @attributes[column.name] = value
       end
-
-      @partial_result
     end
 
-    def accumulate_cell(column_name:, cell:)
+    def add_cell(column_name:, cell:)
       case (current = @attributes[column_name])
       when nil
         @attributes[column_name] = cell
@@ -165,7 +157,7 @@ module CSVDecision
 
       else
         @attributes[column_name] = [current, cell]
-        @multi_result ||= true
+        @multi_result = true
       end
     end
   end

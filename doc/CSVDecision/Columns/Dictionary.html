@@ -126,6 +126,33 @@ interspersed and need not have unique names.</p>
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#ifs-instance_method" title="#ifs (instance method)">#<strong>ifs</strong>  &#x21d2; Hash{Integer=&gt;Entry} </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>if: columns.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#ins-instance_method" title="#ins (instance method)">#<strong>ins</strong>  &#x21d2; Hash{Integer=&gt;Entry} </a>
     
 
@@ -254,19 +281,21 @@ interspersed and need not have unique names.</p>
       <pre class="lines">
 
 
-39
-40
-41
-42
 43
-44</pre>
+44
+45
+46
+47
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@ifs</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='comment'># TODO: @path = {}
 </span>  <span class='comment'># TODO: @defaults = {}
 </span><span class='kw'>end</span></pre>
@@ -281,9 +310,74 @@ interspersed and need not have unique names.</p>
     <h2>Instance Attribute Details</h2>
     
       
-      <span id="ins=-instance_method"></span>
+      <span id="ifs=-instance_method"></span>
       <div class="method_details first">
-  <h3 class="signature first" id="ins-instance_method">
+  <h3 class="signature first" id="ifs-instance_method">
+  
+    #<strong>ifs</strong>  &#x21d2; <tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>if: columns.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>All if: column dictionary entries.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 35</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ifs'>ifs</span>
+  <span class='ivar'>@ifs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="ins=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ins-instance_method">
   
     #<strong>ins</strong>  &#x21d2; <tt>Hash{Integer=&gt;<span class='object_link'><a href="Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
   
@@ -416,9 +510,9 @@ interspersed and need not have unique names.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Dec 30 13:04:05 2017 by
+  Generated on Mon Jan  1 15:30:59 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.3.0).
+  0.9.12 (ruby-2.4.0).
 </div>
 
     </div>

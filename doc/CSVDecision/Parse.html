@@ -242,7 +242,8 @@
 66
 67
 68
-69</pre>
+69
+70</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/parse.rb', line 57</span>
@@ -255,7 +256,8 @@
 
   <span class='id identifier rubyid_parse_table'>parse_table</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>options:</span> <span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_deep_freeze'>deep_freeze</span>
+  <span class='comment'># The table object is now immutable.
+</span>  <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_deep_freeze'>deep_freeze</span>
   <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
 <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Error.html" title="CSVDecision::Error (class)">Error</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_exp'>exp</span>
   <span class='id identifier rubyid_raise_error'>raise_error</span><span class='lparen'>(</span><span class='label'>file:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_file'>file</span><span class='comma'>,</span> <span class='label'>exception:</span> <span class='id identifier rubyid_exp'>exp</span><span class='rparen'>)</span>
@@ -270,9 +272,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Dec 30 13:04:04 2017 by
+  Generated on Mon Jan  1 15:30:58 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.3.0).
+  0.9.12 (ruby-2.4.0).
 </div>
 
     </div>

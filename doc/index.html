@@ -85,7 +85,7 @@ input hash, producing a decision as an output hash.</p>
 <h3 id="label-Why+use+csv_decision-3F">Why use <code>csv_decision</code>?</h3>
 
 <p>Typical “business logic” is notoriously illogical – full of corner cases
-and one-off exceptions. A decision table can capture data-based decisions
+and one-off exceptions. A decision table can express data-based decisions
 in a way that comes more naturally to subject matter experts, who typically
 prefer spreadsheet models. Business logic may then be encapsulated,
 avoiding the need to write tortuous conditional expressions in Ruby that
@@ -93,9 +93,9 @@ draw the ire of <code>rubocop</code> and its ilk.</p>
 
 <p>This gem and the examples below take inspiration from <a
 href="https://github.com/jmettraux/rufus-decision">rufus/decision</a>.
-(However, that gem is no longer maintained and CSV Decision has better
-decision-time performance for the trade-off of slower table parse times and
-more memory – see <code>benchmarks/rufus_decision.rb</code>)</p>
+(That gem is no longer maintained and CSV Decision has better decision-time
+performance, at the expense of slower table parse times and more memory –
+see <code>benchmarks/rufus_decision.rb</code>.)</p>
 
 <h3 id="label-Installation">Installation</h3>
 
@@ -109,27 +109,26 @@ more memory – see <code>benchmarks/rufus_decision.rb</code>)</p>
 <h3 id="label-Simple+example">Simple example</h3>
 
 <p>This table considers two input conditions: <code>topic</code> and
-<code>region</code>. These are labeled <code>in</code>. Certain
-combinations yield an output value for <code>team_member</code>, labeled
-<code>out</code>.</p>
+<code>region</code>, labeled <code>in:</code>. Certain combinations yield
+an output value for <code>team_member</code>, labeled <code>out:</code>.</p>
 
-<pre class="code ruby"><code class="ruby">in :topic | in :region  | out :team_member
-----------+-------------+-----------------
-sports    | Europe      | Alice
-sports    |             | Bob
-finance   | America     | Charlie
-finance   | Europe      | Donald
-finance   |             | Ernest
-politics  | Asia        | Fujio
-politics  | America     | Gilbert
-politics  |             | Henry
-          |             | Zach</code></pre>
+<pre class="code ruby"><code class="ruby">in:topic | in:region  | out:team_member
+---------+------------+----------------
+sports   | Europe     | Alice
+sports   |            | Bob
+finance  | America    | Charlie
+finance  | Europe     | Donald
+finance  |            | Ernest
+politics | Asia       | Fujio
+politics | America    | Gilbert
+politics |            | Henry
+         |            | Zach</code></pre>
 
 <p>When the topic is <code>finance</code> and the region is
 <code>Europe</code> the team member <code>Donald</code> is selected.</p>
 
 <p>This is a “first match” decision table in that as soon as a match is made
-execution stops and a single output value (hash) is returned.</p>
+execution stops and a single output row (hash) is returned.</p>
 
 <p>The ordering of rows matters. <code>Ernest</code>, who is in charge of
 <code>finance</code> for the rest of the world, except for
@@ -138,7 +137,7 @@ colleagues <code>Charlie</code> and <code>Donald</code>. <code>Zach</code>
 has been placed last, catching all the input combos not matching any other
 row.</p>
 
-<p>Here it is as code:</p>
+<p>Here is the example as code:</p>
 
 <p>“`ruby  # Valid CSV string  data = &lt;&lt;~DATA  in :topic, in :region,
 out :team_member  sports, Europe, Alice  sports, , Bob  finance, America,
@@ -147,13 +146,17 @@ politics, America, Gilbert  politics, , Henry  , , Zach  DATA</p>
 
 <p>table = CSVDecision.parse(data)</p>
 
-<p>table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) # returns
-team_member: &#39;Donald&#39;  table.decide(topic: &#39;sports&#39;,
-region: nil) # returns team_member: &#39;Bob&#39;  table.decide(topic:
-&#39;culture&#39;, region: &#39;America&#39;) # team_member: &#39;Zach&#39;
-“`</p>
+<p>table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; {
+team_member: &#39;Donald&#39; }  table.decide(topic: &#39;sports&#39;,
+region: nil) #=&gt; { team_member: &#39;Bob&#39; }  table.decide(topic:
+&#39;culture&#39;, region: &#39;America&#39;) #=&gt; { team_member:
+&#39;Zach&#39; } “`</p>
 
-<p>An empty <code>in</code> cell means “matches any value”, even nils.</p>
+<p>An empty <code>in:</code> cell means “matches any value”, even nils.</p>
+
+<p>Note that all column header names are symbolized, so it&#39;s actually more
+accurate to write <code>in :topic</code>; however spaces before and after
+the <code>:</code> do not matter.</p>
 
 <p>If you have cloned this gem&#39;s git repo, then the example can also be
 run by loading the table from a CSV file:</p>
@@ -163,12 +166,12 @@ CSVDecision.parse(Pathname(&#39;spec/data/valid/simple_example.csv&#39;))
 </code></p>
 
 <p>We can also load this same table using the option: <code>first_match:
-false</code>, which means that  all matching rows will be accumulated into
-an array of hashes.</p>
+false</code>, which means that <em>all</em> matching rows will be
+accumulated into an array of hashes.</p>
 
 <p><code>ruby table = CSVDecision.parse(data, first_match: false)
-table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) # returns
-team_member: %w[Donald Ernest Zach]  </code></p>
+table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; {
+team_member: %w[Donald Ernest Zach] } </code></p>
 
 <p>For more examples see <code>spec/csv_decision/table_spec.rb</code>.
 Complete documentation of all table parameters is in the code - see
@@ -177,26 +180,41 @@ Complete documentation of all table parameters is in the code - see
 
 <h3 id="label-CSV+Decision+features">CSV Decision features</h3>
 <ul><li>
+<p>Either returns the first matching row as a hash (default), or accumulates
+all matches as an  array of hashes (i.e., <code>parse</code> option
+<code>first_match: false</code> or CSV file option
+<code>accumulate</code>).</p>
+</li><li>
 <p>Fast decision-time performance (see <code>benchmarks</code> folder).</p>
 </li><li>
-<p>In addition to simple string matching, can match common Ruby constants, 
-regular expressions, numeric comparisons and Ruby-style ranges.</p>
+<p>In addition to simple strings, <code>csv_decision</code> can match basic
+Ruby constants (e.g., <code>=nil</code>),  regular expressions (e.g.,
+<code>=~ on|off</code>), comparisons (e.g., <code>&gt; 100.0</code> ) and 
+Ruby-style ranges (e.g., <code>1..10</code>)</p>
 </li><li>
-<p>Can use column symbols in comparisons for guard conditions – e.g., &gt;
-:column.</p>
+<p>Can compare an input column versus another input hash key - e.g.,
+<code>&gt; :column</code>.</p>
+</li><li>
+<p>Any cell starting with <code>#</code> is treated as a comment, and comments
+may appear anywhere in the  table. (Comment cells are always interpreted as
+the empty string.)</p>
+</li><li>
+<p>Can use column symbol expressions or Ruby methods (0-arity) in input
+columns for  matching - e.g., <code>:column.zero?</code> or <code>:column
+== 0</code>.</p>
+</li><li>
+<p>May also use Ruby methods in output columns - e.g.,
+<code>:column.length</code>.</p>
 </li><li>
 <p>Accepts data as a file, CSV string or an array of arrays. (For safety all
 input data is  force encoded to UTF-8, and non-ascii strings are converted
 to empty strings.)</p>
 </li><li>
 <p>All CSV cells are parsed for correctness, and helpful error messages
-generated for bad  inputs.</p>
-</li><li>
-<p>Either returns the first matching row as a hash, or accumulates all matches
-as an  array of hashes.</p>
+generated for bad  input.</p>
 </li></ul>
 
-<h3 id="label-Constants+other+than+strings">Constants other than strings</h3>
+<h4 id="label-Constants+other+than+strings">Constants other than strings</h4>
 
 <p>Although <code>csv_decision</code> is string oriented, it does recognise
 other types of constant present in the input hash. Specifically, the
@@ -217,7 +235,7 @@ value: nil<br>  table.decide(constant: 0) # returns value: 0<br>
 table.decide(constant: BigDecimal(&#39;100.0&#39;)) # returns value:
 BigDecimal(&#39;100.0&#39;)<br> “`</p>
 
-<h3 id="label-Column+header+symbols">Column header symbols</h3>
+<h4 id="label-Column+header+symbols">Column header symbols</h4>
 
 <p>All input and output column names are symbolized, and can be used to form
 simple expressions that refer to values in the input hash.</p>
@@ -234,7 +252,8 @@ simple expressions that refer to values in the input hash.</p>
 
 <p>Note that there is no need to include an input column for
 <code>:node</code> in the decision table - it just needs to be present in
-the input hash. Also, <code>== :node</code> can be shortened to just
+the input hash. The expression, <code>== :node</code> should be read as
+<code>:parent == :node</code>. It can also be shortened to just
 <code>:node</code>, so the above decision table may be simplified to:</p>
 
 <p><code>ruby     data = &lt;&lt;~DATA       in :parent, out :top?         
@@ -243,7 +262,7 @@ operators are also supported: <code>!=</code>, <code>&gt;</code>,
 <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. For more simple
 examples see <code>spec/csv_decision/examples_spec.rb</code>.</p>
 
-<h3 id="label-Column+guard+conditions">Column guard conditions</h3>
+<h4 id="label-Column+guard+conditions">Column guard conditions</h4>
 
 <p>Sometimes it&#39;s more convenient to write guard conditions in a single
 column specialized for that purpose. For example:</p>
@@ -264,7 +283,11 @@ column specialized for that purpose. For example:</p>
   <span class='comment'>#=&gt; { ID: &#39;123456789012&#39;, ID_type: &#39;ISIN&#39;, len: 12 }
 </span></code></pre>
 
-<p>Guard columns may be anonymous, and must contain non-constant expressions.</p>
+<p>Guard columns may be anonymous, and must contain non-constant expressions.
+In addition to 0-arity Ruby methods, the following comparison operators are
+also supported: <code>==</code>, <code>!=</code>, <code>&gt;</code>,
+<code>&gt;=</code>, <code>&lt;</code> and <code>&lt;=</code>. Also, regular
+expressions are supported - i.e., <code>=~</code> and <code>!~</code>.</p>
 
 <h3 id="label-Testing">Testing</h3>
 
@@ -277,21 +300,42 @@ bundle install  rspec </code></p>
 <h3 id="label-Planned+features">Planned features</h3>
 
 <p><code>csv_decision</code> is still a work in progress, and will be enhanced
-to support  the following features:  * Use of column symbol expressions or
-built-in guard functions in the input  columns for matching.  * Input
-columns may be indexed for faster lookup performance.  * May use functions
-in the output columns to formulate the final decision.  * Input hash values
-may be conditionally defaulted using a constant or a function call  *
-Output columns may use interpolated strings referencing column symbols.  *
-May be extended with a user-supplied library of Ruby functions for tailored
-logic.  * Can use post-match guard conditions to filter the results of
-multi-row  decision output.</p>
+to support  the following features:  * Text-only input columns may be
+indexed for faster lookup performance.  * Supply a pre-defined library of
+functions that can be called within input columns to  implement matching
+logic or from the output columns to formulate the final decision.  *
+Available functions may be extended with a user-supplied library of Ruby
+methods  for tailored logic.  * Input hash values may be (conditionally)
+defaulted with a constant or a function call.  * Output columns may
+construct interpolated strings referencing column symbols.  * Can use
+post-match guard conditions to filter the results of multi-row  decision
+output.</p>
+
+<h3 id="label-Reasons+for+the+limitations+of+column+expressions">Reasons for the limitations of column expressions</h3>
+
+<p>The simple column expressions allowed by <code>csv_decision</code> are
+purposely limited for reasons of understandability and maintainability. The
+whole point of this gem is to make decision rules easier to express and
+comprehend as declarative, tabular logic. While Ruby makes it easy to
+execute arbitrary code embedded within a CSV file, this could easily result
+in hard to debug logic that also poses safety risks.</p>
+
+<h2 id="label-Changelog">Changelog</h2>
+
+<p>See <a href="./CHANGELOG.md">CHANGELOG.md</a> for a list of changes.</p>
+
+<h2 id="label-License">License</h2>
+
+<p>CSV Decision © 2017-2018 by <a
+href="mailto:brett@phillips-vickers.com">Brett Vickers</a>. CSV Decision is
+licensed under the MIT license. Please see the <a
+href="./LICENSE">LICENSE</a> document for more information.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sat Dec 30 13:04:04 2017 by
+  Generated on Mon Jan  1 15:30:57 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.3.0).
+  0.9.12 (ruby-2.4.0).
 </div>
 
     </div>
