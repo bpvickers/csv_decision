@@ -8,7 +8,7 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Dictionary
-    COLUMN_ENTRY = {
+    ENTRY = {
       in:         { type: :in,    eval: nil },
       'in/text':  { type: :in,    eval: false },
       out:        { type: :out,   eval: nil },
@@ -16,7 +16,7 @@ module CSVDecision
       guard:      { type: :guard, eval: true },
       if:         { type: :if,    eval: true }
     }.freeze
-    private_constant :COLUMN_ENTRY
+    private_constant :ENTRY
 
     # Value object to hold column dictionary entries.
     Entry = Struct.new(:name, :eval, :type) do
@@ -25,31 +25,26 @@ module CSVDecision
       end
     end
 
-    # Column name regular expression.
-    COLUMN_NAME_RE = Matchers.regexp(Header::COLUMN_NAME)
-    private_constant :COLUMN_NAME_RE
-
     # TODO: implement all anonymous column types
     # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
     # These column types do not need a name
     COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if]).freeze
     private_constant :COLUMN_TYPE_ANONYMOUS
 
-    # Classify and build a dictionary of all input and output columns.
+    # Classify and build a dictionary of all input and output columns by
+    # parsing the header row.
     #
     # @param row [Array<String>] The header row after removing any empty columns.
     # @return [Hash<Hash>] Column dictionary is a hash of hashes.
-    def self.build(row:)
-      dictionary = Columns::Dictionary.new
-
+    def self.build(row:, dictionary:)
       row.each_with_index do |cell, index|
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
-      validate(dictionary: dictionary)
+      validate(dictionary)
     end
 
-    def self.validate(dictionary:)
+    def self.validate(dictionary)
       dictionary.outs.each_pair do |col, column|
         validate_out(dictionary: dictionary, column_name: column.name, col: col)
       end
@@ -59,30 +54,14 @@ module CSVDecision
     private_class_method :validate
 
     def self.validate_out(dictionary:, column_name:, col:)
-      if input_column?(dictionary: dictionary, column_name: column_name)
+      if dictionary.ins.any? { |_, column| column_name == column.name }
         raise CellValidationError, "output column name '#{column_name}' is also an input column"
       end
 
-      return unless dup_column?(dictionary: dictionary, column_name: column_name, col: col)
+      return unless dictionary.outs.any? { |key, column| column_name == column.name && col != key }
       raise CellValidationError, "output column name '#{column_name}' is duplicated"
     end
     private_class_method :validate_out
-
-    def self.input_column?(dictionary:, column_name:)
-      dictionary.ins.each_value { |column| return true if column_name == column.name }
-
-      false
-    end
-    private_class_method :input_column?
-
-    def self.dup_column?(dictionary:, column_name:, col:)
-      dictionary.outs.each_pair do |key, column|
-        return true if column_name == column.name && col != key
-      end
-
-      false
-    end
-    private_class_method :dup_column?
 
     def self.validate_column(cell:, index:)
       match = Header::COLUMN_TYPE.match(cell)
@@ -98,14 +77,13 @@ module CSVDecision
     private_class_method :validate_column
 
     def self.column_name(type:, name:, index:)
-      # If columns are named after their index, which is an integer and so cannot
+      # if: columns are named after their index, which is an integer and so cannot
       # clash with other column name types, which are symbols.
       return index if type == :if
 
       return format_column_name(name) if name.present?
 
       return if COLUMN_TYPE_ANONYMOUS.member?(type)
-
       raise CellValidationError, 'column name is missing'
     end
     private_class_method :column_name
@@ -113,7 +91,7 @@ module CSVDecision
     def self.format_column_name(name)
       column_name = name.strip.tr("\s", '_')
 
-      return column_name.to_sym if COLUMN_NAME_RE.match(column_name)
+      return column_name.to_sym if Header::COLUMN_NAME_RE.match(column_name)
 
       raise CellValidationError, "column name '#{name}' contains invalid characters"
     end
@@ -121,8 +99,7 @@ module CSVDecision
 
     # Returns the normalized column type, along with an indication if
     # the column requires evaluation
-    def self.column_type(column_name, type)
-      entry = COLUMN_ENTRY[type]
+    def self.column_type(column_name, entry)
       Entry.new(column_name, entry[:eval], entry[:type])
     end
     private_class_method :column_type
@@ -130,19 +107,16 @@ module CSVDecision
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = validate_column(cell: cell, index: index)
 
-      entry = column_type(column_name, column_type)
+      entry = column_type(column_name, ENTRY[column_type])
 
-      dictionary_entry(dictionary: dictionary,
-                       type: entry.type,
-                       entry: entry,
-                       index: index)
+      dictionary_entry(dictionary: dictionary, entry: entry, index: index)
     end
     private_class_method :parse_cell
 
-    def self.dictionary_entry(dictionary:, type:, entry:, index:)
-      case type
+    def self.dictionary_entry(dictionary:, entry:, index:)
+      case entry.type
       # Header column that has a function for setting the value (planned feature)
-      # when :set, :'set/nil', :'set/blank'
+      # when :set, :'set/nil?', :'set/blank?'
       #   # Default function will set the input value unconditionally or conditionally
       #   dictionary.defaults[index] =
       #     Columns::Default.new(entry.name, nil, default_if(type))

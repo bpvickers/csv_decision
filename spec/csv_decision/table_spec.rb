@@ -427,10 +427,10 @@ describe CSVDecision::Table do
           options: { first_match: false },
           data: <<~DATA
             IN :country, out :ID, if:,         out :ID_type, out :len,   if:,       if:
-            US,          :CUSIP,  !:ID.blank?, CUSIP,        :ID.length, :len >= 9, :ID.present?
-            GB,          :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len >= 9, :ID.present?
-            ,            :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len >= 9, :ID.present?
-            ,            :ISIN,   !:ID.blank?, ISIN,         :ID.length, :len >= 9, :ID.present?
+            US,          :CUSIP,  !:ID.blank?, CUSIP,        :ID.length, :len == 9, :ID.present?
+            GB,          :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len == 7, :ID.present?
+            ,            :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len == 7, :ID.present?
+            ,            :ISIN,   !:ID.blank?, ISIN,         :ID.length, :len ==12, :ID.present?
           DATA
         }
       ]
@@ -444,6 +444,9 @@ describe CSVDecision::Table do
 
             expect(table.send(method, country: 'US',  CUSIP: '123456789', ISIN: '123456789012'))
               .to eq(ID: %w[123456789 123456789012], ID_type: %w[CUSIP ISIN], len: [9, 12])
+
+            expect(table.send(method, country: 'US',  Ticker: 'USTY'))
+              .to eq({})
           end
         end
       end

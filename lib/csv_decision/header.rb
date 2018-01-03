@@ -24,6 +24,7 @@ module CSVDecision
     # More lenient than a Ruby method name - note any spaces will have been replaced with
     # underscores.
     COLUMN_NAME = "\\w[\\w:/!?]*"
+    COLUMN_NAME_RE = Matchers.regexp(Header::COLUMN_NAME)
 
     # Check if the given row contains a recognisable header cell.
     #
