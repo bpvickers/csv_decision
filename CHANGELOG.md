@@ -1,3 +1,8 @@
+## v0.1.0, 5 January 2018.
+*Changes*
+- Changed decide! method for safety so that it no longer potentially mutates the input hash.
+Small performance impact. 
+
 ## v0.0.9, 5 January 2018.
 *Additions*
 - Output column if: filter conditions.

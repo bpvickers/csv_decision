@@ -36,7 +36,7 @@ see `benchmarks/rufus_decision.rb`.)
 To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`:
  
  ```ruby
- gem 'csv_decision', '~> 0.0.1'
+ gem 'csv_decision', '~> 0.1'
  ```
  
  or simply
