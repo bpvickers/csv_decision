@@ -168,6 +168,10 @@ module CSVDecision
       when nil
         @attributes[column_name] = cell
 
+      when Matchers::Proc
+        @attributes[column_name] = [current, cell]
+        @multi_result = true
+
       when Array
         @attributes[column_name] << cell
 
