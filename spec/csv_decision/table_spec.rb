@@ -280,7 +280,6 @@ describe CSVDecision::Table do
           DATA
         }
       ]
-
       examples.each do |test|
         %i[decide decide!].each do |method|
           it "#{method} correctly #{test[:example]}" do
@@ -352,13 +351,37 @@ describe CSVDecision::Table do
         { example: 'evaluates named guard condition',
           options: {},
           data: <<~DATA
-            IN :country, guard : country, out :PAID, out :PAID_type, out :len
+            in :country, guard: country,  out :PAID, out :PAID_type, out :len
             US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
             GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
             ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
             ,            :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
             ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
             ,            ,                := nil,    MISSING,        := nil
+          DATA
+        },
+        { example: 'evaluates named if condition',
+          options: {},
+          data: <<~DATA
+            in :country, out :PAID, out :PAID_type, out :len,     if:
+            US,          :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
+            GB,          :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
+            ,            :ISIN,     ISIN,           :PAID.length, :PAID.present?
+            ,            :SEDOL,    SEDOL,          :PAID.length, :PAID.present?
+            ,            :CUSIP,    CUSIP,          :PAID.length, :PAID.present?
+            ,            := nil,    MISSING,        := nil,
+          DATA
+        },
+        { example: 'evaluates multiple if conditions',
+          options: {},
+          data: <<~DATA
+            in :country, out :PAID, if:,           out :PAID_type, out :len,     if:,            if: stupid
+            US,          :CUSIP,    !:PAID.blank?, CUSIP,          :PAID.length, :PAID.present?, :len >= 9
+            GB,          :SEDOL,    !:PAID.blank?, SEDOL,          :PAID.length, :PAID.present?, :len >= 9
+            ,            :ISIN,     !:PAID.blank?, ISIN,           :PAID.length, :PAID.present?, :len >= 9
+            ,            :SEDOL,    !:PAID.blank?, SEDOL,          :PAID.length, :PAID.present?, :len >= 9
+            ,            :CUSIP,    !:PAID.blank?, CUSIP,          :PAID.length, :PAID.present?, :len >= 9
+            ,            := nil,    ,              MISSING,        := nil,,
           DATA
         }
       ]
@@ -389,6 +412,26 @@ describe CSVDecision::Table do
             ,            :SEDOL.present?, :SEDOL,    SEDOL,      :ID.length
             ,            :ISIN.present?,  :ISIN,     ISIN,       :ID.length
           DATA
+        },
+        { example: 'evaluates if: column conditions & output functions',
+          options: { first_match: false },
+          data: <<~DATA
+            IN :country, out :ID, out :ID_type, out :len,   if:
+            US,          :CUSIP,  CUSIP,        :ID.length, :ID.present?
+            GB,          :SEDOL,  SEDOL,        :ID.length, :ID.present?
+            ,            :SEDOL,  SEDOL,        :ID.length, :ID.present?
+            ,            :ISIN,   ISIN,         :ID.length, :ID.present?
+          DATA
+        },
+        { example: 'evaluates multiple if: column conditions & output functions',
+          options: { first_match: false },
+          data: <<~DATA
+            IN :country, out :ID, if:,         out :ID_type, out :len,   if:,       if:
+            US,          :CUSIP,  !:ID.blank?, CUSIP,        :ID.length, :len == 9, :ID.present?
+            GB,          :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len == 7, :ID.present?
+            ,            :SEDOL,  !:ID.blank?, SEDOL,        :ID.length, :len == 7, :ID.present?
+            ,            :ISIN,   !:ID.blank?, ISIN,         :ID.length, :len ==12, :ID.present?
+          DATA
         }
       ]
       examples.each do |test|
@@ -401,6 +444,9 @@ describe CSVDecision::Table do
 
             expect(table.send(method, country: 'US',  CUSIP: '123456789', ISIN: '123456789012'))
               .to eq(ID: %w[123456789 123456789012], ID_type: %w[CUSIP ISIN], len: [9, 12])
+
+            expect(table.send(method, country: 'US',  Ticker: 'USTY'))
+              .to eq({})
           end
         end
       end

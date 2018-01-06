@@ -8,13 +8,6 @@ module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   # @api private
   class Columns
-    # Value object to hold column dictionary entries.
-    Entry = Struct.new(:name, :eval, :type) do
-      def ins?
-        %i[in guard].member?(type) ? true : false
-      end
-    end
-
     # TODO: Value object used for any columns with defaults
     # Default = Struct.new(:name, :function, :default_if)
 
@@ -30,6 +23,10 @@ module CSVDecision
       # @return [Hash{Integer=>Entry}] All output column dictionary entries.
       attr_accessor :outs
 
+      # if: columns.
+      # @return [Hash{Integer=>Entry}] All if: column dictionary entries.
+      attr_accessor :ifs
+
       # TODO: Input hash path - optional (planned feature)
       # attr_accessor :path
 
@@ -39,6 +36,7 @@ module CSVDecision
       def initialize
         @ins = {}
         @outs = {}
+        @ifs = {}
         # TODO: @path = {}
         # TODO: @defaults = {}
       end
@@ -60,6 +58,12 @@ module CSVDecision
       @dictionary.outs
     end
 
+    # if: columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
+    def ifs
+      @dictionary.ifs
+    end
+
     # Input columns with defaults specified (planned feature)
     # def defaults
     #   @dictionary.defaults
@@ -77,7 +81,7 @@ module CSVDecision
       row = Header.strip_empty_columns(rows: table.rows)
 
       # Build a dictionary of all valid data columns from the header row.
-      @dictionary = Header.dictionary(row: row) if row
+      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: Dictionary.new) if row
 
       freeze
     end

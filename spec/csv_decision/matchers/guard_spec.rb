@@ -133,20 +133,37 @@ describe CSVDecision::Matchers::Guard do
       end
     end
 
-    context 'raises an error for a string in a guard column' do
+    context 'raises an error for a constant in a guard column' do
       data = <<~DATA
-            IN :country, guard : country, out :PAID, out :PAID_type, out :len
-            US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
-            GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
-            ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
-            ,            :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
-            ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
-            ,            := nil,          := nil,    MISSING,        := nil
+        IN :country, guard : country, out :PAID, out :PAID_type, out :len
+        US,          :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+        GB,          :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+        ,            :ISIN.present?,  :ISIN,     ISIN,           :PAID.length
+        ,            :SEDOL.present?, :SEDOL,    SEDOL,          :PAID.length
+        ,            :CUSIP.present?, :CUSIP,    CUSIP,          :PAID.length
+        ,            := nil,          := nil,    MISSING,        := nil
       DATA
 
       specify do
         expect { CSVDecision.parse(data) }
-          .to raise_error(CSVDecision::CellValidationError, 'guard column cannot contain constants')
+          .to raise_error(CSVDecision::CellValidationError, 'guard: column cannot contain constants')
+      end
+    end
+
+    context 'raises an error for a constant in an if column' do
+      data = <<~DATA
+        IN :country, guard : country, out :PAID, out :PAID_type, if:
+        US,          :CUSIP.present?, :CUSIP,    CUSIP,          TRUE
+        GB,          :SEDOL.present?, :SEDOL,    SEDOL,          
+        ,            :ISIN.present?,  :ISIN,     ISIN,           
+        ,            :SEDOL.present?, :SEDOL,    SEDOL,          
+        ,            :CUSIP.present?, :CUSIP,    CUSIP,          
+        ,            := nil,          := nil,    MISSING,        := nil
+      DATA
+
+      specify do
+        expect { CSVDecision.parse(data) }
+          .to raise_error(CSVDecision::CellValidationError, 'if: column cannot contain constants')
       end
     end
   end

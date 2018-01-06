@@ -13,16 +13,18 @@ module CSVDecision
     File.dirname __dir__
   end
 
+  autoload :Columns,    'csv_decision/columns'
+  autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Data,       'csv_decision/data'
   autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'
-  autoload :Columns,    'csv_decision/columns'
   autoload :Header,     'csv_decision/header'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
   autoload :Matchers,   'csv_decision/matchers'
   autoload :Options,    'csv_decision/options'
   autoload :Parse,      'csv_decision/parse'
+  autoload :Result,     'csv_decision/result'
   autoload :ScanRow,    'csv_decision/scan_row'
   autoload :Table,      'csv_decision/table'
 

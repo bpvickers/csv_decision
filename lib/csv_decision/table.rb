@@ -27,15 +27,12 @@ module CSVDecision
     end
 
     # @return [CSVDecision::Columns] Dictionary of all input and output columns.
-    # @api private
     attr_accessor :columns
 
     # @return [File, Pathname, nil] File path name if decision table was loaded from a CSV file.
-    # @api private
     attr_accessor :file
 
     # @return [Hash] All options, explicitly set or defaulted, used to parse the table.
-    # @api private
     attr_accessor :options
 
     # Set if the table row has any output functions (planned feature)
@@ -54,6 +51,10 @@ module CSVDecision
     # @return [Array<CSVDecision::ScanRow>] Used to implement outputting of final results.
     # @api private
     attr_accessor :outs_rows
+
+    # @return [Array<CSVDecision::ScanRow>] Used to implement filtering of final results.
+    # @api private
+    attr_accessor :if_rows
 
     # @return Array<CSVDecision::Table>] pre-loaded tables passed to this decision table
     #   at load time. Used to allow this decision table to lookup values in other
@@ -79,13 +80,13 @@ module CSVDecision
     def initialize
       @columns = nil
       @file = nil
-      @matchers = []
       @options = nil
       @outs_functions = nil
       @outs_rows = []
+      @if_rows = []
       @rows = []
       @scan_rows = []
-      @tables = nil
+      # @tables = nil
     end
   end
 end

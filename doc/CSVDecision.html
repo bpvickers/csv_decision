@@ -79,7 +79,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/csv_decision.rb<span class="defines">,<br />
-  lib/csv_decision/data.rb,<br /> lib/csv_decision/load.rb,<br /> lib/csv_decision/input.rb,<br /> lib/csv_decision/parse.rb,<br /> lib/csv_decision/table.rb,<br /> lib/csv_decision/decide.rb,<br /> lib/csv_decision/header.rb,<br /> lib/csv_decision/columns.rb,<br /> lib/csv_decision/options.rb,<br /> lib/csv_decision/decision.rb,<br /> lib/csv_decision/matchers.rb,<br /> lib/csv_decision/scan_row.rb,<br /> lib/csv_decision/matchers/guard.rb,<br /> lib/csv_decision/matchers/range.rb,<br /> lib/csv_decision/matchers/symbol.rb,<br /> lib/csv_decision/matchers/numeric.rb,<br /> lib/csv_decision/matchers/pattern.rb,<br /> lib/csv_decision/matchers/constant.rb,<br /> lib/csv_decision/matchers/function.rb</span>
+  lib/csv_decision/data.rb,<br /> lib/csv_decision/load.rb,<br /> lib/csv_decision/input.rb,<br /> lib/csv_decision/parse.rb,<br /> lib/csv_decision/table.rb,<br /> lib/csv_decision/decide.rb,<br /> lib/csv_decision/header.rb,<br /> lib/csv_decision/result.rb,<br /> lib/csv_decision/columns.rb,<br /> lib/csv_decision/options.rb,<br /> lib/csv_decision/decision.rb,<br /> lib/csv_decision/matchers.rb,<br /> lib/csv_decision/scan_row.rb,<br /> lib/csv_decision/dictionary.rb,<br /> lib/csv_decision/matchers/guard.rb,<br /> lib/csv_decision/matchers/range.rb,<br /> lib/csv_decision/matchers/symbol.rb,<br /> lib/csv_decision/matchers/numeric.rb,<br /> lib/csv_decision/matchers/pattern.rb,<br /> lib/csv_decision/matchers/constant.rb,<br /> lib/csv_decision/matchers/function.rb</span>
 </dd>
   </dl>
   
@@ -117,11 +117,11 @@ LICENSE and README.md for details.</p>
 <p class="children">
   
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="CSVDecision/Data.html" title="CSVDecision::Data (module)">Data</a></span>, <span class='object_link'><a href="CSVDecision/Decide.html" title="CSVDecision::Decide (module)">Decide</a></span>, <span class='object_link'><a href="CSVDecision/Header.html" title="CSVDecision::Header (module)">Header</a></span>, <span class='object_link'><a href="CSVDecision/Input.html" title="CSVDecision::Input (module)">Input</a></span>, <span class='object_link'><a href="CSVDecision/Load.html" title="CSVDecision::Load (module)">Load</a></span>, <span class='object_link'><a href="CSVDecision/Options.html" title="CSVDecision::Options (module)">Options</a></span>, <span class='object_link'><a href="CSVDecision/Parse.html" title="CSVDecision::Parse (module)">Parse</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="CSVDecision/Data.html" title="CSVDecision::Data (module)">Data</a></span>, <span class='object_link'><a href="CSVDecision/Decide.html" title="CSVDecision::Decide (module)">Decide</a></span>, <span class='object_link'><a href="CSVDecision/Dictionary.html" title="CSVDecision::Dictionary (module)">Dictionary</a></span>, <span class='object_link'><a href="CSVDecision/Header.html" title="CSVDecision::Header (module)">Header</a></span>, <span class='object_link'><a href="CSVDecision/Input.html" title="CSVDecision::Input (module)">Input</a></span>, <span class='object_link'><a href="CSVDecision/Load.html" title="CSVDecision::Load (module)">Load</a></span>, <span class='object_link'><a href="CSVDecision/Options.html" title="CSVDecision::Options (module)">Options</a></span>, <span class='object_link'><a href="CSVDecision/Parse.html" title="CSVDecision::Parse (module)">Parse</a></span>
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="CSVDecision/CellValidationError.html" title="CSVDecision::CellValidationError (class)">CellValidationError</a></span>, <span class='object_link'><a href="CSVDecision/Columns.html" title="CSVDecision::Columns (class)">Columns</a></span>, <span class='object_link'><a href="CSVDecision/Decision.html" title="CSVDecision::Decision (class)">Decision</a></span>, <span class='object_link'><a href="CSVDecision/Error.html" title="CSVDecision::Error (class)">Error</a></span>, <span class='object_link'><a href="CSVDecision/FileError.html" title="CSVDecision::FileError (class)">FileError</a></span>, <span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span>, <span class='object_link'><a href="CSVDecision/ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>, <span class='object_link'><a href="CSVDecision/Table.html" title="CSVDecision::Table (class)">Table</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="CSVDecision/CellValidationError.html" title="CSVDecision::CellValidationError (class)">CellValidationError</a></span>, <span class='object_link'><a href="CSVDecision/Columns.html" title="CSVDecision::Columns (class)">Columns</a></span>, <span class='object_link'><a href="CSVDecision/Decision.html" title="CSVDecision::Decision (class)">Decision</a></span>, <span class='object_link'><a href="CSVDecision/Error.html" title="CSVDecision::Error (class)">Error</a></span>, <span class='object_link'><a href="CSVDecision/FileError.html" title="CSVDecision::FileError (class)">FileError</a></span>, <span class='object_link'><a href="CSVDecision/Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span>, <span class='object_link'><a href="CSVDecision/Result.html" title="CSVDecision::Result (class)">Result</a></span>, <span class='object_link'><a href="CSVDecision/ScanRow.html" title="CSVDecision::ScanRow (class)">ScanRow</a></span>, <span class='object_link'><a href="CSVDecision/Table.html" title="CSVDecision::Table (class)">Table</a></span>
     
   
 </p>
@@ -606,9 +606,9 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
 </div>
 
       <div id="footer">
-  Generated on Sat Dec 30 13:04:04 2017 by
+  Generated on Fri Jan  5 21:44:00 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.3.0).
+  0.9.12 (ruby-2.4.0).
 </div>
 
     </div>

@@ -9,7 +9,7 @@ CSV Decision
 
 ### CSV based Ruby decision tables
 
-`csv_decision` is a RubyGem for CSV (comma separated values) based 
+`csv_decision` is a RubyGem for CSV based 
 [decision tables](https://en.wikipedia.org/wiki/Decision_table). 
 It accepts decision tables implemented as a 
 [CSV file](https://en.wikipedia.org/wiki/Comma-separated_values), 
@@ -18,7 +18,7 @@ producing a decision as an output hash.
 
 ### Why use `csv_decision`?
  
-Typical "business logic" is notoriously illogical -- full of corner cases and one-off 
+Typical "business logic" is notoriously illogical - full of corner cases and one-off 
 exceptions. 
 A decision table can express data-based decisions in a way that comes more naturally 
 to subject matter experts, who typically prefer spreadsheet models. 
@@ -46,22 +46,22 @@ To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`
  
 ### Simple example
   
-This table considers two input conditions: `topic` and `region`.
-These are labeled `in`. Certain combinations yield an output value for `team_member`, 
-labeled `out`.
+This table considers two input conditions: `topic` and `region`, labeled `in:`. 
+Certain combinations yield an output value for `team_member`, 
+labeled `out:`.
  
 ```
-in :topic | in :region  | out :team_member
-----------+-------------+-----------------
-sports    | Europe      | Alice
-sports    |             | Bob
-finance   | America     | Charlie
-finance   | Europe      | Donald
-finance   |             | Ernest
-politics  | Asia        | Fujio
-politics  | America     | Gilbert
-politics  |             | Henry
-          |             | Zach
+in:topic | in:region  | out:team_member
+---------+------------+----------------
+sports   | Europe     | Alice
+sports   |            | Bob
+finance  | America    | Charlie
+finance  | Europe     | Donald
+finance  |            | Ernest
+politics | Asia       | Fujio
+politics | America    | Gilbert
+politics |            | Henry
+         |            | Zach
 ```
  
 When the topic is `finance` and the region is `Europe` the team member `Donald`
@@ -99,7 +99,10 @@ Here is the example as code:
   table.decide(topic: 'culture', region: 'America') #=> { team_member: 'Zach' }
 ```
  
-An empty `in` cell means "matches any value", even nils.
+An empty `in:` cell means "matches any value", even nils. 
+
+Note that all column header names are symbolized, so it's actually more accurate to write 
+`in :topic`; however spaces before and after the `:` do not matter.
 
 If you have cloned this gem's git repo, then the example can also be run by loading
 the table from a CSV file:
@@ -164,8 +167,8 @@ For example:
 ```
  
 #### Column header symbols
-All input and output column names are symbolized, and can be used to form simple
-expressions that refer to values in the input hash.
+All input and output column names are symbolized, and those symbols may be used to form 
+simple expressions that refer to values in the input hash.
 
 For example:
  ```ruby
@@ -195,8 +198,8 @@ may be simplified to:
 These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 
-#### Column guard conditions
-Sometimes it's more convenient to write guard conditions in a single column specialized for that purpose. 
+#### Input guard conditions
+Sometimes it's more convenient to write guard expressions in a single column specialized for that purpose. 
 For example:
 
 ```ruby
@@ -215,8 +218,31 @@ table.decide(country: 'US',  CUSIP: '123456789') #=> { ID: '123456789', ID_type:
 table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012') 
   #=> { ID: '123456789012', ID_type: 'ISIN', len: 12 }
 ```
-Guard columns may be anonymous, and must contain non-constant expressions. In addition to
-0-arity Ruby methods, the following comparison operators are also supported: `==`, `!=`,
+Input `guard:` columns may be anonymous, and must contain non-constant expressions. In addition to
+0-arity Ruby methods, the following comparison operators are allowed: `==`, `!=`,
+`>`, `>=`, `<` and `<=`. Also, regular expressions are supported - i.e., `=~` and `!~`.
+
+#### Output if conditions
+In some situations it is useful to apply filter conditions *after* all the output
+columns have been derived. For example:
+
+```ruby
+data = <<~DATA
+  in :country, guard:,          out :ID, out :ID_type, out :len,   if:
+  US,          :CUSIP.present?, :CUSIP,  CUSIP8,       :ID.length, :len == 8
+  US,          :CUSIP.present?, :CUSIP,  CUSIP9,       :ID.length, :len == 9
+  US,          :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
+  ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length, :len == 12
+  ,            :ISIN.present?,  :ISIN,   DUMMY,        :ID.length,
+  ,            :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
+  DATA
+
+table = CSVDecision.parse(data)
+table.decide(country: 'US',  CUSIP: '123456789') #=> {ID: '123456789', ID_type: 'CUSIP9', len: 9}
+table.decide(CUSIP: '12345678', ISIN:'1234567890') #=> {ID: '1234567890', ID_type: 'DUMMY', len: 10}
+```
+Output `if:` columns may be anonymous, and must contain non-constant expressions. In addition to
+0-arity Ruby methods, the following comparison operators are allowed: `==`, `!=`,
 `>`, `>=`, `<` and `<=`. Also, regular expressions are supported - i.e., `=~` and `!~`.
   
 ### Testing
@@ -233,14 +259,12 @@ Guard columns may be anonymous, and must contain non-constant expressions. In ad
  `csv_decision` is still a work in progress, and will be enhanced to support
  the following features:
  * Text-only input columns may be indexed for faster lookup performance.
+ * Input hash values may be (conditionally) defaulted with a constant or a function call.
+ * Output columns may construct interpolated strings referencing column symbols.
  * Supply a pre-defined library of functions that can be called within input columns to 
    implement matching logic or from the output columns to formulate the final decision.
  * Available functions may be extended with a user-supplied library of Ruby methods 
    for tailored logic.
- * Input hash values may be (conditionally) defaulted with a constant or a function call.
- * Output columns may construct interpolated strings referencing column symbols.
- * Can use post-match guard conditions to filter the results of multi-row 
-   decision output.
  
 ### Reasons for the limitations of column expressions
 The simple column expressions allowed by `csv_decision` are purposely limited for reasons of
@@ -248,3 +272,13 @@ understandability and maintainability. The whole point of this gem is to make de
 easier to express and comprehend as declarative, tabular logic.
 While Ruby makes it easy to execute arbitrary code embedded within a CSV file, 
 this could easily result in hard to debug logic that also poses safety risks.
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for a list of changes.
+
+## License
+
+CSV Decision &copy; 2017-2018 by [Brett Vickers](mailto:brett@phillips-vickers.com). 
+CSV Decision is licensed under the MIT license. Please see the [LICENSE](./LICENSE) 
+document for more information.
