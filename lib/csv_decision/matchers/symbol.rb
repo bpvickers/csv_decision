@@ -60,7 +60,7 @@ module CSVDecision
       # E.g., > :col, we get comparator: >, args: col
       def self.comparison(comparator:, name:)
         function = COMPARE[comparator]
-        Matchers::Proc.with(type: :symbol, function: function[name])
+        Matchers::Proc.new(type: :symbol, function: function[name], symbols: name)
       end
       private_class_method :comparison
 
