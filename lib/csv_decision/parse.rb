@@ -183,7 +183,7 @@ module CSVDecision
 
     def self.add_ins_symbols(columns:, cell:)
       Array(cell.symbols).each do |symbol|
-        Dictionary.add_name(columns: columns, name: symbol, out: false)
+        Dictionary.add_name(columns: columns, name: symbol)
       end
     end
     private_class_method :add_ins_symbols

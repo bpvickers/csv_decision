@@ -26,9 +26,7 @@ module CSVDecision
       end
     end
 
-    # TODO: implement all anonymous column types
-    # COLUMN_TYPE_ANONYMOUS = Set.new(%i[path if guard]).freeze
-    # These column types do not need a name
+    # These column types do not need a name.
     COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if]).freeze
     private_constant :COLUMN_TYPE_ANONYMOUS
 
@@ -45,17 +43,16 @@ module CSVDecision
       dictionary
     end
 
-    # Add a new name to the dictionary of named input and output columns.
+    # Add a new symbol to the dictionary of named input and output columns.
     #
     # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
     # @param name [Symbol] Symbolized column name.
-    # @param out [Boolean] True if an output column, otherwise false for an input column.
+    # @param out [false, Index] False if an input column, otherwise the index of the output column.
     # @return [{Symbol=>Symbol}] Column dictionary updated with the new name.
-    def self.add_name(columns:, name:, out:, index: nil)
+    def self.add_name(columns:, name:, out: false)
       validate_name(columns: columns, name: name, out: out)
 
-      columns[name] = out ? index : :in
-
+      columns[name] = out ? out : :in
       columns
     end
 
@@ -120,16 +117,19 @@ module CSVDecision
       #   dictionary.ins[index] = entry
 
       when :in
-        add_name(columns: dictionary.columns, name: entry.name, out: false)
+        add_name(columns: dictionary.columns, name: entry.name)
         dictionary.ins[index] = entry
 
+      # A guard column is still added to the ins hash for parsing as an input column.
       when :guard
         dictionary.ins[index] = entry
 
       when :out
-        add_name(columns: dictionary.columns, name: entry.name, out: true, index: index)
+        add_name(columns: dictionary.columns, name: entry.name, out: index)
         dictionary.outs[index] = entry
 
+      # Add an if: column to both the +outs+ hash for output column parsing, and also
+      # a specialized +ifs+ hash used for evaluating them for row filtering.
       when :if
         dictionary.outs[index] = entry
         dictionary.ifs[index] = entry
