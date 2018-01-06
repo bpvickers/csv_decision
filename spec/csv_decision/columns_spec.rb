@@ -60,6 +60,8 @@ describe CSVDecision::Columns do
 
     expect(table.columns.dictionary)
       .to eq(input: :in, output: 1, output2: 3, len: 4, input2: :in, input3: :in, input4: :in)
+
+    expect(table.columns.input_keys).to eq %i[input input2 input4 input3]
   end
 
   it 'recognises the output symbol referenced by an output function' do
@@ -81,6 +83,8 @@ describe CSVDecision::Columns do
 
     expect(table.columns.dictionary)
       .to eq(input: :in, output: 1, output2: 3, len: 5, input2: :in, input3: 4, input4: :in)
+
+    expect(table.columns.input_keys).to eq %i[input input2 input4]
   end
 
   it 'raises an error for an output column referring to a later output column' do
@@ -176,6 +180,8 @@ describe CSVDecision::Columns do
 
     expect(table.columns.ins[1].to_h)
       .to eq(name: nil, eval: true, type: :guard)
+
+    expect(table.columns.input_keys).to eq %i[country CUSIP SEDOL]
   end
 
   it 'rejects output column being same as input column' do
@@ -210,5 +216,6 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns.ifs[3].to_h).to eq(name: 3, eval: true, type: :if)
+    expect(table.columns.input_keys).to eq %i[country CUSIP SEDOL]
   end
 end

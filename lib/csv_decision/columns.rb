@@ -65,6 +65,10 @@ module CSVDecision
       @dictionary.columns
     end
 
+    def input_keys
+      @dictionary.columns.select { |_k, v| v == :in }.keys
+    end
+
     # Input columns with defaults specified (planned feature)
     # def defaults
     #   @dictionary.defaults
