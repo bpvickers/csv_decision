@@ -59,7 +59,7 @@ puts ""
     # Test expected results
     expected = first_match ? test[:first_match] : test[:accumulate]
 
-    result = rufus_table.transform!(input)
+    result = rufus_table.transform(input)
 
     unless result.slice(*expected.keys).eql?(expected)
       raise "Rufus expected results check failed for test: #{name}"
@@ -79,7 +79,7 @@ puts ""
 
       GC.start
       x.report("Rufus decision (first_match: #{first_match}) - #{name}: ") do |count|
-        count.times { rufus_table.transform!(input) }
+        count.times { rufus_table.transform(input) }
       end
 
       x.compare!
