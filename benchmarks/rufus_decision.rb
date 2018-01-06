@@ -3,8 +3,6 @@
 require 'benchmark/ips'
 require 'benchmark/memory'
 require 'rufus/decision'
-require 'ice_nine'
-require 'ice_nine/core_ext/object'
 
 require_relative '../lib/csv_decision'
 
@@ -30,7 +28,7 @@ benchmarks = [
     first_match: { 'salesperson' => 'Swanson' },
     accumulate: { 'salesperson' => %w[Swanson Korolev] }
   }
-].deep_freeze
+].freeze
 
 tag_width = 70
 
