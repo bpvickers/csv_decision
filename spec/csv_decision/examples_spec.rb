@@ -95,6 +95,27 @@ context 'simple examples' do
     end
   end
 
+  context 'simple example - column symbols not in header' do
+    data = <<~DATA
+      in :parent, out :top?
+      ==:node,   yes
+      ,          no
+    DATA
+
+    it 'makes correct decisions' do
+      table = CSVDecision.parse(data)
+
+      result = table.decide(node: 0, parent: 0)
+      expect(result).to eq(top?: 'yes')
+
+      result = table.decide(node: 1, parent: 0)
+      expect(result).to eq(top?: 'no')
+
+      result = table.decide(node: '0', parent: 0)
+      expect(result).to eq(top?: 'no')
+    end
+  end
+
   it 'makes correct decision for table with symbol ordered compares' do
     data = <<~DATA
       in :traded, in :settled, out :status

@@ -15,15 +15,15 @@ module CSVDecision
     # The key of each hash is the header cell's array column index.
     # Note that input and output columns can be interspersed and need not have unique names.
     class Dictionary
-      # Input columns.
+      # @return [Hash{Integer=>Entry}] All column names.
+      attr_accessor :columns
+
       # @return [Hash{Integer=>Entry}] All input column dictionary entries.
       attr_accessor :ins
 
-      # Output columns.
       # @return [Hash{Integer=>Entry}] All output column dictionary entries.
       attr_accessor :outs
 
-      # if: columns.
       # @return [Hash{Integer=>Entry}] All if: column dictionary entries.
       attr_accessor :ifs
 
@@ -34,17 +34,14 @@ module CSVDecision
       # attr_accessor :defaults
 
       def initialize
+        @columns = {}
+        @ifs = {}
         @ins = {}
         @outs = {}
-        @ifs = {}
         # TODO: @path = {}
         # TODO: @defaults = {}
       end
     end
-
-    # Dictionary of all data columns.
-    # @return [Columns::Dictionary]
-    attr_reader :dictionary
 
     # Input columns hash keyed by column index.
     # @return [Hash{Index=>Entry}]
@@ -55,13 +52,17 @@ module CSVDecision
     # Output columns hash keyed by column index.
     # @return [Hash{Index=>Entry}]
     def outs
-      @dictionary.outs
+      @dictionary&.outs
     end
 
     # if: columns hash keyed by column index.
     # @return [Hash{Index=>Entry}]
     def ifs
       @dictionary.ifs
+    end
+
+    def dictionary
+      @dictionary.columns
     end
 
     # Input columns with defaults specified (planned feature)

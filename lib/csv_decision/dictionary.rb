@@ -42,27 +42,22 @@ module CSVDecision
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
-      validate(dictionary)
-    end
-
-    def self.validate(dictionary)
-      dictionary.outs.each_pair do |col, column|
-        validate_out(dictionary: dictionary, column_name: column.name, col: col)
-      end
-
       dictionary
     end
-    private_class_method :validate
 
-    def self.validate_out(dictionary:, column_name:, col:)
-      if dictionary.ins.any? { |_, column| column_name == column.name }
-        raise CellValidationError, "output column name '#{column_name}' is also an input column"
-      end
+    # Add a new name to the dictionary of named input and output columns.
+    #
+    # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
+    # @param name [Symbol] Symbolized column name.
+    # @param out [Boolean] True if an output column, otherwise false for an input column.
+    # @return [{Symbol=>Symbol}] Column dictionary updated with the new name.
+    def self.add_name(columns:, name:, out:, index: nil)
+      validate_name(columns: columns, name: name, out: out)
 
-      return unless dictionary.outs.any? { |key, column| column_name == column.name && col != key }
-      raise CellValidationError, "output column name '#{column_name}' is duplicated"
+      columns[name] = out ? index : :in
+
+      columns
     end
-    private_class_method :validate_out
 
     def self.validate_column(cell:, index:)
       match = Header::COLUMN_TYPE.match(cell)
@@ -124,10 +119,15 @@ module CSVDecision
       #   # Treat set: as an in: column
       #   dictionary.ins[index] = entry
 
-      when :in, :guard
+      when :in
+        add_name(columns: dictionary.columns, name: entry.name, out: false)
+        dictionary.ins[index] = entry
+
+      when :guard
         dictionary.ins[index] = entry
 
       when :out
+        add_name(columns: dictionary.columns, name: entry.name, out: true, index: index)
         dictionary.outs[index] = entry
 
       when :if
@@ -138,6 +138,31 @@ module CSVDecision
       dictionary
     end
     private_class_method :dictionary_entry
+
+    def self.validate_name(columns:, name:, out:)
+      return unless (in_out = columns[name])
+
+      return validate_out_name(in_out: in_out, name: name) if out
+      validate_in_name(in_out: in_out, name: name)
+    end
+    private_class_method :validate_name
+
+    def self.validate_out_name(in_out:, name:)
+      if in_out == :in
+        raise CellValidationError, "output column name '#{name}' is also an input column"
+      end
+
+      raise CellValidationError, "output column name '#{name}' is duplicated"
+    end
+    private_class_method :validate_out_name
+
+    def self.validate_in_name(in_out:, name:)
+      # in: columns may be duped
+      return if in_out == :in
+
+      raise CellValidationError, "output column name '#{name}' is also an input column"
+    end
+    private_class_method :validate_in_name
 
     # def self.default_if(type)
     #   return nil if type == :set
