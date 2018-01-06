@@ -17,17 +17,24 @@ module CSVDecision
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
-      # For safety the default is to symbolize keys and make a copy of the hash.
-      # However, if this is turned off then the keys must already symbolized.
-      input = symbolize_keys ? input.symbolize_keys : input
-
-      parsed_input = parse_input(table: table, input: input)
-
-      # Freeze the copy of the input hash we just created.
-      parsed_input[:hash].freeze if symbolize_keys
-
-      parsed_input.freeze
+      parse_input(table: table, input: input(table, input, symbolize_keys))
     end
+
+    def self.input(table, input, symbolize_keys)
+      input_keys = table.columns.input_keys
+
+      # For safety the default is to symbolize the keys of a copy of the input hash.
+      if symbolize_keys
+        input = input.symbolize_keys
+        input.slice!(*input_keys)
+        return input
+      end
+
+      # However, if this is turned off then the keys should already symbolized,
+      # so just return a copy of the input hash slice we need.
+      input.slice(*input_keys)
+    end
+    private_class_method :input
 
     def self.validate(input)
       return if input.is_a?(Hash) && !input.empty?
@@ -47,7 +54,7 @@ module CSVDecision
         scan_cols[col] = value
       end
 
-      { hash: input, scan_cols: scan_cols }
+      { hash: input.freeze, scan_cols: scan_cols }.freeze
     end
     private_class_method :parse_input
   end

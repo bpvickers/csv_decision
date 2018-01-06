@@ -124,8 +124,9 @@ context 'simple examples' do
       ,           <:traded,    invalid trade
       ,                   ,    invalid data
     DATA
-
     table = CSVDecision.parse(data)
+
+    expect(table.columns.input_keys).to eq %i[traded settled]
 
     expect(table.decide(traded: '20171227',  settled: '20171227')).to eq(status: 'same day')
     expect(table.decide(traded:  20171227,   settled:  20171227 )).to eq(status: 'same day')
