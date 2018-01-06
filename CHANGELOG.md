@@ -1,3 +1,7 @@
+## v0.0.9, 5 January 2018.
+*Additions*
+- Output column if: filter conditions.
+
 ## v0.0.8, 31 December 2017.
 *Additions*
 - Guard conditions can use `=~` and `!~` for regular expressions.
