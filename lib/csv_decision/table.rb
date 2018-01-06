@@ -27,15 +27,12 @@ module CSVDecision
     end
 
     # @return [CSVDecision::Columns] Dictionary of all input and output columns.
-    # @api private
     attr_accessor :columns
 
     # @return [File, Pathname, nil] File path name if decision table was loaded from a CSV file.
-    # @api private
     attr_accessor :file
 
     # @return [Hash] All options, explicitly set or defaulted, used to parse the table.
-    # @api private
     attr_accessor :options
 
     # Set if the table row has any output functions (planned feature)

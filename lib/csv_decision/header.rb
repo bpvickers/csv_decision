@@ -24,6 +24,8 @@ module CSVDecision
     # More lenient than a Ruby method name - note any spaces will have been replaced with
     # underscores.
     COLUMN_NAME = "\\w[\\w:/!?]*"
+
+    # Regular expression for matching a column name.
     COLUMN_NAME_RE = Matchers.regexp(Header::COLUMN_NAME)
 
     # Check if the given row contains a recognisable header cell.
@@ -47,7 +49,9 @@ module CSVDecision
       rows.shift
     end
 
-    # Array of all empty column indices.
+    # Build an array of all empty column indices.
+    # @param row [Array]
+    # @return [false, Array<Integer>]
     def self.empty_columns?(row:)
       result = []
       row&.each_with_index { |cell, index| result << index if cell == '' }

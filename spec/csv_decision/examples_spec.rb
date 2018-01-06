@@ -133,4 +133,29 @@ context 'simple examples' do
     expect(table.decide(country: 'EU',  CUSIP: '123456789', ISIN:'123456789012'))
       .to eq(ID: '123456789012', ID_type: 'ISIN', len: 12)
   end
+
+  it 'makes a correct decision using an if column' do
+    data = <<~DATA
+      in :country, guard:,          out :ID, out :ID_type, out :len,  if:
+      US,          :CUSIP.present?, :CUSIP,  CUSIP8,       :ID.length, :len == 8
+      US,          :CUSIP.present?, :CUSIP,  CUSIP9,       :ID.length, :len == 9
+      US,          :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
+      ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length, :len == 12
+      ,            :ISIN.present?,  :ISIN,   DUMMY,        :ID.length,
+      ,            :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
+      DATA
+
+    table = CSVDecision.parse(data)
+
+    expect(table.decide(country: 'US',  CUSIP: '12345678'))
+      .to eq(ID: '12345678', ID_type: 'CUSIP8', len: 8)
+    expect(table.decide(country: 'US',  CUSIP: '123456789'))
+      .to eq(ID: '123456789', ID_type: 'CUSIP9', len: 9)
+    expect(table.decide(country: 'US',  CUSIP: '1234567890'))
+      .to eq(ID: '1234567890', ID_type: 'DUMMY', len: 10)
+    expect(table.decide(country: nil,  CUSIP: '123456789', ISIN:'123456789012'))
+      .to eq(ID: '123456789012', ID_type: 'ISIN', len: 12)
+    expect(table.decide(CUSIP: '12345678', ISIN:'1234567890'))
+      .to eq(ID: '1234567890', ID_type: 'DUMMY', len: 10)
+  end
 end

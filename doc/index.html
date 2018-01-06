@@ -75,16 +75,16 @@ src="http://img.shields.io/badge/license-MIT-yellowgreen.svg"></a></p>
 
 <h3 id="label-CSV+based+Ruby+decision+tables">CSV based Ruby decision tables</h3>
 
-<p><code>csv_decision</code> is a RubyGem for CSV (comma separated values)
-based <a href="https://en.wikipedia.org/wiki/Decision_table">decision
-tables</a>. It accepts decision tables implemented as a <a
+<p><code>csv_decision</code> is a RubyGem for CSV based <a
+href="https://en.wikipedia.org/wiki/Decision_table">decision tables</a>. It
+accepts decision tables implemented as a <a
 href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a>,
 which can then be used to execute complex conditional logic against an
 input hash, producing a decision as an output hash.</p>
 
 <h3 id="label-Why+use+csv_decision-3F">Why use <code>csv_decision</code>?</h3>
 
-<p>Typical “business logic” is notoriously illogical – full of corner cases
+<p>Typical “business logic” is notoriously illogical - full of corner cases
 and one-off exceptions. A decision table can express data-based decisions
 in a way that comes more naturally to subject matter experts, who typically
 prefer spreadsheet models. Business logic may then be encapsulated,
@@ -237,8 +237,8 @@ BigDecimal(&#39;100.0&#39;)<br> “`</p>
 
 <h4 id="label-Column+header+symbols">Column header symbols</h4>
 
-<p>All input and output column names are symbolized, and can be used to form
-simple expressions that refer to values in the input hash.</p>
+<p>All input and output column names are symbolized, and those symbols may be
+used to form simple expressions that refer to values in the input hash.</p>
 
 <p>For example:  “`ruby  data = &lt;&lt;~DATA  in :node, in :parent, out :top?
 , == :node, yes  , , no  DATA</p>
@@ -262,9 +262,9 @@ operators are also supported: <code>!=</code>, <code>&gt;</code>,
 <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. For more simple
 examples see <code>spec/csv_decision/examples_spec.rb</code>.</p>
 
-<h4 id="label-Column+guard+conditions">Column guard conditions</h4>
+<h4 id="label-Input+guard+conditions">Input guard conditions</h4>
 
-<p>Sometimes it&#39;s more convenient to write guard conditions in a single
+<p>Sometimes it&#39;s more convenient to write guard expressions in a single
 column specialized for that purpose. For example:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;~DATA</span>
@@ -283,11 +283,39 @@ column specialized for that purpose. For example:</p>
   <span class='comment'>#=&gt; { ID: &#39;123456789012&#39;, ID_type: &#39;ISIN&#39;, len: 12 }
 </span></code></pre>
 
-<p>Guard columns may be anonymous, and must contain non-constant expressions.
-In addition to 0-arity Ruby methods, the following comparison operators are
-also supported: <code>==</code>, <code>!=</code>, <code>&gt;</code>,
-<code>&gt;=</code>, <code>&lt;</code> and <code>&lt;=</code>. Also, regular
-expressions are supported - i.e., <code>=~</code> and <code>!~</code>.</p>
+<p>Input <code>guard:</code> columns may be anonymous, and must contain
+non-constant expressions. In addition to 0-arity Ruby methods, the
+following comparison operators are allowed: <code>==</code>,
+<code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>
+and <code>&lt;=</code>. Also, regular expressions are supported - i.e.,
+<code>=~</code> and <code>!~</code>.</p>
+
+<h4 id="label-Output+if+conditions">Output if conditions</h4>
+
+<p>In some situations it is useful to apply filter conditions <em>after</em>
+all the output columns have been derived. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;~DATA</span>
+<span class='tstring_content'>  in :country, guard:,          out :ID, out :ID_type, out :len,   if:
+</span><span class='tstring_content'>  US,          :CUSIP.present?, :CUSIP,  CUSIP8,       :ID.length, :len == 8
+</span><span class='tstring_content'>  US,          :CUSIP.present?, :CUSIP,  CUSIP9,       :ID.length, :len == 9
+</span><span class='tstring_content'>  US,          :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
+</span><span class='tstring_content'>  ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length, :len == 12
+</span><span class='tstring_content'>  ,            :ISIN.present?,  :ISIN,   DUMMY,        :ID.length,
+</span><span class='tstring_content'>  ,            :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
+</span><span class='heredoc_end'>  DATA
+</span>
+<span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="CSVDecision.html#parse-class_method" title="CSVDecision.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>country:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>US</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>  <span class='label'>CUSIP:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>123456789</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; {ID: &#39;123456789&#39;, ID_type: &#39;CUSIP9&#39;, len: 9}
+</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>CUSIP:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>12345678</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>ISIN:</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1234567890</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; {ID: &#39;1234567890&#39;, ID_type: &#39;DUMMY&#39;, len: 10}
+</span></code></pre>
+
+<p>Output <code>if:</code> columns may be anonymous, and must contain
+non-constant expressions. In addition to 0-arity Ruby methods, the
+following comparison operators are allowed: <code>==</code>,
+<code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>
+and <code>&lt;=</code>. Also, regular expressions are supported - i.e.,
+<code>=~</code> and <code>!~</code>.</p>
 
 <h3 id="label-Testing">Testing</h3>
 
@@ -301,15 +329,13 @@ bundle install  rspec </code></p>
 
 <p><code>csv_decision</code> is still a work in progress, and will be enhanced
 to support  the following features:  * Text-only input columns may be
-indexed for faster lookup performance.  * Supply a pre-defined library of
-functions that can be called within input columns to  implement matching
-logic or from the output columns to formulate the final decision.  *
-Available functions may be extended with a user-supplied library of Ruby
-methods  for tailored logic.  * Input hash values may be (conditionally)
-defaulted with a constant or a function call.  * Output columns may
-construct interpolated strings referencing column symbols.  * Can use
-post-match guard conditions to filter the results of multi-row  decision
-output.</p>
+indexed for faster lookup performance.  * Input hash values may be
+(conditionally) defaulted with a constant or a function call.  * Output
+columns may construct interpolated strings referencing column symbols.  *
+Supply a pre-defined library of functions that can be called within input
+columns to  implement matching logic or from the output columns to
+formulate the final decision.  * Available functions may be extended with a
+user-supplied library of Ruby methods  for tailored logic.</p>
 
 <h3 id="label-Reasons+for+the+limitations+of+column+expressions">Reasons for the limitations of column expressions</h3>
 
@@ -333,7 +359,7 @@ href="./LICENSE">LICENSE</a> document for more information.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Mon Jan  1 15:30:57 2018 by
+  Generated on Fri Jan  5 21:43:59 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

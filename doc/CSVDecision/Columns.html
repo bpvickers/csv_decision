@@ -120,7 +120,7 @@
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Dictionary</a></span>, <span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Dictionary</a></span>
     
   
 </p>
@@ -327,19 +327,19 @@
       <pre class="lines">
 
 
+78
+79
+80
+81
+82
+83
+84
 85
 86
-87
-88
-89
-90
-91
-92
-93
-94</pre>
+87</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 85</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span>
   <span class='comment'># If a column does not have a valid header cell, then it&#39;s empty of data.
@@ -347,7 +347,7 @@
 </span>  <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Header.html" title="CSVDecision::Header (module)">Header</a></span></span><span class='period'>.</span><span class='id identifier rubyid_strip_empty_columns'><span class='object_link'><a href="Header.html#strip_empty_columns-class_method" title="CSVDecision::Header.strip_empty_columns (method)">strip_empty_columns</a></span></span><span class='lparen'>(</span><span class='label'>rows:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_rows'>rows</span><span class='rparen'>)</span>
 
   <span class='comment'># Build a dictionary of all valid data columns from the header row.
-</span>  <span class='ivar'>@dictionary</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Header.html" title="CSVDecision::Header (module)">Header</a></span></span><span class='period'>.</span><span class='id identifier rubyid_dictionary'><span class='object_link'><a href="Header.html#dictionary-class_method" title="CSVDecision::Header.dictionary (method)">dictionary</a></span></span><span class='lparen'>(</span><span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_row'>row</span>
+</span>  <span class='ivar'>@dictionary</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Dictionary.html" title="CSVDecision::Dictionary (module)">Dictionary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_build'><span class='object_link'><a href="Dictionary.html#build-class_method" title="CSVDecision::Dictionary.build (method)">build</a></span></span><span class='lparen'>(</span><span class='label'>header:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>dictionary:</span> <span class='const'><span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Dictionary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Columns/Dictionary.html#initialize-instance_method" title="CSVDecision::Columns::Dictionary#initialize (method)">new</a></span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_row'>row</span>
 
   <span class='id identifier rubyid_freeze'>freeze</span>
 <span class='kw'>end</span></pre>
@@ -406,12 +406,12 @@
       <pre class="lines">
 
 
-54
-55
-56</pre>
+47
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 54</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dictionary'>dictionary</span>
   <span class='ivar'>@dictionary</span>
@@ -431,7 +431,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="ifs-instance_method">
   
-    #<strong>ifs</strong>  &#x21d2; <tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
+    #<strong>ifs</strong>  &#x21d2; <tt>Hash{Index=&gt;Entry}</tt> 
   
 
   
@@ -457,7 +457,7 @@
     <li>
       
       
-        <span class='type'>(<tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+        <span class='type'>(<tt>Hash{Index=&gt;Entry}</tt>)</span>
       
       
       
@@ -471,12 +471,12 @@
       <pre class="lines">
 
 
-70
-71
-72</pre>
+63
+64
+65</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ifs'>ifs</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_ifs'>ifs</span>
@@ -489,7 +489,7 @@
       <div class="method_details ">
   <h3 class="signature " id="ins-instance_method">
   
-    #<strong>ins</strong>  &#x21d2; <tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
+    #<strong>ins</strong>  &#x21d2; <tt>Hash{Index=&gt;Entry}</tt> 
   
 
   
@@ -515,7 +515,7 @@
     <li>
       
       
-        <span class='type'>(<tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+        <span class='type'>(<tt>Hash{Index=&gt;Entry}</tt>)</span>
       
       
       
@@ -529,12 +529,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_ins'>ins</span>
@@ -547,7 +547,7 @@
       <div class="method_details ">
   <h3 class="signature " id="outs-instance_method">
   
-    #<strong>outs</strong>  &#x21d2; <tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt> 
+    #<strong>outs</strong>  &#x21d2; <tt>Hash{Index=&gt;Entry}</tt> 
   
 
   
@@ -573,7 +573,7 @@
     <li>
       
       
-        <span class='type'>(<tt>Hash{Index=&gt;<span class='object_link'><a href="Columns/Entry.html" title="CSVDecision::Columns::Entry (class)">Entry</a></span>}</tt>)</span>
+        <span class='type'>(<tt>Hash{Index=&gt;Entry}</tt>)</span>
       
       
       
@@ -587,12 +587,12 @@
       <pre class="lines">
 
 
-64
-65
-66</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@dictionary</span><span class='period'>.</span><span class='id identifier rubyid_outs'>outs</span>
@@ -607,7 +607,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Jan  1 15:30:59 2018 by
+  Generated on Fri Jan  5 21:44:00 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

@@ -124,8 +124,7 @@ module CSVDecision
       Matchers.parse(columns: columns, matchers: @outs, row: row)
     end
 
-    # @abstract Subclass and override {#matches?} to implement
-    #   a custom Matcher class.
+    # Subclass and override {#matches?} to implement a custom Matcher class.
     class Matcher
       def initialize(_options = nil); end
 

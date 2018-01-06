@@ -29,20 +29,32 @@ module CSVDecision
 
     # Common case for building a single row result is just copying output column values to the
     # final result hash.
+    # @param row [Array]
+    # @return [void]
     def add_outs(row)
       @outs.each_pair { |col, column| @attributes[column.name] = row[col] }
     end
 
+    # Accumulate the outs into arrays.
+    # @param row [Array]
+    # @return [void]
     def accumulate_outs(row)
       @outs.each_pair { |col, column| add_cell(column_name: column.name, cell: row[col]) }
     end
 
+    # Derive the final result.
+    # @return [{Symbol=>Object}]
     def final
       return @attributes if @if_columns.empty?
 
       @multi_result ? multi_row_result : single_row_result
     end
 
+    # Evaluate the output columns, and use them to start building the final result,
+    # along with the partial result required to evaluate functions.
+    #
+    # @param row [Array]
+    # @return (see #final)
     def eval_outs(row)
       # Set the constants first, in case the functions refer to them
       eval_outs_constants(row: row)
@@ -53,6 +65,11 @@ module CSVDecision
       final
     end
 
+    # Evaluate the cell proc using the partial result calculated so far.
+    #
+    # @param proc [Matchers::Pro]
+    # @param column_name [Symbol, Integer]
+    # @param index [Integer]
     def eval_cell_proc(proc:, column_name:, index:)
       @attributes[column_name][index] = proc.function[partial_result(index)]
     end
@@ -122,18 +139,6 @@ module CSVDecision
       end
     end
 
-    def partial_result(index)
-      @attributes.each_pair do |column_name, value|
-        # Delete this column from the partial result in case there is data from a prior result row
-        next @partial_result.delete(column_name) if value[index].is_a?(Matchers::Proc)
-
-        # Add this constant value to the partial result row built so far.
-        @partial_result[column_name] = value[index]
-      end
-
-      @partial_result
-    end
-
     def eval_outs_procs(row:)
       @outs.each_pair do |col, column|
         proc = row[col]
@@ -144,6 +149,18 @@ module CSVDecision
         @partial_result[column.name] = value
         @attributes[column.name] = value
       end
+    end
+
+    def partial_result(index)
+      @attributes.each_pair do |column_name, value|
+        # Delete this column from the partial result in case there is data from a prior result row
+        next @partial_result.delete(column_name) if value[index].is_a?(Matchers::Proc)
+
+        # Add this constant value to the partial result row built so far.
+        @partial_result[column_name] = value[index]
+      end
+
+      @partial_result
     end
 
     def add_cell(column_name:, cell:)
