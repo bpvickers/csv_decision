@@ -20,10 +20,18 @@ module CSVDecision
       @outs = table.columns.outs
       @if_columns = table.columns.ifs
 
-      # Partial result always includes the input hash for calculating output functions.
+      # Partial result always copies in the input hash for calculating output functions.
+      # Note that these input key values will not be mutated, as output columns can never
+      # have the same symbol as an input hash key.
+      # However, the rest of this hash is mutated as output column evaluation results
+      # are accumulated.
       @partial_result = input[:hash].dup if table.outs_functions
 
+      # Attributes hash contains the output decision key value pairs
       @attributes = {}
+
+      # Set to true if the result has more than one row.
+      # Only possible for the first_match: false option.
       @multi_result = false
     end
 
@@ -35,7 +43,7 @@ module CSVDecision
       @outs.each_pair { |col, column| @attributes[column.name] = row[col] }
     end
 
-    # Accumulate the outs into arrays.
+    # Accumulate the outs into arrays of values.
     # @param row [Array]
     # @return [void]
     def accumulate_outs(row)
@@ -45,6 +53,7 @@ module CSVDecision
     # Derive the final result.
     # @return [{Symbol=>Object}]
     def final
+      # If there are no if: columns, then nothing needs to be filtered out of this result hash.
       return @attributes if @if_columns.empty?
 
       @multi_result ? multi_row_result : single_row_result
@@ -76,12 +85,13 @@ module CSVDecision
 
     private
 
-    # Case where we have a single row result
+    # Case where we have a single row result, which either gets returned
+    # or filtered by the if: column conditions.
     def single_row_result
       @if_columns.each_key do |col|
         return nil unless @attributes[col]
 
-        # Remove the if: column from the final result
+        # Remove the if: column from the final result hash.
         @attributes.delete(col)
       end
 
@@ -121,9 +131,11 @@ module CSVDecision
       case count
       when 0
         {}
-        # Single row array values do not require arrays.
+
+      # Single row array values do not require arrays.
       when 1
         @attributes.transform_values!(&:first)
+
       else
         @attributes
       end
