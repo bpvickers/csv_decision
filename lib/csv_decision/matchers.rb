@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# require 'values'
-
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017.
 # @author Brett Vickers.
