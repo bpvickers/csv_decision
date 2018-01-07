@@ -9,6 +9,9 @@ module CSVDecision
   class Error < StandardError; end
 
   # Error validating a cell when parsing input table data.
+  class TableValidationError < Error; end
+
+  # Error validating a cell when parsing input table cell data.
   class CellValidationError < Error; end
 
   # Table parsing error message enhanced to include the file being processed.

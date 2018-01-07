@@ -8,10 +8,15 @@ module CSVDecision
   # Parse the default row beneath the header row if present
   # @api private
   module Defaults
-    # @params columns [{Integer=>Dictionary::Entry}] Hash of header columns with defaults.
-    # @params matchers [Array<Matchers>] Output cell special matchers.
-    # @params row [Array<String>] Defaults row that appears just after the header row.
+    # Parse the defaults row that (optionally) appears just after the header row.
+    # We have already determined that this row must be present.
+    # @param columns [{Integer=>Dictionary::Entry}] Hash of header columns with defaults.
+    # @param matchers [Array<Matchers>] Output cell special matchers.
+    # @param row [Array<String>] Defaults row that appears just after the header row.
+    # @raise [TableValidationError] Missing defaults row.
     def self.parse(columns:, matchers:, row:)
+      raise TableValidationError, 'Missing defaults row' if row.nil?
+
       defaults = columns.defaults
 
       # Scan the default row for procs and constants
