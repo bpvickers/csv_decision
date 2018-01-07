@@ -1,7 +1,7 @@
 ## v0.1.0, 5 January 2018.
-*Changes*
-- Changed decide! method for safety so that it no longer potentially mutates the input hash.
-Small performance impact. 
+*Additions*
+- Implement more checks on output columns that are duplicated or
+reference columns that appear after them.
 
 ## v0.0.9, 5 January 2018.
 *Additions*
