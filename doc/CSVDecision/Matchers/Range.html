@@ -135,7 +135,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#matches%3F-class_method" title="matches? (class method)">.<strong>matches?</strong>(cell)  &#x21d2; false, CSVDecision::Proc </a>
+      <a href="#matches%3F-class_method" title="matches? (class method)">.<strong>matches?</strong>(cell)  &#x21d2; Boolean </a>
     
 
     
@@ -219,7 +219,7 @@ or <tt>!a..z</tt>.</p>
       <div class="method_details first">
   <h3 class="signature first" id="matches?-class_method">
   
-    .<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
+    .<strong>matches?</strong>(cell)  &#x21d2; <tt>Boolean</tt> 
   
 
   
@@ -234,47 +234,22 @@ or <tt>!a..z</tt>.</p>
 
 <p>Match a table data cell string against a Ruby-like range expression.</p>
 
+<p>(see Matcher#matches?)</p>
+
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>cell</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Data row cell.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
     <li>
       
       
-        <span class='type'>(<tt>false</tt>, <tt>CSVDecision::Proc</tt>)</span>
+        <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-      
-        &mdash;
-        <div class='inline'>
-<p>Returns false if this cell is not a match; otherwise returns the
-<code>CSVDecision::Proc</code> object indicating if this is a constant or
-some type of function.</p>
-</div>
       
     </li>
   
@@ -286,6 +261,7 @@ some type of function.</p>
       <pre class="lines">
 
 
+17
 18
 19
 20
@@ -295,11 +271,10 @@ some type of function.</p>
 24
 25
 26
-27
-28</pre>
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/range.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/range.rb', line 17</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='const'>NUMERIC_RANGE</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -346,27 +321,7 @@ or <tt>!a..z</tt>.</p>
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>cell</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Data row cell.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -394,12 +349,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-92
-93
-94</pre>
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/range.rb', line 92</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/range.rb', line 90</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Range (class)">Range</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Range.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
@@ -414,7 +369,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 20:03:02 2018 by
+  Generated on Sun Jan  7 16:36:29 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

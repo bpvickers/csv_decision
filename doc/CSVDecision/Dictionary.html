@@ -127,7 +127,7 @@ table load time.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#add_name-class_method" title="add_name (class method)">.<strong>add_name</strong>(columns:, name:, out: false)  &#x21d2; {Symbol=&gt;Symbol} </a>
+      <a href="#add_name-class_method" title="add_name (class method)">.<strong>add_name</strong>(columns:, name:, out: false)  &#x21d2; Hash{Symbol=&gt;[:in, Integer]} </a>
     
 
     
@@ -185,7 +185,7 @@ the header row.</p>
       <div class="method_details first">
   <h3 class="signature first" id="add_name-class_method">
   
-    .<strong>add_name</strong>(columns:, name:, out: false)  &#x21d2; <tt>{Symbol=&gt;Symbol}</tt> 
+    .<strong>add_name</strong>(columns:, name:, out: false)  &#x21d2; <tt>Hash{Symbol=&gt;[:in, Integer]}</tt> 
   
 
   
@@ -263,7 +263,7 @@ the header row.</p>
     <li>
       
       
-        <span class='type'>(<tt>{Symbol=&gt;Symbol}</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol=&gt;[:in, Integer]}</tt>)</span>
       
       
       
@@ -282,18 +282,18 @@ the header row.</p>
       <pre class="lines">
 
 
-52
-53
-54
-55
-56
-57</pre>
+111
+112
+113
+114
+115
+116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 52</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 111</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_add_name'>add_name</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>name:</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='kw'>false</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_validate_name'>validate_name</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='id identifier rubyid_out'>out</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="Validate.html" title="CSVDecision::Validate (module)">Validate</a></span></span><span class='period'>.</span><span class='id identifier rubyid_name'><span class='object_link'><a href="Validate.html#name-class_method" title="CSVDecision::Validate.name (method)">name</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='id identifier rubyid_out'>out</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_columns'>columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_out'>out</span> <span class='op'>?</span> <span class='id identifier rubyid_out'>out</span> <span class='op'>:</span> <span class='symbol'>:in</span>
   <span class='id identifier rubyid_columns'>columns</span>
@@ -372,16 +372,16 @@ the header row.</p>
       <pre class="lines">
 
 
-38
-39
-40
-41
-42
-43
-44</pre>
+97
+98
+99
+100
+101
+102
+103</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 97</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build'>build</span><span class='lparen'>(</span><span class='label'>header:</span><span class='comma'>,</span> <span class='label'>dictionary:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_header'>header</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
@@ -400,7 +400,7 @@ the header row.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 20:03:01 2018 by
+  Generated on Sun Jan  7 16:36:27 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

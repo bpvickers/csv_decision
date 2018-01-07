@@ -169,7 +169,7 @@ some type of function.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#matches%3F-instance_method" title="#matches? (instance method)">#<strong>matches?</strong>(cell)  &#x21d2; false, CSVDecision::Proc </a>
+      <a href="#matches%3F-instance_method" title="#matches? (instance method)">#<strong>matches?</strong>(cell)  &#x21d2; Boolean </a>
     
 
     
@@ -347,7 +347,7 @@ some type of function.</p>
       <div class="method_details first">
   <h3 class="signature first" id="matches?-instance_method">
   
-    #<strong>matches?</strong>(cell)  &#x21d2; <tt>false</tt>, <tt>CSVDecision::Proc</tt> 
+    #<strong>matches?</strong>(cell)  &#x21d2; <tt>Boolean</tt> 
   
 
   
@@ -364,47 +364,22 @@ some type of function.</p>
 
 <pre class="code ruby"><code class="ruby">otherwise return false.</code></pre>
 
+<p>(see Matcher#matches?)</p>
+
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>cell</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Data row cell.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
     <li>
       
       
-        <span class='type'>(<tt>false</tt>, <tt>CSVDecision::Proc</tt>)</span>
+        <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-      
-        &mdash;
-        <div class='inline'>
-<p>Returns false if this cell is not a match; otherwise returns the
-<code>CSVDecision::Proc</code> object indicating if this is a constant or
-some type of function.</p>
-</div>
       
     </li>
   
@@ -416,12 +391,12 @@ some type of function.</p>
       <pre class="lines">
 
 
+65
 66
-67
-68</pre>
+67</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/constant.rb', line 66</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/constant.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Matchers.html" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Constant (class)">Constant</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Constant.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
@@ -479,12 +454,12 @@ some type of function.</p>
       <pre class="lines">
 
 
+70
 71
-72
-73</pre>
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/constant.rb', line 71</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/constant.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs?'>outs?</span>
   <span class='kw'>true</span>
@@ -499,7 +474,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 20:03:02 2018 by
+  Generated on Sun Jan  7 16:36:29 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

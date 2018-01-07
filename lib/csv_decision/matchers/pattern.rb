@@ -77,7 +77,7 @@ module CSVDecision
 
       # @param options [Hash{Symbol=>Object}] Used to determine the value of regexp_implicit:.
       def initialize(options = {})
-        # By default regexp's must have an explicit comparator
+        # By default regexp's must have an explicit comparator.
         @regexp_explicit = !options[:regexp_implicit]
       end
 
@@ -85,8 +85,8 @@ module CSVDecision
       # If the option regexp_implicit: true has been set, then cells may omit the +=~+ comparator
       # so long as they contain non-word characters typically used in regular expressions such as
       # +*+ and +.+.
-      # @param (see Matchers::Matcher#matches?)
-      # @return (see Matchers::Matcher#matches?)
+      # @param (see Matcher#matches?)
+      # @return (see Matcher#matches?)
       def matches?(cell)
         Pattern.matches?(cell, regexp_explicit: @regexp_explicit)
       end
