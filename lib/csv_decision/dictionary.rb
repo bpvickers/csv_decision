@@ -24,25 +24,61 @@ module CSVDecision
       }.freeze
       private_constant :ENTRY
 
-      def self.create(column_name, column_type)
-        entry = ENTRY[column_type]
-        new(name: column_name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if])
+      # Input column types.
+      INS_TYPES = %i[in guard set].freeze
+      private_constant :INS_TYPES
+
+      # Create a new column dictionary entry defaulting attributes from the column type,
+      # which is looked up in +ENTRY+ table.
+      #
+      # @param name [Symbol] Column name.
+      # @param type [Symbol] Column type.
+      # @return [Entry] Column dictionary entry.
+      def self.create(name:, type:)
+        entry = ENTRY[type]
+        new(name: name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if])
       end
 
+      # @return [Boolean] Return true is this is an input column, false otherwise.
       def ins?
-        %i[in guard set].member?(type) ? true : false
+        @ins
       end
 
-      attr_reader :name, :type, :set_if
+      # @return [Symbol] Column name.
+      attr_reader :name
+
+      # @return [Symbol] Column type.
+      attr_reader :type
+
+      # @return [nil, Boolean] If set to true then this column has procs that
+      #   need evaluating, otherwise it only contains constants.
       attr_accessor :eval
 
+      # @return [nil, true, Symbol] Defined for columns of type :set, nil otherwise.
+      #   If true, then default is set unconditionally, otherwise the method symbol
+      #   sent to the input hash value that must evaluate to a truthy value.
+      attr_reader :set_if
+
+      # @return [Matchers::Proc, Object] For a column of type set: gives the proc that must be
+      #   evaluated to set the default value. If not a proc then some type of constant.
+      attr_accessor :function
+
+      # @param name (see #name)
+      # @param type (see #type)
+      # @param eval (see #eval)
+      # @param set_if (see #set_if)
       def initialize(name:, type:, eval: nil, set_if: nil)
         @name = name
         @type = type
         @eval = eval
         @set_if = set_if
+        @function = nil
+        @ins = INS_TYPES.member?(type)
       end
 
+      # Convert the object's attributes to a hash.
+      #
+      # @return [{Symbol=>Object}]
       def to_h
         {
           name: @name,
@@ -82,9 +118,9 @@ module CSVDecision
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = Validate.column(cell: cell, index: index)
 
-      entry = Entry.create(column_name, column_type)
-
-      dictionary_entry(dictionary: dictionary, entry: entry, index: index)
+      dictionary_entry(dictionary: dictionary,
+                       entry: Entry.create(name: column_name, type: column_type),
+                       index: index)
     end
     private_class_method :parse_cell
 
@@ -117,15 +153,13 @@ module CSVDecision
     private_class_method :output_entry
 
     def self.input_entry(dictionary:, entry:, index:)
+      dictionary.ins[index] = entry
+
       # Default function will set the input value unconditionally or conditionally.
-      if entry.type == :set
-        dictionary.defaults[index] = Columns::Default.new(entry.name, entry.set_if)
-      end
+      dictionary.defaults[index] = entry if entry.type == :set
 
       # guard: columns are anonymous
       add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
-
-      dictionary.ins[index] = entry
     end
     private_class_method :input_entry
   end

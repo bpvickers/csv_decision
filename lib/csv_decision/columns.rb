@@ -8,31 +8,29 @@ module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   # @api private
   class Columns
-    # Value object used for any columns with defaults.
-    Default = Struct.new(:name, :set_if, :function, :eval, :type)
-
-    # Dictionary of all data columns.
+    # Dictionary of all table data columns.
     # The key of each hash is the header cell's array column index.
-    # Note that input and output columns can be interspersed and need not have unique names.
+    # Note that input and output columns may be interspersed, and multiple input columns
+    # may refer to the same input hash key symbol.
+    # However, output columns must have unique symbols, which cannot overlap with input
+    # column symbols.
     class Dictionary
       # @return [Hash{Integer=>Entry}] All column names.
       attr_accessor :columns
 
-      # @return [Hash{Integer=>Entry}] All defaulted input column dictionary
-      #  entries.
-      attr_accessor :defaults
-
       # @return [Hash{Integer=>Entry}] All input column dictionary entries.
       attr_accessor :ins
+
+      # @return [Hash{Integer=>Entry}] All defaulted input column dictionary
+      #  entries. This is actually just a subset of :ins.
+      attr_accessor :defaults
 
       # @return [Hash{Integer=>Entry}] All output column dictionary entries.
       attr_accessor :outs
 
       # @return [Hash{Integer=>Entry}] All if: column dictionary entries.
+      #   This is actually just a subset of :outs.
       attr_accessor :ifs
-
-      # TODO: Input hash path - optional (planned feature)
-      # attr_accessor :path
 
       def initialize
         @columns = {}
@@ -40,7 +38,6 @@ module CSVDecision
         @ifs = {}
         @ins = {}
         @outs = {}
-        # TODO: @path = {}
       end
     end
 
@@ -82,11 +79,6 @@ module CSVDecision
     def input_keys
       @dictionary.columns.select { |_k, v| v == :in }.keys
     end
-
-    # Input hash path (planned feature)
-    # def path
-    #   @dictionary.path
-    # end
 
     # @param table [Table] Decision table being constructed.
     def initialize(table)

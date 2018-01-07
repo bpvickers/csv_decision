@@ -27,6 +27,21 @@ module CSVDecision
       invalid_constant?(type: :constant, column: column)
     end
 
+    # Evaluate the cell proc against the column's input value and/or input hash.
+    #
+    # @param proc [CSVDecision::Proc] Proc in the table cell.
+    # @param value [Object] Value supplied in the input hash corresponding to this column.
+    # @param hash [{Symbol=>Object}] Input hash with symbolized keys.
+    def self.eval_matcher(proc:, hash:, value: nil)
+      function = proc.function
+
+      # A symbol guard expression just needs to be passed the input hash
+      return function[hash] if proc.type == :guard
+
+      # All other procs can take one or two args
+      function.arity == 1 ? function[value] : function[value, hash]
+    end
+
     def self.scan_matchers(column:, matchers:, cell:)
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
@@ -43,7 +58,7 @@ module CSVDecision
 
     # A guard column can only use output matchers
     def self.guard_ins_matcher?(column, matcher)
-     !matcher.outs? && column.type == :guard
+      column.type == :guard && !matcher.outs?
     end
     private_class_method :guard_ins_matcher?
 
@@ -61,21 +76,6 @@ module CSVDecision
       raise CellValidationError, "#{column.type}: column cannot contain constants"
     end
     private_class_method :invalid_constant?
-
-    # Evaluate the cell proc against the column's input value and/or input hash.
-    #
-    # @param proc [CSVDecision::Proc] Proc in the table cell.
-    # @param value [Object] Value supplied in the input hash corresponding to this column.
-    # @param hash [{Symbol=>Object}] Input hash with symbolized keys.
-    def self.eval_matcher(proc:, hash:, value: nil)
-      function = proc.function
-
-      # A symbol guard expression just needs to be passed the input hash
-      return function[hash] if proc.type == :guard
-
-      # All other procs can take one or two args
-      function.arity == 1 ? function[value] : function[value, hash]
-    end
 
     # @return [Array<Integer>] Column indices for simple constants.
     attr_reader :constants
