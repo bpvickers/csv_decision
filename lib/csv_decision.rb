@@ -27,6 +27,7 @@ module CSVDecision
   autoload :Result,     'csv_decision/result'
   autoload :ScanRow,    'csv_decision/scan_row'
   autoload :Table,      'csv_decision/table'
+  autoload :Validate,   'csv_decision/validate'
 
   class Matchers
     autoload :Constant,      'csv_decision/matchers/constant'

@@ -8,15 +8,9 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Header
-    # TODO: implement all column types
-    # COLUMN_TYPE = %r{
-    #   \A(?<type>in|out|in/text|out/text|set|set/nil|set/blank|path|guard|if)
-    #   \s*:\s*(?<name>\S?.*)\z
-    # }xi
-
     # Column types recognised in the header row.
     COLUMN_TYPE = %r{
-      \A(?<type>in|out|in/text|out/text|guard|if)
+      \A(?<type>in/text|in|out/text|out|guard|if|set/nil\?|set/blank\?|set)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 
@@ -27,6 +21,15 @@ module CSVDecision
 
     # Regular expression for matching a column name.
     COLUMN_NAME_RE = Matchers.regexp(Header::COLUMN_NAME)
+    private_constant :COLUMN_NAME_RE
+
+    # Return true if column name is valid.
+    #
+    # @param column_name [String]
+    # @return [Boolean]
+    def self.column_name?(column_name)
+      COLUMN_NAME_RE.match(column_name)
+    end
 
     # Check if the given row contains a recognisable header cell.
     #
@@ -39,8 +42,8 @@ module CSVDecision
     # Strip empty columns from all data rows.
     #
     # @param rows [Array<Array<String>>] Data rows.
-    # @return [Array<Array<String>>] Data array after removing any empty columns and the
-    #   header row.
+    # @return [Array<Array<String>>] Data array after removing any empty columns
+    #   and the header row.
     def self.strip_empty_columns(rows:)
       empty_cols = empty_columns?(row: rows.first)
       Data.strip_columns(data: rows, empty_columns: empty_cols) if empty_cols

@@ -8,8 +8,8 @@ module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   # @api private
   class Columns
-    # TODO: Value object used for any columns with defaults
-    # Default = Struct.new(:name, :function, :default_if)
+    # Value object used for any columns with defaults.
+    Default = Struct.new(:name, :function, :default_if)
 
     # Dictionary of all data columns.
     # The key of each hash is the header cell's array column index.
@@ -17,6 +17,10 @@ module CSVDecision
     class Dictionary
       # @return [Hash{Integer=>Entry}] All column names.
       attr_accessor :columns
+
+      # @return [Hash{Integer=>Entry}] All defaulted input column dictionary
+      #  entries.
+      attr_accessor :defaults
 
       # @return [Hash{Integer=>Entry}] All input column dictionary entries.
       attr_accessor :ins
@@ -30,17 +34,25 @@ module CSVDecision
       # TODO: Input hash path - optional (planned feature)
       # attr_accessor :path
 
-      # TODO: Input columns with a default value (planned feature)
-      # attr_accessor :defaults
-
       def initialize
         @columns = {}
+        @defaults = {}
         @ifs = {}
         @ins = {}
         @outs = {}
         # TODO: @path = {}
-        # TODO: @defaults = {}
       end
+    end
+
+    # Input columns with defaults specified (planned feature)
+    def defaults
+      @dictionary.defaults
+    end
+
+    # @return [{Symbol=>[false, Integer]}] Dictionary of all
+    #   input and output column names.
+    def dictionary
+      @dictionary.columns
     end
 
     # Input columns hash keyed by column index.
@@ -61,18 +73,10 @@ module CSVDecision
       @dictionary.ifs
     end
 
-    def dictionary
-      @dictionary.columns
-    end
-
+    # @return [Array<Symbol] All input column symbols.
     def input_keys
       @dictionary.columns.select { |_k, v| v == :in }.keys
     end
-
-    # Input columns with defaults specified (planned feature)
-    # def defaults
-    #   @dictionary.defaults
-    # end
 
     # Input hash path (planned feature)
     # def path
