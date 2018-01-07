@@ -28,7 +28,7 @@ module CSVDecision
     # @param column_name [String]
     # @return [Boolean]
     def self.column_name?(column_name)
-      COLUMN_NAME_RE.match(column_name)
+      COLUMN_NAME_RE.match?(column_name)
     end
 
     # Check if the given row contains a recognisable header cell.
@@ -36,7 +36,7 @@ module CSVDecision
     # @param row [Array<String>] Header row.
     # @return [Boolean] Return true if the row looks like a header.
     def self.row?(row)
-      row.any? { |cell| cell.match(COLUMN_TYPE) }
+      row.any? { |cell| COLUMN_TYPE.match?(cell) }
     end
 
     # Strip empty columns from all data rows.

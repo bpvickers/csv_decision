@@ -16,14 +16,12 @@ module CSVDecision
       IMPLICIT_COMPARISON = Matchers.regexp("(?<comparator>=~|!~|!=)?\\s*(?<value>\\S.*)")
       private_constant :IMPLICIT_COMPARISON
 
-      # rubocop: disable Style/DoubleNegation
       PATTERN_LAMBDAS = {
-        '!=' => proc { |pattern, value|   pattern != value }.freeze,
-        '=~' => proc { |pattern, value| !!pattern.match(value) }.freeze,
-        '!~' => proc { |pattern, value|  !pattern.match(value) }.freeze
+        '!=' => proc { |pattern, value|  pattern != value }.freeze,
+        '=~' => proc { |pattern, value|  pattern.match?(value) }.freeze,
+        '!~' => proc { |pattern, value| !pattern.match?(value) }.freeze
       }.freeze
       private_constant :PATTERN_LAMBDAS
-      # rubocop: enable Style/DoubleNegation
 
       def self.regexp?(cell:, explicit:)
         # By default a regexp pattern must use an explicit comparator

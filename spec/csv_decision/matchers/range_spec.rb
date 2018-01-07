@@ -10,38 +10,6 @@ describe CSVDecision::Matchers::Range do
     it { is_expected.to respond_to(:matches?).with(1).argument }
   end
 
-  # context 'cell value matching' do
-  #   ranges = {
-  #     '-1..1' => { min: '-1', type: '..', max: '1', negate: '' },
-  #     '! -1..1' => { min: '-1', type: '..', max: '1', negate: '!' },
-  #     '!-1.0..1.1' => { min: '-1.0', type: '..', max: '1.1', negate: '!' },
-  #     '!-1.0...1.1' => { min: '-1.0', type: '...', max: '1.1', negate: '!' }
-  #   }
-  #   ranges.each_pair do |range, expected|
-  #     it "matches #{range} as a numeric range" do
-  #       match = described_class::NUMERIC_RANGE.match(range)
-  #       expect(match['min']).to eq expected[:min]
-  #       expect(match['max']).to eq expected[:max]
-  #       expect(match['type']).to eq expected[:type]
-  #       expect(match['negate']).to eq expected[:negate]
-  #     end
-  #   end
-  #
-  #   ranges = {
-  #     'a..z' => { min: 'a', type: '..', max: 'z', negate: '' },
-  #     '!1...9' => { min: '1', type: '...', max: '9', negate: '!' },
-  #   }
-  #   ranges.each_pair do |range, expected|
-  #     it "matches #{range} as an alphanumeric range" do
-  #       match = described_class::ALNUM_RANGE.match(range)
-  #       expect(match['min']).to eq expected[:min]
-  #       expect(match['max']).to eq expected[:max]
-  #       expect(match['type']).to eq expected[:type]
-  #       expect(match['negate']).to eq expected[:negate]
-  #     end
-  #   end
-  # end
-
   describe '#matches?' do
     matcher = described_class.new
 

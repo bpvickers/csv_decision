@@ -51,9 +51,6 @@ module CSVDecision
     # Negation sign prefixed to ranges and functions.
     NEGATE = '!'
 
-    # Cell constants and functions specified by prefixing the value with one of these 3 symbols.
-    EQUALS = '==|:=|='
-
     # All regular expressions used for matching are anchored inside their own
     # non-capturing group.
     #
@@ -63,6 +60,9 @@ module CSVDecision
       Regexp.new("\\A(?:#{value})\\z").freeze
     end
 
+    # Cell constants and functions specified by prefixing the value with one of these 3 symbols.
+    EQUALS = '==|:=|='
+
     EQUALS_RE = regexp(EQUALS)
     private_constant :EQUALS_RE
 
@@ -71,7 +71,7 @@ module CSVDecision
     # @param operator [String]
     # @return [String]
     def self.normalize_operator(operator)
-      EQUALS_RE.match(operator) ? '==' : operator
+      EQUALS_RE.match?(operator) ? '==' : operator
     end
 
     # Regular expression used to recognise a numeric string with or without a decimal point.

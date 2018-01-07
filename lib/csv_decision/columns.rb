@@ -51,7 +51,7 @@ module CSVDecision
       @dictionary.defaults = value
     end
 
-    # @return [{Symbol=>[false, Integer]}] Dictionary of all
+    # @return [Hash{Symbol=>[false, Integer]}] Dictionary of all
     #   input and output column names.
     def dictionary
       @dictionary.columns
@@ -75,7 +75,7 @@ module CSVDecision
       @dictionary.ifs
     end
 
-    # @return [Array<Symbol] All input column symbols.
+    # @return [Array<Symbol>] All input column symbols.
     def input_keys
       @dictionary.columns.select { |_k, v| v == :in }.keys
     end

@@ -60,7 +60,7 @@ module CSVDecision
       attr_reader :set_if
 
       # @return [Matchers::Proc, Object] For a column of type set: gives the proc that must be
-      #   evaluated to set the default value. If not a proc then some type of constant.
+      #   evaluated to set the default value. If not a proc, then it's some type of constant.
       attr_accessor :function
 
       # @param name (see #name)
@@ -78,7 +78,7 @@ module CSVDecision
 
       # Convert the object's attributes to a hash.
       #
-      # @return [{Symbol=>Object}]
+      # @return [Hash{Symbol=>[nil, Boolean, Symbol]}]
       def to_h
         {
           name: @name,
@@ -107,7 +107,7 @@ module CSVDecision
     # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
     # @param name [Symbol] Symbolized column name.
     # @param out [false, Index] False if an input column, otherwise the index of the output column.
-    # @return [{Symbol=>Symbol}] Column dictionary updated with the new name.
+    # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
     def self.add_name(columns:, name:, out: false)
       Validate.name(columns: columns, name: name, out: out)
 
