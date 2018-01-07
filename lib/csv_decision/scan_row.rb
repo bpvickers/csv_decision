@@ -43,7 +43,7 @@ module CSVDecision
 
     # A guard column can only use output matchers
     def self.guard_ins_matcher?(column, matcher)
-      column.type == :guard && !matcher.outs?
+     !matcher.outs? && column.type == :guard
     end
     private_class_method :guard_ins_matcher?
 
@@ -91,7 +91,7 @@ module CSVDecision
     # Scan all the specified +columns+ (e.g., inputs) in the given +data+ row using the +matchers+
     # array supplied.
     #
-    # @param row [Array] Data row.
+    # @param row [Array<String>] Data row - still just all string constants.
     # @param columns [Array<Columns::Entry>] Array of column dictionary entries.
     # @param matchers [Array<Matchers::Matcher>] Array of table cell matchers.
     # @return [Array] Data row with anything not a string constant replaced with a Proc or a

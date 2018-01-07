@@ -135,9 +135,9 @@ module CSVDecision
 
     # @param options (see CSVDecision.parse)
     def initialize(options)
-      @matchers = options[:matchers].collect { |klass| klass.new(options) }
-      @ins = @matchers.select(&:ins?)
-      @outs = @matchers.select(&:outs?)
+      matchers = options[:matchers].collect { |klass| klass.new(options) }
+      @ins = matchers.select(&:ins?)
+      @outs = matchers.select(&:outs?)
     end
 
     # Parse the row's input columns using the input matchers.

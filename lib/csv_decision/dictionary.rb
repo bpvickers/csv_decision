@@ -8,27 +8,50 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Dictionary
-    # Table used to build a column dictionary entry.
-    ENTRY = {
-      in:         { type: :in,    eval: nil },
-      'in/text':  { type: :in,    eval: false },
-      out:        { type: :out,   eval: nil },
-      'out/text': { type: :out,   eval: false },
-      guard:      { type: :guard, eval: true },
-      if:         { type: :if,    eval: true }
-    }.freeze
-    private_constant :ENTRY
+    # Column dictionary entries.
+    class Entry
+      # Table used to build a column dictionary entry.
+      ENTRY = {
+        in:           { type: :in,    eval: nil },
+        'in/text':    { type: :in,    eval: false },
+        set:          { type: :set,   eval: nil, set_if: true },
+        'set/nil?':   { type: :set,   eval: nil, set_if: :nil? },
+        'set/blank?': { type: :set,   eval: nil, set_if: :blank? },
+        out:          { type: :out,   eval: nil },
+        'out/text':   { type: :out,   eval: false },
+        guard:        { type: :guard, eval: true },
+        if:           { type: :if,    eval: true }
+      }.freeze
+      private_constant :ENTRY
 
-    # Value object to hold column dictionary entries.
-    Entry = Struct.new(:name, :eval, :type) do
+      def self.create(column_name, column_type)
+        entry = ENTRY[column_type]
+        new(name: column_name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if])
+      end
+
       def ins?
-        %i[in guard].member?(type) ? true : false
+        %i[in guard set].member?(type) ? true : false
+      end
+
+      attr_reader :name, :type, :set_if
+      attr_accessor :eval
+
+      def initialize(name:, type:, eval: nil, set_if: nil)
+        @name = name
+        @type = type
+        @eval = eval
+        @set_if = set_if
+      end
+
+      def to_h
+        {
+          name: @name,
+          type: @type,
+          eval: @eval,
+          set_if: @set_if
+        }
       end
     end
-
-    # These column types do not need a name.
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if]).freeze
-    private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Classify and build a dictionary of all input and output columns by
     # parsing the header row.
@@ -56,17 +79,10 @@ module CSVDecision
       columns
     end
 
-    # Returns the normalized column type, along with an indication if
-    # the column requires evaluation
-    def self.column_type(column_name, entry)
-      Entry.new(column_name, entry[:eval], entry[:type])
-    end
-    private_class_method :column_type
-
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = Validate.column(cell: cell, index: index)
 
-      entry = column_type(column_name, ENTRY[column_type])
+      entry = Entry.create(column_name, column_type)
 
       dictionary_entry(dictionary: dictionary, entry: entry, index: index)
     end
@@ -75,51 +91,42 @@ module CSVDecision
     def self.dictionary_entry(dictionary:, entry:, index:)
       case entry.type
       # A guard column is still added to the ins hash for parsing as an input column.
-      when :in, :guard, :set, :'set/nil?', :'set/blank?'
+      when :in, :guard, :set
         input_entry(dictionary: dictionary, entry: entry, index: index)
 
       when :out, :if
         output_entry(dictionary: dictionary, entry: entry, index: index)
       end
+
+      dictionary
     end
     private_class_method :dictionary_entry
 
     def self.output_entry(dictionary:, entry:, index:)
       case entry.type
+      # if: columns are anonymous
       when :if
         dictionary.ifs[index] = entry
+
       when :out
         add_name(columns: dictionary.columns, name: entry.name, out: index)
       end
 
       dictionary.outs[index] = entry
-      dictionary
     end
+    private_class_method :output_entry
 
     def self.input_entry(dictionary:, entry:, index:)
-      case entry.type
-      when :in
-        add_name(columns: dictionary.columns, name: entry.name)
-
-      when :set, :'set/nil?', :'set/blank?'
-        defaults_entry(dictionary: dictionary, entry: entry, index: index)
+      # Default function will set the input value unconditionally or conditionally.
+      if entry.type == :set
+        dictionary.defaults[index] = Columns::Default.new(entry.name, entry.set_if)
       end
 
+      # guard: columns are anonymous
+      add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
+
       dictionary.ins[index] = entry
-      dictionary
     end
-
-    def self.defaults_entry(dictionary:, entry:, index:)
-      # Default function will set the input value unconditionally or conditionally.
-      dictionary.defaults[index] =
-        Columns::Default.new(entry.name, nil, default_if(entry.type))
-    end
-
-    def self.default_if(type)
-      return nil if type == :set
-      return :nil? if type == :'set/nil'
-      :blank?
-    end
-    private_class_method :default_if
+    private_class_method :input_entry
   end
 end

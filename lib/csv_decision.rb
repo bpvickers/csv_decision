@@ -14,10 +14,11 @@ module CSVDecision
   end
 
   autoload :Columns,    'csv_decision/columns'
-  autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Data,       'csv_decision/data'
   autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'
+  autoload :Defaults,   'csv_decision/defaults'
+  autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Header,     'csv_decision/header'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'

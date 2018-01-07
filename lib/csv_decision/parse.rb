@@ -82,12 +82,30 @@ module CSVDecision
       # These override any options passed as parameters to the parse method.
       table.options = Options.from_csv(rows: table.rows, options: options).freeze
 
+      # Matchers
+      matchers = CSVDecision::Matchers.new(options)
+
+      # Parse the header row
+      table.columns = parse_header(table: table, matchers: matchers)
+
+      # Parse the table's the data rows.
+      parse_data(table: table, matchers: matchers)
+    end
+    private_class_method :parse_table
+
+    def self.parse_header(table:, matchers:)
       # Parse the header row
       table.columns = CSVDecision::Columns.new(table)
 
-      parse_data(table: table, matchers: Matchers.new(options))
+      # Parse the defaults row if present
+      return table.columns if table.columns.defaults.blank?
+
+      table.columns.defaults =
+        Defaults.parse(columns: table.columns, matchers: matchers.outs, row: table.rows.shift)
+
+      table.columns
     end
-    private_class_method :parse_table
+    private_class_method :parse_header
 
     def self.parse_data(table:, matchers:)
       table.rows.each_with_index do |row, index|
@@ -201,7 +219,7 @@ module CSVDecision
 
       add_ins_symbols(columns: columns, cell: cell)
     end
-    private_class_method :ins_cell_dictionary
+    # private_class_method :ins_cell_dictionary
 
     def self.add_ins_symbols(columns:, cell:)
       Array(cell.symbols).each do |symbol|

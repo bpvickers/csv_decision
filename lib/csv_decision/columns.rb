@@ -9,7 +9,7 @@ module CSVDecision
   # @api private
   class Columns
     # Value object used for any columns with defaults.
-    Default = Struct.new(:name, :function, :default_if)
+    Default = Struct.new(:name, :set_if, :function, :eval, :type)
 
     # Dictionary of all data columns.
     # The key of each hash is the header cell's array column index.
@@ -44,9 +44,14 @@ module CSVDecision
       end
     end
 
-    # Input columns with defaults specified (planned feature)
+    # Input columns with defaults specified
     def defaults
-      @dictionary.defaults
+      @dictionary&.defaults
+    end
+
+    # Set defaults for columns with defaults specified
+    def defaults=(value)
+      @dictionary.defaults = value
     end
 
     # @return [{Symbol=>[false, Integer]}] Dictionary of all
