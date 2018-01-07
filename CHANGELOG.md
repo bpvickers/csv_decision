@@ -1,3 +1,7 @@
+## v0.2.0, January 2018.
+*Additions*
+- Set values in the input hash either as a default or unconditionally.
+
 ## v0.1.0, 5 January 2018.
 *Additions*
 - Implement more checks on output columns that are duplicated or
