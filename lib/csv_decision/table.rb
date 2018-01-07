@@ -20,6 +20,7 @@ module CSVDecision
     #
     # @param input (see #decide)
     # @note Input hash must have its keys symbolized.
+    #   Input hash will be mutated by any functions that have side effects.
     # @return (see #decide)
     def decide!(input)
       Decide.decide(table: self, input: input, symbolize_keys: false)

@@ -436,7 +436,7 @@ result, along with the partial result required to evaluate functions.</p>
 </span>  <span class='comment'># have the same symbol as an input hash key.
 </span>  <span class='comment'># However, the rest of this hash is mutated as output column evaluation results
 </span>  <span class='comment'># are accumulated.
-</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='kw'>if</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_outs_functions'>outs_functions</span>
+</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='op'>&amp;.</span><span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_input_keys'>input_keys</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_outs_functions'>outs_functions</span>
 
   <span class='comment'># Attributes hash contains the output decision key value pairs
 </span>  <span class='ivar'>@attributes</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -952,7 +952,7 @@ result, along with the partial result required to evaluate functions.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 16:16:30 2018 by
+  Generated on Sat Jan  6 20:03:02 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
