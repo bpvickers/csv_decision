@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'values'
-
 # CSV Decision: CSV based Ruby decision tables.
 # Created December 2017.
 # @author Brett Vickers.
@@ -10,9 +8,45 @@ module CSVDecision
   # Match table data cells against a valid decision table expression or a simple constant.
   # @api private
   class Matchers
-    # Value object for a data cell proc.
+    # Composite object for a data cell proc. Note that we do not need it to be comparable.
+    # Implemented as an immutable array of 2 or 3 entries for memory compactness and speed.
     # @api private
-    Proc = Value.new(:type, :function)
+    class Proc < Array
+      # @param type [Symbol] Type of the function value - e.g., :constant or :guard.
+      # @param function [Object] Either a lambda function,
+      #   or some kind of constant such as an Integer.
+      # @param symbols [nil, Symbol, Array<Symbol>] The symbol or list of symbols
+      #   that the function uses to reference input hash keys (which are always symbolized).
+      def initialize(type:, function:, symbols: nil)
+        super()
+
+        self << type
+
+        # Function values should always be frozen
+        self << function.freeze
+
+        # Some function values, such as constants or 0-arity functions, do not reference symbols.
+        self << symbols if symbols
+
+        freeze
+      end
+
+      # @return [Symbol] Type of the function value - e.g., :constant or :guard.
+      def type
+        fetch(0)
+      end
+
+      # @return [Object] Either a lambda function, or some kind of constant such as an Integer.
+      def function
+        fetch(1)
+      end
+
+      # @return [nil, Symbol, Array<Symbol>] The symbol or list of symbols
+      #   that the function uses to reference input hash keys (which are always symbolized).
+      def symbols
+        fetch(2, nil)
+      end
+    end
 
     # Negation sign prefixed to ranges and functions.
     NEGATE = '!'

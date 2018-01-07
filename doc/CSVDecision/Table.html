@@ -388,8 +388,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Unsafe version of decide - will mutate the hash if <tt>set: column</tt> type is
-used (planned feature).</p>
+<p>Unsafe version of decide - assumes the input hash is symbolized.</p>
 </div></span>
   
 </li>
@@ -1117,13 +1116,13 @@ and last row index given.</p>
   <div class="note notetag">
     <strong>Note:</strong>
     <div class='inline'>
-<p>Input hash must have its keys symbolized.</p>
+<p>Input hash must have its keys symbolized. Input hash will be mutated by any
+functions that have side effects.</p>
 </div>
   </div>
 
 
-<p>Unsafe version of decide - will mutate the hash if <tt>set: column</tt> type is
-used (planned feature).</p>
+<p>Unsafe version of decide - assumes the input hash is symbolized.</p>
 
 
   </div>
@@ -1291,7 +1290,7 @@ and last row index given.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Jan  5 21:44:00 2018 by
+  Generated on Sat Jan  6 20:03:02 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

@@ -127,6 +127,30 @@ table load time.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#add_name-class_method" title="add_name (class method)">.<strong>add_name</strong>(columns:, name:, out: false)  &#x21d2; {Symbol=&gt;Symbol} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Add a new symbol to the dictionary of named input and output columns.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#build-class_method" title="build (class method)">.<strong>build</strong>(header:, dictionary:)  &#x21d2; Hash&lt;Hash&gt; </a>
     
 
@@ -159,7 +183,128 @@ the header row.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="build-class_method">
+  <h3 class="signature first" id="add_name-class_method">
+  
+    .<strong>add_name</strong>(columns:, name:, out: false)  &#x21d2; <tt>{Symbol=&gt;Symbol}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Add a new symbol to the dictionary of named input and output columns.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>columns</span>
+      
+      
+        <span class='type'>(<tt>{Symbol=&gt;Symbol}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Hash of column names with key values :in or :out.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Symbolized column name.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>out</span>
+      
+      
+        <span class='type'>(<tt>false</tt>, <tt>Index</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>False if an input column, otherwise the index of the output column.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>{Symbol=&gt;Symbol}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Column dictionary updated with the new name.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+52
+53
+54
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 52</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_add_name'>add_name</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>name:</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_name'>validate_name</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='id identifier rubyid_out'>out</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_columns'>columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_out'>out</span> <span class='op'>?</span> <span class='id identifier rubyid_out'>out</span> <span class='op'>:</span> <span class='symbol'>:in</span>
+  <span class='id identifier rubyid_columns'>columns</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="build-class_method">
   
     .<strong>build</strong>(header:, dictionary:)  &#x21d2; <tt>Hash&lt;Hash&gt;</tt> 
   
@@ -227,23 +372,23 @@ the header row.</p>
       <pre class="lines">
 
 
+38
+39
 40
 41
 42
 43
-44
-45
-46</pre>
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build'>build</span><span class='lparen'>(</span><span class='label'>header:</span><span class='comma'>,</span> <span class='label'>dictionary:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_header'>header</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
     <span class='id identifier rubyid_dictionary'>dictionary</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_cell'>parse_cell</span><span class='lparen'>(</span><span class='label'>cell:</span> <span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>index:</span> <span class='id identifier rubyid_index'>index</span><span class='comma'>,</span> <span class='label'>dictionary:</span> <span class='id identifier rubyid_dictionary'>dictionary</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_validate'>validate</span><span class='lparen'>(</span><span class='id identifier rubyid_dictionary'>dictionary</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_dictionary'>dictionary</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -255,7 +400,7 @@ the header row.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Jan  5 21:44:00 2018 by
+  Generated on Sat Jan  6 20:03:01 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

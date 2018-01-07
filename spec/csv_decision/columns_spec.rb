@@ -37,6 +37,80 @@ describe CSVDecision::Columns do
     expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
     expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
     expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
+
+    expect(table.columns.dictionary).to eq(input: :in, output: 1, output2: 3)
+  end
+
+  it 'recognises all input and output column symbols' do
+    data = <<~DATA
+      IN :input, OUT :output, IN/text :input, OUT/text:output2, out: len,       guard:
+      input0,    output0,     input1,         output1,          :input2.length, 
+      input1,    output1,     input1,         output2,          :input3.length, :input4.present?
+    DATA
+    table = CSVDecision.parse(data)
+
+    expect(table.columns).to be_a(CSVDecision::Columns)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
+    expect(table.columns.ins[5].to_h).to eq(name: nil, eval: true, type: :guard)
+
+    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
+    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
+    expect(table.columns.outs[4].to_h).to eq(name: :len, eval: true, type: :out)
+
+    expect(table.columns.dictionary)
+      .to eq(input: :in, output: 1, output2: 3, len: 4, input2: :in, input3: :in, input4: :in)
+
+    expect(table.columns.input_keys).to eq %i[input input2 input4 input3]
+  end
+
+  it 'recognises the output symbol referenced by an output function' do
+    data = <<~DATA
+      IN :input, OUT :output, IN/text :input, OUT/text:output2, out: input3,      out: len       
+      input0,    output0,     input1,         output1,          ,                 :input2.length
+      input1,    output1,     input1,         output2,          :input4.present?, :input3.length
+    DATA
+
+    table = CSVDecision.parse(data)
+
+    expect(table.columns).to be_a(CSVDecision::Columns)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
+    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
+    expect(table.columns.outs[4].to_h).to eq(name: :input3, eval: true, type: :out)
+    expect(table.columns.outs[5].to_h).to eq(name: :len, eval: true, type: :out)
+
+    expect(table.columns.dictionary)
+      .to eq(input: :in, output: 1, output2: 3, len: 5, input2: :in, input3: 4, input4: :in)
+
+    expect(table.columns.input_keys).to eq %i[input input2 input4]
+  end
+
+  it 'raises an error for an output column referring to a later output column' do
+    data = <<~DATA
+      IN :input, OUT :output, IN/text :input, OUT/text:output2, out: len,        out: input3,            
+      input0,    output0,     input1,         output1,          :input2.length,                 
+      input1,    output1,     input1,         output2,          :input3.length   :input4.upcase
+    DATA
+
+    expect { CSVDecision.parse(data) }
+      .to raise_error(
+        CSVDecision::CellValidationError,
+        "output column 'len' makes an out of order reference to output column 'input3'"
+      )
+  end
+
+  it 'raises an error for an output column referring to itself' do
+    data = <<~DATA
+      IN :input, OUT :output, IN/text :input, OUT/text:output2, out: len,      out: input3,            
+      input0,    output0,     input1,         output1,          :len.length,                 
+      input1,    output1,     input1,         output2,          :len.length   :input4.upcase
+    DATA
+
+    expect { CSVDecision.parse(data) }
+      .to raise_error(CSVDecision::CellValidationError,
+                      "output column 'len' makes reference to itself")
   end
 
   it 'parses a decision table columns from a CSV file' do
@@ -106,6 +180,8 @@ describe CSVDecision::Columns do
 
     expect(table.columns.ins[1].to_h)
       .to eq(name: nil, eval: true, type: :guard)
+
+    expect(table.columns.input_keys).to eq %i[country CUSIP SEDOL]
   end
 
   it 'rejects output column being same as input column' do
@@ -114,9 +190,21 @@ describe CSVDecision::Columns do
       US,          :CUSIP.present?, :CUSIP,    CUSUP
       GB,          :SEDOL.present?, :SEDOL,    SEDOL
     DATA
+
     expect { CSVDecision.parse(data) }
       .to raise_error(CSVDecision::CellValidationError,
                       "output column name 'country' is also an input column")
+  end
+
+  it 'rejects output column being same as an input symbol not in the header' do
+    data = <<~DATA
+      in :parent, out :node
+      ==:node,    top
+      ,           child
+    DATA
+    expect { CSVDecision.parse(data) }
+      .to raise_error(CSVDecision::CellValidationError,
+                      "output column name 'node' is also an input column")
   end
 
   it 'recognises the if: column' do
@@ -128,5 +216,6 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns.ifs[3].to_h).to eq(name: 3, eval: true, type: :if)
+    expect(table.columns.input_keys).to eq %i[country CUSIP SEDOL]
   end
 end

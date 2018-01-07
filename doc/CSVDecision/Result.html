@@ -211,7 +211,7 @@ which eventually get evaluated and removed.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Accumulate the outs into arrays.</p>
+<p>Accumulate the outs into arrays of values.</p>
 </div></span>
   
 </li>
@@ -414,7 +414,15 @@ result, along with the partial result required to evaluate functions.</p>
 25
 26
 27
-28</pre>
+28
+29
+30
+31
+32
+33
+34
+35
+36</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 19</span>
@@ -423,11 +431,19 @@ result, along with the partial result required to evaluate functions.</p>
   <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@if_columns</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_ifs'>ifs</span>
 
-  <span class='comment'># Partial result always includes the input hash for calculating output functions.
-</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='kw'>if</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_outs_functions'>outs_functions</span>
+  <span class='comment'># Partial result always copies in the input hash for calculating output functions.
+</span>  <span class='comment'># Note that these input key values will not be mutated, as output columns can never
+</span>  <span class='comment'># have the same symbol as an input hash key.
+</span>  <span class='comment'># However, the rest of this hash is mutated as output column evaluation results
+</span>  <span class='comment'># are accumulated.
+</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='op'>&amp;.</span><span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_input_keys'>input_keys</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_outs_functions'>outs_functions</span>
 
-  <span class='ivar'>@attributes</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-  <span class='ivar'>@multi_result</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='comment'># Attributes hash contains the output decision key value pairs
+</span>  <span class='ivar'>@attributes</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+  <span class='comment'># Set to true if the result has more than one row.
+</span>  <span class='comment'># Only possible for the first_match: false option.
+</span>  <span class='ivar'>@multi_result</span> <span class='op'>=</span> <span class='kw'>false</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -594,7 +610,7 @@ which eventually get evaluated and removed.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 <p class="note returns_void">This method returns an undefined value.</p>
-<p>Accumulate the outs into arrays.</p>
+<p>Accumulate the outs into arrays of values.</p>
 
 
   </div>
@@ -623,12 +639,12 @@ which eventually get evaluated and removed.</p>
       <pre class="lines">
 
 
-41
-42
-43</pre>
+49
+50
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 41</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 49</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accumulate_outs'>accumulate_outs</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
   <span class='ivar'>@outs</span><span class='period'>.</span><span class='id identifier rubyid_each_pair'>each_pair</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_col'>col</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='id identifier rubyid_add_cell'>add_cell</span><span class='lparen'>(</span><span class='label'>column_name:</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>cell:</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -684,12 +700,12 @@ values to the final result hash.</p>
       <pre class="lines">
 
 
-34
-35
-36</pre>
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 34</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_outs'>add_outs</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
   <span class='ivar'>@outs</span><span class='period'>.</span><span class='id identifier rubyid_each_pair'>each_pair</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_col'>col</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='ivar'>@attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
@@ -766,12 +782,12 @@ values to the final result hash.</p>
       <pre class="lines">
 
 
-73
-74
-75</pre>
+82
+83
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 82</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_eval_cell_proc'>eval_cell_proc</span><span class='lparen'>(</span><span class='label'>proc:</span><span class='comma'>,</span> <span class='label'>column_name:</span><span class='comma'>,</span> <span class='label'>index:</span><span class='rparen'>)</span>
   <span class='ivar'>@attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_column_name'>column_name</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_proc'>proc</span><span class='period'>.</span><span class='id identifier rubyid_function'>function</span><span class='lbracket'>[</span><span class='id identifier rubyid_partial_result'>partial_result</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span><span class='rbracket'>]</span>
@@ -840,18 +856,18 @@ result, along with the partial result required to evaluate functions.</p>
       <pre class="lines">
 
 
-58
-59
-60
-61
-62
-63
-64
-65
-66</pre>
+67
+68
+69
+70
+71
+72
+73
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 67</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_eval_outs'>eval_outs</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
   <span class='comment'># Set the constants first, in case the functions refer to them
@@ -910,17 +926,19 @@ result, along with the partial result required to evaluate functions.</p>
       <pre class="lines">
 
 
-47
-48
-49
-50
-51</pre>
+55
+56
+57
+58
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_final'>final</span>
-  <span class='kw'>return</span> <span class='ivar'>@attributes</span> <span class='kw'>if</span> <span class='ivar'>@if_columns</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+  <span class='comment'># If there are no if: columns, then nothing needs to be filtered out of this result hash.
+</span>  <span class='kw'>return</span> <span class='ivar'>@attributes</span> <span class='kw'>if</span> <span class='ivar'>@if_columns</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
 
   <span class='ivar'>@multi_result</span> <span class='op'>?</span> <span class='id identifier rubyid_multi_row_result'>multi_row_result</span> <span class='op'>:</span> <span class='id identifier rubyid_single_row_result'>single_row_result</span>
 <span class='kw'>end</span></pre>
@@ -934,7 +952,7 @@ result, along with the partial result required to evaluate functions.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Jan  5 21:44:00 2018 by
+  Generated on Sat Jan  6 20:03:02 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

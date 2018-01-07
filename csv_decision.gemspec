@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'csv_decision'
-  spec.version       = '0.0.9'
+  spec.version       = '0.1.0'
   spec.authors       = ['Brett Vickers']
   spec.email         = ['brett@phillips-vickers.com']
   spec.description   = 'CSV based Ruby decision tables.'
@@ -25,8 +25,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3.0'
 
   spec.add_dependency 'activesupport', '~> 5.1'
-  spec.add_dependency 'ice_nine',      '~> 0.11'
-  spec.add_dependency 'values',        '~> 1.8'
 
   spec.add_development_dependency 'benchmark-ips',         '~> 2.7'
   spec.add_development_dependency 'benchmark-memory',      '~> 0.1'

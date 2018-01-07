@@ -12,21 +12,17 @@ module CSVDecision
     # e.g., +>:column.present?+ or +:column == 100.0+.
     class Guard < Matcher
       # Column symbol expression - e.g., +>:column+ or +:!column+.
-      SYMBOL = "(?<negate>#{Matchers::NEGATE}?)\\s*:(?<name>#{Header::COLUMN_NAME})"
-      private_constant :SYMBOL
-
-      SYMBOL_RE = Matchers.regexp(SYMBOL)
+      SYMBOL_RE =
+        Matchers.regexp("(?<negate>#{Matchers::NEGATE}?)\\s*:(?<name>#{Header::COLUMN_NAME})")
       private_constant :SYMBOL_RE
 
       # Column symbol guard expression - e.g., +>:column.present?+ or +:column == 100.0+.
-      GUARD =
+      GUARD_RE = Matchers.regexp(
         "(?<negate>#{Matchers::NEGATE}?)\\s*" \
         ":(?<name>#{Header::COLUMN_NAME})\\s*" \
         "(?<method>!=|=~|!~|<=|>=|>|<|#{Matchers::EQUALS}|\\.)\\s*" \
         "(?<param>\\S.*)"
-      private_constant :GUARD
-
-      GUARD_RE = Matchers.regexp(GUARD)
+      )
       private_constant :GUARD_RE
 
       # Negated methods
@@ -114,7 +110,7 @@ module CSVDecision
         method = match['negate'].present? ? '!:' : ':'
         proc = SYMBOL_PROC[method]
         symbol = match['name'].to_sym
-        Matchers::Proc.with(type: :guard, function: proc.curry[symbol].freeze)
+        Matchers::Proc.new(type: :guard, symbols: symbol, function: proc.curry[symbol].freeze)
       end
       private_class_method :symbol_proc
 
@@ -124,7 +120,8 @@ module CSVDecision
 
         proc, value = guard_proc(match)
         symbol = match['name'].to_sym
-        Matchers::Proc.with(type: :guard, function: proc.curry[symbol][value].freeze)
+        Matchers::Proc.new(type: :guard, symbols: symbol,
+                           function: proc.curry[symbol][value].freeze)
       end
       private_class_method :symbol_guard
 

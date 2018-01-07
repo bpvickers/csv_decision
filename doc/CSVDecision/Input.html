@@ -271,10 +271,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 24
 25
 26
-27
-28
-29
-30</pre>
+27</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/input.rb', line 17</span>
@@ -282,13 +279,10 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate'>validate</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
 
-  <span class='comment'># For safety the default is to symbolize keys and make a copy of the hash.
-</span>  <span class='comment'># However, if this is turned off then the keys must already symbolized.
-</span>  <span class='id identifier rubyid_input'>input</span> <span class='op'>=</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>?</span> <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>:</span> <span class='id identifier rubyid_input'>input</span>
+  <span class='id identifier rubyid_parsed_input'>parsed_input</span> <span class='op'>=</span>
+    <span class='id identifier rubyid_parse_input'>parse_input</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_parsed_input'>parsed_input</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_input'>parse_input</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
-
-  <span class='comment'># Freeze the copy of the input hash we just created.
+  <span class='comment'># We can freeze it as we made our own copy
 </span>  <span class='id identifier rubyid_parsed_input'>parsed_input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span> <span class='kw'>if</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
 
   <span class='id identifier rubyid_parsed_input'>parsed_input</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
@@ -303,7 +297,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Jan  5 21:44:00 2018 by
+  Generated on Sat Jan  6 20:03:01 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

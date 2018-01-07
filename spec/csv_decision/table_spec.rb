@@ -439,7 +439,7 @@ describe CSVDecision::Table do
           it "#{method} correctly #{test[:example]}" do
             table = CSVDecision.parse(test[:data], test[:options])
 
-            expect(table.send(method, country: 'US',  CUSIP: '123456789'))
+            expect(table.send(method, country: 'US',  CUSIP: '123456789', Ticker: 'USTY'))
               .to eq(ID: '123456789', ID_type: 'CUSIP', len: 9)
 
             expect(table.send(method, country: 'US',  CUSIP: '123456789', ISIN: '123456789012'))

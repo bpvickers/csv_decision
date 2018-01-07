@@ -16,11 +16,11 @@ module CSVDecision
       Decide.decide(table: self, input: input, symbolize_keys: true)
     end
 
-    # Unsafe version of decide - will mutate the hash if +set: column+ type
-    # is used (planned feature).
+    # Unsafe version of decide - assumes the input hash is symbolized.
     #
     # @param input (see #decide)
     # @note Input hash must have its keys symbolized.
+    #   Input hash will be mutated by any functions that have side effects.
     # @return (see #decide)
     def decide!(input)
       Decide.decide(table: self, input: input, symbolize_keys: false)

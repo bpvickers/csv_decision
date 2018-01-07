@@ -30,7 +30,6 @@ describe CSVDecision::Input do
     expect(result).to eql expected
     expect(result[:hash]).not_to equal expected[:hash]
     expect(result[:hash].frozen?).to eq true
-    expect(result[:defaults].frozen?).to eq true
   end
 
   it 'processes input hash with symbolize_keys: false' do
@@ -49,6 +48,5 @@ describe CSVDecision::Input do
     expect(result).to eql expected
     expect(result[:hash]).to equal expected[:hash]
     expect(result[:hash].frozen?).to eq false
-    expect(result[:defaults].frozen?).to eq true
   end
 end
