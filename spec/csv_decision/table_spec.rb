@@ -451,5 +451,20 @@ describe CSVDecision::Table do
         end
       end
     end
+
+    it 'recognises the set: columns and uses correct defaults' do
+      data = <<~DATA
+        set/nil? :country, in: type, guard:,          set: class,    out :PAID, out: len,     if:
+        US,                ,         ,                :class.upcase,
+        US,                Equity,   :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+        !=US,              Equity,   :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+        US,                ,         :CUSIP.present?, PRIVATE,       :CUSIP,    :PAID.length,
+        US,                ,         :ISIN.present?,  PRIVATE,       :ISIN,     :PAID.length,
+      DATA
+
+      table = CSVDecision.parse(data)
+
+      expect(table.decide(CUSIP: '1234567890', class: 'Private')).to eq(PAID: '1234567890', len: 10)
+    end
   end
 end
