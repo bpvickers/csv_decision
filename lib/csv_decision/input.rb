@@ -69,6 +69,8 @@ module CSVDecision
         next if column.type == :guard
 
         scan_cols[col] = default_value(cell: defaulted_columns[col], input: input, column: column)
+
+        # Also update the input hash with the default value.
         input[column.name] = scan_cols[col]
       end
 
