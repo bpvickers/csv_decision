@@ -68,7 +68,7 @@ module CSVDecision
       table.columns.ins.each_pair do |col, column|
         next if column.type == :guard
 
-        scan_cols[col] = default_value(cell: defaulted_columns[col], input: input, column: column)
+        scan_cols[col] = default_value(default: defaulted_columns[col], input: input, column: column)
 
         # Also update the input hash with the default value.
         input[column.name] = scan_cols[col]
@@ -78,16 +78,31 @@ module CSVDecision
     end
     private_class_method :parse_defaulted
 
-    def self.default_value(cell:, input:, column:)
+    def self.default_value(default:, input:, column:)
       value = input[column.name]
-      return value unless cell
 
-      set_if = cell.set_if
-      return value unless set_if == true || (value.respond_to?(set_if) && value.send(set_if))
+      # Do we have a default entry for this column?
+      return value if default.nil?
 
-      function = cell.function
-      value = function.is_a?(::Proc) ? function[input] : function
-      input[column.name] = value
+      # Has the set condition been met, or is it unconditional?
+      return value unless set_if?(default.set_if, value)
+
+      # Expression may be a Proc that needs evaluating against the input hash,
+      # or else a constant.
+      eval_set(default.function, input)
     end
+    private_class_method :default_value
+
+    def self.set_if?(set_if, value)
+      set_if == true || (value.respond_to?(set_if) && value.send(set_if))
+    end
+    private_class_method :set_if?
+
+    # Expression may be a Proc that needs evaluating against the input hash,
+    # or else a constant.
+    def self.eval_set(expression, input)
+      expression.is_a?(::Proc) ? expression[input] : expression
+    end
+    private_class_method :eval_set
   end
 end
