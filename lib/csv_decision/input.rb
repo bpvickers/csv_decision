@@ -68,7 +68,8 @@ module CSVDecision
       table.columns.ins.each_pair do |col, column|
         next if column.type == :guard
 
-        scan_cols[col] = default_value(default: defaulted_columns[col], input: input, column: column)
+        scan_cols[col] =
+          default_value(default: defaulted_columns[col], input: input, column: column)
 
         # Also update the input hash with the default value.
         input[column.name] = scan_cols[col]
@@ -81,28 +82,28 @@ module CSVDecision
     def self.default_value(default:, input:, column:)
       value = input[column.name]
 
-      # Do we have a default entry for this column?
+      # Do we even have a default entry for this column?
       return value if default.nil?
 
       # Has the set condition been met, or is it unconditional?
-      return value unless set_if?(default.set_if, value)
+      return value unless default_if?(default.set_if, value)
 
       # Expression may be a Proc that needs evaluating against the input hash,
       # or else a constant.
-      eval_set(default.function, input)
+      eval_default(default.function, input)
     end
     private_class_method :default_value
 
-    def self.set_if?(set_if, value)
+    def self.default_if?(set_if, value)
       set_if == true || (value.respond_to?(set_if) && value.send(set_if))
     end
-    private_class_method :set_if?
+    private_class_method :default_if?
 
     # Expression may be a Proc that needs evaluating against the input hash,
     # or else a constant.
-    def self.eval_set(expression, input)
+    def self.eval_default(expression, input)
       expression.is_a?(::Proc) ? expression[input] : expression
     end
-    private_class_method :eval_set
+    private_class_method :eval_default
   end
 end
