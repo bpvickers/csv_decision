@@ -452,19 +452,43 @@ describe CSVDecision::Table do
       end
     end
 
-    it 'recognises the set: columns and uses correct defaults' do
-      data = <<~DATA
-        set/nil? :country, in: type, guard:,          set: class,    out :PAID, out: len,     if:
-        US,                ,         ,                :class.upcase,
-        US,                Equity,   :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
-        !=US,              Equity,   :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
-        US,                ,         :CUSIP.present?, PRIVATE,       :CUSIP,    :PAID.length,
-        US,                ,         :ISIN.present?,  PRIVATE,       :ISIN,     :PAID.length,
-      DATA
+    context 'recognises the set: columns and uses correct defaults' do
+      examples = [
+        { example: 'evaluates set/nil? and set columns',
+          options: { first_match: true },
+          data: <<~DATA
+            set/nil? :country, in: type, guard:,          set: class,    out :PAID, out: len,     if:
+            US,                ,         ,                :class.upcase,
+            US,                Equity,   :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+            !=US,              Equity,   :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+            US,                ,         :CUSIP.present?, PRIVATE,       :CUSIP,    :PAID.length,
+            !=US,              ,         :ISIN.present?,  PRIVATE,       :ISIN,     :PAID.length,
+          DATA
+        },
+        { example: 'evaluates set/blank? and set columns',
+          options: { first_match: true },
+          data: <<~DATA
+            set/blank? :country, in: type, guard:,          set: class,    out :PAID, out: len,     if:
+            US,                  ,         ,                :class.upcase,
+            US,                  Equity,   :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+            !=US,                Equity,   :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+            US,                  ,         :CUSIP.present?, PRIVATE,       :CUSIP,    :PAID.length,
+            !=US,                ,         :ISIN.present?,  PRIVATE,       :ISIN,     :PAID.length,
+          DATA
+        }
+      ]
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
 
-      table = CSVDecision.parse(data)
-
-      expect(table.decide(CUSIP: '1234567890', class: 'Private')).to eq(PAID: '1234567890', len: 10)
+            expect(table.send(method, CUSIP: '1234567890', class: 'Private')).to eq(PAID: '1234567890', len: 10)
+            expect(table.send(method, CUSIP: '123456789', type: 'Equity', class: 'Public')).to eq(PAID: '123456789', len: 9)
+            expect(table.send(method, ISIN: '123456789', country: 'GB', class: 'public')).to eq({})
+            expect(table.send(method, ISIN: '123456789012', country: 'GB', class: 'private')).to eq(PAID: '123456789012', len: 12)
+          end
+        end
+      end
     end
   end
 end
