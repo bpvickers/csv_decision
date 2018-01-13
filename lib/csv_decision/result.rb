@@ -30,7 +30,7 @@ module CSVDecision
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = input[:hash]&.slice(*table.columns.input_keys) if @outs_functions
+      @partial_result = input&.slice(*table.columns.input_keys) if @outs_functions
 
       # Attributes hash contains the output decision key value pairs
       @attributes = {}

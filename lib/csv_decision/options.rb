@@ -32,12 +32,10 @@ module CSVDecision
     # These options may appear in the CSV file before the header row.
     # They get converted to a normalized option key value pair.
     CSV_NAMES = {
-      first_match: [:first_match, true],
-      accumulate: [:first_match, false],
+      first_match: [:first_match, true], accumulate: [:first_match, false],
       regexp_implicit: [:regexp_implicit, true],
       text_only: [:text_only, true],
-      index: [:index, nil],
-      keys: [:index, nil]
+      index: [:index, nil], keys: [:index, nil]
     }.freeze
     private_constant :CSV_NAMES
 

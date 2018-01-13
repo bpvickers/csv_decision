@@ -17,14 +17,14 @@ module CSVDecision
     # @return [Hash] Decision result.
     def self.decide(table:, input:, symbolize_keys:)
       # Parse and transform the hash supplied as input
-      parsed_input = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
+      hash, scan_cols = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
 
       # The decision object collects the results of the search and
       # calculates the final result
-      decision = Decision.new(table: table, input: parsed_input)
+      decision = Decision.new(table: table, input: hash)
 
       # table_scan(table: table, input: parsed_input, decision: decision)
-      decision.scan(table: table, hash: parsed_input[:hash], scan_cols: parsed_input[:scan_cols])
+      decision.scan(table: table, hash: hash, scan_cols: scan_cols)
     end
   end
 end

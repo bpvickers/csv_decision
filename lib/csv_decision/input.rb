@@ -17,13 +17,13 @@ module CSVDecision
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
-      parsed_input =
+      input, scan_cols =
         parse_input(table: table, input: symbolize_keys ?  input.symbolize_keys : input)
 
       # We can freeze it as we made our own copy
-      parsed_input[:hash].freeze if symbolize_keys
+      input.freeze if symbolize_keys
 
-      parsed_input.freeze
+      [input, scan_cols.freeze]
     end
 
     def self.validate(input)
@@ -50,7 +50,7 @@ module CSVDecision
         scan_cols[col] = input[column.name]
       end
 
-      { hash: input, scan_cols: scan_cols }
+      [input, scan_cols]
     end
     private_class_method :parse_cells
 
@@ -67,7 +67,7 @@ module CSVDecision
         input[column.name] = scan_cols[col]
       end
 
-      { hash: input, scan_cols: scan_cols }
+      [input, scan_cols]
     end
     private_class_method :parse_defaulted
 
