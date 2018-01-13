@@ -283,12 +283,13 @@ table.decide(ISIN: '123456789012', country: 'GB', class: 'private') #=> {PAID: '
  `csv_decision` is still a work in progress, and will be enhanced to support
  the following features:
  * Text-only input columns may be indexed for faster lookup performance.
- * Input hash values may be (conditionally) defaulted with a constant or a function call.
- * Output columns may construct interpolated strings referencing column symbols.
- * Supply a pre-defined library of functions that can be called within input columns to 
-   implement matching logic or from the output columns to formulate the final decision.
+ * Output columns may construct interpolated strings containing references to column 
+   symbols.
+ * Supply a pre-defined library of functions that may be called within input columns to 
+   implement custom matching logic or from the output columns to formulate the final 
+   decision.
  * Available functions may be extended with a user-supplied library of Ruby methods 
-   for tailored logic.
+   for custom logic.
  
 ### Reasons for the limitations of column expressions
 The simple column expressions allowed by `csv_decision` are purposely limited for reasons of
