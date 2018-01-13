@@ -198,7 +198,7 @@ may be simplified to:
 These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 
-#### Input guard conditions
+#### Input `guard` conditions
 Sometimes it's more convenient to write guard expressions in a single column specialized for that purpose. 
 For example:
 
@@ -222,7 +222,7 @@ Input `guard:` columns may be anonymous, and must contain non-constant expressio
 0-arity Ruby methods, the following comparison operators are allowed: `==`, `!=`,
 `>`, `>=`, `<` and `<=`. Also, regular expressions are supported - i.e., `=~` and `!~`.
 
-#### Output if conditions
+#### Output `if` conditions
 In some situations it is useful to apply filter conditions *after* all the output
 columns have been derived. For example:
 
@@ -245,6 +245,30 @@ Output `if:` columns may be anonymous, and must contain non-constant expressions
 0-arity Ruby methods, the following comparison operators are allowed: `==`, `!=`,
 `>`, `>=`, `<` and `<=`. Also, regular expressions are supported - i.e., `=~` and `!~`.
   
+#### Input `set` columns
+
+If you wish to set default values in the input hash, you can use a `set` column rather
+than an `in` column. The data row beneath the header is used to specify the default expression.
+There are three variations: `set` (unconditional default) `set/nil?`(set if `nil?` true) 
+and `set/blank?` (set if `blank?` true). 
+Note that the `decide!` method will mutate the input hash.
+
+```ruby
+data = <<~DATA
+  set/nil? :country, guard:,          set: class,    out :PAID, out: len,     if:
+  US,                ,                :class.upcase,
+  US,                :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+  !=US,              :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+  US,                :CUSIP.present?, PRIVATE,       :CUSIP,    :PAID.length,
+  !=US,              :ISIN.present?,  PRIVATE,       :ISIN,     :PAID.length,
+DATA
+
+table = CSVDecision.parse(data)
+table.decide(CUSIP: '1234567890', class: 'Private') #=> {PAID: '1234567890', len: 10}
+table.decide(ISIN: '123456789012', country: 'GB', class: 'private') #=> {PAID: '123456789012', len: 12}
+
+```
+
 ### Testing
  
  `csv_decision` includes thorough [RSpec](http://rspec.info) tests:
