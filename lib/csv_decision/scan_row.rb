@@ -27,21 +27,6 @@ module CSVDecision
       invalid_constant?(type: :constant, column: column)
     end
 
-    # Evaluate the cell proc against the column's input value and/or input hash.
-    #
-    # @param proc [CSVDecision::Proc] Proc in the table cell.
-    # @param value [Object] Value supplied in the input hash corresponding to this column.
-    # @param hash [{Symbol=>Object}] Input hash with symbolized keys.
-    def self.eval_matcher(proc:, hash:, value: nil)
-      type, function = proc
-
-      # A symbol guard expression just needs to be passed the input hash
-      return function[hash] if type == :guard
-
-      # All other procs can take one or two args
-      function.arity == 1 ? function[value] : function[value, hash]
-    end
-
     def self.scan_matchers(column:, matchers:, cell:)
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
@@ -114,12 +99,14 @@ module CSVDecision
 
     # Match cells in the input hash against a decision table row.
     # @param row (see ScanRow.scan_columns)
-    # @param input (see Decision#row_scan)
+    # @param hash (see Decision#row_scan)
     # @return [Boolean] True for a match, false otherwise.
     def match?(row:, scan_cols:, hash:)
+      # Check table cell constants first, and maybe fail fast
       return false if @constants.any? { |col| row[col] != scan_cols[col] }
 
-      @procs.all? { |col| ScanRow.eval_matcher(proc: row[col], value: scan_cols[col], hash: hash) }
+      # These table cells are Proc objects which need evaluating
+      @procs.all? { |col| row[col].call(value: scan_cols[col], hash: hash) }
     end
 
     private

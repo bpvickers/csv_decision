@@ -31,6 +31,15 @@ module CSVDecision
         freeze
       end
 
+      def call(hash:, value: nil)
+        func = fetch(1)
+
+        return func.call(hash) if fetch(0) == :guard
+
+        # All other procs can take one or two args
+        func.arity == 1 ? func.call(value) : func.call(value, hash)
+      end
+
       # @return [Symbol] Type of the function value - e.g., :constant or :guard.
       def type
         fetch(0)
