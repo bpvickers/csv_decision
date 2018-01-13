@@ -80,12 +80,6 @@ module CSVDecision
     NUMERIC_RE = regexp(NUMERIC)
     private_constant :NUMERIC_RE
 
-    # @param value [Object] Value from the input hash.
-    # @return [Boolean] Return true if value is an Integer or a BigDecimal, false otherwise.
-    def self.numeric?(value)
-      value.is_a?(Integer) || value.is_a?(BigDecimal)
-    end
-
     # Validate a numeric value and convert it to an Integer or BigDecimal if a valid numeric string.
     #
     # @param value [nil, String, Integer, BigDecimal]

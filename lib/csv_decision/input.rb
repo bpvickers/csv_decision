@@ -17,13 +17,11 @@ module CSVDecision
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
-      input, scan_cols =
+      hash, scan_cols =
         parse_input(table: table, input: symbolize_keys ?  input.symbolize_keys : input)
 
-      # We can freeze it as we made our own copy
-      input.freeze if symbolize_keys
-
-      [input, scan_cols.freeze]
+      # We can freeze the input hash for safety if we made our own copy
+      [symbolize_keys ? hash.freeze : hash, scan_cols.freeze]
     end
 
     def self.validate(input)
