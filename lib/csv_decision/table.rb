@@ -16,7 +16,8 @@ module CSVDecision
       Decide.decide(table: self, input: input, symbolize_keys: true)
     end
 
-    # Unsafe version of decide - assumes the input hash is symbolized.
+    # Unsafe version of decide - may mutate the input hash and assumes the input
+    # hash is symbolized.
     #
     # @param input (see #decide)
     # @note Input hash must have its keys symbolized.

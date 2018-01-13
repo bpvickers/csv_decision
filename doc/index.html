@@ -262,7 +262,7 @@ operators are also supported: <code>!=</code>, <code>&gt;</code>,
 <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. For more simple
 examples see <code>spec/csv_decision/examples_spec.rb</code>.</p>
 
-<h4 id="label-Input+guard+conditions">Input guard conditions</h4>
+<h4 id="label-Input+guard+conditions">Input <code>guard</code> conditions</h4>
 
 <p>Sometimes it&#39;s more convenient to write guard expressions in a single
 column specialized for that purpose. For example:</p>
@@ -290,7 +290,7 @@ following comparison operators are allowed: <code>==</code>,
 and <code>&lt;=</code>. Also, regular expressions are supported - i.e.,
 <code>=~</code> and <code>!~</code>.</p>
 
-<h4 id="label-Output+if+conditions">Output if conditions</h4>
+<h4 id="label-Output+if+conditions">Output <code>if</code> conditions</h4>
 
 <p>In some situations it is useful to apply filter conditions <em>after</em>
 all the output columns have been derived. For example:</p>
@@ -316,6 +316,30 @@ following comparison operators are allowed: <code>==</code>,
 <code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>
 and <code>&lt;=</code>. Also, regular expressions are supported - i.e.,
 <code>=~</code> and <code>!~</code>.</p>
+
+<h4 id="label-Input+set+columns">Input <code>set</code> columns</h4>
+
+<p>If you wish to set default values in the input hash, you can use a
+<code>set</code> column rather than an <code>in</code> column. The data row
+beneath the header is used to specify the default expression. There are
+three variations: <code>set</code> (unconditional default)
+<code>set/nil?</code>(set if <code>nil?</code> true) and
+<code>set/blank?</code> (set if <code>blank?</code> true). Note that the
+<code>decide!</code> method will mutate the input hash.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;~DATA</span>
+<span class='tstring_content'>  set/nil? :country, guard:,          set: class,    out :PAID, out: len,     if:
+</span><span class='tstring_content'>  US,                ,                :class.upcase,
+</span><span class='tstring_content'>  US,                :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+</span><span class='tstring_content'>  !=US,              :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+</span><span class='tstring_content'>  US,                :CUSIP.present?, PRIVATE,       :CUSIP,    :PAID.length,
+</span><span class='tstring_content'>  !=US,              :ISIN.present?,  PRIVATE,       :ISIN,     :PAID.length,
+</span><span class='heredoc_end'>DATA
+</span>
+<span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="CSVDecision.html#parse-class_method" title="CSVDecision.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>CUSIP:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1234567890</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>class:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Private</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; {PAID: &#39;1234567890&#39;, len: 10}
+</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>ISIN:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>123456789012</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>country:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>GB</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>class:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>private</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; {PAID: &#39;123456789012&#39;, len: 12}
+</span></code></pre>
 
 <h3 id="label-Testing">Testing</h3>
 
@@ -359,7 +383,7 @@ href="./LICENSE">LICENSE</a> document for more information.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sun Jan  7 16:36:26 2018 by
+  Generated on Sat Jan 13 10:02:45 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
