@@ -65,7 +65,7 @@ module CSVDecision
     # @api private
     def each(first = 0, last = @rows.count - 1)
       index = first
-      while index <= (last || first)
+      while index <= last
         yield(@rows[index], index)
 
         index += 1

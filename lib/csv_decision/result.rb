@@ -12,12 +12,17 @@ module CSVDecision
     #   both result values and if: columns, which eventually get evaluated and removed.
     attr_reader :attributes
 
+    attr_reader :outs
+
+    attr_reader :outs_functions
+
     # @return [Boolean] Returns true if this is a multi-row result
     attr_reader :multi_result
 
     # (see Decision.initialize)
     def initialize(table:, input:)
       @outs = table.columns.outs
+      @outs_functions = table.outs_functions
       @if_columns = table.columns.ifs
 
       # Partial result always copies in the input hash for calculating output functions.
@@ -25,7 +30,7 @@ module CSVDecision
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = input[:hash]&.slice(*table.columns.input_keys) if table.outs_functions
+      @partial_result = input[:hash]&.slice(*table.columns.input_keys) if @outs_functions
 
       # Attributes hash contains the output decision key value pairs
       @attributes = {}

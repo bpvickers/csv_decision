@@ -20,45 +20,25 @@ module CSVDecision
       @rows_picked = []
 
       # Relevant table attributes
-      table_attributes(table)
+      @first_match = table.options[:first_match]
     end
 
     # Scan the decision table up against the input hash.
     #
     # @param (see #initialize)
     # @return [{Symbol=>Object}] Decision result.
-    def scan(table:, input:)
+    def scan(table:, hash:, scan_cols:)
+      scan_rows = table.scan_rows
+
       table.each do |row, index|
-        # +row_scan+ returns false if more rows need to be scanned, truthy otherwise.
-        return result if row_scan(input: input, row: row, scan_row: table.scan_rows[index])
+        next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+        return @result.attributes if add(row)
       end
 
-      result
+      @rows_picked.empty? ? {} : accumulated_result
     end
 
     private
-
-    # Record the relevant table attributes.
-    def table_attributes(table)
-      @first_match = table.options[:first_match]
-      @outs = table.columns.outs
-      @outs_functions = table.outs_functions
-    end
-
-    # Derive the final result.
-    #
-    # @return [nil, Hash{Symbol=>Object}] Final result hash if matches found,
-    #   otherwise the empty hash for no result.
-    def result
-      return {} if @rows_picked.blank?
-      @first_match ? @result.attributes : accumulated_result
-    end
-
-    # Scan the row for matches against the input conditions.
-    def row_scan(input:, row:, scan_row:)
-      # +add+ returns false if more rows need to be scanned, truthy otherwise.
-      add(row) if Decide.matches?(row: row, input: input, scan_row: scan_row)
-    end
 
     # Add a matched row to the decision object being built.
     #
@@ -76,7 +56,7 @@ module CSVDecision
     end
 
     def accumulated_result
-      return @result.final unless @outs_functions
+      return @result.final unless @result.outs_functions
       return @result.eval_outs(@rows_picked.first) unless @result.multi_result
 
       multi_row_result
@@ -84,7 +64,7 @@ module CSVDecision
 
     def multi_row_result
       # Scan each output column that contains functions
-      @outs.each_pair { |col, column| eval_column_procs(col: col, column: column) if column.eval }
+      @result.outs.each_pair { |col, column| eval_column_procs(col: col, column: column) if column.eval }
 
       @result.final
     end
@@ -103,7 +83,7 @@ module CSVDecision
       # This decision row may contain procs, which if present will need to be evaluated.
       # If this row contains if: columns then this row may be filtered out, in which case
       # this method call will return false.
-      return eval_single_row(row) if @outs_functions
+      return eval_single_row(row) if @result.outs_functions
 
       # Common case is just copying output column values to the final result.
       @rows_picked = row

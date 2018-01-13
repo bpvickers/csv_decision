@@ -91,7 +91,7 @@ module CSVDecision
     # @param value [nil, String, Integer, BigDecimal]
     # @return [nil, Integer, BigDecimal]
     def self.numeric(value)
-      return value if numeric?(value)
+      return value if value.is_a?(Integer) || value.is_a?(BigDecimal)
       return unless value.is_a?(String)
 
       to_numeric(value)
