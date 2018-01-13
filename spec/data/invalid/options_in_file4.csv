@@ -1,0 +1,5 @@
+#comment,
+accumulate, index:
+regexp_implicit
+IN :input,OUT :output
+input,#output

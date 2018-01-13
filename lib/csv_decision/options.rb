@@ -5,18 +5,6 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # # Specialized cell value matchers beyond simple string compares.
-  # # By default all these matchers are tried in the specified order on all
-  # # input data cells.
-  # DEFAULT_MATCHERS = [
-  #   Matchers::Range,
-  #   Matchers::Numeric,
-  #   Matchers::Pattern,
-  #   Matchers::Constant,
-  #   Matchers::Symbol,
-  #   Matchers::Guard
-  # ].freeze
-
   # Validate and normalize the options values supplied.
   # @api private
   module Options
@@ -47,7 +35,9 @@ module CSVDecision
       first_match: [:first_match, true],
       accumulate: [:first_match, false],
       regexp_implicit: [:regexp_implicit, true],
-      text_only: [:text_only, true]
+      text_only: [:text_only, true],
+      index: [:index, nil],
+      keys: [:index, nil]
     }.freeze
     private_constant :CSV_NAMES
 
@@ -55,7 +45,7 @@ module CSVDecision
     #
     # @param options [Hash] Input options hash supplied by the user.
     # @return [Hash] Options hash filled in with all required values, defaulted if necessary.
-    # @raise [ArgumentError] For invalid option keys.
+    # @raise [CellValidationError] For invalid option keys.
     def self.normalize(options)
       validate(options)
       default(options)
@@ -119,17 +109,58 @@ module CSVDecision
     private_class_method :matchers
 
     def self.option?(cell)
-      key = cell.downcase.to_sym
-      return CSV_NAMES[key] if CSV_NAMES.key?(key)
+      key, value = valid_option?(cell)
+      return if key.nil?
+
+      return [key, index_value(value)] if key == :index
+
+      [key, value]
     end
     private_class_method :option?
+
+    def self.index_value(data)
+      value = Matchers.to_numeric(data)
+      return value if value.is_a?(Integer) && value.positive?
+
+      raise CellValidationError, "index option value '#{data}' is not a positive integer"
+    end
+    private_class_method :index_value
+
+    def self.valid_option?(cell)
+      return unless (key_value = valid_key?(cell))
+
+      return key_value.first if key_value.last.empty?
+
+      # Default value is useless, so return the actual value
+      [key_value.first.first, key_value.last]
+    end
+    private_class_method :valid_option?
+
+    def self.valid_key?(cell)
+      key_value = cell.partition(':').map(&:strip)
+      validate_value(*key_value)
+
+      key = key_value[0].downcase.to_sym
+      [CSV_NAMES[key], key_value.last]
+    end
+    private_class_method :valid_key?
+
+    # If a CSV option is of the form +key: value+, then +value+
+    # must be present.
+    def self.validate_value(key, colon, value)
+      return if colon.empty?
+      return unless value.empty?
+
+      raise CellValidationError, "CSV '#{key}:' option does not have a value"
+    end
+    private_class_method :validate_value
 
     def self.validate(options)
       invalid_options = options.keys - VALID.keys
 
       return if invalid_options.empty?
 
-      raise ArgumentError, "invalid option(s) supplied: #{invalid_options.inspect}"
+      raise CellValidationError, "invalid option(s) supplied: #{invalid_options.inspect}"
     end
     private_class_method :validate
   end

@@ -3,6 +3,7 @@
 require_relative '../../lib/csv_decision'
 
 SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
+SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
 
 describe CSVDecision::Options do
   it 'sets the default options' do
@@ -48,7 +49,8 @@ describe CSVDecision::Options do
     DATA
 
     expect { CSVDecision.parse(data, bad_option: false) }
-      .to raise_error(ArgumentError, "invalid option(s) supplied: [:bad_option]")
+      .to raise_error(CSVDecision::CellValidationError,
+                      "invalid option(s) supplied: [:bad_option]")
   end
 
   it 'parses options from a CSV file' do
@@ -75,5 +77,35 @@ describe CSVDecision::Options do
       matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
+  end
+
+  it 'parses index option from the CSV file' do
+    file = Pathname(File.join(SPEC_DATA_VALID, 'options_in_file3.csv'))
+    result = CSVDecision.parse(file)
+
+    expected = {
+      first_match: false,
+      regexp_implicit: true,
+      text_only: false,
+      matchers: CSVDecision::Options::DEFAULT_MATCHERS,
+      index: 1
+    }
+    expect(result.options).to eql expected
+  end
+
+  it 'rejects index option with missing value' do
+    file = Pathname(File.join(SPEC_DATA_INVALID, 'options_in_file4.csv'))
+
+    expect { CSVDecision.parse(file) }
+      .to raise_error(CSVDecision::FileError,
+                      /CSV 'index:' option does not have a value/)
+  end
+
+  it 'rejects index option with invalid value' do
+    file = Pathname(File.join(SPEC_DATA_INVALID, 'options_in_file5.csv'))
+
+    expect { CSVDecision.parse(file) }
+      .to raise_error(CSVDecision::FileError,
+                      /index option value 'x' is not a positive integer/)
   end
 end
