@@ -14,10 +14,11 @@ module CSVDecision
   end
 
   autoload :Columns,    'csv_decision/columns'
-  autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Data,       'csv_decision/data'
   autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'
+  autoload :Defaults,   'csv_decision/defaults'
+  autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Header,     'csv_decision/header'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
@@ -27,6 +28,7 @@ module CSVDecision
   autoload :Result,     'csv_decision/result'
   autoload :ScanRow,    'csv_decision/scan_row'
   autoload :Table,      'csv_decision/table'
+  autoload :Validate,   'csv_decision/validate'
 
   class Matchers
     autoload :Constant,      'csv_decision/matchers/constant'

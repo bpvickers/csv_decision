@@ -8,27 +8,86 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Dictionary
-    # Table used to build a column dictionary entry.
-    ENTRY = {
-      in:         { type: :in,    eval: nil },
-      'in/text':  { type: :in,    eval: false },
-      out:        { type: :out,   eval: nil },
-      'out/text': { type: :out,   eval: false },
-      guard:      { type: :guard, eval: true },
-      if:         { type: :if,    eval: true }
-    }.freeze
-    private_constant :ENTRY
+    # Column dictionary entries.
+    class Entry
+      # Table used to build a column dictionary entry.
+      ENTRY = {
+        in:           { type: :in,    eval: nil },
+        'in/text':    { type: :in,    eval: false },
+        set:          { type: :set,   eval: nil, set_if: true },
+        'set/nil?':   { type: :set,   eval: nil, set_if: :nil? },
+        'set/blank?': { type: :set,   eval: nil, set_if: :blank? },
+        out:          { type: :out,   eval: nil },
+        'out/text':   { type: :out,   eval: false },
+        guard:        { type: :guard, eval: true },
+        if:           { type: :if,    eval: true }
+      }.freeze
+      private_constant :ENTRY
 
-    # Value object to hold column dictionary entries.
-    Entry = Struct.new(:name, :eval, :type) do
+      # Input column types.
+      INS_TYPES = %i[in guard set].freeze
+      private_constant :INS_TYPES
+
+      # Create a new column dictionary entry defaulting attributes from the column type,
+      # which is looked up in +ENTRY+ table.
+      #
+      # @param name [Symbol] Column name.
+      # @param type [Symbol] Column type.
+      # @return [Entry] Column dictionary entry.
+      def self.create(name:, type:)
+        entry = ENTRY[type]
+        new(name: name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if])
+      end
+
+      # @return [Boolean] Return true is this is an input column, false otherwise.
       def ins?
-        %i[in guard].member?(type) ? true : false
+        @ins
+      end
+
+      # @return [Symbol] Column name.
+      attr_reader :name
+
+      # @return [Symbol] Column type.
+      attr_reader :type
+
+      # @return [nil, Boolean] If set to true then this column has procs that
+      #   need evaluating, otherwise it only contains constants.
+      attr_accessor :eval
+
+      # @return [nil, true, Symbol] Defined for columns of type :set, nil otherwise.
+      #   If true, then default is set unconditionally, otherwise the method symbol
+      #   sent to the input hash value that must evaluate to a truthy value.
+      attr_reader :set_if
+
+      # @return [Matchers::Proc, Object] For a column of type set: gives the proc that must be
+      #   evaluated to set the default value. If not a proc, then it's some type of constant.
+      attr_accessor :function
+
+      # @param name (see #name)
+      # @param type (see #type)
+      # @param eval (see #eval)
+      # @param set_if (see #set_if)
+      def initialize(name:, type:, eval: nil, set_if: nil)
+        @name = name
+        @type = type
+        @eval = eval
+        @set_if = set_if
+        @function = nil
+        @ins = INS_TYPES.member?(type)
+      end
+
+      # Convert the object's attributes to a hash.
+      #
+      # @return [Hash{Symbol=>[nil, Boolean, Symbol]}]
+      def to_h
+        {
+          name: @name,
+          type: @type,
+          eval: @eval,
+          set_if: @set_if
+        }
       end
     end
-
-    # These column types do not need a name.
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if]).freeze
-    private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Classify and build a dictionary of all input and output columns by
     # parsing the header row.
@@ -48,127 +107,60 @@ module CSVDecision
     # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
     # @param name [Symbol] Symbolized column name.
     # @param out [false, Index] False if an input column, otherwise the index of the output column.
-    # @return [{Symbol=>Symbol}] Column dictionary updated with the new name.
+    # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
     def self.add_name(columns:, name:, out: false)
-      validate_name(columns: columns, name: name, out: out)
+      Validate.name(columns: columns, name: name, out: out)
 
       columns[name] = out ? out : :in
       columns
     end
 
-    def self.validate_column(cell:, index:)
-      match = Header::COLUMN_TYPE.match(cell)
-      raise CellValidationError, 'column name is not well formed' unless match
-
-      column_type = match['type']&.downcase&.to_sym
-      column_name = column_name(type: column_type, name: match['name'], index: index)
-
-      [column_type, column_name]
-    rescue CellValidationError => exp
-      raise CellValidationError, "header column '#{cell}' is not valid as the #{exp.message}"
-    end
-    private_class_method :validate_column
-
-    def self.column_name(type:, name:, index:)
-      # if: columns are named after their index, which is an integer and so cannot
-      # clash with other column name types, which are symbols.
-      return index if type == :if
-
-      return format_column_name(name) if name.present?
-
-      return if COLUMN_TYPE_ANONYMOUS.member?(type)
-      raise CellValidationError, 'column name is missing'
-    end
-    private_class_method :column_name
-
-    def self.format_column_name(name)
-      column_name = name.strip.tr("\s", '_')
-
-      return column_name.to_sym if Header::COLUMN_NAME_RE.match(column_name)
-      raise CellValidationError, "column name '#{name}' contains invalid characters"
-    end
-    private_class_method :format_column_name
-
-    # Returns the normalized column type, along with an indication if
-    # the column requires evaluation
-    def self.column_type(column_name, entry)
-      Entry.new(column_name, entry[:eval], entry[:type])
-    end
-    private_class_method :column_type
-
     def self.parse_cell(cell:, index:, dictionary:)
-      column_type, column_name = validate_column(cell: cell, index: index)
+      column_type, column_name = Validate.column(cell: cell, index: index)
 
-      entry = column_type(column_name, ENTRY[column_type])
-
-      dictionary_entry(dictionary: dictionary, entry: entry, index: index)
+      dictionary_entry(dictionary: dictionary,
+                       entry: Entry.create(name: column_name, type: column_type),
+                       index: index)
     end
     private_class_method :parse_cell
 
     def self.dictionary_entry(dictionary:, entry:, index:)
       case entry.type
-      # Header column that has a function for setting the value (planned feature)
-      # when :set, :'set/nil?', :'set/blank?'
-      #   # Default function will set the input value unconditionally or conditionally
-      #   dictionary.defaults[index] =
-      #     Columns::Default.new(entry.name, nil, default_if(type))
-      #
-      #   # Treat set: as an in: column
-      #   dictionary.ins[index] = entry
-
-      when :in
-        add_name(columns: dictionary.columns, name: entry.name)
-        dictionary.ins[index] = entry
-
       # A guard column is still added to the ins hash for parsing as an input column.
-      when :guard
-        dictionary.ins[index] = entry
+      when :in, :guard, :set
+        input_entry(dictionary: dictionary, entry: entry, index: index)
 
-      when :out
-        add_name(columns: dictionary.columns, name: entry.name, out: index)
-        dictionary.outs[index] = entry
-
-      # Add an if: column to both the +outs+ hash for output column parsing, and also
-      # a specialized +ifs+ hash used for evaluating them for row filtering.
-      when :if
-        dictionary.outs[index] = entry
-        dictionary.ifs[index] = entry
+      when :out, :if
+        output_entry(dictionary: dictionary, entry: entry, index: index)
       end
 
       dictionary
     end
     private_class_method :dictionary_entry
 
-    def self.validate_name(columns:, name:, out:)
-      return unless (in_out = columns[name])
+    def self.output_entry(dictionary:, entry:, index:)
+      case entry.type
+      # if: columns are anonymous
+      when :if
+        dictionary.ifs[index] = entry
 
-      return validate_out_name(in_out: in_out, name: name) if out
-      validate_in_name(in_out: in_out, name: name)
-    end
-    private_class_method :validate_name
-
-    def self.validate_out_name(in_out:, name:)
-      if in_out == :in
-        raise CellValidationError, "output column name '#{name}' is also an input column"
+      when :out
+        add_name(columns: dictionary.columns, name: entry.name, out: index)
       end
 
-      raise CellValidationError, "output column name '#{name}' is duplicated"
+      dictionary.outs[index] = entry
     end
-    private_class_method :validate_out_name
+    private_class_method :output_entry
 
-    def self.validate_in_name(in_out:, name:)
-      # in: columns may be duped
-      return if in_out == :in
+    def self.input_entry(dictionary:, entry:, index:)
+      dictionary.ins[index] = entry
 
-      raise CellValidationError, "output column name '#{name}' is also an input column"
+      # Default function will set the input value unconditionally or conditionally.
+      dictionary.defaults[index] = entry if entry.type == :set
+
+      # guard: columns are anonymous
+      add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
     end
-    private_class_method :validate_in_name
-
-    # def self.default_if(type)
-    #   return nil if type == :set
-    #   return :nil? if type == :'set/nil'
-    #   :blank?
-    # end
-    # private_class_method :default_if
+    private_class_method :input_entry
   end
 end

@@ -27,6 +27,21 @@ module CSVDecision
       invalid_constant?(type: :constant, column: column)
     end
 
+    # Evaluate the cell proc against the column's input value and/or input hash.
+    #
+    # @param proc [CSVDecision::Proc] Proc in the table cell.
+    # @param value [Object] Value supplied in the input hash corresponding to this column.
+    # @param hash [{Symbol=>Object}] Input hash with symbolized keys.
+    def self.eval_matcher(proc:, hash:, value: nil)
+      function = proc.function
+
+      # A symbol guard expression just needs to be passed the input hash
+      return function[hash] if proc.type == :guard
+
+      # All other procs can take one or two args
+      function.arity == 1 ? function[value] : function[value, hash]
+    end
+
     def self.scan_matchers(column:, matchers:, cell:)
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
@@ -62,21 +77,6 @@ module CSVDecision
     end
     private_class_method :invalid_constant?
 
-    # Evaluate the cell proc against the column's input value and/or input hash.
-    #
-    # @param proc [CSVDecision::Proc] Proc in the table cell.
-    # @param value [Object] Value supplied in the input hash corresponding to this column.
-    # @param hash [{Symbol=>Object}] Input hash with symbolized keys.
-    def self.eval_matcher(proc:, hash:, value: nil)
-      function = proc.function
-
-      # A symbol guard expression just needs to be passed the input hash
-      return function[hash] if proc.type == :guard
-
-      # All other procs can take one or two args
-      function.arity == 1 ? function[value] : function[value, hash]
-    end
-
     # @return [Array<Integer>] Column indices for simple constants.
     attr_reader :constants
 
@@ -91,7 +91,7 @@ module CSVDecision
     # Scan all the specified +columns+ (e.g., inputs) in the given +data+ row using the +matchers+
     # array supplied.
     #
-    # @param row [Array] Data row.
+    # @param row [Array<String>] Data row - still just all string constants.
     # @param columns [Array<Columns::Entry>] Array of column dictionary entries.
     # @param matchers [Array<Matchers::Matcher>] Array of table cell matchers.
     # @return [Array] Data row with anything not a string constant replaced with a Proc or a

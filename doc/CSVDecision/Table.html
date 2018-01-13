@@ -349,7 +349,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#decide-instance_method" title="#decide (instance method)">#<strong>decide</strong>(input)  &#x21d2; Hash{Symbol =&gt; Object, Array&lt;Object&gt;} </a>
+      <a href="#decide-instance_method" title="#decide (instance method)">#<strong>decide</strong>(input)  &#x21d2; {Symbol =&gt; Object, Array&lt;Object&gt;} </a>
     
 
     
@@ -373,7 +373,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#decide!-instance_method" title="#decide! (instance method)">#<strong>decide!</strong>(input)  &#x21d2; Hash{Symbol =&gt; Object, Array&lt;Object&gt;} </a>
+      <a href="#decide!-instance_method" title="#decide! (instance method)">#<strong>decide!</strong>(input)  &#x21d2; {Symbol =&gt; Object, Array&lt;Object&gt;} </a>
     
 
     
@@ -388,7 +388,8 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Unsafe version of decide - assumes the input hash is symbolized.</p>
+<p>Unsafe version of decide - may mutate the input hash and assumes the input
+hash is symbolized.</p>
 </div></span>
   
 </li>
@@ -481,20 +482,20 @@ and last row index given.</p>
       <pre class="lines">
 
 
+76
+77
+78
+79
 80
 81
 82
 83
 84
 85
-86
-87
-88
-89
-90</pre>
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 80</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 76</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='kw'>nil</span>
@@ -563,12 +564,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-30
 31
-32</pre>
+32
+33</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_columns'>columns</span>
   <span class='ivar'>@columns</span>
@@ -624,12 +625,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-33
 34
-35</pre>
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_file'>file</span>
   <span class='ivar'>@file</span>
@@ -689,12 +690,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_if_rows'>if_rows</span>
   <span class='ivar'>@if_rows</span>
@@ -750,12 +751,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-36
 37
-38</pre>
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 36</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_options'>options</span>
   <span class='ivar'>@options</span>
@@ -797,12 +798,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-40
 41
-42</pre>
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs_functions'>outs_functions</span>
   <span class='ivar'>@outs_functions</span>
@@ -862,12 +863,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-53
 54
-55</pre>
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs_rows'>outs_rows</span>
   <span class='ivar'>@outs_rows</span>
@@ -927,12 +928,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-44
 45
-46</pre>
+46
+47</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_rows'>rows</span>
   <span class='ivar'>@rows</span>
@@ -992,12 +993,12 @@ and last row index given.</p>
       <pre class="lines">
 
 
-49
 50
-51</pre>
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scan_rows'>scan_rows</span>
   <span class='ivar'>@scan_rows</span>
@@ -1017,7 +1018,7 @@ and last row index given.</p>
       <div class="method_details first">
   <h3 class="signature first" id="decide-instance_method">
   
-    #<strong>decide</strong>(input)  &#x21d2; <tt>Hash{Symbol =&gt; Object, Array&lt;Object&gt;}</tt> 
+    #<strong>decide</strong>(input)  &#x21d2; <tt>{Symbol =&gt; Object, Array&lt;Object&gt;}</tt> 
   
 
   
@@ -1067,7 +1068,7 @@ and last row index given.</p>
     <li>
       
       
-        <span class='type'>(<tt>Hash{Symbol =&gt; Object, Array&lt;Object&gt;}</tt>)</span>
+        <span class='type'>(<tt>{Symbol =&gt; Object, Array&lt;Object&gt;}</tt>)</span>
       
       
       
@@ -1104,7 +1105,7 @@ and last row index given.</p>
       <div class="method_details ">
   <h3 class="signature " id="decide!-instance_method">
   
-    #<strong>decide!</strong>(input)  &#x21d2; <tt>Hash{Symbol =&gt; Object, Array&lt;Object&gt;}</tt> 
+    #<strong>decide!</strong>(input)  &#x21d2; <tt>{Symbol =&gt; Object, Array&lt;Object&gt;}</tt> 
   
 
   
@@ -1122,7 +1123,8 @@ functions that have side effects.</p>
   </div>
 
 
-<p>Unsafe version of decide - assumes the input hash is symbolized.</p>
+<p>Unsafe version of decide - may mutate the input hash and assumes the input
+hash is symbolized.</p>
 
 
   </div>
@@ -1155,7 +1157,7 @@ functions that have side effects.</p>
     <li>
       
       
-        <span class='type'>(<tt>Hash{Symbol =&gt; Object, Array&lt;Object&gt;}</tt>)</span>
+        <span class='type'>(<tt>{Symbol =&gt; Object, Array&lt;Object&gt;}</tt>)</span>
       
       
       
@@ -1174,12 +1176,12 @@ functions that have side effects.</p>
       <pre class="lines">
 
 
-25
 26
-27</pre>
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 25</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 26</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_decide!'>decide!</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Decide.html" title="CSVDecision::Decide (module)">Decide</a></span></span><span class='period'>.</span><span class='id identifier rubyid_decide'><span class='object_link'><a href="Decide.html#decide-class_method" title="CSVDecision::Decide.decide (method)">decide</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span> <span class='kw'>false</span><span class='rparen'>)</span>
@@ -1260,17 +1262,17 @@ and last row index given.</p>
       <pre class="lines">
 
 
+66
+67
+68
+69
 70
 71
 72
-73
-74
-75
-76
-77</pre>
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/table.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='id identifier rubyid_first'>first</span> <span class='op'>=</span> <span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_last'>last</span> <span class='op'>=</span> <span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_first'>first</span>
@@ -1290,7 +1292,7 @@ and last row index given.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 20:03:02 2018 by
+  Generated on Sat Jan 13 10:02:46 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

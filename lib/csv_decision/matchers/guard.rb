@@ -48,8 +48,9 @@ module CSVDecision
       end
 
       def self.regexp_match(symbol, value, hash)
-        value.is_a?(String) && hash[symbol].is_a?(String) &&
-          Matchers.regexp(value).match(hash[symbol])
+        return false unless value.is_a?(String)
+        data = hash[symbol]
+        data.is_a?(String) && Matchers.regexp(value).match?(data)
       end
 
       FUNCTION = {

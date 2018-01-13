@@ -284,16 +284,16 @@
       <pre class="lines">
 
 
+79
+80
 81
-82
-83
-84</pre>
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 81</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='comment'># By default regexp&#39;s must have an explicit comparator
+  <span class='comment'># By default regexp&#39;s must have an explicit comparator.
 </span>  <span class='ivar'>@regexp_explicit</span> <span class='op'>=</span> <span class='op'>!</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:regexp_implicit</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -351,6 +351,8 @@
       <pre class="lines">
 
 
+66
+67
 68
 69
 70
@@ -359,12 +361,10 @@
 73
 74
 75
-76
-77
-78</pre>
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 68</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>regexp_explicit:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_comparator'>comparator</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_regexp?'>regexp?</span><span class='lparen'>(</span><span class='label'>cell:</span> <span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>explicit:</span> <span class='id identifier rubyid_regexp_explicit'>regexp_explicit</span><span class='rparen'>)</span>
@@ -461,12 +461,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-92
-93
-94</pre>
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 92</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/pattern.rb', line 90</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Pattern (class)">Pattern</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Pattern.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='label'>regexp_explicit:</span> <span class='ivar'>@regexp_explicit</span><span class='rparen'>)</span>
@@ -481,7 +481,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 20:03:02 2018 by
+  Generated on Sat Jan 13 10:02:47 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

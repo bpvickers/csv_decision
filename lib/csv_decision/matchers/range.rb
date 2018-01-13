@@ -13,8 +13,7 @@ module CSVDecision
     class Range < Matcher
       # Match a table data cell string against a Ruby-like range expression.
       #
-      # @param (see Matcher#matches?)
-      # @return (see Matcher#matches?)
+      # (see Matcher#matches?)
       def self.matches?(cell)
         if (match = NUMERIC_RANGE.match(cell))
           return range_proc(match: match, coerce: :to_numeric)
@@ -87,7 +86,6 @@ module CSVDecision
 
       # Ruby-like range expressions or their negation - e.g., +0...10+ or +!a..z+.
       #
-      # @param (see Matcher#matches?)
       # @return (see Matcher#matches?)
       def matches?(cell)
         Range.matches?(cell)

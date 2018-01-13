@@ -61,8 +61,7 @@ module CSVDecision
       # If a constant expression returns a Proc of type :constant,
       #   otherwise return false.
       #
-      # @param (see Matcher#matches?)
-      # @return (see Matcher#matches?)
+      # (see Matcher#matches?)
       def matches?(cell)
         Matchers::Constant.matches?(cell)
       end

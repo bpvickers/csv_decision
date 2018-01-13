@@ -33,10 +33,10 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns).to be_a(CSVDecision::Columns)
-    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
-    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
-    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
-    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in, set_if: nil)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in, set_if: nil)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out, set_if: nil)
+    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out, set_if: nil)
 
     expect(table.columns.dictionary).to eq(input: :in, output: 1, output2: 3)
   end
@@ -50,13 +50,13 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns).to be_a(CSVDecision::Columns)
-    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
-    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
-    expect(table.columns.ins[5].to_h).to eq(name: nil, eval: true, type: :guard)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in, set_if: nil)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in, set_if: nil)
+    expect(table.columns.ins[5].to_h).to eq(name: nil, eval: true, type: :guard, set_if: nil)
 
-    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
-    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
-    expect(table.columns.outs[4].to_h).to eq(name: :len, eval: true, type: :out)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out, set_if: nil)
+    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out, set_if: nil)
+    expect(table.columns.outs[4].to_h).to eq(name: :len, eval: true, type: :out, set_if: nil)
 
     expect(table.columns.dictionary)
       .to eq(input: :in, output: 1, output2: 3, len: 4, input2: :in, input3: :in, input4: :in)
@@ -74,12 +74,12 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns).to be_a(CSVDecision::Columns)
-    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in)
-    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in)
-    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out)
-    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out)
-    expect(table.columns.outs[4].to_h).to eq(name: :input3, eval: true, type: :out)
-    expect(table.columns.outs[5].to_h).to eq(name: :len, eval: true, type: :out)
+    expect(table.columns.ins[0].to_h).to eq(name: :input, eval: nil, type: :in, set_if: nil)
+    expect(table.columns.ins[2].to_h).to eq(name: :input, eval: false, type: :in, set_if: nil)
+    expect(table.columns.outs[1].to_h).to eq(name: :output, eval: nil, type: :out, set_if: nil)
+    expect(table.columns.outs[3].to_h).to eq(name: :output2, eval: false, type: :out, set_if: nil)
+    expect(table.columns.outs[4].to_h).to eq(name: :input3, eval: true, type: :out, set_if: nil)
+    expect(table.columns.outs[5].to_h).to eq(name: :len, eval: true, type: :out, set_if: nil)
 
     expect(table.columns.dictionary)
       .to eq(input: :in, output: 1, output2: 3, len: 5, input2: :in, input3: 4, input4: :in)
@@ -118,10 +118,10 @@ describe CSVDecision::Columns do
     result = CSVDecision.parse(file)
 
     expect(result.columns).to be_a(CSVDecision::Columns)
-    expect(result.columns.ins)
-      .to eq(0 => CSVDecision::Dictionary::Entry.new(:input, nil, :in))
-    expect(result.columns.outs)
-      .to eq(1 => CSVDecision::Dictionary::Entry.new(:output, nil, :out))
+    expect(result.columns.ins.count).to eq 1
+    expect(result.columns.outs.count).to eq 1
+    expect(result.columns.ins[0].to_h).to eql(name: :input, type: :in, eval: nil, set_if: nil)
+    expect(result.columns.outs[1].to_h).to eql(name: :output, type: :out, eval: nil, set_if: nil)
   end
 
   it 'rejects an invalid header column' do
@@ -179,7 +179,7 @@ describe CSVDecision::Columns do
     table = CSVDecision.parse(data)
 
     expect(table.columns.ins[1].to_h)
-      .to eq(name: nil, eval: true, type: :guard)
+      .to eq(name: nil, eval: true, type: :guard, set_if: nil)
 
     expect(table.columns.input_keys).to eq %i[country CUSIP SEDOL]
   end
@@ -215,7 +215,23 @@ describe CSVDecision::Columns do
     DATA
     table = CSVDecision.parse(data)
 
-    expect(table.columns.ifs[3].to_h).to eq(name: 3, eval: true, type: :if)
+    expect(table.columns.ifs[3].to_h).to eq(name: 3, eval: true, type: :if, set_if: nil)
     expect(table.columns.input_keys).to eq %i[country CUSIP SEDOL]
+  end
+
+  it 'recognises the set: columns' do
+    data = <<~DATA
+      set/nil? :country, guard:,          set: class,    out :PAID, out: len,     if:
+      US,                ,                :class.upcase,
+      US,                :CUSIP.present?, != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+      !=US,              :ISIN.present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+    DATA
+    table = CSVDecision.parse(data)
+
+    expect(table.columns.ins[0].to_h).to eq(name: :country, eval: nil, type: :set, set_if: :nil?)
+    expect(table.columns.ins[1].to_h).to eq(name: nil, eval: true, type: :guard, set_if: nil)
+    expect(table.columns.ins[2].to_h).to eq(name: :class, eval: nil, type: :set, set_if: true)
+
+    expect(table.columns.input_keys).to eq %i[country class CUSIP ISIN]
   end
 end

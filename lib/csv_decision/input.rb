@@ -43,19 +43,67 @@ module CSVDecision
     private_class_method :validate
 
     def self.parse_input(table:, input:)
+      defaulted_columns = table.columns.defaults
+      parse_cells(table: table, input: input) if defaulted_columns.empty?
+
+      parse_defaulted(table: table, input: input, defaulted_columns: defaulted_columns)
+    end
+    private_class_method :parse_input
+
+    def self.parse_cells(table:, input:)
       scan_cols = {}
-
-      # TODO: Does this table have any defaulted columns?
-      # defaulted_columns = table.columns[:defaults]
-
       table.columns.ins.each_pair do |col, column|
-        value = input[column.name]
+        next if column.type == :guard
 
-        scan_cols[col] = value
+        scan_cols[col] = input[column.name]
       end
 
       { hash: input, scan_cols: scan_cols }
     end
-    private_class_method :parse_input
+    private_class_method :parse_cells
+
+    def self.parse_defaulted(table:, input:, defaulted_columns:)
+      scan_cols = {}
+
+      table.columns.ins.each_pair do |col, column|
+        next if column.type == :guard
+
+        scan_cols[col] =
+          default_value(default: defaulted_columns[col], input: input, column: column)
+
+        # Also update the input hash with the default value.
+        input[column.name] = scan_cols[col]
+      end
+
+      { hash: input, scan_cols: scan_cols }
+    end
+    private_class_method :parse_defaulted
+
+    def self.default_value(default:, input:, column:)
+      value = input[column.name]
+
+      # Do we even have a default entry for this column?
+      return value if default.nil?
+
+      # Has the set condition been met, or is it unconditional?
+      return value unless default_if?(default.set_if, value)
+
+      # Expression may be a Proc that needs evaluating against the input hash,
+      # or else a constant.
+      eval_default(default.function, input)
+    end
+    private_class_method :default_value
+
+    def self.default_if?(set_if, value)
+      set_if == true || (value.respond_to?(set_if) && value.send(set_if))
+    end
+    private_class_method :default_if?
+
+    # Expression may be a Proc that needs evaluating against the input hash,
+    # or else a constant.
+    def self.eval_default(expression, input)
+      expression.is_a?(::Proc) ? expression[input] : expression
+    end
+    private_class_method :eval_default
   end
 end

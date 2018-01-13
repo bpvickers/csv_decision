@@ -11,12 +11,13 @@ module CSVDecision
     #
     # @note Input hash keys may or may not be symbolized.
     # @param input [Hash] Input hash.
-    # @return [Hash{Symbol => Object, Array<Object>}] Decision hash.
+    # @return [{Symbol => Object, Array<Object>}] Decision hash.
     def decide(input)
       Decide.decide(table: self, input: input, symbolize_keys: true)
     end
 
-    # Unsafe version of decide - assumes the input hash is symbolized.
+    # Unsafe version of decide - may mutate the input hash and assumes the input
+    # hash is symbolized.
     #
     # @param input (see #decide)
     # @note Input hash must have its keys symbolized.
@@ -55,11 +56,6 @@ module CSVDecision
     # @return [Array<CSVDecision::ScanRow>] Used to implement filtering of final results.
     # @api private
     attr_accessor :if_rows
-
-    # @return Array<CSVDecision::Table>] pre-loaded tables passed to this decision table
-    #   at load time. Used to allow this decision table to lookup values in other
-    #   decision tables. (Planned feature.)
-    # attr_reader :tables
 
     # Iterate through all data rows of the decision table, with an optional
     # first and last row index given.

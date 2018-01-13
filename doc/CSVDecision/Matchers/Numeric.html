@@ -108,7 +108,7 @@
   You should avoid using this class if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Recognise numeric comparison expressions - e.g., <tt>&gt; 100</tt> or <tt>!= 0</tt></p>
+<p>Recognise numeric comparison expressions - e.g., <tt>&gt; 100</tt> or <tt>!= 0</tt>.</p>
 
 
   </div>
@@ -149,9 +149,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns false if this cell is not a match; otherwise returns the
-<code>CSVDecision::Proc</code> object indicating if this is a constant or
-some type of function.</p>
+<p>Determine if the input cell string is recognised by this Matcher.</p>
 </div></span>
   
 </li>
@@ -184,9 +182,7 @@ some type of function.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns false if this cell is not a match; otherwise returns the
-<code>CSVDecision::Proc</code> object indicating if this is a constant or
-some type of function.</p>
+<p>Determine if the input cell string is recognised by this Matcher.</p>
 </div></span>
   
 </li>
@@ -234,9 +230,7 @@ some type of function.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Returns false if this cell is not a match; otherwise returns the
-<code>CSVDecision::Proc</code> object indicating if this is a constant or
-some type of function.</p>
+<p>Determine if the input cell string is recognised by this Matcher.</p>
 
 
   </div>
@@ -290,6 +284,7 @@ some type of function.</p>
       <pre class="lines">
 
 
+29
 30
 31
 32
@@ -299,11 +294,10 @@ some type of function.</p>
 36
 37
 38
-39
-40</pre>
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 29</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='const'>COMPARISON</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
@@ -343,9 +337,7 @@ some type of function.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Returns false if this cell is not a match; otherwise returns the
-<code>CSVDecision::Proc</code> object indicating if this is a constant or
-some type of function.</p>
+<p>Determine if the input cell string is recognised by this Matcher.</p>
 
 
   </div>
@@ -399,12 +391,12 @@ some type of function.</p>
       <pre class="lines">
 
 
-44
-45
-46</pre>
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers/numeric.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matches?'>matches?</span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers::Numeric (class)">Numeric</a></span></span><span class='period'>.</span><span class='id identifier rubyid_matches?'><span class='object_link'><a href="#matches%3F-class_method" title="CSVDecision::Matchers::Numeric.matches? (method)">matches?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cell'>cell</span><span class='rparen'>)</span>
@@ -419,7 +411,7 @@ some type of function.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan  6 20:03:02 2018 by
+  Generated on Sat Jan 13 10:02:47 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
