@@ -8,6 +8,19 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Dictionary
+    # Add a new symbol to the dictionary of named input and output columns.
+    #
+    # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
+    # @param name [Symbol] Symbolized column name.
+    # @param out [false, Index] False if an input column, otherwise the index of the output column.
+    # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
+    def self.add_name(columns:, name:, out: false)
+      Validate.name(columns: columns, name: name, out: out)
+
+      columns[name] = out ? out : :in
+      columns
+    end
+
     # Column dictionary entries.
     class Entry
       # Table used to build a column dictionary entry.
@@ -102,19 +115,6 @@ module CSVDecision
       dictionary
     end
 
-    # Add a new symbol to the dictionary of named input and output columns.
-    #
-    # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
-    # @param name [Symbol] Symbolized column name.
-    # @param out [false, Index] False if an input column, otherwise the index of the output column.
-    # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
-    def self.add_name(columns:, name:, out: false)
-      Validate.name(columns: columns, name: name, out: out)
-
-      columns[name] = out ? out : :in
-      columns
-    end
-
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = Validate.column(cell: cell, index: index)
 
@@ -145,7 +145,7 @@ module CSVDecision
         dictionary.ifs[index] = entry
 
       when :out
-        add_name(columns: dictionary.columns, name: entry.name, out: index)
+        Dictionary.add_name(columns: dictionary.columns, name: entry.name, out: index)
       end
 
       dictionary.outs[index] = entry
@@ -159,7 +159,7 @@ module CSVDecision
       dictionary.defaults[index] = entry if entry.type == :set
 
       # guard: columns are anonymous
-      add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
+      Dictionary.add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
     end
     private_class_method :input_entry
   end

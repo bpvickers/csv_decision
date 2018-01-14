@@ -102,10 +102,10 @@ module CSVDecision
     # @param hash (see Decision#row_scan)
     # @return [Boolean] True for a match, false otherwise.
     def match?(row:, scan_cols:, hash:)
-      # Check table cell constants first, and maybe fail fast
+      # Check any table row cell constants first, and maybe fail fast...
       return false if @constants.any? { |col| row[col] != scan_cols[col] }
 
-      # These table cells are Proc objects which need evaluating
+      # These table row cells are Proc objects which need evaluating
       @procs.all? { |col| row[col].call(value: scan_cols[col], hash: hash) }
     end
 
