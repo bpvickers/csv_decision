@@ -20,6 +20,7 @@ module CSVDecision
   autoload :Defaults,   'csv_decision/defaults'
   autoload :Dictionary, 'csv_decision/dictionary'
   autoload :Header,     'csv_decision/header'
+  autoload :Index,      'csv_decision/index'
   autoload :Input,      'csv_decision/input'
   autoload :Load,       'csv_decision/load'
   autoload :Matchers,   'csv_decision/matchers'

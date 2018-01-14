@@ -78,15 +78,18 @@ module CSVDecision
     private_class_method :raise_error
 
     def self.parse_table(table:, input:, options:)
-      # Parse input data into an array of arrays
+      # Parse input data into an array of arrays.
       table.rows = Data.to_array(data: input)
 
       # Pick up any options specified in the CSV file before the header row.
       # These override any options passed as parameters to the parse method.
       table.options = Options.from_csv(rows: table.rows, options: options).freeze
 
-      # Parse table with cell matchers
+      # Parse table header and data rows with special cell matchers.
       parse_with_matchers(table: table, matchers: CSVDecision::Matchers.new(options))
+
+      # Build the index if one is indicated
+      table.index = Index.build(table: table, options: options)
     end
     private_class_method :parse_table
 
@@ -143,26 +146,6 @@ module CSVDecision
       row
     end
     private_class_method :parse_row_outs
-
-    # def self.ins_column_dictionary(columns:, row:)
-    #   row.each { |cell| ins_cell_dictionary(columns: columns, cell: cell) }
-    # end
-    # private_class_method :ins_column_dictionary
-    #
-    # def self.ins_cell_dictionary(columns:, cell:)
-    #   return unless cell.is_a?(Matchers::Proc)
-    #   return if cell.symbols.nil?
-    #
-    #   add_ins_symbols(columns: columns, cell: cell)
-    # end
-    # # private_class_method :ins_cell_dictionary
-    #
-    # def self.add_ins_symbols(columns:, cell:)
-    #   Array(cell.symbols).each do |symbol|
-    #     Dictionary.add_name(columns: columns, name: symbol)
-    #   end
-    # end
-    # private_class_method :add_ins_symbols
 
     def self.outs_functions(table:, index:)
       return if table.outs_rows[index].procs.empty?

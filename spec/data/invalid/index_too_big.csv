@@ -1,5 +1,5 @@
 #comment,
-accumulate, index : 1
+accumulate, index : 2
 regexp_implicit
 IN :input,OUT :output
 none,:=0

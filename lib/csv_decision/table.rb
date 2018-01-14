@@ -33,6 +33,9 @@ module CSVDecision
     # @return [File, Pathname, nil] File path name if decision table was loaded from a CSV file.
     attr_accessor :file
 
+    # @return [CSVDecision::Index] The index built on one or more input columns.
+    attr_accessor :index
+
     # @return [Hash] All options, explicitly set or defaulted, used to parse the table.
     attr_accessor :options
 
@@ -76,6 +79,7 @@ module CSVDecision
     def initialize
       @columns = nil
       @file = nil
+      @index = nil
       @options = nil
       @outs_functions = nil
       @outs_rows = []
