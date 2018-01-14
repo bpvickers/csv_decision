@@ -1,0 +1,12 @@
+#comment,
+index : 2
+guard:,in :type, IN :input,OUT :output
+:number.present?,integer,none,:=0
+:string.blank?,string,none,:=nil
+:string.present?,string,none,0
+:string.blank?,string,one,:=nil
+:number.present?,integer,one,:=1
+:number.blank?,integer,one,:=nil
+:string.present?,string,one,1
+:string.blank?,string,one,:=nil
+:number.blank?,integer,none,:=nil

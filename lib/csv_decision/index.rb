@@ -9,41 +9,21 @@ module CSVDecision
   # designated as keys
   # @api private
   class Index
-    # Build the index on the designated input columns.
-    def self.build(table:, options:)
-      # Do we even have an index?
-      keys = options[:index]
-      return if keys.nil?
+    # Build the index on the designated number of input columns.
+    #
+    # @param table [CSVDecision::Table] Decision table being indexed.
+    # @param index [nil, Integer] If specified, then the option value is a positive integer giving
+    #   the number of input columns, scanning from left to right, to be included in the index.
+    # @return [CSVDecision::Index] The built index.
+    def self.build(table:, index:)
+      # Do we even have an index? If specified, then the option value is a positive integer giving
+      # the number of input columns, scanning from left to right, to be included in the index.
+      # Guard columns will be skipped.
+      return if index.nil?
 
-      key_cols = validate_index(columns: table.columns.ins, keys: keys)
+      key_cols = validate_index(columns: table.columns.ins, index: index)
 
       Index.new(table: table, keys: key_cols)
-    end
-
-    def self.validate_index(columns:, keys:)
-      key_cols = validate_keys(columns: columns, keys: keys)
-      return key_cols if key_cols
-
-      raise TableValidationError, "option :index value of #{keys} exceeds number of input columns"
-    end
-
-    def self.validate_keys(columns:, keys:)
-      return false if keys > columns.count
-
-      validate_columns(columns: columns, keys: keys)
-    end
-
-    def self.validate_columns(columns:, keys:)
-      count = 0
-      key_cols = []
-      columns.each_pair do |col, column|
-        next if column.type == :guard
-
-        key_cols << col
-        return key_cols if (count += 1) == keys
-      end
-
-      false
     end
 
     def self.simple_key(cell:, index:)
@@ -61,13 +41,45 @@ module CSVDecision
       return integer_value(current_value, index) if current_value.is_a?(Integer)
 
       array_value(current_value, index)
+
+      current_value
     end
+
+    def self.validate_index(columns:, index:)
+      key_cols = validate_keys(columns: columns, index: index)
+      return key_cols if key_cols
+
+      raise TableValidationError, "option :index value of #{index} exceeds number of input columns"
+    end
+    private_class_method :validate_index
+
+    def self.validate_keys(columns:, index:)
+      return false if index > columns.count
+
+      validate_columns(columns: columns, index: index)
+    end
+    private_class_method :validate_keys
+
+    def self.validate_columns(columns:, index:)
+      count = 0
+      key_cols = []
+      columns.each_pair do |col, column|
+        next if column.type == :guard
+
+        key_cols << col
+        return key_cols if (count += 1) == index
+      end
+
+      false
+    end
+    private_class_method :validate_columns
 
     # Current value is a row index integer
     def self.integer_value(current_value, index)
       # Is the new row index contiguous with the last start row/end row range?
       current_value + 1 == index ? [[current_value, index]] : [current_value, index]
     end
+    private_class_method :integer_value
 
     # Current value is an array of row indexes
     def self.array_value(current_value, index)
@@ -78,8 +90,12 @@ module CSVDecision
       # Is the new row index contiguous with the last start row/end row range?
       end_row + 1 == index ? current_value[-1] = [start_row, index] : current_value << index
     end
+    private_class_method :array_value
 
+    # @return [Hash] The index hash mapping in input values to one or more data array row indexes.
     attr_reader :hash
+
+    # @return [Array<Integer>] Array of column indices
     attr_reader :keys
 
     def initialize(table:, keys:)
@@ -91,7 +107,8 @@ module CSVDecision
       freeze
     end
 
-    # TODO: Stub
+    private
+
     def build(table)
       table.each do |row, index|
         key = build_key(row: row, index: index)
