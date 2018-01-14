@@ -38,6 +38,21 @@ module CSVDecision
       @rows_picked.empty? ? {} : accumulated_result
     end
 
+    # Use an index to scan the decision table up against the input hash.
+    #
+    # @param (see #initialize)
+    # @return [{Symbol=>Object}] Decision result.
+    def index(keys:, table:, hash:, scan_cols:)
+      scan_rows = table.scan_rows
+
+      table.each do |row, index|
+        next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+        return @result.attributes if add(row)
+      end
+
+      @rows_picked.empty? ? {} : accumulated_result
+    end
+
     private
 
     # Add a matched row to the decision object being built.
@@ -64,12 +79,12 @@ module CSVDecision
 
     def multi_row_result
       # Scan each output column that contains functions
-      @result.outs.each_pair { |col, column| eval_column_procs(col: col, column: column) if column.eval }
+      @result.outs.each_pair { |col, column| eval_procs(col: col, column: column) if column.eval }
 
       @result.final
     end
 
-    def eval_column_procs(col:, column:)
+    def eval_procs(col:, column:)
       @rows_picked.each_with_index do |row, index|
         proc = row[col]
         next unless proc.is_a?(Matchers::Proc)

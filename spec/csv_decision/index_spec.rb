@@ -22,7 +22,7 @@ describe CSVDecision::Index do
       3 => 8
     }
 
-    expect(result.index.keys).to eq [0]
+    expect(result.index.columns).to eq [0]
     expect(result.index.hash).to eql expected
   end
 
@@ -37,7 +37,7 @@ describe CSVDecision::Index do
       %w[string one] => [[6, 7]]
     }
 
-    expect(result.index.keys).to eq [1, 2]
+    expect(result.index.columns).to eq [1, 2]
     expect(result.index.hash).to eql expected
   end
 
@@ -52,7 +52,7 @@ describe CSVDecision::Index do
       %w[integer one] => [[4, 5]]
     }
 
-    expect(result.index.keys).to eq [1, 2]
+    expect(result.index.columns).to eq [1, 2]
     expect(result.index.hash).to eql expected
   end
 

@@ -23,7 +23,7 @@ module CSVDecision
 
       key_cols = validate_index(columns: table.columns.ins, index: index)
 
-      Index.new(table: table, keys: key_cols)
+      Index.new(table: table, columns: key_cols)
     end
 
     def self.simple_key(cell:, index:)
@@ -32,7 +32,6 @@ module CSVDecision
       return cell unless cell.is_a?(Matchers::Proc)
 
       raise 'a functional expression'
-
     rescue StandardError => error
       raise CellValidationError, "key value is #{error} in row ##{index + 1}"
     end
@@ -96,10 +95,10 @@ module CSVDecision
     attr_reader :hash
 
     # @return [Array<Integer>] Array of column indices
-    attr_reader :keys
+    attr_reader :columns
 
-    def initialize(table:, keys:)
-      @keys = keys
+    def initialize(table:, columns:)
+      @columns = columns
       @hash = {}
 
       build(table)
@@ -119,10 +118,10 @@ module CSVDecision
     end
 
     def build_key(row:, index:)
-      if @keys.count == 1
-        Index.simple_key(cell: row[@keys[0]], index: index)
+      if @columns.count == 1
+        Index.simple_key(cell: row[@columns[0]], index: index)
       else
-        @keys.map { |col| Index.simple_key(cell: row[col], index: index) }
+        @columns.map { |col| Index.simple_key(cell: row[col], index: index) }
       end
     end
   end

@@ -18,16 +18,40 @@ module CSVDecision
       validate(input)
 
       hash, scan_cols =
-        parse_input(table: table, input: symbolize_keys ?  input.symbolize_keys : input)
+        parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
+
+      index_key = table.index ? parse_key(table: table, hash: hash, keys: table.option.index) : nil
 
       # We can freeze the input hash for safety if we made our own copy
-      [symbolize_keys ? hash.freeze : hash, scan_cols.freeze]
+      [symbolize_keys ? hash.freeze : hash, scan_cols.freeze, index_key]
+    end
+
+    def self.parse_key(table:, hash:, keys:)
+      return scan_key(table: table, hash: hash) if keys == 1
+
+      scan_keys(table: table, hash: hash).freeze
+    end
+
+    def self.scan_key(table:, hash:)
+      col = table.index.columns[0]
+      column = table.columns.ins[col]
+
+      hash[column.name]
+    end
+
+    def self.scan_keys(table:, hash:)
+      table.index.columns.map do |col|
+        column = table.columns.ins[col]
+
+        hash[column.name]
+      end
     end
 
     def self.validate(input)
       return if input.is_a?(Hash) && !input.empty?
       raise ArgumentError, 'input must be a non-empty hash'
     end
+
     private_class_method :validate
 
     def self.parse_input(table:, input:)
@@ -38,6 +62,7 @@ module CSVDecision
 
       parse_defaulted(table: table, input: input, defaulted_columns: defaulted_columns)
     end
+
     private_class_method :parse_input
 
     def self.parse_cells(table:, input:)
@@ -50,6 +75,7 @@ module CSVDecision
 
       [input, scan_cols]
     end
+
     private_class_method :parse_cells
 
     def self.parse_defaulted(table:, input:, defaulted_columns:)
@@ -67,6 +93,7 @@ module CSVDecision
 
       [input, scan_cols]
     end
+
     private_class_method :parse_defaulted
 
     def self.default_value(default:, input:, column:)
@@ -82,11 +109,13 @@ module CSVDecision
       # or else a constant.
       eval_default(default.function, input)
     end
+
     private_class_method :default_value
 
     def self.default_if?(set_if, value)
       set_if == true || (value.respond_to?(set_if) && value.send(set_if))
     end
+
     private_class_method :default_if?
 
     # Expression may be a Proc that needs evaluating against the input hash,
@@ -94,6 +123,7 @@ module CSVDecision
     def self.eval_default(expression, input)
       expression.is_a?(::Proc) ? expression[input] : expression
     end
+
     private_class_method :eval_default
   end
 end
