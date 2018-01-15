@@ -87,7 +87,7 @@ module CSVDecision
         next if (cell = row[col]) == '' && column.ins?
 
         # If the column is text only then no special matchers need be invoked
-        next @constants << col if column.eval == false
+        next constants_set(col, column) if column.eval == false
 
         # Need to scan the cell against all matchers, and possibly overwrite
         # the cell contents with a Matchers::Proc.
@@ -95,6 +95,10 @@ module CSVDecision
       end
 
       row
+    end
+
+    def constants_set(col, column)
+      @constants << col unless column.indexed
     end
 
     # Match cells in the input hash against a decision table row.
@@ -115,17 +119,17 @@ module CSVDecision
       # Scan the cell against all the matchers
       proc = ScanRow.scan(column: column, matchers: matchers, cell: cell)
 
-      return set(proc, col) if proc
+      return set(proc, col, column) if proc
 
       # Just a plain constant
-      @constants << col
+      constants_set(col, column)
       cell
     end
 
-    def set(proc, col)
+    def set(proc, col, column)
       # Unbox a constant
       if proc.type == :constant
-        @constants << col
+        constants_set(col, column)
         return proc.function
       end
 

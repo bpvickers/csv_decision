@@ -7,12 +7,12 @@ SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
 
 describe CSVDecision::Columns do
   describe '#new' do
-    it 'creates a columns object' do
-      table = CSVDecision::Table.new
-      columns = CSVDecision::Columns.new(table)
-
-      expect(columns).to be_a(CSVDecision::Columns)
-    end
+    # it 'creates a columns object' do
+    #   table = CSVDecision::Table.new
+    #   columns = CSVDecision::Columns.new(table)
+    #
+    #   expect(columns).to be_a(CSVDecision::Columns)
+    # end
   end
 
   it 'rejects a duplicate output column name' do

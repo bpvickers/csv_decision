@@ -106,12 +106,15 @@ module CSVDecision
       #   This is actually just a subset of :outs.
       attr_accessor :ifs
 
-      def initialize
+      attr_reader :keys
+
+      def initialize(table)
         @columns = {}
         @defaults = {}
         @ifs = {}
         @ins = {}
         @outs = {}
+        @keys = table.options[:index]
       end
     end
 
@@ -160,8 +163,12 @@ module CSVDecision
       # Return the stripped header row, and remove it from the data array.
       row = Header.strip_empty_columns(rows: table.rows)
 
+      # No header row found?
+      raise TableValidationError, 'table has no header row' unless row
+
       # Build a dictionary of all valid data columns from the header row.
-      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: Dictionary.new) if row
+      dictionary =  Dictionary.new(table)
+      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: dictionary)
 
       freeze
     end

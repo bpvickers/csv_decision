@@ -21,7 +21,7 @@ module CSVDecision
       # Guard columns will be skipped.
       return if index.nil?
 
-      key_cols = validate_index(columns: table.columns.ins, index: index)
+      key_cols = index_columns(columns: table.columns.ins, index: index)
 
       Index.new(table: table, columns: key_cols)
     end
@@ -44,22 +44,7 @@ module CSVDecision
       current_value
     end
 
-    def self.validate_index(columns:, index:)
-      key_cols = validate_keys(columns: columns, index: index)
-      return key_cols if key_cols
-
-      raise TableValidationError, "option :index value of #{index} exceeds number of input columns"
-    end
-    private_class_method :validate_index
-
-    def self.validate_keys(columns:, index:)
-      return false if index > columns.count
-
-      validate_columns(columns: columns, index: index)
-    end
-    private_class_method :validate_keys
-
-    def self.validate_columns(columns:, index:)
+    def self.index_columns(columns:, index:)
       count = 0
       key_cols = []
       columns.each_pair do |col, column|
@@ -68,10 +53,8 @@ module CSVDecision
         key_cols << col
         return key_cols if (count += 1) == index
       end
-
-      false
     end
-    private_class_method :validate_columns
+    private_class_method :index_columns
 
     # Current value is a row index integer
     def self.integer_value(current_value, index)

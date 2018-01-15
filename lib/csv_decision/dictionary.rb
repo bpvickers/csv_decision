@@ -63,6 +63,9 @@ module CSVDecision
       # @return [Symbol] Column type.
       attr_reader :type
 
+      # @return [Boolean] Returns true if this column is indexed
+      attr_accessor :indexed
+
       # @return [nil, Boolean] If set to true then this column has procs that
       #   need evaluating, otherwise it only contains constants.
       attr_accessor :eval
@@ -80,13 +83,14 @@ module CSVDecision
       # @param type (see #type)
       # @param eval (see #eval)
       # @param set_if (see #set_if)
-      def initialize(name:, type:, eval: nil, set_if: nil)
+      def initialize(name:, type:, eval: nil, set_if: nil, indexed: false)
         @name = name
         @type = type
         @eval = eval
         @set_if = set_if
         @function = nil
         @ins = INS_TYPES.member?(type)
+        @indexed = indexed
       end
 
       # Convert the object's attributes to a hash.
@@ -112,8 +116,22 @@ module CSVDecision
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
-      dictionary
+      dictionary.keys ? indexed_ins(dictionary) : dictionary
     end
+
+    def self.indexed_ins(dictionary)
+      count = dictionary.keys
+      dictionary.ins.each_value do |entry|
+        next if entry.type == :guard
+
+        entry.indexed = true
+        return dictionary if (count -= 1).zero?
+      end
+
+      raise TableValidationError,
+            "option :index value of #{dictionary.keys} exceeds number of input columns"
+    end
+    private_class_method :indexed_ins
 
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = Validate.column(cell: cell, index: index)
