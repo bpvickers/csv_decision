@@ -1,4 +1,4 @@
-## v0.3.0, January 2018.
+## v0.3.0, 20 January 2018.
 *Additions*
 - Index one or more text-only input columns for faster lookup performance.
 
