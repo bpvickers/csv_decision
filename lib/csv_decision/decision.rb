@@ -66,7 +66,7 @@ module CSVDecision
     # @param input [Hash] Hash of parsed input data.
     # @return [{Symbol=>Object}] Decision result.
     def index(table:, input:)
-      # If the index lookup fails, there is no match
+      # If the index lookup fails, there's no match
       return {} unless (rows = table.index.hash[input[:key]])
 
       index_scan(table: table, scan_cols: input[:scan_cols], hash: input[:hash], rows: rows)
