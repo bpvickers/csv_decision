@@ -17,17 +17,24 @@ module CSVDecision
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
-      hash, scan_cols =
-        parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
+      parsed_input = parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
 
+      key = table.index ? parse_key(table: table, hash: parsed_input[:hash]) : nil
+
+      result(symbolize_keys: symbolize_keys, input: parsed_input, key: key)
+    end
+
+    def self.result(symbolize_keys:, input:, key:)
+      hash = input[:hash]
       {
         # We can freeze the input hash for safety if we made our own copy.
         hash: symbolize_keys ? hash.freeze : hash,
-        scan_cols:  scan_cols.freeze,
+        scan_cols:  input[:scan_cols].freeze,
         # Build the index key if this table is indexed.
-        key: table.index ? parse_key(table: table, hash: hash) : nil
+        key: key
       }
     end
+    private_class_method :result
 
     def self.parse_key(table:, hash:)
       return scan_key(table: table, hash: hash) if table.index.columns.count == 1
@@ -78,7 +85,7 @@ module CSVDecision
         scan_cols[col] = input[column.name]
       end
 
-      [input, scan_cols]
+      { hash: input, scan_cols: scan_cols }
     end
 
     private_class_method :parse_cells
@@ -96,7 +103,7 @@ module CSVDecision
         input[column.name] = scan_cols[col]
       end
 
-      [input, scan_cols]
+      { hash: input, scan_cols: scan_cols }
     end
 
     private_class_method :parse_defaulted
