@@ -86,7 +86,6 @@ module CSVDecision
       @if_rows = []
       @rows = []
       @scan_rows = []
-      # @tables = nil
     end
   end
 end

@@ -49,9 +49,11 @@ module CSVDecision
       # @return [Entry] Column dictionary entry.
       def self.create(name:, type:)
         entry = ENTRY[type]
-        new(name: name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if],
-            indexed: entry[:type] != :guard
-        )
+        new(name: name,
+            eval: entry[:eval],              # Set if the column requires functions evaluated
+            type: entry[:type],              # Column type
+            set_if: entry[:set_if],          # Set if the column has a conditional default
+            indexed: entry[:type] != :guard) # A guard column cannot be indexed.
       end
 
       # @return [Boolean] Return true is this is an input column, false otherwise.
@@ -118,7 +120,7 @@ module CSVDecision
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
-      dictionary.keys ? indexed_ins(dictionary) : dictionary
+      dictionary
     end
 
     def self.parse_cell(cell:, index:, dictionary:)
@@ -145,16 +147,16 @@ module CSVDecision
     private_class_method :dictionary_entry
 
     def self.output_entry(dictionary:, entry:, index:)
+      dictionary.outs[index] = entry
+
       case entry.type
-      # if: columns are anonymous
+      # if: columns are anonymous, even if the user names them
       when :if
         dictionary.ifs[index] = entry
 
       when :out
         Dictionary.add_name(columns: dictionary.columns, name: entry.name, out: index)
       end
-
-      dictionary.outs[index] = entry
     end
     private_class_method :output_entry
 

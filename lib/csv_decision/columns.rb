@@ -106,15 +106,12 @@ module CSVDecision
       #   This is actually just a subset of :outs.
       attr_accessor :ifs
 
-      attr_reader :keys
-
-      def initialize(table)
+      def initialize
         @columns = {}
         @defaults = {}
         @ifs = {}
         @ins = {}
         @outs = {}
-        @keys = table.options[:index]
       end
     end
 
@@ -167,8 +164,7 @@ module CSVDecision
       raise TableValidationError, 'table has no header row' unless row
 
       # Build a dictionary of all valid data columns from the header row.
-      dictionary =  Dictionary.new(table)
-      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: dictionary)
+      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: Dictionary.new)
 
       freeze
     end

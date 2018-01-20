@@ -34,8 +34,7 @@ module CSVDecision
     CSV_NAMES = {
       first_match: [:first_match, true], accumulate: [:first_match, false],
       regexp_implicit: [:regexp_implicit, true],
-      text_only: [:text_only, true],
-      # index: [:index, nil], keys: [:index, nil]
+      text_only: [:text_only, true], string_search: [:text_only, true]
     }.freeze
     private_constant :CSV_NAMES
 
