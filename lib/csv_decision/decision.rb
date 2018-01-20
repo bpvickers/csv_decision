@@ -26,7 +26,7 @@ module CSVDecision
       if table.index
         decision.index(table: table, input: input)
       else
-        decision.scan(table: table, input: input)
+        decision.scan(table: table, hash: input[:hash], scan_cols: input[:scan_cols])
       end
     end
 
@@ -48,15 +48,12 @@ module CSVDecision
     # Scan the decision table up against the input hash.
     #
     # @param table (see #initialize)
-    # @param input [Hash] Hash of parsed input data.
+    # @param hash [Hash] Input hash.
+    # @param scan_cols [Hash{Index=>Object}] Input column values to scan.
     # @return [Hash{Symbol=>Object}] Decision result.
-    def scan(table:, input:)
-      hash = input[:hash]
-      scan_cols = input[:scan_cols]
-      scan_rows = table.scan_rows
-
+    def scan(table:, hash:, scan_cols:)
       table.each do |row, index|
-        next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+        next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
         return @result.attributes if add(row)
       end
 
@@ -78,11 +75,9 @@ module CSVDecision
     private
 
     def index_scan(table:, scan_cols:, hash:, rows:)
-      scan_rows = table.scan_rows
-
       Array(rows).each do |start_row, end_row|
         table.each(start_row, end_row || start_row) do |row, index|
-          next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+          next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
           return @result.attributes if add(row)
         end
       end
