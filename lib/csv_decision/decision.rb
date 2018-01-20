@@ -69,13 +69,13 @@ module CSVDecision
       # If the index lookup fails, there's no match
       return {} unless (rows = table.index.hash[input[:key]])
 
-      index_scan(table: table, scan_cols: input[:scan_cols], hash: input[:hash], rows: rows)
+      index_scan(table: table, scan_cols: input[:scan_cols], hash: input[:hash], rows: Array(rows))
     end
 
     private
 
     def index_scan(table:, scan_cols:, hash:, rows:)
-      Array(rows).each do |start_row, end_row|
+      rows.each do |start_row, end_row|
         table.each(start_row, end_row || start_row) do |row, index|
           next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
           return @result.attributes if add(row)
