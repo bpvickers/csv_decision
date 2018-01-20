@@ -176,60 +176,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>table</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="Table.html" title="CSVDecision::Table (class)">CSVDecision::Table</a></span></tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Decision table.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>input</span>
-      
-      
-        <span class='type'>(<tt>Hash</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Input hash (keys may or may not be symbolized)</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>symbolize_keys</span>
-      
-      
-        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Set to false if keys are symbolized and it&#39;s OK to mutate the input
-hash. Otherwise a copy of the input hash is symbolized.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -279,13 +226,13 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate'>validate</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_parsed_input'>parsed_input</span> <span class='op'>=</span>
-    <span class='id identifier rubyid_parse_input'>parse_input</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span> <span class='op'>=</span>
+    <span class='id identifier rubyid_parse_input'>parse_input</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>?</span> <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>:</span> <span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
 
-  <span class='comment'># We can freeze it as we made our own copy
-</span>  <span class='id identifier rubyid_parsed_input'>parsed_input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span> <span class='kw'>if</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+  <span class='id identifier rubyid_index_key'>index_key</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span> <span class='op'>?</span> <span class='id identifier rubyid_parse_key'>parse_key</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span>
 
-  <span class='id identifier rubyid_parsed_input'>parsed_input</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+  <span class='comment'># We can freeze the input hash for safety if we made our own copy.
+</span>  <span class='lbracket'>[</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>?</span> <span class='id identifier rubyid_hash'>hash</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span> <span class='op'>:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span> <span class='id identifier rubyid_index_key'>index_key</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -297,7 +244,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan 13 10:02:46 2018 by
+  Generated on Sat Jan 20 14:53:58 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

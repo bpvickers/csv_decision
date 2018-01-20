@@ -136,6 +136,30 @@ compactness and speed.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#call-instance_method" title="#call (instance method)">#<strong>call</strong>(hash:, value: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Value returned from function call.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#function-instance_method" title="#function (instance method)">#<strong>function</strong>  &#x21d2; Object </a>
     
 
@@ -365,7 +389,116 @@ hash keys (which are always symbolized).</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="function-instance_method">
+  <h3 class="signature first" id="call-instance_method">
+  
+    #<strong>call</strong>(hash:, value: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Returns Value returned from function call.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>hash</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Input hash to function call.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Input value to function call.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Value returned from function call.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+37
+38
+39
+40
+41
+42
+43
+44</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 37</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='label'>hash:</span><span class='comma'>,</span> <span class='label'>value:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_func'>func</span> <span class='op'>=</span> <span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='symbol'>:guard</span>
+
+  <span class='comment'># All other procs can take one or two args
+</span>  <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_arity'>arity</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>?</span> <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="function-instance_method">
   
     #<strong>function</strong>  &#x21d2; <tt>Object</tt> 
   
@@ -413,12 +546,12 @@ Integer.</p>
       <pre class="lines">
 
 
-40
-41
-42</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_function'>function</span>
   <span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
@@ -478,12 +611,12 @@ hash keys (which are always symbolized).</p>
       <pre class="lines">
 
 
-46
-47
-48</pre>
+58
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_symbols'>symbols</span>
   <span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='int'>2</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
@@ -541,12 +674,12 @@ hash keys (which are always symbolized).</p>
       <pre class="lines">
 
 
-35
-36
-37</pre>
+47
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
   <span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span>
@@ -561,7 +694,7 @@ hash keys (which are always symbolized).</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan 13 10:02:47 2018 by
+  Generated on Sat Jan 20 14:53:59 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

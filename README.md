@@ -36,7 +36,7 @@ see `benchmarks/rufus_decision.rb`.)
 To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`:
  
  ```ruby
- gem 'csv_decision', '~> 0.1'
+ gem 'csv_decision'
  ```
  
  or simply
@@ -126,7 +126,8 @@ Complete documentation of all table parameters is in the code - see
 ### CSV Decision features
  * Either returns the first matching row as a hash (default), or accumulates all matches as an 
  array of hashes (i.e., `parse` option `first_match: false` or CSV file option `accumulate`).
- * Fast decision-time performance (see `benchmarks` folder).
+ * Fast decision-time performance (see `benchmarks` folder). Automatically indexes all 
+ text-only columns that do not contain any empty strings.
  * In addition to simple strings, `csv_decision` can match basic Ruby constants (e.g., `=nil`), 
  regular expressions (e.g., `=~ on|off`), comparisons (e.g., `> 100.0` ) and 
  Ruby-style ranges (e.g., `1..10`)
@@ -282,14 +283,15 @@ table.decide(ISIN: '123456789012', country: 'GB', class: 'private') #=> {PAID: '
 ### Planned features
  `csv_decision` is still a work in progress, and will be enhanced to support
  the following features:
- * Text-only input columns may be indexed for faster lookup performance.
- * Output columns may construct interpolated strings containing references to column 
-   symbols.
  * Supply a pre-defined library of functions that may be called within input columns to 
-   implement custom matching logic or from the output columns to formulate the final 
+   implement custom matching logic, or from the output columns to formulate the final 
    decision.
+ * Built-in lookup functions evaluate other decision tables to implement guard conditions,
+   or supply output values.
  * Available functions may be extended with a user-supplied library of Ruby methods 
    for custom logic.
+ * Output columns may construct interpolated strings containing references to column 
+   symbols.
  
 ### Reasons for the limitations of column expressions
 The simple column expressions allowed by `csv_decision` are purposely limited for reasons of
