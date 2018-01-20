@@ -63,7 +63,7 @@ module CSVDecision
     private_class_method :invalid_constant?
 
     # @return [Array<Integer>] Column indices for simple constants.
-    attr_reader :constants
+    attr_accessor :constants
 
     # @return [Array<Integer>] Column indices for Proc objects.
     attr_reader :procs
@@ -83,22 +83,21 @@ module CSVDecision
     #   non-string constant.
     def scan_columns(row:, columns:, matchers:)
       columns.each_pair do |col, column|
-        # An empty input cell matches everything, and so never needs to be scanned
-        next if (cell = row[col]) == '' && column.ins?
+        cell = row[col]
 
-        # If the column is text only then no special matchers need be invoked
-        next constants_set(col, column) if column.eval == false
+        # An empty input cell matches everything, and so never needs to be scanned,
+        # but it cannot be indexed either.
+        next column.indexed = false if cell == '' && column.ins?
+
+        # If the column is text only then no special matchers need be used.
+        next @constants << col if column.eval == false
 
         # Need to scan the cell against all matchers, and possibly overwrite
-        # the cell contents with a Matchers::Proc.
+        # the cell contents with a Matchers::Proc value.
         row[col] = scan_cell(column: column, col: col, matchers: matchers, cell: cell)
       end
 
       row
-    end
-
-    def constants_set(col, column)
-      @constants << col unless column.indexed
     end
 
     # Match cells in the input hash against a decision table row.
@@ -108,6 +107,8 @@ module CSVDecision
     def match?(row:, scan_cols:, hash:)
       # Check any table row cell constants first, and maybe fail fast...
       return false if @constants.any? { |col| row[col] != scan_cols[col] }
+
+      return true if @procs.empty?
 
       # These table row cells are Proc objects which need evaluating
       @procs.all? { |col| row[col].call(value: scan_cols[col], hash: hash) }
@@ -122,18 +123,19 @@ module CSVDecision
       return set(proc, col, column) if proc
 
       # Just a plain constant
-      constants_set(col, column)
+      @constants << col
       cell
     end
 
     def set(proc, col, column)
       # Unbox a constant
       if proc.type == :constant
-        constants_set(col, column)
+        @constants << col
         return proc.function
       end
 
       @procs << col
+      column.indexed = false
       proc
     end
   end

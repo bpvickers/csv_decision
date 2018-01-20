@@ -20,14 +20,14 @@ module CSVDecision
       hash, scan_cols =
         parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
 
-      index_key = table.index ? parse_key(table: table, hash: hash, keys: table.option.index) : nil
+      index_key = table.index ? parse_key(table: table, hash: hash) : nil
 
-      # We can freeze the input hash for safety if we made our own copy
+      # We can freeze the input hash for safety if we made our own copy.
       [symbolize_keys ? hash.freeze : hash, scan_cols.freeze, index_key]
     end
 
-    def self.parse_key(table:, hash:, keys:)
-      return scan_key(table: table, hash: hash) if keys == 1
+    def self.parse_key(table:, hash:)
+      return scan_key(table: table, hash: hash) if table.index.columns.count == 1
 
       scan_keys(table: table, hash: hash).freeze
     end

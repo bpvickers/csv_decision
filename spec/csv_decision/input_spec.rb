@@ -23,7 +23,7 @@ describe CSVDecision::Input do
     expected = [
       { input: 'input0', input1: 'input1' },
       { 0 => 'input0', 2 => 'input1'},
-      nil
+      'input0'
     ]
 
     result = CSVDecision::Input.parse(table: table, input: input, symbolize_keys: true)
@@ -42,7 +42,7 @@ describe CSVDecision::Input do
 
     table = CSVDecision.parse(data)
     input = { input: 'input0', input1: 'input1' }
-    expected = [input, { 0 => 'input0', 2 => 'input1'}, nil]
+    expected = [input, { 0 => 'input0', 2 => 'input1'}, 'input0']
 
     result = CSVDecision::Input.parse(table: table, input: input, symbolize_keys: false)
 

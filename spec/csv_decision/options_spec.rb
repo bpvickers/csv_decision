@@ -87,25 +87,8 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: true,
       text_only: false,
-      matchers: CSVDecision::Options::DEFAULT_MATCHERS,
-      index: 1
+      matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
-  end
-
-  it 'rejects index option with missing value' do
-    file = Pathname(File.join(SPEC_DATA_INVALID, 'options_in_file4.csv'))
-
-    expect { CSVDecision.parse(file) }
-      .to raise_error(CSVDecision::FileError,
-                      /CSV 'index:' option does not have a value/)
-  end
-
-  it 'rejects index option with invalid value' do
-    file = Pathname(File.join(SPEC_DATA_INVALID, 'options_in_file5.csv'))
-
-    expect { CSVDecision.parse(file) }
-      .to raise_error(CSVDecision::FileError,
-                      /index option value 'x' is not a positive integer/)
   end
 end

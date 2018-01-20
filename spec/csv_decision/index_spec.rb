@@ -55,20 +55,4 @@ describe CSVDecision::Index do
     expect(result.index.columns).to eq [1, 2]
     expect(result.index.hash).to eql expected
   end
-
-  it 'rejects index value greater than number of input columns' do
-    file = Pathname(File.join(SPEC_DATA_INVALID, 'index_too_big.csv'))
-
-    expect { CSVDecision.parse(file) }
-      .to raise_error(CSVDecision::FileError,
-                      /option :index value of 2 exceeds number of input columns/)
-  end
-
-  it 'rejects index on guard column' do
-    file = Pathname(File.join(SPEC_DATA_INVALID, 'index_guard_column.csv'))
-
-    expect { CSVDecision.parse(file) }
-      .to raise_error(CSVDecision::FileError,
-                      /option :index value of 2 exceeds number of input columns/)
-  end
 end

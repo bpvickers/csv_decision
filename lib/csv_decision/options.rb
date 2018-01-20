@@ -35,7 +35,7 @@ module CSVDecision
       first_match: [:first_match, true], accumulate: [:first_match, false],
       regexp_implicit: [:regexp_implicit, true],
       text_only: [:text_only, true],
-      index: [:index, nil], keys: [:index, nil]
+      # index: [:index, nil], keys: [:index, nil]
     }.freeze
     private_constant :CSV_NAMES
 
@@ -107,51 +107,11 @@ module CSVDecision
     private_class_method :matchers
 
     def self.option?(cell)
-      key, value = valid_option?(cell)
-      return if key.nil?
+      key = cell.strip.downcase.to_sym
 
-      return [key, index_value(value)] if key == :index
-
-      [key, value]
+      CSV_NAMES[key]
     end
     private_class_method :option?
-
-    def self.index_value(data)
-      value = Matchers.to_numeric(data)
-      return value if value.is_a?(Integer) && value.positive?
-
-      raise CellValidationError, "index option value '#{data}' is not a positive integer"
-    end
-    private_class_method :index_value
-
-    def self.valid_option?(cell)
-      return unless (key_value = valid_key?(cell))
-
-      return key_value.first if key_value.last.empty?
-
-      # Default value is useless, so return the actual value
-      [key_value.first.first, key_value.last]
-    end
-    private_class_method :valid_option?
-
-    def self.valid_key?(cell)
-      key_value = cell.partition(':').map(&:strip)
-      validate_value(*key_value)
-
-      key = key_value[0].downcase.to_sym
-      [CSV_NAMES[key], key_value.last]
-    end
-    private_class_method :valid_key?
-
-    # If a CSV option is of the form +key: value+, then +value+
-    # must be present.
-    def self.validate_value(key, colon, value)
-      return if colon.empty?
-      return unless value.empty?
-
-      raise CellValidationError, "CSV '#{key}:' option does not have a value"
-    end
-    private_class_method :validate_value
 
     def self.validate(options)
       invalid_options = options.keys - VALID.keys

@@ -127,7 +127,7 @@ module CSVDecision
       # Convert values in the data row if not just a simple constant.
       row = scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
 
-      [row, scan_row.freeze]
+      [row, scan_row]
     end
 
     # @return [Array<Matchers::Matcher>] Matchers for the input columns.

@@ -12,28 +12,22 @@ module CSVDecision
     # Build the index on the designated number of input columns.
     #
     # @param table [CSVDecision::Table] Decision table being indexed.
-    # @param index [nil, Integer] If specified, then the option value is a positive integer giving
-    #   the number of input columns, scanning from left to right, to be included in the index.
     # @return [CSVDecision::Index] The built index.
-    def self.build(table:, index:)
-      # Do we even have an index? If specified, then the option value is a positive integer giving
-      # the number of input columns, scanning from left to right, to be included in the index.
-      # Guard columns will be skipped.
-      return if index.nil?
+    def self.build(table:)
+      # Do we even have an index?
+      key_cols = index_columns(columns: table.columns.ins)
+      return if key_cols.empty?
 
-      key_cols = index_columns(columns: table.columns.ins, index: index)
+      table.index = Index.new(table: table, columns: key_cols)
 
-      Index.new(table: table, columns: key_cols)
+      # Indexed columns do not need to be scanned
+      trim_scan_rows(scan_rows: table.scan_rows, index_columns: table.index.columns)
+
+      table
     end
 
-    def self.simple_key(cell:, index:)
-      raise 'an empty string' if cell == ''
-
-      return cell unless cell.is_a?(Matchers::Proc)
-
-      raise 'a functional expression'
-    rescue StandardError => error
-      raise CellValidationError, "key value is #{error} in row ##{index + 1}"
+    def self.trim_scan_rows(scan_rows:, index_columns:)
+      scan_rows.each { |scan_row| scan_row.constants = scan_row.constants - index_columns }
     end
 
     def self.value(current_value, index)
@@ -44,15 +38,11 @@ module CSVDecision
       current_value
     end
 
-    def self.index_columns(columns:, index:)
-      count = 0
+    def self.index_columns(columns:)
       key_cols = []
-      columns.each_pair do |col, column|
-        next if column.type == :guard
+      columns.each_pair { |col, column| key_cols << col if column.indexed }
 
-        key_cols << col
-        return key_cols if (count += 1) == index
-      end
+      key_cols
     end
     private_class_method :index_columns
 
@@ -93,18 +83,18 @@ module CSVDecision
 
     def build(table)
       table.each do |row, index|
-        key = build_key(row: row, index: index)
+        key = build_key(row: row)
 
         current_value = @hash.key?(key)
         @hash[key] = current_value ? Index.value(@hash[key], index) : index
       end
     end
 
-    def build_key(row:, index:)
+    def build_key(row:)
       if @columns.count == 1
-        Index.simple_key(cell: row[@columns[0]], index: index)
+        row[@columns[0]]
       else
-        @columns.map { |col| Index.simple_key(cell: row[col], index: index) }
+        @columns.map { |col| row[col] }
       end
     end
   end

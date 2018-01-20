@@ -43,11 +43,16 @@ module CSVDecision
     # @param (see #initialize)
     # @return [{Symbol=>Object}] Decision result.
     def index(keys:, table:, hash:, scan_cols:)
+      # If the index lookup fails, there is no match
+      return {} unless (rows = table.index.hash[keys])
+
       scan_rows = table.scan_rows
 
-      table.each do |row, index|
-        next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
-        return @result.attributes if add(row)
+      Array(rows).each do |start_row, end_row|
+        table.each(start_row, end_row || start_row) do |row, index|
+          next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+          return @result.attributes if add(row)
+        end
       end
 
       @rows_picked.empty? ? {} : accumulated_result

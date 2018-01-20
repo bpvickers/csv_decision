@@ -13,7 +13,15 @@ RUFUS_OPTIONS = { open_uri: false, ruby_eval: false }.freeze
 
 benchmarks = [
   {
-    name: 'String compares only (no index)',
+    name: 'String compares only with index',
+    data: 'index_example.csv',
+    input: { 'topic' => 'politics', 'region' => 'Arctic' },
+    # Expected results for first_match and accumulate
+    first_match: { 'team_member' => 'Henry' },
+    accumulate: { 'team_member' => ['Henry', 'Zach'] }
+  },
+  {
+    name: 'String compares only',
     data: 'simple_example.csv',
     input: { 'topic' => 'culture', 'region' => 'America' },
     # Expected results for first_match and accumulate

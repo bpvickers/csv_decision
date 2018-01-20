@@ -24,11 +24,11 @@ module CSVDecision
       # calculates the final result
       decision = Decision.new(table: table, input: hash)
 
-      # table_scan(table: table, input: parsed_input, decision: decision)
-      decision.index(table: table, hash: hash, scan_cols: scan_cols, keys: keys) if keys
-
-      # table_scan(table: table, input: parsed_input, decision: decision)
-      decision.scan(table: table, hash: hash, scan_cols: scan_cols)
+      if table.index
+        decision.index(table: table, hash: hash, scan_cols: scan_cols, keys: keys)
+      else
+        decision.scan(table: table, hash: hash, scan_cols: scan_cols)
+      end
     end
   end
 end

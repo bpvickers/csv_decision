@@ -89,7 +89,7 @@ module CSVDecision
       parse_with_matchers(table: table, matchers: CSVDecision::Matchers.new(options))
 
       # Build the index if one is indicated
-      table.index = Index.build(table: table, index: options[:index])
+      Index.build(table: table)
     end
     private_class_method :parse_table
 

@@ -42,14 +42,16 @@ module CSVDecision
       private_constant :INS_TYPES
 
       # Create a new column dictionary entry defaulting attributes from the column type,
-      # which is looked up in +ENTRY+ table.
+      # which is looked up in the above table.
       #
       # @param name [Symbol] Column name.
       # @param type [Symbol] Column type.
       # @return [Entry] Column dictionary entry.
       def self.create(name:, type:)
         entry = ENTRY[type]
-        new(name: name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if])
+        new(name: name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if],
+            indexed: entry[:type] != :guard
+        )
       end
 
       # @return [Boolean] Return true is this is an input column, false otherwise.
@@ -118,20 +120,6 @@ module CSVDecision
 
       dictionary.keys ? indexed_ins(dictionary) : dictionary
     end
-
-    def self.indexed_ins(dictionary)
-      count = dictionary.keys
-      dictionary.ins.each_value do |entry|
-        next if entry.type == :guard
-
-        entry.indexed = true
-        return dictionary if (count -= 1).zero?
-      end
-
-      raise TableValidationError,
-            "option :index value of #{dictionary.keys} exceeds number of input columns"
-    end
-    private_class_method :indexed_ins
 
     def self.parse_cell(cell:, index:, dictionary:)
       column_type, column_name = Validate.column(cell: cell, index: index)
