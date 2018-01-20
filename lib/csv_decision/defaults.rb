@@ -40,7 +40,7 @@ module CSVDecision
       entry.function = cell.function
 
       # Add any referenced input column symbols to the column name dictionary
-      Parse.ins_cell_dictionary(columns: columns, cell: cell)
+      Columns.ins_cell_dictionary(columns: columns, cell: cell)
     end
     private_class_method :parse_cell
   end

@@ -5,18 +5,6 @@
 # @author Brett Vickers <brett@phillips-vickers.com>
 # See LICENSE and README.md for details.
 module CSVDecision
-  # # Specialized cell value matchers beyond simple string compares.
-  # # By default all these matchers are tried in the specified order on all
-  # # input data cells.
-  # DEFAULT_MATCHERS = [
-  #   Matchers::Range,
-  #   Matchers::Numeric,
-  #   Matchers::Pattern,
-  #   Matchers::Constant,
-  #   Matchers::Symbol,
-  #   Matchers::Guard
-  # ].freeze
-
   # Validate and normalize the options values supplied.
   # @api private
   module Options
@@ -44,10 +32,9 @@ module CSVDecision
     # These options may appear in the CSV file before the header row.
     # They get converted to a normalized option key value pair.
     CSV_NAMES = {
-      first_match: [:first_match, true],
-      accumulate: [:first_match, false],
+      first_match: [:first_match, true], accumulate: [:first_match, false],
       regexp_implicit: [:regexp_implicit, true],
-      text_only: [:text_only, true]
+      text_only: [:text_only, true], string_search: [:text_only, true]
     }.freeze
     private_constant :CSV_NAMES
 
@@ -55,7 +42,7 @@ module CSVDecision
     #
     # @param options [Hash] Input options hash supplied by the user.
     # @return [Hash] Options hash filled in with all required values, defaulted if necessary.
-    # @raise [ArgumentError] For invalid option keys.
+    # @raise [CellValidationError] For invalid option keys.
     def self.normalize(options)
       validate(options)
       default(options)
@@ -119,8 +106,9 @@ module CSVDecision
     private_class_method :matchers
 
     def self.option?(cell)
-      key = cell.downcase.to_sym
-      return CSV_NAMES[key] if CSV_NAMES.key?(key)
+      key = cell.strip.downcase.to_sym
+
+      CSV_NAMES[key]
     end
     private_class_method :option?
 
@@ -129,7 +117,7 @@ module CSVDecision
 
       return if invalid_options.empty?
 
-      raise ArgumentError, "invalid option(s) supplied: #{invalid_options.inspect}"
+      raise CellValidationError, "invalid option(s) supplied: #{invalid_options.inspect}"
     end
     private_class_method :validate
   end

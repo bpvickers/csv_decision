@@ -31,6 +31,18 @@ module CSVDecision
         freeze
       end
 
+      # @param hash [Hash] Input hash to function call.
+      # @param value [Object] Input value to function call.
+      # @return [Object] Value returned from function call.
+      def call(hash:, value: nil)
+        func = fetch(1)
+
+        return func.call(hash) if fetch(0) == :guard
+
+        # All other procs can take one or two args
+        func.arity == 1 ? func.call(value) : func.call(value, hash)
+      end
+
       # @return [Symbol] Type of the function value - e.g., :constant or :guard.
       def type
         fetch(0)
@@ -80,18 +92,12 @@ module CSVDecision
     NUMERIC_RE = regexp(NUMERIC)
     private_constant :NUMERIC_RE
 
-    # @param value [Object] Value from the input hash.
-    # @return [Boolean] Return true if value is an Integer or a BigDecimal, false otherwise.
-    def self.numeric?(value)
-      value.is_a?(Integer) || value.is_a?(BigDecimal)
-    end
-
     # Validate a numeric value and convert it to an Integer or BigDecimal if a valid numeric string.
     #
     # @param value [nil, String, Integer, BigDecimal]
     # @return [nil, Integer, BigDecimal]
     def self.numeric(value)
-      return value if numeric?(value)
+      return value if value.is_a?(Integer) || value.is_a?(BigDecimal)
       return unless value.is_a?(String)
 
       to_numeric(value)
@@ -124,7 +130,7 @@ module CSVDecision
       # Convert values in the data row if not just a simple constant.
       row = scan_row.scan_columns(columns: columns, matchers: matchers, row: row)
 
-      [row, scan_row.freeze]
+      [row, scan_row]
     end
 
     # @return [Array<Matchers::Matcher>] Matchers for the input columns.

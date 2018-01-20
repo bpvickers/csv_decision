@@ -17,24 +17,38 @@ module CSVDecision
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
-      parsed_input =
-        parse_input(table: table, input: input(table, input, symbolize_keys))
+      hash, scan_cols =
+        parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
 
-      # We can freeze it as we made our own copy
-      parsed_input[:hash].freeze if symbolize_keys
+      index_key = table.index ? parse_key(table: table, hash: hash) : nil
 
-      parsed_input.freeze
+      # We can freeze the input hash for safety if we made our own copy.
+      [symbolize_keys ? hash.freeze : hash, scan_cols.freeze, index_key]
     end
 
-    def self.input(table, input, symbolize_keys)
-      return input unless symbolize_keys
+    def self.parse_key(table:, hash:)
+      return scan_key(table: table, hash: hash) if table.index.columns.count == 1
 
-      # For safety the default is to symbolize the keys of a copy of the input hash.
-      input = input.symbolize_keys
-      input.slice!(*table.columns.input_keys)
-      input
+      scan_keys(table: table, hash: hash).freeze
     end
-    private_class_method :input
+    private_class_method :parse_key
+
+    def self.scan_key(table:, hash:)
+      col = table.index.columns[0]
+      column = table.columns.ins[col]
+
+      hash[column.name]
+    end
+    private_class_method :scan_key
+
+    def self.scan_keys(table:, hash:)
+      table.index.columns.map do |col|
+        column = table.columns.ins[col]
+
+        hash[column.name]
+      end
+    end
+    private_class_method :scan_keys
 
     def self.validate(input)
       return if input.is_a?(Hash) && !input.empty?
@@ -44,10 +58,13 @@ module CSVDecision
 
     def self.parse_input(table:, input:)
       defaulted_columns = table.columns.defaults
-      parse_cells(table: table, input: input) if defaulted_columns.empty?
+
+      # Code path optimized for no defaults
+      return parse_cells(table: table, input: input) if defaulted_columns.empty?
 
       parse_defaulted(table: table, input: input, defaulted_columns: defaulted_columns)
     end
+
     private_class_method :parse_input
 
     def self.parse_cells(table:, input:)
@@ -58,8 +75,9 @@ module CSVDecision
         scan_cols[col] = input[column.name]
       end
 
-      { hash: input, scan_cols: scan_cols }
+      [input, scan_cols]
     end
+
     private_class_method :parse_cells
 
     def self.parse_defaulted(table:, input:, defaulted_columns:)
@@ -75,8 +93,9 @@ module CSVDecision
         input[column.name] = scan_cols[col]
       end
 
-      { hash: input, scan_cols: scan_cols }
+      [input, scan_cols]
     end
+
     private_class_method :parse_defaulted
 
     def self.default_value(default:, input:, column:)
@@ -92,11 +111,13 @@ module CSVDecision
       # or else a constant.
       eval_default(default.function, input)
     end
+
     private_class_method :default_value
 
     def self.default_if?(set_if, value)
       set_if == true || (value.respond_to?(set_if) && value.send(set_if))
     end
+
     private_class_method :default_if?
 
     # Expression may be a Proc that needs evaluating against the input hash,
@@ -104,6 +125,7 @@ module CSVDecision
     def self.eval_default(expression, input)
       expression.is_a?(::Proc) ? expression[input] : expression
     end
+
     private_class_method :eval_default
   end
 end

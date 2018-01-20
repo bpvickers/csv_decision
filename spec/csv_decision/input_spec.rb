@@ -20,16 +20,17 @@ describe CSVDecision::Input do
     table = CSVDecision.parse(data)
 
     input = { 'input' => 'input0', input1: 'input1' }
-    expected = {
-      hash: { input: 'input0', input1: 'input1' },
-      scan_cols: { 0 => 'input0', 2 => 'input1'}
-    }
+    expected = [
+      { input: 'input0', input1: 'input1' },
+      { 0 => 'input0', 2 => 'input1'},
+      'input0'
+    ]
 
     result = CSVDecision::Input.parse(table: table, input: input, symbolize_keys: true)
 
     expect(result).to eql expected
-    expect(result[:hash]).not_to equal expected[:hash]
-    expect(result[:hash].frozen?).to eq true
+    expect(result.first).not_to equal expected.first
+    expect(result.last.frozen?).to eq true
   end
 
   it 'processes input hash with symbolize_keys: false' do
@@ -41,12 +42,12 @@ describe CSVDecision::Input do
 
     table = CSVDecision.parse(data)
     input = { input: 'input0', input1: 'input1' }
-    expected = { hash: input, scan_cols: { 0 => 'input0', 2 => 'input1'} }
+    expected = [input, { 0 => 'input0', 2 => 'input1'}, 'input0']
 
     result = CSVDecision::Input.parse(table: table, input: input, symbolize_keys: false)
 
     expect(result).to eql expected
-    expect(result[:hash]).to equal expected[:hash]
-    expect(result[:hash].frozen?).to eq false
+    expect(result.first).to equal expected.first
+    expect(result.first.frozen?).to eq false
   end
 end

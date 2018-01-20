@@ -3,11 +3,10 @@
 require_relative '../../lib/csv_decision'
 
 describe CSVDecision::Parse do
-  it 'loads an empty decision table' do
-    table =  CSVDecision.parse('')
-    expect(table).to be_a CSVDecision::Table
-    expect(table.frozen?).to eq true
-    expect(table.rows.empty?).to eq true
+  it 'rejects an empty decision table' do
+    expect { CSVDecision.parse('') }
+      .to raise_error(CSVDecision::TableValidationError,
+                      'table has no header row')
   end
 
   it 'parses a decision table from a CSV file' do

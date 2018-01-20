@@ -102,7 +102,7 @@ see <code>benchmarks/rufus_decision.rb</code>.)</p>
 <p>To get started, just add <code>csv_decision</code> to your
 <code>Gemfile</code>, and then run <code>bundle</code>:</p>
 
-<p><code>ruby  gem &#39;csv_decision&#39;, &#39;~&gt; 0.1&#39; </code></p>
+<p><code>ruby  gem &#39;csv_decision&#39; </code></p>
 
 <p>or simply  <code>bash  gem install csv_decision </code></p>
 
@@ -185,7 +185,9 @@ all matches as an  array of hashes (i.e., <code>parse</code> option
 <code>first_match: false</code> or CSV file option
 <code>accumulate</code>).</p>
 </li><li>
-<p>Fast decision-time performance (see <code>benchmarks</code> folder).</p>
+<p>Fast decision-time performance (see <code>benchmarks</code> folder).
+Automatically indexes all  text-only columns that do not contain any empty
+strings.</p>
 </li><li>
 <p>In addition to simple strings, <code>csv_decision</code> can match basic
 Ruby constants (e.g., <code>=nil</code>),  regular expressions (e.g.,
@@ -352,14 +354,14 @@ bundle install  rspec </code></p>
 <h3 id="label-Planned+features">Planned features</h3>
 
 <p><code>csv_decision</code> is still a work in progress, and will be enhanced
-to support  the following features:  * Text-only input columns may be
-indexed for faster lookup performance.  * Input hash values may be
-(conditionally) defaulted with a constant or a function call.  * Output
-columns may construct interpolated strings referencing column symbols.  *
-Supply a pre-defined library of functions that can be called within input
-columns to  implement matching logic or from the output columns to
-formulate the final decision.  * Available functions may be extended with a
-user-supplied library of Ruby methods  for tailored logic.</p>
+to support  the following features:  * Supply a pre-defined library of
+functions that may be called within input columns to  implement custom
+matching logic, or from the output columns to formulate the final 
+decision.  * Built-in lookup functions evaluate other decision tables to
+implement guard conditions,  or supply output values.  * Available
+functions may be extended with a user-supplied library of Ruby methods  for
+custom logic.  * Output columns may construct interpolated strings
+containing references to column  symbols.</p>
 
 <h3 id="label-Reasons+for+the+limitations+of+column+expressions">Reasons for the limitations of column expressions</h3>
 
@@ -383,7 +385,7 @@ href="./LICENSE">LICENSE</a> document for more information.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sat Jan 13 10:02:46 2018 by
+  Generated on Sat Jan 20 14:53:58 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

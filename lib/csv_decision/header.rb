@@ -52,6 +52,23 @@ module CSVDecision
       rows.shift
     end
 
+    # Parse the header row, and the defaults row if present.
+    # @param table [CSVDecision::Table] Decision table being parsed.
+    # @param matchers [Array<Matchers::Matcher>] Array of special cell matchers.
+    # @return [CSVDecision::Columns] Table columns object.
+    def self.parse(table:, matchers:)
+      # Parse the header row
+      table.columns = CSVDecision::Columns.new(table)
+
+      # Parse the defaults row if present
+      return table.columns if table.columns.defaults.blank?
+
+      table.columns.defaults =
+        Defaults.parse(columns: table.columns, matchers: matchers.outs, row: table.rows.shift)
+
+      table.columns
+    end
+
     # Build an array of all empty column indices.
     # @param row [Array]
     # @return [false, Array<Integer>]

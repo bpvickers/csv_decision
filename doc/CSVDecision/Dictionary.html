@@ -151,7 +151,7 @@ table load time.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#build-class_method" title="build (class method)">.<strong>build</strong>(header:, dictionary:)  &#x21d2; Hash&lt;Hash&gt; </a>
+      <a href="#build-class_method" title="build (class method)">.<strong>build</strong>(header:, dictionary:)  &#x21d2; Columns::Dictionary </a>
     
 
     
@@ -244,7 +244,7 @@ the header row.</p>
         <span class='name'>out</span>
       
       
-        <span class='type'>(<tt>false</tt>, <tt>Index</tt>)</span>
+        <span class='type'>(<tt>false</tt>, <tt><span class='object_link'><a href="Index.html" title="CSVDecision::Index (class)">Index</a></span></tt>)</span>
       
       
       
@@ -282,15 +282,15 @@ the header row.</p>
       <pre class="lines">
 
 
-111
-112
-113
-114
-115
-116</pre>
+17
+18
+19
+20
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 17</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_add_name'>add_name</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>name:</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='kw'>false</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Validate.html" title="CSVDecision::Validate (module)">Validate</a></span></span><span class='period'>.</span><span class='id identifier rubyid_name'><span class='object_link'><a href="Validate.html#name-class_method" title="CSVDecision::Validate.name (method)">name</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>out:</span> <span class='id identifier rubyid_out'>out</span><span class='rparen'>)</span>
@@ -306,7 +306,7 @@ the header row.</p>
       <div class="method_details ">
   <h3 class="signature " id="build-class_method">
   
-    .<strong>build</strong>(header:, dictionary:)  &#x21d2; <tt>Hash&lt;Hash&gt;</tt> 
+    .<strong>build</strong>(header:, dictionary:)  &#x21d2; <tt><span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Columns::Dictionary</a></span></tt> 
   
 
   
@@ -345,6 +345,22 @@ the header row.</p>
       
     </li>
   
+    <li>
+      
+        <span class='name'>dictionary</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Columns::Dictionary</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Table&#39;s columns dictionary.</p>
+</div>
+      
+    </li>
+  
 </ul>
 
 <p class="tag_title">Returns:</p>
@@ -353,13 +369,13 @@ the header row.</p>
     <li>
       
       
-        <span class='type'>(<tt>Hash&lt;Hash&gt;</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="Columns/Dictionary.html" title="CSVDecision::Columns::Dictionary (class)">Columns::Dictionary</a></span></tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>Column dictionary is a hash of hashes.</p>
+<p>Table&#39;s columns dictionary.</p>
 </div>
       
     </li>
@@ -372,16 +388,16 @@ the header row.</p>
       <pre class="lines">
 
 
-97
-98
-99
-100
-101
-102
-103</pre>
+120
+121
+122
+123
+124
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/dictionary.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build'>build</span><span class='lparen'>(</span><span class='label'>header:</span><span class='comma'>,</span> <span class='label'>dictionary:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_header'>header</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cell'>cell</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
@@ -400,7 +416,7 @@ the header row.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan 13 10:02:46 2018 by
+  Generated on Sat Jan 20 14:53:58 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

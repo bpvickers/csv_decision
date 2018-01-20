@@ -12,12 +12,19 @@ module CSVDecision
     #   both result values and if: columns, which eventually get evaluated and removed.
     attr_reader :attributes
 
+    # @return [Hash{Index=>Dictionary::Entry}] Output columns.
+    attr_reader :outs
+
+    # @return [nil, true] Set to true if the table has output functions.
+    attr_reader :outs_functions
+
     # @return [Boolean] Returns true if this is a multi-row result
     attr_reader :multi_result
 
     # (see Decision.initialize)
     def initialize(table:, input:)
       @outs = table.columns.outs
+      @outs_functions = table.outs_functions
       @if_columns = table.columns.ifs
 
       # Partial result always copies in the input hash for calculating output functions.
@@ -25,14 +32,10 @@ module CSVDecision
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = input[:hash]&.slice(*table.columns.input_keys) if table.outs_functions
+      @partial_result = input&.slice(*table.columns.input_keys) if @outs_functions
 
       # Attributes hash contains the output decision key value pairs
       @attributes = {}
-
-      # Set to true if the result has more than one row.
-      # Only possible for the first_match: false option.
-      @multi_result = false
     end
 
     # Common case for building a single row result is just copying output column values to the
@@ -156,10 +159,8 @@ module CSVDecision
         proc = row[col]
         next unless proc.is_a?(Matchers::Proc)
 
-        value = proc.function[@partial_result]
-
-        @partial_result[column.name] = value
-        @attributes[column.name] = value
+        @attributes[column.name] = proc.function[@partial_result]
+        @partial_result[column.name] = @attributes[column.name]
       end
     end
 

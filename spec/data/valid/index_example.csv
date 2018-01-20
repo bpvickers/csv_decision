@@ -1,0 +1,12 @@
+in:topic,in:region,out:team_member
+sports,Europe,Alice
+sports,,Bob
+finance,America,Charlie
+finance,Europe,Donald
+finance,,Ernest
+politics,Asia,Fujio
+politics,America,Gilbert
+politics,,Henry
+sports,,Zach
+finance,,Zach
+politics,,Zach

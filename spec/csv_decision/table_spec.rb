@@ -490,5 +490,75 @@ describe CSVDecision::Table do
         end
       end
     end
+
+    context 'uses single column index to make correct decisions' do
+      examples = [
+        { example: 'evaluates single-column index CSV string',
+          options: { first_match: false },
+          data: <<~DATA
+            in:topic, in:region, out:team_member
+            sports,   Europe,    Alice
+            sports,   ,          Bob
+            finance,  America,   Charlie
+            finance,  Europe,    Donald
+            finance,  ,          Ernest
+            politics, Asia,      Fujio
+            politics, America,   Gilbert
+            politics, ,          Henry
+            sports,   ,          Zach
+            finance,  ,          Zach
+            politics, ,          Zach
+          DATA
+        },
+        { example: 'evaluates single-column index CSV file',
+          options: { first_match: false },
+          data: Pathname(File.join(SPEC_DATA_VALID, 'index_example.csv'))
+        }
+      ]
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
+
+            expect(table.send(method, topic: 'politics', region: 'Arctic'))
+              .to eq(team_member: %w[Henry Zach])
+          end
+        end
+      end
+    end
+
+    context 'uses multi-column index to make correct decisions' do
+      examples = [
+        { example: 'evaluates multi-column index CSV string',
+          options: { first_match: true },
+          data: <<~DATA
+            guard:,           in :type, IN :input, OUT :output
+            :number.present?, integer,  none,      :=0
+            :number.blank?,   integer,  none,      :=nil
+            :number.present?, integer,  one,       :=1
+            :number.blank?,   integer,  one,       :=nil
+            :string.present?, string,   none,      0
+            :number.blank?,   string,   none,      :=nil
+            :string.present?, string,   one,       1
+            :number.blank?,   string,   one,       :=nil
+          DATA
+        },
+        { example: 'evaluates multi-column index CSV file',
+          options: { first_match: true },
+          data: Pathname(File.join(SPEC_DATA_VALID, 'multi_column_index.csv'))
+        }
+      ]
+      examples.each do |test|
+        %i[decide decide!].each do |method|
+          it "#{method} correctly #{test[:example]}" do
+            table = CSVDecision.parse(test[:data], test[:options])
+
+            expect(table.send(method, number: 1,   type: 'integer', input: 'none')).to eq(output: 0)
+            expect(table.send(method, number: nil, type: 'string', input: 'one')).to eq(output: nil)
+            expect(table.send(method, string: '1', type: 'string', input: 'one')).to eq(output: '1')
+          end
+        end
+      end
+    end
   end
 end

@@ -8,6 +8,89 @@ module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   # @api private
   class Columns
+    # @param columns [CSVDecision::Columns] Table's columns dictionary.
+    # @param row [Array] Data row.
+    # @return [void]
+    def self.outs_dictionary(columns:, row:)
+      row.each_with_index do |cell, index|
+        outs_check_cell(columns: columns, cell: cell, index: index)
+      end
+    end
+
+    # @param columns [CSVDecision::Columns] Table's columns dictionary.
+    # @param row [Array] Data row.
+    # @return [void]
+    def self.ins_dictionary(columns:, row:)
+      row.each { |cell| ins_cell_dictionary(columns: columns, cell: cell) }
+    end
+
+    # @param columns [CSVDecision::Columns] Table's columns dictionary.
+    # @param cell [Object] Data row cell.
+    # @return [void]
+    def self.ins_cell_dictionary(columns:, cell:)
+      return unless cell.is_a?(Matchers::Proc)
+      return if cell.symbols.nil?
+
+      add_ins_symbols(columns: columns, cell: cell)
+    end
+
+    def self.outs_check_cell(columns:, cell:, index:)
+      return unless cell.is_a?(Matchers::Proc)
+      return if cell.symbols.nil?
+
+      check_outs_symbols(columns: columns, cell: cell, index: index)
+    end
+    private_class_method :outs_check_cell
+
+    def self.check_outs_symbols(columns:, cell:, index:)
+      Array(cell.symbols).each do |symbol|
+        check_outs_symbol(columns: columns, symbol: symbol, index: index)
+      end
+    end
+    private_class_method :check_outs_symbols
+
+    def self.check_outs_symbol(columns:, symbol:, index:)
+      in_out = columns.dictionary[symbol]
+
+      # If its an input column symbol then we're good.
+      return if ins_symbol?(columns: columns, symbol: symbol, in_out: in_out)
+
+      # Check if this output symbol reference is on or after this cell's column
+      invalid_out_ref?(columns, index, in_out)
+    end
+    private_class_method :check_outs_symbol
+
+    # If the symbol exists either as an input or does not exist then we're good.
+    def self.ins_symbol?(columns:, symbol:, in_out:)
+      return true if in_out == :in
+
+      # It must an input symbol, as all the output symbols have been parsed.
+      return columns.dictionary[symbol] = :in if in_out.nil?
+
+      false
+    end
+    private_class_method :ins_symbol?
+
+    def self.invalid_out_ref?(columns, index, in_out)
+      return false if in_out < index
+
+      that_column = if in_out == index
+                      'reference to itself'
+                    else
+                      "an out of order reference to output column '#{columns.outs[in_out].name}'"
+                    end
+      raise CellValidationError,
+            "output column '#{columns.outs[index].name}' makes #{that_column}"
+    end
+    private_class_method :invalid_out_ref?
+
+    def self.add_ins_symbols(columns:, cell:)
+      Array(cell.symbols).each do |symbol|
+        CSVDecision::Dictionary.add_name(columns: columns, name: symbol)
+      end
+    end
+    private_class_method :add_ins_symbols
+
     # Dictionary of all table data columns.
     # The key of each hash is the header cell's array column index.
     # Note that input and output columns may be interspersed, and multiple input columns
@@ -86,8 +169,11 @@ module CSVDecision
       # Return the stripped header row, and remove it from the data array.
       row = Header.strip_empty_columns(rows: table.rows)
 
+      # No header row found?
+      raise TableValidationError, 'table has no header row' unless row
+
       # Build a dictionary of all valid data columns from the header row.
-      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: Dictionary.new) if row
+      @dictionary = CSVDecision::Dictionary.build(header: row, dictionary: Dictionary.new)
 
       freeze
     end

@@ -22,11 +22,6 @@ describe CSVDecision::Data do
   end
 
   it 'parses a CSV file' do
-    file = File.new(File.join(CSVDecision.root, 'spec/data/valid', 'empty.csv'))
-    result = CSVDecision::Data.to_array(data: file)
-    expect(result).to be_a Array
-    expect(result.empty?).to eq true
-
     file = Pathname(File.join(CSVDecision.root, 'spec/data/valid', 'valid.csv'))
     result = CSVDecision::Data.to_array(data: file)
     expected = [

@@ -3,6 +3,7 @@
 require_relative '../../lib/csv_decision'
 
 SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
+SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
 
 describe CSVDecision::Options do
   it 'sets the default options' do
@@ -48,7 +49,8 @@ describe CSVDecision::Options do
     DATA
 
     expect { CSVDecision.parse(data, bad_option: false) }
-      .to raise_error(ArgumentError, "invalid option(s) supplied: [:bad_option]")
+      .to raise_error(CSVDecision::CellValidationError,
+                      "invalid option(s) supplied: [:bad_option]")
   end
 
   it 'parses options from a CSV file' do
@@ -67,6 +69,19 @@ describe CSVDecision::Options do
   it 'options from the CSV file override method options' do
     file = Pathname(File.join(SPEC_DATA_VALID, 'options_in_file2.csv'))
     result = CSVDecision.parse(file, first_match: true, regexp_implicit: nil)
+
+    expected = {
+      first_match: false,
+      regexp_implicit: true,
+      text_only: false,
+      matchers: CSVDecision::Options::DEFAULT_MATCHERS
+    }
+    expect(result.options).to eql expected
+  end
+
+  it 'parses index option from the CSV file' do
+    file = Pathname(File.join(SPEC_DATA_VALID, 'options_in_file3.csv'))
+    result = CSVDecision.parse(file)
 
     expected = {
       first_match: false,

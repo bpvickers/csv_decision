@@ -8,6 +8,19 @@ module CSVDecision
   # Parse the CSV file's header row. These methods are only required at table load time.
   # @api private
   module Dictionary
+    # Add a new symbol to the dictionary of named input and output columns.
+    #
+    # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
+    # @param name [Symbol] Symbolized column name.
+    # @param out [false, Index] False if an input column, otherwise the index of the output column.
+    # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
+    def self.add_name(columns:, name:, out: false)
+      Validate.name(columns: columns, name: name, out: out)
+
+      columns[name] = out ? out : :in
+      columns
+    end
+
     # Column dictionary entries.
     class Entry
       # Table used to build a column dictionary entry.
@@ -29,14 +42,18 @@ module CSVDecision
       private_constant :INS_TYPES
 
       # Create a new column dictionary entry defaulting attributes from the column type,
-      # which is looked up in +ENTRY+ table.
+      # which is looked up in the above table.
       #
       # @param name [Symbol] Column name.
       # @param type [Symbol] Column type.
       # @return [Entry] Column dictionary entry.
       def self.create(name:, type:)
         entry = ENTRY[type]
-        new(name: name, eval: entry[:eval], type: entry[:type], set_if: entry[:set_if])
+        new(name: name,
+            eval: entry[:eval],              # Set if the column requires functions evaluated
+            type: entry[:type],              # Column type
+            set_if: entry[:set_if],          # Set if the column has a conditional default
+            indexed: entry[:type] != :guard) # A guard column cannot be indexed.
       end
 
       # @return [Boolean] Return true is this is an input column, false otherwise.
@@ -49,6 +66,9 @@ module CSVDecision
 
       # @return [Symbol] Column type.
       attr_reader :type
+
+      # @return [Boolean] Returns true if this column is indexed
+      attr_accessor :indexed
 
       # @return [nil, Boolean] If set to true then this column has procs that
       #   need evaluating, otherwise it only contains constants.
@@ -67,13 +87,15 @@ module CSVDecision
       # @param type (see #type)
       # @param eval (see #eval)
       # @param set_if (see #set_if)
-      def initialize(name:, type:, eval: nil, set_if: nil)
+      # @param indexed (see #indexed)
+      def initialize(name:, type:, eval: nil, set_if: nil, indexed: nil)
         @name = name
         @type = type
         @eval = eval
         @set_if = set_if
         @function = nil
         @ins = INS_TYPES.member?(type)
+        @indexed = indexed
       end
 
       # Convert the object's attributes to a hash.
@@ -93,26 +115,14 @@ module CSVDecision
     # parsing the header row.
     #
     # @param header [Array<String>] The header row after removing any empty columns.
-    # @return [Hash<Hash>] Column dictionary is a hash of hashes.
+    # @param dictionary [Columns::Dictionary] Table's columns dictionary.
+    # @return [Columns::Dictionary] Table's columns dictionary.
     def self.build(header:, dictionary:)
       header.each_with_index do |cell, index|
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)
       end
 
       dictionary
-    end
-
-    # Add a new symbol to the dictionary of named input and output columns.
-    #
-    # @param columns [{Symbol=>Symbol}] Hash of column names with key values :in or :out.
-    # @param name [Symbol] Symbolized column name.
-    # @param out [false, Index] False if an input column, otherwise the index of the output column.
-    # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
-    def self.add_name(columns:, name:, out: false)
-      Validate.name(columns: columns, name: name, out: out)
-
-      columns[name] = out ? out : :in
-      columns
     end
 
     def self.parse_cell(cell:, index:, dictionary:)
@@ -139,16 +149,16 @@ module CSVDecision
     private_class_method :dictionary_entry
 
     def self.output_entry(dictionary:, entry:, index:)
+      dictionary.outs[index] = entry
+
       case entry.type
-      # if: columns are anonymous
+      # if: columns are anonymous, even if the user names them
       when :if
         dictionary.ifs[index] = entry
 
       when :out
-        add_name(columns: dictionary.columns, name: entry.name, out: index)
+        Dictionary.add_name(columns: dictionary.columns, name: entry.name, out: index)
       end
-
-      dictionary.outs[index] = entry
     end
     private_class_method :output_entry
 
@@ -159,7 +169,7 @@ module CSVDecision
       dictionary.defaults[index] = entry if entry.type == :set
 
       # guard: columns are anonymous
-      add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
+      Dictionary.add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
     end
     private_class_method :input_entry
   end
