@@ -165,7 +165,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#index-instance_method" title="#index (instance method)">#<strong>index</strong>(key:, table:, hash:, scan_cols:)  &#x21d2; {Symbol=&gt;Object} </a>
+      <a href="#index-instance_method" title="#index (instance method)">#<strong>index</strong>(table:, input:)  &#x21d2; {Symbol=&gt;Object} </a>
     
 
     
@@ -308,6 +308,7 @@
       <pre class="lines">
 
 
+35
 36
 37
 38
@@ -318,11 +319,10 @@
 43
 44
 45
-46
-47</pre>
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 36</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 35</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='rparen'>)</span>
   <span class='comment'># The result object is a hash of values, and each value will be an array if this is
@@ -462,25 +462,23 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 28
 29
 30
-31
-32</pre>
+31</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_make'>make</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span><span class='rparen'>)</span>
   <span class='comment'># Parse and transform the hash supplied as input
-</span>  <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='comma'>,</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>=</span>
-    <span class='const'><span class='object_link'><a href="Input.html" title="CSVDecision::Input (module)">Input</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="Input.html#parse-class_method" title="CSVDecision::Input.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
+</span>  <span class='id identifier rubyid_input'>input</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Input.html" title="CSVDecision::Input (module)">Input</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="Input.html#parse-class_method" title="CSVDecision::Input.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>symbolize_keys:</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
 
   <span class='comment'># The decision object collects the results of the search and
 </span>  <span class='comment'># calculates the final result
-</span>  <span class='id identifier rubyid_decision'>decision</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Decision (class)">Decision</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="CSVDecision::Decision#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span>
+</span>  <span class='id identifier rubyid_decision'>decision</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Decision (class)">Decision</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="CSVDecision::Decision#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
   <span class='kw'>if</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span>
-    <span class='id identifier rubyid_decision'>decision</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_decision'>decision</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_decision'>decision</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_decision'>decision</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:scan_cols</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -497,7 +495,7 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
       <div class="method_details first">
   <h3 class="signature first" id="index-instance_method">
   
-    #<strong>index</strong>(key:, table:, hash:, scan_cols:)  &#x21d2; <tt>{Symbol=&gt;Object}</tt> 
+    #<strong>index</strong>(table:, input:)  &#x21d2; <tt>{Symbol=&gt;Object}</tt> 
   
 
   
@@ -518,6 +516,22 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 <div class="tags">
   <p class="tag_title">Parameters:</p>
 <ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Hash of parsed input data.</p>
+</div>
+      
+    </li>
   
     <li>
       
@@ -578,39 +592,21 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
       <pre class="lines">
 
 
+68
+69
 70
 71
 72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84</pre>
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 68</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='label'>key:</span><span class='comma'>,</span> <span class='label'>table:</span><span class='comma'>,</span> <span class='label'>hash:</span><span class='comma'>,</span> <span class='label'>scan_cols:</span><span class='rparen'>)</span>
-  <span class='comment'># If the index lookup fails, there is no match
-</span>  <span class='kw'>return</span> <span class='lbrace'>{</span><span class='rbrace'>}</span> <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_rows'>rows</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='rparen'>)</span>
+  <span class='comment'># If the index lookup fails, there&#39;s no match
+</span>  <span class='kw'>return</span> <span class='lbrace'>{</span><span class='rbrace'>}</span> <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_rows'>rows</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_scan_rows'>scan_rows</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_scan_rows'>scan_rows</span>
-
-  <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_rows'>rows</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_start_row'>start_row</span><span class='comma'>,</span> <span class='id identifier rubyid_end_row'>end_row</span><span class='op'>|</span>
-    <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='id identifier rubyid_start_row'>start_row</span><span class='comma'>,</span> <span class='id identifier rubyid_end_row'>end_row</span> <span class='op'>||</span> <span class='id identifier rubyid_start_row'>start_row</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
-      <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_scan_rows'>scan_rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='rparen'>)</span>
-      <span class='kw'>return</span> <span class='ivar'>@result</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span> <span class='kw'>if</span> <span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
-
-  <span class='ivar'>@rows_picked</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>?</span> <span class='lbrace'>{</span><span class='rbrace'>}</span> <span class='op'>:</span> <span class='id identifier rubyid_accumulated_result'>accumulated_result</span>
+  <span class='id identifier rubyid_index_scan'>index_scan</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:scan_cols</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:hash</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>rows:</span> <span class='id identifier rubyid_rows'>rows</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -717,25 +713,21 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
       <pre class="lines">
 
 
+54
 55
 56
 57
 58
 59
 60
-61
-62
-63
-64</pre>
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/decision.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>hash:</span><span class='comma'>,</span> <span class='label'>scan_cols:</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_scan_rows'>scan_rows</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_scan_rows'>scan_rows</span>
-
   <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
-    <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_scan_rows'>scan_rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='rparen'>)</span>
+    <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_scan_rows'>scan_rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>scan_cols:</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@result</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span> <span class='kw'>if</span> <span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
@@ -751,7 +743,7 @@ hash. Otherwise a copy of the input hash is symbolized.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan 20 14:53:59 2018 by
+  Generated on Sat Jan 20 15:44:35 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

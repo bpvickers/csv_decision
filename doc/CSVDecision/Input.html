@@ -218,7 +218,10 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 24
 25
 26
-27</pre>
+27
+28
+29
+30</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/input.rb', line 17</span>
@@ -229,10 +232,13 @@ column. Defaults to nil if the key is missing in the input hash.</p>
   <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span> <span class='op'>=</span>
     <span class='id identifier rubyid_parse_input'>parse_input</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>input:</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>?</span> <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>:</span> <span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_index_key'>index_key</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span> <span class='op'>?</span> <span class='id identifier rubyid_parse_key'>parse_key</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span>
-
-  <span class='comment'># We can freeze the input hash for safety if we made our own copy.
-</span>  <span class='lbracket'>[</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>?</span> <span class='id identifier rubyid_hash'>hash</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span> <span class='op'>:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span> <span class='id identifier rubyid_index_key'>index_key</span><span class='rbracket'>]</span>
+  <span class='lbrace'>{</span>
+    <span class='comment'># We can freeze the input hash for safety if we made our own copy.
+</span>    <span class='label'>hash:</span> <span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='op'>?</span> <span class='id identifier rubyid_hash'>hash</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span> <span class='op'>:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span>
+    <span class='label'>scan_cols:</span>  <span class='id identifier rubyid_scan_cols'>scan_cols</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+    <span class='comment'># Build the index key if this table is indexed.
+</span>    <span class='label'>key:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span> <span class='op'>?</span> <span class='id identifier rubyid_parse_key'>parse_key</span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span>
+  <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -244,7 +250,7 @@ column. Defaults to nil if the key is missing in the input hash.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan 20 14:53:58 2018 by
+  Generated on Sat Jan 20 15:44:34 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

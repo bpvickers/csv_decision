@@ -17,17 +17,16 @@ module CSVDecision
     # @return [Hash] Decision result.
     def self.make(table:, input:, symbolize_keys:)
       # Parse and transform the hash supplied as input
-      hash, scan_cols, key =
-        Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
+      input = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
 
       # The decision object collects the results of the search and
       # calculates the final result
-      decision = Decision.new(table: table, input: hash)
+      decision = Decision.new(table: table, input: input[:hash])
 
       if table.index
-        decision.index(table: table, hash: hash, scan_cols: scan_cols, key: key)
+        decision.index(table: table, input: input)
       else
-        decision.scan(table: table, hash: hash, scan_cols: scan_cols)
+        decision.scan(table: table, hash: input[:hash], scan_cols: input[:scan_cols])
       end
     end
 
@@ -53,10 +52,8 @@ module CSVDecision
     # @param scan_cols [Hash{Index=>Object}] Input column values to scan.
     # @return [Hash{Symbol=>Object}] Decision result.
     def scan(table:, hash:, scan_cols:)
-      scan_rows = table.scan_rows
-
       table.each do |row, index|
-        next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+        next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
         return @result.attributes if add(row)
       end
 
@@ -66,24 +63,27 @@ module CSVDecision
     # Use an index to scan the decision table up against the input hash.
     #
     # @param (see #initialize)
+    # @param input [Hash] Hash of parsed input data.
     # @return [{Symbol=>Object}] Decision result.
-    def index(key:, table:, hash:, scan_cols:)
-      # If the index lookup fails, there is no match
-      return {} unless (rows = table.index.hash[key])
+    def index(table:, input:)
+      # If the index lookup fails, there's no match
+      return {} unless (rows = table.index.hash[input[:key]])
 
-      scan_rows = table.scan_rows
+      index_scan(table: table, scan_cols: input[:scan_cols], hash: input[:hash], rows: Array(rows))
+    end
 
-      Array(rows).each do |start_row, end_row|
+    private
+
+    def index_scan(table:, scan_cols:, hash:, rows:)
+      rows.each do |start_row, end_row|
         table.each(start_row, end_row || start_row) do |row, index|
-          next unless scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+          next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
           return @result.attributes if add(row)
         end
       end
 
       @rows_picked.empty? ? {} : accumulated_result
     end
-
-    private
 
     # Add a matched row to the decision object being built.
     #
