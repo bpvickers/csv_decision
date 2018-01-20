@@ -87,7 +87,8 @@ module CSVDecision
       # @param type (see #type)
       # @param eval (see #eval)
       # @param set_if (see #set_if)
-      def initialize(name:, type:, eval: nil, set_if: nil, indexed: false)
+      # @param indexed (see #indexed)
+      def initialize(name:, type:, eval: nil, set_if: nil, indexed: nil)
         @name = name
         @type = type
         @eval = eval
@@ -114,7 +115,8 @@ module CSVDecision
     # parsing the header row.
     #
     # @param header [Array<String>] The header row after removing any empty columns.
-    # @return [Hash<Hash>] Column dictionary is a hash of hashes.
+    # @param dictionary [Columns::Dictionary] Table's columns dictionary.
+    # @return [Columns::Dictionary] Table's columns dictionary.
     def self.build(header:, dictionary:)
       header.each_with_index do |cell, index|
         dictionary = parse_cell(cell: cell, index: index, dictionary: dictionary)

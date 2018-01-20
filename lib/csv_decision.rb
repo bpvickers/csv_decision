@@ -15,7 +15,6 @@ module CSVDecision
 
   autoload :Columns,    'csv_decision/columns'
   autoload :Data,       'csv_decision/data'
-  autoload :Decide,     'csv_decision/decide'
   autoload :Decision,   'csv_decision/decision'
   autoload :Defaults,   'csv_decision/defaults'
   autoload :Dictionary, 'csv_decision/dictionary'

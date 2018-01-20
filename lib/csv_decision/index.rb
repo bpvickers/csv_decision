@@ -26,10 +26,9 @@ module CSVDecision
       table
     end
 
-    def self.trim_scan_rows(scan_rows:, index_columns:)
-      scan_rows.each { |scan_row| scan_row.constants = scan_row.constants - index_columns }
-    end
-
+    # @param current_value [Integer, Array] Current index key value.
+    # @param index [Integer] Array row index to be included in the table index entry.
+    # @return [Integer, Array] New index key value.
     def self.value(current_value, index)
       return integer_value(current_value, index) if current_value.is_a?(Integer)
 
@@ -37,6 +36,11 @@ module CSVDecision
 
       current_value
     end
+
+    def self.trim_scan_rows(scan_rows:, index_columns:)
+      scan_rows.each { |scan_row| scan_row.constants = scan_row.constants - index_columns }
+    end
+    private_class_method :trim_scan_rows
 
     def self.index_columns(columns:)
       key_cols = []
@@ -70,6 +74,8 @@ module CSVDecision
     # @return [Array<Integer>] Array of column indices
     attr_reader :columns
 
+    # @param table [CSVDecision::Table] Decision table.
+    # @param columns [Array<Index>] Array of column indexes to be indexed.
     def initialize(table:, columns:)
       @columns = columns
       @hash = {}

@@ -46,12 +46,14 @@ module CSVDecision
       def self.symbol_function(symbol, method, hash)
         hash[symbol].respond_to?(method) && hash[symbol].send(method)
       end
+      private_class_method :symbol_function
 
       def self.regexp_match(symbol, value, hash)
         return false unless value.is_a?(String)
         data = hash[symbol]
         data.is_a?(String) && Matchers.regexp(value).match?(data)
       end
+      private_class_method :regexp_match
 
       FUNCTION = {
         '.'  => proc { |symbol, method, hash|  symbol_function(symbol, method, hash) },

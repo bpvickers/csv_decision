@@ -31,6 +31,9 @@ module CSVDecision
         freeze
       end
 
+      # @param hash [Hash] Input hash to function call.
+      # @param value [Object] Input value to function call.
+      # @return [Object] Value returned from function call.
       def call(hash:, value: nil)
         func = fetch(1)
 

@@ -14,6 +14,7 @@ module CSVDecision
 
     # Scan the table cell against all matches.
     #
+    # @param column [Dictionary::Entry] Column dictionary entry.
     # @param matchers [Array<Matchers::Matcher>]
     # @param cell [String]
     # @return [false, Matchers::Proc]

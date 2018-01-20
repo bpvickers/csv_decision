@@ -31,6 +31,7 @@ module CSVDecision
 
       scan_keys(table: table, hash: hash).freeze
     end
+    private_class_method :parse_key
 
     def self.scan_key(table:, hash:)
       col = table.index.columns[0]
@@ -38,6 +39,7 @@ module CSVDecision
 
       hash[column.name]
     end
+    private_class_method :scan_key
 
     def self.scan_keys(table:, hash:)
       table.index.columns.map do |col|
@@ -46,12 +48,12 @@ module CSVDecision
         hash[column.name]
       end
     end
+    private_class_method :scan_keys
 
     def self.validate(input)
       return if input.is_a?(Hash) && !input.empty?
       raise ArgumentError, 'input must be a non-empty hash'
     end
-
     private_class_method :validate
 
     def self.parse_input(table:, input:)

@@ -8,16 +8,25 @@ module CSVDecision
   # Dictionary of all this table's columns - inputs, outputs etc.
   # @api private
   class Columns
+    # @param columns [CSVDecision::Columns] Table's columns dictionary.
+    # @param row [Array] Data row.
+    # @return [void]
     def self.outs_dictionary(columns:, row:)
       row.each_with_index do |cell, index|
         outs_check_cell(columns: columns, cell: cell, index: index)
       end
     end
 
+    # @param columns [CSVDecision::Columns] Table's columns dictionary.
+    # @param row [Array] Data row.
+    # @return [void]
     def self.ins_dictionary(columns:, row:)
       row.each { |cell| ins_cell_dictionary(columns: columns, cell: cell) }
     end
 
+    # @param columns [CSVDecision::Columns] Table's columns dictionary.
+    # @param cell [Object] Data row cell.
+    # @return [void]
     def self.ins_cell_dictionary(columns:, cell:)
       return unless cell.is_a?(Matchers::Proc)
       return if cell.symbols.nil?

@@ -8,6 +8,29 @@ module CSVDecision
   # Accumulate the matching row(s) and calculate the final result.
   # @api private
   class Decision
+    # Main method for making decisions.
+    #
+    # @param table [CSVDecision::Table] Decision table.
+    # @param input [Hash] Input hash (keys may or may not be symbolized)
+    # @param symbolize_keys [true, false] Set to false if keys are symbolized and it's
+    #   OK to mutate the input hash. Otherwise a copy of the input hash is symbolized.
+    # @return [Hash] Decision result.
+    def self.make(table:, input:, symbolize_keys:)
+      # Parse and transform the hash supplied as input
+      hash, scan_cols, key =
+        Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
+
+      # The decision object collects the results of the search and
+      # calculates the final result
+      decision = Decision.new(table: table, input: hash)
+
+      if table.index
+        decision.index(table: table, hash: hash, scan_cols: scan_cols, key: key)
+      else
+        decision.scan(table: table, hash: hash, scan_cols: scan_cols)
+      end
+    end
+
     # @param table [CSVDecision::Table] Decision table being processed.
     # @param input [Hash{Symbol=>Object}] Input hash data structure.
     def initialize(table:, input:)
@@ -25,8 +48,10 @@ module CSVDecision
 
     # Scan the decision table up against the input hash.
     #
-    # @param (see #initialize)
-    # @return [{Symbol=>Object}] Decision result.
+    # @param table (see #initialize)
+    # @param hash [Hash] Input hash.
+    # @param scan_cols [Hash{Index=>Object}] Input column values to scan.
+    # @return [Hash{Symbol=>Object}] Decision result.
     def scan(table:, hash:, scan_cols:)
       scan_rows = table.scan_rows
 
@@ -42,9 +67,9 @@ module CSVDecision
     #
     # @param (see #initialize)
     # @return [{Symbol=>Object}] Decision result.
-    def index(keys:, table:, hash:, scan_cols:)
+    def index(key:, table:, hash:, scan_cols:)
       # If the index lookup fails, there is no match
-      return {} unless (rows = table.index.hash[keys])
+      return {} unless (rows = table.index.hash[key])
 
       scan_rows = table.scan_rows
 

@@ -12,8 +12,10 @@ module CSVDecision
     #   both result values and if: columns, which eventually get evaluated and removed.
     attr_reader :attributes
 
+    # @return [Hash{Index=>Dictionary::Entry}] Output columns.
     attr_reader :outs
 
+    # @return [nil, true] Set to true if the table has output functions.
     attr_reader :outs_functions
 
     # @return [Boolean] Returns true if this is a multi-row result
@@ -34,10 +36,6 @@ module CSVDecision
 
       # Attributes hash contains the output decision key value pairs
       @attributes = {}
-
-      # Set to true if the result has more than one row.
-      # Only possible for the first_match: false option.
-      @multi_result = false
     end
 
     # Common case for building a single row result is just copying output column values to the
@@ -161,10 +159,8 @@ module CSVDecision
         proc = row[col]
         next unless proc.is_a?(Matchers::Proc)
 
-        value = proc.function[@partial_result]
-
-        @partial_result[column.name] = value
-        @attributes[column.name] = value
+        @attributes[column.name] = proc.function[@partial_result]
+        @partial_result[column.name] = @attributes[column.name]
       end
     end
 
