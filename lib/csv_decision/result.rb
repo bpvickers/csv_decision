@@ -23,6 +23,9 @@ module CSVDecision
 
     # (see Decision.initialize)
     def initialize(table:, input:)
+      # Attributes hash contains the output decision key value pairs
+      @attributes = {}
+
       @outs = table.columns.outs
       @outs_functions = table.outs_functions
       @if_columns = table.columns.ifs
@@ -32,10 +35,7 @@ module CSVDecision
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = input&.slice(*table.columns.input_keys) if @outs_functions
-
-      # Attributes hash contains the output decision key value pairs
-      @attributes = {}
+      @partial_result = input.slice(*table.columns.input_keys) if @outs_functions
     end
 
     # Common case for building a single row result is just copying output column values to the
@@ -92,7 +92,7 @@ module CSVDecision
     # or filtered by the if: column conditions.
     def single_row_result
       @if_columns.each_key do |col|
-        return nil unless @attributes[col]
+        return false unless @attributes[col]
 
         # Remove the if: column from the final result hash.
         @attributes.delete(col)

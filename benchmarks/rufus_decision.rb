@@ -87,7 +87,7 @@ puts ""
 
       GC.start
       x.report("Rufus decision (first_match: #{first_match}) - #{name}: ") do |count|
-        count.times { rufus_table.transform(input) }
+        count.times { rufus_table.transform!(input) }
       end
 
       x.compare!

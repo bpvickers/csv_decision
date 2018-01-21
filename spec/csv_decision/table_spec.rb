@@ -522,6 +522,8 @@ describe CSVDecision::Table do
 
             expect(table.send(method, topic: 'politics', region: 'Arctic'))
               .to eq(team_member: %w[Henry Zach])
+            expect(table.send(method, topic: 'culture', region: 'America'))
+              .to eq({})
           end
         end
       end
@@ -556,6 +558,7 @@ describe CSVDecision::Table do
             expect(table.send(method, number: 1,   type: 'integer', input: 'none')).to eq(output: 0)
             expect(table.send(method, number: nil, type: 'string', input: 'one')).to eq(output: nil)
             expect(table.send(method, string: '1', type: 'string', input: 'one')).to eq(output: '1')
+            expect(table.send(method, number: '1', type: 'string', input: 'one')).to eq({})
           end
         end
       end
