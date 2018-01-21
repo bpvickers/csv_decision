@@ -483,6 +483,9 @@ result, along with the partial result required to evaluate functions.</p>
       <pre class="code"><span class="info file"># File 'lib/csv_decision/result.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>input:</span><span class='rparen'>)</span>
+  <span class='comment'># Attributes hash contains the output decision key value pairs
+</span>  <span class='ivar'>@attributes</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+
   <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@outs_functions</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_outs_functions'>outs_functions</span>
   <span class='ivar'>@if_columns</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_ifs'>ifs</span>
@@ -492,10 +495,7 @@ result, along with the partial result required to evaluate functions.</p>
 </span>  <span class='comment'># have the same symbol as an input hash key.
 </span>  <span class='comment'># However, the rest of this hash is mutated as output column evaluation results
 </span>  <span class='comment'># are accumulated.
-</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='op'>&amp;.</span><span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_input_keys'>input_keys</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@outs_functions</span>
-
-  <span class='comment'># Attributes hash contains the output decision key value pairs
-</span>  <span class='ivar'>@attributes</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+</span>  <span class='ivar'>@partial_result</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_input_keys'>input_keys</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@outs_functions</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1134,7 +1134,7 @@ result, along with the partial result required to evaluate functions.</p>
 </div>
 
       <div id="footer">
-  Generated on Sat Jan 20 15:44:35 2018 by
+  Generated on Sun Jan 21 08:56:46 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
