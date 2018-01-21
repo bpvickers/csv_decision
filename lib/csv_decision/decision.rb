@@ -23,7 +23,7 @@ module CSVDecision
       # calculates the final result
       decision = Decision.new(table: table, input: input[:hash])
 
-      # Use the table index if present
+      # Use the table's index if present
       return decision.index(table: table, input: input) if table.index
 
       decision.scan(table: table, hash: input[:hash], scan_cols: input[:scan_cols])
