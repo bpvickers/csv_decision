@@ -23,18 +23,6 @@ module CSVDecision
       parsed_input
     end
 
-    def self.result(symbolize_keys:, input:, key:)
-      hash = input[:hash]
-      {
-        # We can freeze the input hash for safety if we made our own copy.
-        hash: symbolize_keys ? hash.freeze : hash,
-        scan_cols:  input[:scan_cols].freeze,
-        # Build the index key if this table is indexed.
-        key: key
-      }
-    end
-    private_class_method :result
-
     def self.parse_key(table:, hash:)
       return scan_key(table: table, hash: hash) if table.index.columns.count == 1
 
