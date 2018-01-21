@@ -23,11 +23,10 @@ module CSVDecision
       # calculates the final result
       decision = Decision.new(table: table, input: input[:hash])
 
-      if table.index
-        decision.index(table: table, input: input)
-      else
-        decision.scan(table: table, hash: input[:hash], scan_cols: input[:scan_cols])
-      end
+      # Use the table index if present
+      return decision.index(table: table, input: input) if table.index
+
+      decision.scan(table: table, hash: input[:hash], scan_cols: input[:scan_cols])
     end
 
     # @param table [CSVDecision::Table] Decision table being processed.
@@ -37,11 +36,10 @@ module CSVDecision
       # a multi-row result for the +first_match: false+ option.
       @result = Result.new(table: table, input: input)
 
-      # All rows picked by the matching process. An array if +first_match: false+, otherwise
-      # a single row.
+      # All rows picked by the matching process. An array if +first_match: false+,
+      # otherwise a single row.
       @rows_picked = []
 
-      # Relevant table attributes
       @first_match = table.options[:first_match]
     end
 
@@ -52,12 +50,8 @@ module CSVDecision
     # @param scan_cols [Hash{Index=>Object}] Input column values to scan.
     # @return [Hash{Symbol=>Object}] Decision result.
     def scan(table:, hash:, scan_cols:)
-      table.each do |row, index|
-        next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
-        return @result.attributes if add(row)
-      end
-
-      @rows_picked.empty? ? {} : accumulated_result
+      return scan_first_match(table: table, hash: hash, scan_cols: scan_cols) if @first_match
+      scan_accumulate(table: table, hash: hash, scan_cols: scan_cols)
     end
 
     # Use an index to scan the decision table up against the input hash.
@@ -67,37 +61,66 @@ module CSVDecision
     # @return [{Symbol=>Object}] Decision result.
     def index(table:, input:)
       # If the index lookup fails, there's no match
-      return {} unless (rows = table.index.hash[input[:key]])
+      return {} unless (index_rows = table.index.hash[input[:key]])
 
-      index_scan(table: table, scan_cols: input[:scan_cols], hash: input[:hash], rows: Array(rows))
+      if @first_match
+        index_scan_first_match(table: table,
+                               scan_cols: input[:scan_cols],
+                               hash: input[:hash],
+                               index_rows: Array(index_rows))
+      else
+        index_scan_accumulate(table: table,
+                              scan_cols: input[:scan_cols],
+                              hash: input[:hash],
+                              index_rows: Array(index_rows))
+      end
     end
 
     private
 
-    def index_scan(table:, scan_cols:, hash:, rows:)
-      rows.each do |start_row, end_row|
-        table.each(start_row, end_row || start_row) do |row, index|
-          next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
-          return @result.attributes if add(row)
-        end
+    def scan_first_match(table:, hash:, scan_cols:)
+      table.each do |row, index|
+        next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+
+        return @result.attributes if first_match(row)
+      end
+
+      {}
+    end
+
+    def scan_accumulate(table:, hash:, scan_cols:)
+      table.each do |row, index|
+        next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+        # Accumulate output rows
+        @rows_picked << row
+        @result.accumulate_outs(row)
       end
 
       @rows_picked.empty? ? {} : accumulated_result
     end
 
-    # Add a matched row to the decision object being built.
-    #
-    # @param row [Array] Data row.
-    # @return [false, Hash]
-    def add(row)
-      return add_first_match(row) if @first_match
+    def index_scan_first_match(table:, scan_cols:, hash:, index_rows:)
+      index_rows.each do |start_row, end_row|
+        table.each(start_row, end_row || start_row) do |row, index|
+          next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+          return @result.attributes if first_match(row)
+        end
+      end
 
-      # Accumulate output rows
-      @rows_picked << row
-      @result.accumulate_outs(row)
+      {}
+    end
 
-      # Not done
-      false
+    def index_scan_accumulate(table:, scan_cols:, hash:, index_rows:)
+      index_rows.each do |start_row, end_row|
+        table.each(start_row, end_row || start_row) do |row, index|
+          next unless table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+          # Accumulate output rows
+          @rows_picked << row
+          @result.accumulate_outs(row)
+        end
+      end
+
+      @rows_picked.empty? ? {} : accumulated_result
     end
 
     def accumulated_result
@@ -124,7 +147,7 @@ module CSVDecision
       end
     end
 
-    def add_first_match(row)
+    def first_match(row)
       # This decision row may contain procs, which if present will need to be evaluated.
       # If this row contains if: columns then this row may be filtered out, in which case
       # this method call will return false.

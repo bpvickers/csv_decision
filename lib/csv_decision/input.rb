@@ -19,9 +19,8 @@ module CSVDecision
 
       parsed_input = parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
 
-      key = table.index ? parse_key(table: table, hash: parsed_input[:hash]) : nil
-
-      result(symbolize_keys: symbolize_keys, input: parsed_input, key: key)
+      parsed_input[:key] = parse_key(table: table, hash: parsed_input[:hash]) if table.index
+      parsed_input
     end
 
     def self.result(symbolize_keys:, input:, key:)
