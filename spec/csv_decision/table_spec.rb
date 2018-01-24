@@ -496,6 +496,7 @@ describe CSVDecision::Table do
         { example: 'evaluates single-column index CSV string',
           options: { first_match: false },
           data: <<~DATA
+            text_only
             in:topic, in:region, out:team_member
             sports,   Europe,    Alice
             sports,   ,          Bob
