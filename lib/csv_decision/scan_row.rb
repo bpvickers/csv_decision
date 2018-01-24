@@ -109,9 +109,8 @@ module CSVDecision
       # Check any table row cell constants first, and maybe fail fast...
       return false if @constants.any? { |col| row[col] != scan_cols[col] }
 
-      return true if @procs.empty?
-
-      # These table row cells are Proc objects which need evaluating
+      # These table row cells are Proc objects which need evaluating and
+      # must all return a truthy value.
       @procs.all? { |col| row[col].call(value: scan_cols[col], hash: hash) }
     end
 
@@ -121,14 +120,14 @@ module CSVDecision
       # Scan the cell against all the matchers
       proc = ScanRow.scan(column: column, matchers: matchers, cell: cell)
 
-      return set(proc, col, column) if proc
+      return set(proc: proc, col: col, column: column) if proc
 
       # Just a plain constant
       @constants << col
       cell
     end
 
-    def set(proc, col, column)
+    def set(proc:, col:, column:)
       # Unbox a constant
       if proc.type == :constant
         @constants << col
