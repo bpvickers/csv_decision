@@ -28,7 +28,7 @@ module CSVDecision
   #
   # @param data [Pathname, File, Array<Array<String>>, String] input data given as
   #   a CSV file, array of arrays or CSV string.
-  # @param options [Hash] Options hash supplied by the user.
+  # @param options [Hash{Symbol=>Object}] Options hash controlling how the table is parsed and interpreted.
   #
   # @option options [Boolean] :first_match Stop scanning after finding the first row match.
   # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than

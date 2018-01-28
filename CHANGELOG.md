@@ -1,5 +1,9 @@
+## v0.3.2, 28 January 2018.
+*Changes*
+- Refactor code and update documentation.
+
 ## v0.3.1, 21 January 2018.
-*changes*
+*Changes*
 - Optimize code.
 
 ## v0.3.0, 20 January 2018.

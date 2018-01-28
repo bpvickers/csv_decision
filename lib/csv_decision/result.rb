@@ -54,8 +54,8 @@ module CSVDecision
     end
 
     # Derive the final result.
-    # @return [{Symbol=>Object}]
-    def final
+    # @return [Hash{Symbol=>Object}]
+    def final_result
       # If there are no if: columns, then nothing needs to be filtered out of this result hash.
       return @attributes if @if_columns.empty?
 
@@ -74,7 +74,7 @@ module CSVDecision
       # Then evaluate the procs, left to right
       eval_outs_procs(row: row)
 
-      final
+      final_result
     end
 
     # Evaluate the cell proc using the partial result calculated so far.

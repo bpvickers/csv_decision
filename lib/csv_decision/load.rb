@@ -7,10 +7,11 @@
 module CSVDecision
   # Load all the CSV files located in the designated folder path.
   #
-  # @param path [Pathname] Directory containing CSV files.
-  # @param options [Hash] Options hash used for table creation.
-  # @return [Hash<CSVDecision::Table>]
-  # @raise [ArgumentError] Invalid folder.
+  # @param path [Pathname] Directory containing CSV decision table files.
+  # @param options (see CSVDecision.parse)
+  # @return [Hash{Symbol=><CSVDecision::Table>}] Hash of decision tables keyed by the CSV
+  #   file's symbolized base name.
+  # @raise [ArgumentError] Invalid path name or folder.
   def self.load(path, options = {})
     Load.path(path: path, options: options)
   end

@@ -77,6 +77,10 @@ module CSVDecision
 
     # @api private
     def initialize
+      @file = nil
+      @index = nil
+      @options = nil
+      @outs_functions = nil
       @outs_rows = []
       @if_rows = []
       @rows = []
