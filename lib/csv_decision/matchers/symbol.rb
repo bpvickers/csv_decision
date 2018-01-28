@@ -8,11 +8,16 @@ module CSVDecision
   # Recognise expressions in table data cells.
   # @api private
   class Matchers
-    # Match cell against a symbolic expression - e.g., :column, > :column
+    # Match cell against a symbolic expression - e.g., :column, > :column.
+    # Can also call a Ruby method pn the column value - e.g, .blank? or !.blank?
     class Symbol < Matcher
-      # Column symbol comparison - e.g., > :column or != :column
+      SYMBOL_COMPARATORS = "#{INEQUALITY}|>=|<=|<|>|#{EQUALS}"
+      private_constant :SYMBOL_COMPARATORS
+
+      # Column symbol comparison - e.g., > :column or != :column.
+      # Can also be a method call - e.g., .present? or .blank?
       SYMBOL_COMPARE =
-        "(?<comparator>!=|>=|<=|<|>|#{Matchers::EQUALS})?\\s*:(?<name>#{Header::COLUMN_NAME})"
+        "(?<comparator>#{SYMBOL_COMPARATORS})?\\s*(?<type>[.:])(?<name>#{Header::COLUMN_NAME})"
       private_constant :SYMBOL_COMPARE
 
       # Symbol comparision regular expression.
@@ -33,6 +38,20 @@ module CSVDecision
       end
       private_class_method :compare_proc
 
+      def self.value_method(value, method)
+        value.respond_to?(method) && value.send(method)
+      end
+      private_class_method :value_method
+
+      def self.method_proc(negate:)
+        if negate
+          proc { |symbol, value| !value_method(value, symbol) }
+        else
+          proc { |symbol, value|  value_method(value, symbol) }
+        end
+      end
+      private_class_method :method_proc
+
       COMPARE = {
         # Equality and inequality - create a lambda proc by calling with the actual column name
         # symbol.
@@ -40,12 +59,17 @@ module CSVDecision
         '='  => ->(symbol) { EQUALITY[':='].curry[symbol].freeze },
         '==' => ->(symbol) { EQUALITY[':='].curry[symbol].freeze },
         '!=' => ->(symbol) { EQUALITY['!='].curry[symbol].freeze },
+        '!'  => ->(symbol) { EQUALITY['!='].curry[symbol].freeze },
 
         # Comparisons - create a lambda proc by calling with the actual column name symbol.
         '>'  => ->(symbol) { compare_proc(:'>').curry[symbol].freeze },
         '>=' => ->(symbol) { compare_proc(:'>=').curry[symbol].freeze },
         '<'  => ->(symbol) { compare_proc(:'<').curry[symbol].freeze },
-        '<=' => ->(symbol) { compare_proc(:'<=').curry[symbol].freeze }
+        '<=' => ->(symbol) { compare_proc(:'<=').curry[symbol].freeze },
+
+        # 0-arity Ruby method calls applied to an input column value.
+        '.'  => ->(symbol) { method_proc(negate: false).curry[symbol].freeze },
+        '!.' => ->(symbol) { method_proc(negate: true).curry[symbol].freeze }
       }.freeze
       private_constant :COMPARE
 
@@ -57,23 +81,43 @@ module CSVDecision
       end
       private_class_method :compare?
 
-      # E.g., > :col, we get comparator: >, args: col
+      # E.g., > :col, we get comparator: >, name: col
       def self.comparison(comparator:, name:)
         function = COMPARE[comparator]
         Matchers::Proc.new(type: :symbol, function: function[name], symbols: name)
       end
       private_class_method :comparison
 
+      # E.g., !.nil?, we get comparator: !, name: nil?
+      def self.method_call(comparator:, name:)
+        equality = EQUALS_RE.match?(comparator)
+        inequality = equality ? false : INEQUALITY_RE.match?(comparator)
+
+        return false unless equality || inequality
+
+        # Allowed Ruby method names are a bit stricter than allowed decision table column names.
+        return false unless METHOD_NAME_RE.match?(name)
+
+        function = COMPARE[equality ? '.' : '!.']
+        Matchers::Proc.new(type: :proc, function: function[name])
+      end
+      private_class_method :method_call
+
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
       def self.matches?(cell)
-        match = SYMBOL_COMPARE_RE.match(cell)
-        return false unless match
+        return false unless (match = SYMBOL_COMPARE_RE.match(cell))
 
         comparator = match['comparator'] || '='
         name = match['name'].to_sym
+        if match['type'] == ':'
+          comparison(comparator: comparator, name: name)
 
-        comparison(comparator: comparator, name: name)
+        # Method call - e.g, .blank? or !.present?
+        # Can also take the forms: := .blank? or !=.present?
+        else
+          method_call(comparator: comparator, name: name)
+        end
       end
 
       # @param (see Matcher#matches?)

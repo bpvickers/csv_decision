@@ -266,9 +266,9 @@ describe CSVDecision::Table do
         { example: 'uses != :parent, drops :parent input column',
           options: {},
           data: <<~DATA
-            in :node,    out :top?
-            != :parent,  no
-            ,            yes
+            in :node,  out :top?
+            !:parent,  no
+            ,          yes
           DATA
         },
         { example: 'uses != :parent and == :parent',
@@ -532,7 +532,7 @@ describe CSVDecision::Table do
 
     context 'uses multi-column index to make correct decisions' do
       examples = [
-        { example: 'evaluates multi-column index CSV string',
+        { example: 'evaluates multi-column index CSV string with guard',
           options: { first_match: true },
           data: <<~DATA
             guard:,           in :type, IN :input, OUT :output
@@ -544,6 +544,34 @@ describe CSVDecision::Table do
             :number.blank?,   string,   none,      :=nil
             :string.present?, string,   one,       1
             :number.blank?,   string,   one,       :=nil
+          DATA
+        },
+        { example: 'evaluates multi-column index CSV string with symbol conditions',
+          options: { first_match: true },
+          data: <<~DATA
+            in: number, in: string, in :type, IN :input, OUT :output
+            .present?,  ,           integer,  none,      :=0
+            .blank?,    ,           integer,  none,      :=nil
+            .present?,  ,           integer,  one,       :=1
+            .blank?,    ,           integer,  one,       :=nil
+            ,           .present?,  string,   none,      0
+            .blank?,    ,           string,   none,      :=nil
+            ,           .present?,  string,   one,       1
+            .blank?,    ,           string,   one,       :=nil
+          DATA
+        },
+        { example: 'evaluates multi-column index CSV string with negated symbol conditions',
+          options: { first_match: true },
+          data: <<~DATA
+            in: number,   in: string, in :type, IN :input, OUT :output
+            !.blank?,     ,           integer,  none,      :=0
+            != .present?, ,           integer,  none,      :=nil
+            =.present?,   ,           integer,  one,       :=1
+            ==.blank?,    ,           integer,  one,       :=nil
+            ,             .present?,  string,   none,      0
+            .blank?,      ,           string,   none,      :=nil
+            ,             !.blank?,   string,   one,       1
+            .blank?,      ,           string,   one,       :=nil
           DATA
         },
         { example: 'evaluates multi-column index CSV file',

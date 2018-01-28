@@ -196,7 +196,10 @@ may be simplified to:
       ,           no
     DATA
  ```
-These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`.
+These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`. 
+In addition, you can also apply a Ruby 0-arity method - e.g., `.present?` or `.nil?`. Negation is
+also supported - e.g., `!.nil?`.
+
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 
 #### Input `guard` conditions

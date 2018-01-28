@@ -72,11 +72,21 @@ module CSVDecision
       Regexp.new("\\A(?:#{value})\\z").freeze
     end
 
-    # Cell constants and functions specified by prefixing the value with one of these 3 symbols.
+    # Symbols used for inequality
+    INEQUALITY = '!=|!'
+
+    # Match string for inequality
+    INEQUALITY_RE = regexp(INEQUALITY)
+
+    # Equality, cell constants and functions specified by prefixing the value with
+    # one of these 3 symbols.
     EQUALS = '==|:=|='
 
+    # Match string for equality
     EQUALS_RE = regexp(EQUALS)
-    private_constant :EQUALS_RE
+
+    # Method names are stricter than CSV column names.
+    METHOD_NAME_RE = /\A[_a-z][_a-z0-9]*[?!=]?\z/
 
     # Normalize the operators which are a variation on equals/assignment.
     #
