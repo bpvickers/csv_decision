@@ -261,8 +261,12 @@ the input hash. The expression, <code>== :node</code> should be read as
 <p><code>ruby     data = &lt;&lt;~DATA       in :parent, out :top?         
 :node,   yes       ,           no     DATA </code> These comparison
 operators are also supported: <code>!=</code>, <code>&gt;</code>,
-<code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. For more simple
-examples see <code>spec/csv_decision/examples_spec.rb</code>.</p>
+<code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. In addition, you
+can also apply a Ruby 0-arity method - e.g., <code>.present?</code> or
+<code>.nil?</code>. Negation is also supported - e.g., <code>!.nil?</code>.</p>
+
+<p>For more simple examples see
+<code>spec/csv_decision/examples_spec.rb</code>.</p>
 
 <h4 id="label-Input+guard+conditions">Input <code>guard</code> conditions</h4>
 
@@ -385,7 +389,7 @@ href="./LICENSE">LICENSE</a> document for more information.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sun Jan 28 11:58:37 2018 by
+  Generated on Sun Jan 28 14:41:47 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
