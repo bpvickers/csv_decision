@@ -568,10 +568,10 @@ describe CSVDecision::Table do
             != .present?, ,           integer,  none,      :=nil
             =.present?,   ,           integer,  one,       :=1
             ==.blank?,    ,           integer,  one,       :=nil
-            ,             .present?,  string,   none,      0
+            ,             :=present?, string,   none,      0
             .blank?,      ,           string,   none,      :=nil
             ,             !.blank?,   string,   one,       1
-            .blank?,      ,           string,   one,       :=nil
+            = !present?,  ,           string,   one,       :=nil
           DATA
         },
         { example: 'evaluates multi-column index CSV file',

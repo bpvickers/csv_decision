@@ -198,7 +198,8 @@ may be simplified to:
  ```
 These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`. 
 In addition, you can also apply a Ruby 0-arity method - e.g., `.present?` or `.nil?`. Negation is
-also supported - e.g., `!.nil?`.
+also supported - e.g., `!.nil?`. Note that `.nil?` can also be written as `:= nil?`, and `!.nil?`
+as `:= !nil?`, depending on preference.
 
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 

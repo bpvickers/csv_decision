@@ -55,7 +55,7 @@ describe CSVDecision::Matchers::Symbol do
     end
 
     context 'does not match a function' do
-      data = ['1', 'abc', 'abc.*def', '-1..1', '0...3', ':= false', ':= lookup?']
+      data = ['1', 'abc', 'abc.*def', '-1..1', '0...3', ':= false()', ':= lookup?()']
 
       data.each do |cell|
         it "cell #{cell} is not a function" do

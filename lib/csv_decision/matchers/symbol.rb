@@ -17,7 +17,7 @@ module CSVDecision
       # Column symbol comparison - e.g., > :column or != :column.
       # Can also be a method call - e.g., .present? or .blank?
       SYMBOL_COMPARE =
-        "(?<comparator>#{SYMBOL_COMPARATORS})?\\s*(?<type>[.:])(?<name>#{Header::COLUMN_NAME})"
+        "(?<comparator>#{SYMBOL_COMPARATORS})?\\s*(?<type>[.:!])?(?<name>#{Header::COLUMN_NAME})"
       private_constant :SYMBOL_COMPARE
 
       # Symbol comparision regular expression.
@@ -89,12 +89,13 @@ module CSVDecision
       private_class_method :comparison
 
       # E.g., !.nil?, we get comparator: !, name: nil?
-      def self.method_call(comparator:, name:)
+      def self.method_call(comparator:, name:, type:)
         equality = EQUALS_RE.match?(comparator)
         inequality = !equality && INEQUALITY_RE.match?(comparator)
         return false unless equality || inequality
 
-        method_function(name: name, negate: inequality)
+        negate = type == '!' ? !inequality : inequality
+        method_function(name: name, negate: negate)
       end
       private_class_method :method_call
 
@@ -108,21 +109,28 @@ module CSVDecision
       end
       private_class_method :method_function
 
+      def self.comparator_type(comparator:, name:, type:)
+        if type == ':'
+          comparison(comparator: comparator, name: name)
+
+          # Method call - e.g, .blank? or !.present?
+          # Can also take the forms: := .blank? or !=.present?
+        else
+          method_call(comparator: comparator, name: name, type: type || '.')
+        end
+      end
+      private_class_method :comparator_type
+
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
       def self.matches?(cell)
         return false unless (match = SYMBOL_COMPARE_RE.match(cell))
 
-        comparator = match['comparator'] || '='
-        name = match['name'].to_sym
-        if match['type'] == ':'
-          comparison(comparator: comparator, name: name)
+        comparator = match['comparator']
+        type = match['type']
+        return false if comparator.nil? && type.nil?
 
-        # Method call - e.g, .blank? or !.present?
-        # Can also take the forms: := .blank? or !=.present?
-        else
-          method_call(comparator: comparator, name: name)
-        end
+        comparator_type(comparator: comparator || '=', type: type, name: match['name'].to_sym)
       end
 
       # @param (see Matcher#matches?)
