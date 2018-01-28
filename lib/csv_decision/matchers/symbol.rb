@@ -91,17 +91,22 @@ module CSVDecision
       # E.g., !.nil?, we get comparator: !, name: nil?
       def self.method_call(comparator:, name:)
         equality = EQUALS_RE.match?(comparator)
-        inequality = equality ? false : INEQUALITY_RE.match?(comparator)
-
+        inequality = !equality && INEQUALITY_RE.match?(comparator)
         return false unless equality || inequality
 
+        method_function(name: name, negate: inequality)
+      end
+      private_class_method :method_call
+
+      # E.g., !.nil?, we get comparator: !, name: nil?
+      def self.method_function(name:, negate:)
         # Allowed Ruby method names are a bit stricter than allowed decision table column names.
         return false unless METHOD_NAME_RE.match?(name)
 
-        function = COMPARE[equality ? '.' : '!.']
+        function = COMPARE[negate ? '!.' : '.']
         Matchers::Proc.new(type: :proc, function: function[name])
       end
-      private_class_method :method_call
+      private_class_method :method_function
 
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
