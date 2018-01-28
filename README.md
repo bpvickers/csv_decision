@@ -127,7 +127,7 @@ Complete documentation of all table parameters is in the code - see
  * Either returns the first matching row as a hash (default), or accumulates all matches as an 
  array of hashes (i.e., `parse` option `first_match: false` or CSV file option `accumulate`).
  * Fast decision-time performance (see `benchmarks` folder). Automatically indexes all 
- text-only columns that do not contain any empty strings.
+ constants-only columns that do not contain any empty strings.
  * In addition to simple strings, `csv_decision` can match basic Ruby constants (e.g., `=nil`), 
  regular expressions (e.g., `=~ on|off`), comparisons (e.g., `> 100.0` ) and 
  Ruby-style ranges (e.g., `1..10`)
