@@ -12,9 +12,9 @@ module CSVDecision
     #
     # @param table [CSVDecision::Table] Decision table.
     # @param input [Hash] Input hash (keys may or may not be symbolized)
-    # @param symbolize_keys [true, false] Set to false if keys are symbolized and it's
+    # @param symbolize_keys [Boolean] Set to false if keys are symbolized and it's
     #   OK to mutate the input hash. Otherwise a copy of the input hash is symbolized.
-    # @return [Hash] Decision result.
+    # @return [Hash{Symbol=>Object}] Decision result.
     def self.make(table:, input:, symbolize_keys:)
       # Parse and transform the hash supplied as input
       input = Input.parse(table: table, input: input, symbolize_keys: symbolize_keys)
@@ -51,15 +51,18 @@ module CSVDecision
       hash = @input[:hash]
       scan_cols = @input[:scan_cols]
 
-      return scan_first_match(hash: hash, scan_cols: scan_cols) if @first_match
-      scan_accumulate(hash: hash, scan_cols: scan_cols)
+      if @first_match
+        scan_first_match(hash: hash, scan_cols: scan_cols)
+      else
+        scan_accumulate(hash: hash, scan_cols: scan_cols)
+      end
     end
 
     # Use an index to scan the decision table up against the input hash.
     #
-    # @return [{Symbol=>Object}] Decision result.
+    # @return [Hash{Symbol=>Object}] Decision result.
     def index_scan
-      # If the index lookup fails, there's no match
+      # If the index lookup fails, there's no match.
       return {} unless (index_rows = Array(@table.index.hash[@input[:key]]))
 
       hash = @input[:hash]
@@ -78,7 +81,7 @@ module CSVDecision
       @table.each do |row, index|
         next unless @table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
 
-        return @result.attributes if first_match(row)
+        return @result.attributes if first_match_found(row)
       end
 
       {}
@@ -87,6 +90,7 @@ module CSVDecision
     def scan_accumulate(hash:, scan_cols:)
       @table.each do |row, index|
         next unless @table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
+
         # Accumulate output rows
         @rows_picked << row
         @result.accumulate_outs(row)
@@ -99,7 +103,8 @@ module CSVDecision
       index_rows.each do |start_row, end_row|
         @table.each(start_row, end_row || start_row) do |row, index|
           next unless @table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
-          return @result.attributes if first_match(row)
+
+          return @result.attributes if first_match_found(row)
         end
       end
 
@@ -110,7 +115,8 @@ module CSVDecision
       index_rows.each do |start_row, end_row|
         @table.each(start_row, end_row || start_row) do |row, index|
           next unless @table.scan_rows[index].match?(row: row, hash: hash, scan_cols: scan_cols)
-          # Accumulate output rows
+
+          # Accumulate output rows.
           @rows_picked << row
           @result.accumulate_outs(row)
         end
@@ -120,7 +126,7 @@ module CSVDecision
     end
 
     def accumulated_result
-      return @result.final unless @result.outs_functions
+      return @result.final_result unless @result.outs_functions
       return @result.eval_outs(@rows_picked.first) unless @result.multi_result
 
       multi_row_result
@@ -130,7 +136,7 @@ module CSVDecision
       # Scan each output column that contains functions
       @result.outs.each_pair { |col, column| eval_procs(col: col, column: column) if column.eval }
 
-      @result.final
+      @result.final_result
     end
 
     def eval_procs(col:, column:)
@@ -143,7 +149,7 @@ module CSVDecision
       end
     end
 
-    def first_match(row)
+    def first_match_found(row)
       # This decision row may contain procs, which if present will need to be evaluated.
       # If this row contains if: columns then this row may be filtered out, in which case
       # this method call will return false.
