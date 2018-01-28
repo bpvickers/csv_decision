@@ -143,7 +143,7 @@ LICENSE and README.md for details.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#load-class_method" title="load (class method)">.<strong>load</strong>(path, options = {})  &#x21d2; Hash&lt;CSVDecision::Table&gt; </a>
+      <a href="#load-class_method" title="load (class method)">.<strong>load</strong>(path, options = {})  &#x21d2; Hash{Symbol=&gt;&lt;CSVDecision::Table&gt;} </a>
     
 
     
@@ -225,7 +225,7 @@ CSV string or an array of arrays.</p>
       <div class="method_details first">
   <h3 class="signature first" id="load-class_method">
   
-    .<strong>load</strong>(path, options = {})  &#x21d2; <tt>Hash&lt;<span class='object_link'><a href="CSVDecision/Table.html" title="CSVDecision::Table (class)">CSVDecision::Table</a></span>&gt;</tt> 
+    .<strong>load</strong>(path, options = {})  &#x21d2; <tt>Hash{Symbol=&gt;&lt;<span class='object_link'><a href="CSVDecision/Table.html" title="CSVDecision::Table (class)">CSVDecision::Table</a></span>&gt;}</tt> 
   
 
   
@@ -254,7 +254,7 @@ CSV string or an array of arrays.</p>
       
         &mdash;
         <div class='inline'>
-<p>Directory containing CSV files.</p>
+<p>Directory containing CSV decision table files.</p>
 </div>
       
     </li>
@@ -264,7 +264,7 @@ CSV string or an array of arrays.</p>
         <span class='name'>options</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol=&gt;Object}</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>{}</tt>)</em>
@@ -272,7 +272,7 @@ CSV string or an array of arrays.</p>
       
         &mdash;
         <div class='inline'>
-<p>Options hash used for table creation.</p>
+<p>Options hash controlling how the table is parsed and interpreted.</p>
 </div>
       
     </li>
@@ -285,9 +285,14 @@ CSV string or an array of arrays.</p>
     <li>
       
       
-        <span class='type'>(<tt>Hash&lt;<span class='object_link'><a href="CSVDecision/Table.html" title="CSVDecision::Table (class)">CSVDecision::Table</a></span>&gt;</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol=&gt;&lt;<span class='object_link'><a href="CSVDecision/Table.html" title="CSVDecision::Table (class)">CSVDecision::Table</a></span>&gt;}</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Hash of decision tables keyed by the CSV file&#39;s symbolized base name.</p>
+</div>
       
     </li>
   
@@ -304,7 +309,7 @@ CSV string or an array of arrays.</p>
       
         &mdash;
         <div class='inline'>
-<p>Invalid folder.</p>
+<p>Invalid path name or folder.</p>
 </div>
       
     </li>
@@ -317,12 +322,12 @@ CSV string or an array of arrays.</p>
       <pre class="lines">
 
 
-14
 15
-16</pre>
+16
+17</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/load.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/load.rb', line 15</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="CSVDecision/Load.html" title="CSVDecision::Load (module)">Load</a></span></span><span class='period'>.</span><span class='id identifier rubyid_path'><span class='object_link'><a href="CSVDecision/Load.html#path-class_method" title="CSVDecision::Load.path (method)">path</a></span></span><span class='lparen'>(</span><span class='label'>path:</span> <span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='label'>options:</span> <span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -390,7 +395,7 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
         <span class='name'>options</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol=&gt;Object}</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>{}</tt>)</em>
@@ -398,7 +403,7 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
       
         &mdash;
         <div class='inline'>
-<p>Options hash supplied by the user.</p>
+<p>Options hash controlling how the table is parsed and interpreted.</p>
 </div>
       
     </li>
@@ -606,7 +611,7 @@ table.decide(topic: &#39;finance&#39;, region: &#39;Europe&#39;) #=&gt; team_mem
 </div>
 
       <div id="footer">
-  Generated on Sun Jan 21 08:56:46 2018 by
+  Generated on Sun Jan 28 11:58:37 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
