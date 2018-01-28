@@ -197,4 +197,21 @@ context 'simple examples' do
     expect(table.decide(ISIN: '123456789', country: 'GB', class: 'public')).to eq({})
     expect(table.decide(ISIN: '123456789012', country: 'GB', class: 'private')).to eq(PAID: '123456789012', len: 12)
   end
+
+  it 'recognises in column method call conditions' do
+    data = <<~DATA
+      set/nil? :country, in :CUSIP,       in :ISIN,   set: class,    out :PAID, out: len,     if:
+      US,                ,                ,           :class.upcase,
+      US,                .present?,       ,           != PRIVATE,    :CUSIP,    :PAID.length, :len == 9
+      !=US,              ,                .present?,  != PRIVATE,    :ISIN,     :PAID.length, :len == 12
+      US,                =.present?,      ,           PRIVATE,       :CUSIP,    :PAID.length,
+      !=US,              ,                !.blank?,   PRIVATE,       :ISIN,     :PAID.length,
+    DATA
+
+    table = CSVDecision.parse(data)
+    expect(table.decide(CUSIP: '1234567890', class: 'Private')).to eq(PAID: '1234567890', len: 10)
+    expect(table.decide(CUSIP: '123456789', class: 'Public')).to eq(PAID: '123456789', len: 9)
+    expect(table.decide(ISIN: '123456789', country: 'GB', class: 'public')).to eq({})
+    expect(table.decide(ISIN: '123456789012', country: 'GB', class: 'private')).to eq(PAID: '123456789012', len: 12)
+  end
 end

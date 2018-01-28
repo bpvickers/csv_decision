@@ -1,3 +1,8 @@
+## v0.4.0, 28 January 2018.
+*Additions*
+- Input columns may now use 0-arity Ruby methods to implement conditional logic.
+For example `.present?` or `nil?`. Negation is also supported - e.g., `!.nil?`.
+
 ## v0.3.2, 28 January 2018.
 *Changes*
 - Refactor code and update documentation.
