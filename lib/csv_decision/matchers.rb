@@ -75,14 +75,14 @@ module CSVDecision
     # Symbols used for inequality
     INEQUALITY = '!=|!'
 
-    # Match string for inequality
+    # Match Regexp for inequality
     INEQUALITY_RE = regexp(INEQUALITY)
 
     # Equality, cell constants and functions specified by prefixing the value with
     # one of these 3 symbols.
     EQUALS = '==|:=|='
 
-    # Match string for equality
+    # Match Regexp for equality
     EQUALS_RE = regexp(EQUALS)
 
     # Method names are stricter than CSV column names.
