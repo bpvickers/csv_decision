@@ -1,3 +1,8 @@
+## v0.4.1, 10 February 2018.
+*Additions*
+- For consistency, input columns may now use the form `!nil?` to negate 0-arity Ruby methods.
+(Typical SME users can be somewhat lax with syntax.)
+
 ## v0.4.0, 28 January 2018.
 *Additions*
 - Input columns may now use 0-arity Ruby methods to implement conditional logic.
