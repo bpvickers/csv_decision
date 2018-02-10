@@ -43,8 +43,7 @@ module CSVDecision
       private_class_method :proc
 
       def self.numeric?(match)
-        value = Matchers.to_numeric(match['value'])
-        return false unless value
+        return false unless (value = Matchers.to_numeric(match['value']))
 
         proc(function: value)
       end

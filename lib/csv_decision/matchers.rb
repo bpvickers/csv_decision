@@ -75,14 +75,14 @@ module CSVDecision
     # Symbols used for inequality
     INEQUALITY = '!=|!'
 
-    # Match string for inequality
+    # Match Regexp for inequality
     INEQUALITY_RE = regexp(INEQUALITY)
 
     # Equality, cell constants and functions specified by prefixing the value with
     # one of these 3 symbols.
     EQUALS = '==|:=|='
 
-    # Match string for equality
+    # Match Regexp for equality
     EQUALS_RE = regexp(EQUALS)
 
     # Method names are stricter than CSV column names.
@@ -122,6 +122,20 @@ module CSVDecision
 
       return value.to_i if match['decimal'] == ''
       BigDecimal(value.chomp('.'))
+    end
+
+    # Compare one object with another if they both respond to the compare method.
+    #
+    # @param lhs [Object]
+    # @param compare [Object]
+    # @param rhs [Object]
+    # @return [nil, Boolean]
+    def self.compare?(lhs:, compare:, rhs:)
+      # Is the rhs the same class or a superclass of lhs, and does rhs respond to the
+      # compare method?
+      return lhs.send(compare, rhs) if lhs.is_a?(rhs.class) && rhs.respond_to?(compare)
+
+      nil
     end
 
     # Parse the supplied input columns for the row supplied using an array of matchers.

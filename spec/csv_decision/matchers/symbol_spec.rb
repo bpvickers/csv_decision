@@ -42,7 +42,7 @@ describe CSVDecision::Matchers::Symbol do
         { cell:  '<=:col', value:  0,  hash: { col:  1 },  result: true },
         { cell:  '<=:col', value:  1,  hash: { col:  0 },  result: false },
         { cell:  '<=:col', value:  1,  hash: { col:  1 },  result: true },
-        { cell:  '<=:col', value: '1', hash: { col:  1 },  result: false },
+        { cell:  '<=:col', value: '1', hash: { col:  1 },  result: nil },
         { cell:  '<=:col', value: '1', hash: { col: '1' }, result: true },
       ]
       examples.each do |ex|
@@ -55,7 +55,7 @@ describe CSVDecision::Matchers::Symbol do
     end
 
     context 'does not match a function' do
-      data = ['1', 'abc', 'abc.*def', '-1..1', '0...3', ':= false', ':= lookup?']
+      data = ['1', 'abc', 'abc.*def', '-1..1', '0...3', ':= false()', ':= lookup?()']
 
       data.each do |cell|
         it "cell #{cell} is not a function" do

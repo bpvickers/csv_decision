@@ -20,10 +20,10 @@ producing a decision as an output hash.
  
 Typical "business logic" is notoriously illogical - full of corner cases and one-off 
 exceptions. 
-A decision table can express data-based decisions in a way that comes more naturally 
-to subject matter experts, who typically prefer spreadsheet models. 
-Business logic may then be encapsulated, avoiding the need to write tortuous 
-conditional expressions in Ruby that draw the ire of `rubocop` and its ilk.
+A decision table can express data-based decisions in a way that comes naturally 
+to subject matter experts, who typically use spreadsheet models. 
+Business logic can be encapsulated in a table, avoiding the need for tortuous conditional 
+expressions.
 
 This gem and the examples below take inspiration from 
 [rufus/decision](https://github.com/jmettraux/rufus-decision).
@@ -75,7 +75,7 @@ the world, except for `America` and `Europe`, *must* come after his colleagues
 `Charlie` and `Donald`. `Zach` has been placed last, catching all the input combos
 not matching any other row.
 
-Here is the example as code:
+Here's the example as code:
  
  ```ruby
   # Valid CSV string
@@ -127,7 +127,7 @@ Complete documentation of all table parameters is in the code - see
  * Either returns the first matching row as a hash (default), or accumulates all matches as an 
  array of hashes (i.e., `parse` option `first_match: false` or CSV file option `accumulate`).
  * Fast decision-time performance (see `benchmarks` folder). Automatically indexes all 
- text-only columns that do not contain any empty strings.
+ constants-only columns that do not contain any empty strings.
  * In addition to simple strings, `csv_decision` can match basic Ruby constants (e.g., `=nil`), 
  regular expressions (e.g., `=~ on|off`), comparisons (e.g., `> 100.0` ) and 
  Ruby-style ranges (e.g., `1..10`)
@@ -198,7 +198,8 @@ may be simplified to:
  ```
 These comparison operators are also supported: `!=`, `>`, `>=`, `<`, `<=`. 
 In addition, you can also apply a Ruby 0-arity method - e.g., `.present?` or `.nil?`. Negation is
-also supported - e.g., `!.nil?`.
+also supported - e.g., `!.nil?`. Note that `.nil?` can also be written as `:= nil?`, and `!.nil?`
+as `:= !nil?`, depending on preference.
 
 For more simple examples see `spec/csv_decision/examples_spec.rb`.
 
