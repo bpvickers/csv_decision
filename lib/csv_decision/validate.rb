@@ -10,7 +10,7 @@ module CSVDecision
   # @api private
   module Validate
     # These column types do not need a name.
-    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if]).freeze
+    COLUMN_TYPE_ANONYMOUS = Set.new(%i[guard if path]).freeze
     private_constant :COLUMN_TYPE_ANONYMOUS
 
     # Validate a column header cell and return its type and name.

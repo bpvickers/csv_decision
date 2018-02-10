@@ -38,7 +38,7 @@ module CSVDecision
     attr_accessor :index
 
     # @return [CSVDecision::Path] The array of paths built on one or more input columns.
-    attr_accessor :path
+    attr_accessor :paths
 
     # @return [Hash] All options, explicitly set or defaulted, used to parse the table.
     attr_accessor :options
@@ -83,7 +83,7 @@ module CSVDecision
     def initialize
       @file = nil
       @index = nil
-      @path = []
+      @paths = []
       @options = nil
       @outs_functions = nil
       @outs_rows = []
@@ -95,7 +95,7 @@ module CSVDecision
     private
 
     def decision(input:, symbolize_keys:)
-      if @path.empty?
+      if @paths.empty?
         Decision.make(table: self, input: input, symbolize_keys: symbolize_keys)
       else
         Scan.table(table: self, input: input, symbolize_keys: symbolize_keys)
