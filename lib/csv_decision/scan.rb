@@ -16,9 +16,11 @@ module CSVDecision
     #   OK to mutate the input hash. Otherwise a copy of the input hash is symbolized.
     # @return [Hash{Symbol=>Object}] Decision result.
     def self.table(table:, input:, symbolize_keys:)
+      data = symbolize_keys ? input.deep_symbolize_keys : input
+      decision = Decision.new(table: table)
       scan_table(table: table,
-                 input: symbolize_keys ? input.deep_symbolize_keys : input,
-                 decision: Decision.new(table: table))
+                 input: data,
+                 decision: decision)
     end
 
     def self.scan_table(table:, input:, decision:)

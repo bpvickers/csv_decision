@@ -81,11 +81,7 @@ module CSVDecision
 
     # @api private
     def initialize
-      @file = nil
-      @index = nil
       @paths = []
-      @options = nil
-      @outs_functions = nil
       @outs_rows = []
       @if_rows = []
       @rows = []
@@ -95,7 +91,7 @@ module CSVDecision
     private
 
     def decision(input:, symbolize_keys:)
-      if @paths.empty?
+      if columns.paths.empty?
         Decision.make(table: self, input: input, symbolize_keys: symbolize_keys)
       else
         Scan.table(table: self, input: input, symbolize_keys: symbolize_keys)

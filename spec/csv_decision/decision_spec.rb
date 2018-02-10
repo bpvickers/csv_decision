@@ -12,9 +12,7 @@ describe CSVDecision::Decision do
 
     table = CSVDecision.parse(data)
 
-    input = { input: 'input0', input1: 'input1' }
-
-    decision = CSVDecision::Decision.new(table: table, input: input)
+    decision = CSVDecision::Decision.new(table: table)
 
     expect(decision).to be_a(CSVDecision::Decision)
   end

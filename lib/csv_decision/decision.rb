@@ -21,7 +21,8 @@ module CSVDecision
 
       # The decision object collects the results of the search and
       # calculates the final result
-      decision = Decision.new(table: table, input: input)
+      decision = Decision.new(table: table)
+      decision.reinitialize(input: input)
 
       # Use the table's index if present
       table.index ? decision.index_scan : decision.table_scan
@@ -29,14 +30,12 @@ module CSVDecision
 
     # @param table [CSVDecision::Table] Decision table being processed.
     # @param input [Hash{Symbol=>Object}] Input hash data structure.
-    def initialize(table:, input:)
+    def initialize(table:)
       # The result object is a hash of values, and each value will be an array if this is
       # a multi-row result for the +first_match: false+ option.
       @result = Result.new(table: table)
       @first_match = table.options[:first_match]
       @table = table
-
-      reinitialize(input: input)
     end
 
     # @param input [Hash{Symbol=>Object}] Input hash data structure.

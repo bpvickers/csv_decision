@@ -592,5 +592,23 @@ describe CSVDecision::Table do
         end
       end
     end
+
+    xit 'scans the input hash paths' do
+      data = <<~DATA
+        path:,   path:,    in :type_cd, out :value, if:
+        header,  ,         !nil?,       :type_cd,   :value.present?
+        payload, ,         !nil?,       :type_cd,   :value.present?
+        payload, ref_data, ,            :type_id,   :value.present?
+      DATA
+      table = CSVDecision.parse(data)
+
+      input = {
+        header: { id: 1, type_cd: 'BUY' },
+        payload: { tran_id: 9,
+                   ref_data: { account_id: 5, type_id: 'BUYL' }
+        }
+      }
+      expect(table.decide(input)).to eq(value: 'BUY')
+    end
   end
 end
