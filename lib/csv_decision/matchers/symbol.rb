@@ -33,8 +33,10 @@ module CSVDecision
       }.freeze
       private_constant :EQUALITY
 
-      def self.compare_proc(compare)
-        proc { |symbol, value, hash| Matchers.compare?(lhs: value, compare: compare, rhs: hash[symbol]) }
+      def self.compare_proc(sym)
+        proc do |symbol, value, hash|
+          Matchers.compare?(lhs: value, compare: sym, rhs: hash[symbol])
+        end
       end
       private_class_method :compare_proc
 
@@ -80,16 +82,28 @@ module CSVDecision
       end
       private_class_method :comparison
 
-      # E.g., !.nil?, we get comparator: !, name: nil?
+      # E.g., !.nil?, we get comparator: !, name: nil?, type: .
       def self.method_call(comparator:, name:, type:)
-        equality = EQUALS_RE.match?(comparator)
-        inequality = !equality && INEQUALITY_RE.match?(comparator)
-        return false unless equality || inequality
+        negate = negated_comparator?(comparator: comparator)
+        return false if negate.nil?
 
-        negate = type == '!' ? !inequality : inequality
+        # Check for double negation - e.g., != !blank?
+        negate = type == '!' ? !negate : negate
         method_function(name: name, negate: negate)
       end
       private_class_method :method_call
+
+      def self.negated_comparator?(comparator:)
+        # Do we have an equality comparator?
+        if EQUALS_RE.match?(comparator)
+          false
+
+        # If do not have equality, do we have inequality?
+        elsif INEQUALITY_RE.match?(comparator)
+          true
+        end
+      end
+      private_class_method :negated_comparator?
 
       # E.g., !.nil?, we get comparator: !, name: nil?
       def self.method_function(name:, negate:)
