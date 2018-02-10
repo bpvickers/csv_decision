@@ -571,7 +571,7 @@ describe CSVDecision::Table do
             ,             :=present?, string,   none,      0
             .blank?,      ,           string,   none,      :=nil
             ,             !.blank?,   string,   one,       1
-            = !present?,  ,           string,   one,       :=nil
+            !present?,    ,           string,   one,       :=nil
           DATA
         },
         { example: 'evaluates multi-column index CSV file',
