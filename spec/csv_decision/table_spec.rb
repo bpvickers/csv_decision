@@ -568,7 +568,7 @@ describe CSVDecision::Table do
             != .present?, ,           integer,  none,      :=nil
             =.present?,   ,           integer,  one,       :=1
             ==.blank?,    ,           integer,  one,       :=nil
-            ,             :=present?, string,   none,      0
+            ,             != !blank?, string,   none,      0
             .blank?,      ,           string,   none,      :=nil
             ,             !.blank?,   string,   one,       1
             !present?,    ,           string,   one,       :=nil
