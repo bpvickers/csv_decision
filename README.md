@@ -20,10 +20,10 @@ producing a decision as an output hash.
  
 Typical "business logic" is notoriously illogical - full of corner cases and one-off 
 exceptions. 
-A decision table can express data-based decisions in a way that comes more naturally 
-to subject matter experts, who typically prefer spreadsheet models. 
-Business logic may then be encapsulated, avoiding the need to write tortuous 
-conditional expressions in Ruby that draw the ire of `rubocop` and its ilk.
+A decision table can express data-based decisions in a way that comes naturally 
+to subject matter experts, who typically use spreadsheet models. 
+Business logic can be encapsulated in a table, avoiding the need for tortuous conditional 
+expressions.
 
 This gem and the examples below take inspiration from 
 [rufus/decision](https://github.com/jmettraux/rufus-decision).
@@ -75,7 +75,7 @@ the world, except for `America` and `Europe`, *must* come after his colleagues
 `Charlie` and `Donald`. `Zach` has been placed last, catching all the input combos
 not matching any other row.
 
-Here is the example as code:
+Here's the example as code:
  
  ```ruby
   # Valid CSV string
