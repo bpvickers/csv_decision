@@ -22,20 +22,22 @@ module CSVDecision
     attr_reader :multi_result
 
     # (see Decision.initialize)
-    def initialize(table:, input:)
-      # Attributes hash contains the output decision key value pairs
-      @attributes = {}
-
+    def initialize(table:)
       @outs = table.columns.outs
       @outs_functions = table.outs_functions
       @if_columns = table.columns.ifs
+      @input_keys = table.columns.input_keys
+    end
 
+    def reinitialize(input:)
+      # Attributes hash contains the output decision key value pairs
+      @attributes = {}
       # Partial result always copies in the input hash for calculating output functions.
       # Note that these input key values will not be mutated, as output columns can never
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = input.slice(*table.columns.input_keys) if @outs_functions
+      @partial_result = input.slice(*@input_keys) if @outs_functions
     end
 
     # Common case for building a single row result is just copying output column values to the

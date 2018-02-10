@@ -26,6 +26,7 @@ module CSVDecision
   autoload :Options,    'csv_decision/options'
   autoload :Parse,      'csv_decision/parse'
   autoload :Result,     'csv_decision/result'
+  autoload :Scan,       'csv_decision/scan'
   autoload :ScanRow,    'csv_decision/scan_row'
   autoload :Table,      'csv_decision/table'
   autoload :Validate,   'csv_decision/validate'

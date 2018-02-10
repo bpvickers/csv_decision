@@ -13,10 +13,23 @@ module CSVDecision
     def self.parse(table:, input:, symbolize_keys:)
       validate(input)
 
-      parsed_input = parse_input(table: table, input: symbolize_keys ? input.symbolize_keys : input)
+      parsed_input =
+        parse_data(table: table, input: symbolize_keys ? input.symbolize_keys : input)
 
       parsed_input[:key] = parse_key(table: table, hash: parsed_input[:hash]) if table.index
       parsed_input
+    end
+
+    # @param table [CSVDecision::Table] Decision table.
+    # @param input [Hash] Input hash (keys may or may not be symbolized)
+    # @return [Hash{Symbol=>Object}]
+    def self.parse_data(table:, input:)
+      defaulted_columns = table.columns.defaults
+
+      # Code path optimized for no defaults
+      return parse_cells(table: table, input: input) if defaulted_columns.empty?
+
+      parse_defaulted(table: table, input: input, defaulted_columns: defaulted_columns)
     end
 
     def self.parse_key(table:, hash:)
@@ -48,16 +61,6 @@ module CSVDecision
       raise ArgumentError, 'input must be a non-empty hash'
     end
     private_class_method :validate
-
-    def self.parse_input(table:, input:)
-      defaulted_columns = table.columns.defaults
-
-      # Code path optimized for no defaults
-      return parse_cells(table: table, input: input) if defaulted_columns.empty?
-
-      parse_defaulted(table: table, input: input, defaulted_columns: defaulted_columns)
-    end
-    private_class_method :parse_input
 
     def self.parse_cells(table:, input:)
       scan_cols = {}
