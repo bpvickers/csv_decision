@@ -27,11 +27,8 @@ module CSVDecision
 
       # (see Matcher#matches?)
       def self.matches?(cell)
-        match = COMPARISON.match(cell)
-        return false unless match
-
-        numeric_cell = Matchers.to_numeric(match['value'])
-        return false unless numeric_cell
+        return false unless (match = COMPARISON.match(cell))
+        return false unless (numeric_cell = Matchers.to_numeric(match['value']))
 
         comparator = match['comparator']
         Matchers::Proc.new(type: :proc,

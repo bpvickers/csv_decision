@@ -41,7 +41,6 @@ module CSVDecision
         return false if value.blank?
 
         # We cannot do a regexp comparison against a symbol name.
-        # (Maybe we should add this feature?)
         return if value[0] == ':'
 
         # If no comparator then the implicit option must be on

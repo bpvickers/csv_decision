@@ -42,7 +42,7 @@ describe CSVDecision::Matchers::Symbol do
         { cell:  '<=:col', value:  0,  hash: { col:  1 },  result: true },
         { cell:  '<=:col', value:  1,  hash: { col:  0 },  result: false },
         { cell:  '<=:col', value:  1,  hash: { col:  1 },  result: true },
-        { cell:  '<=:col', value: '1', hash: { col:  1 },  result: false },
+        { cell:  '<=:col', value: '1', hash: { col:  1 },  result: nil },
         { cell:  '<=:col', value: '1', hash: { col: '1' }, result: true },
       ]
       examples.each do |ex|

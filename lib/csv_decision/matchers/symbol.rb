@@ -34,7 +34,7 @@ module CSVDecision
       private_constant :EQUALITY
 
       def self.compare_proc(compare)
-        proc { |symbol, value, hash| compare?(lhs: value, compare: compare, rhs: hash[symbol]) }
+        proc { |symbol, value, hash| Matchers.compare?(lhs: value, compare: compare, rhs: hash[symbol]) }
       end
       private_class_method :compare_proc
 
@@ -73,14 +73,6 @@ module CSVDecision
       }.freeze
       private_constant :COMPARE
 
-      def self.compare?(lhs:, compare:, rhs:)
-        # Is the rhs a superclass of lhs, and does rhs respond to the compare method?
-        return lhs.public_send(compare, rhs) if lhs.is_a?(rhs.class) && rhs.respond_to?(compare)
-
-        false
-      end
-      private_class_method :compare?
-
       # E.g., > :col, we get comparator: >, name: col
       def self.comparison(comparator:, name:)
         function = COMPARE[comparator]
@@ -113,8 +105,8 @@ module CSVDecision
         if type == ':'
           comparison(comparator: comparator, name: name)
 
-          # Method call - e.g, .blank? or !.present?
-          # Can also take the forms: := .blank? or !=.present?
+        # Method call - e.g, .blank? or !.present?
+        # Can also take the forms: := .blank? or !=.present?
         else
           method_call(comparator: comparator, name: name, type: type || '.')
         end

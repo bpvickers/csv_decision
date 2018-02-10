@@ -124,6 +124,20 @@ module CSVDecision
       BigDecimal(value.chomp('.'))
     end
 
+    # Compare one object with another if they both respond to the compare method.
+    #
+    # @param lhs [Object]
+    # @param compare [Object]
+    # @param rhs [Object]
+    # @return [nil, Boolean]
+    def self.compare?(lhs:, compare:, rhs:)
+      # Is the rhs the same class or a superclass of lhs, and does rhs respond to the
+      # compare method?
+      return lhs.send(compare, rhs) if lhs.is_a?(rhs.class) && rhs.respond_to?(compare)
+
+      nil
+    end
+
     # Parse the supplied input columns for the row supplied using an array of matchers.
     #
     # @param columns [Hash{Integer=>Columns::Entry}] Input columns hash.

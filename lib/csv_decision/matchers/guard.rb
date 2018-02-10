@@ -69,20 +69,11 @@ module CSVDecision
       }.freeze
       private_constant :SYMBOL_PROC
 
-      def self.compare?(lhs:, compare:, rhs:)
-        # Is the rhs the same class or a superclass of lhs, and does rhs respond to the
-        # compare method?
-        return lhs.send(compare, rhs) if lhs.is_a?(rhs.class) && rhs.respond_to?(compare)
-
-        nil
-      end
-      private_class_method :compare?
-
       def self.non_numeric(method)
         proc = FUNCTION[method]
         return proc if proc
 
-        proc { |symbol, value, hash| compare?(lhs: hash[symbol], compare: method, rhs: value) }
+        proc { |symbol, value, hash| Matchers.compare?(lhs: hash[symbol], compare: method, rhs: value) }
       end
       private_class_method :non_numeric
 
