@@ -230,9 +230,9 @@ context 'simple examples' do
         id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
         metrics: { service_name: 'Trading', receive_time: '12:00' }
       },
-      payload: { tran_id: 9,
-                 amount: '100.00',
-                 ref_data: { account_id: '5010', type_id: 'BUYL' }
+      payload: {
+        tran_id: 9, amount: '100.00',
+        ref_data: { account_id: '5010', type_id: 'BUYL' }
       }
     }
 
