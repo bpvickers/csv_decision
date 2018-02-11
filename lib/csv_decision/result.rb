@@ -158,11 +158,16 @@ module CSVDecision
         cell = row[col]
         next unless cell.is_a?(Matchers::Proc)
 
-        @attributes[column.name] = cell.function[@partial_result]
-
-        # Do not add if: columns to the partial result
-        @partial_result[column.name] = @attributes[column.name] unless column.type == :if
+        eval_out_proc(cell: cell, column_name: column.name, column_type: column.type)
       end
+    end
+
+    def eval_out_proc(cell:, column_name:, column_type:)
+      @attributes[column_name] = cell.function[@partial_result]
+
+      # Do not add if: columns to the partial result
+      return if column_type == :if
+      @partial_result[column_name] = @attributes[column_name]
     end
 
     def partial_result(index)
