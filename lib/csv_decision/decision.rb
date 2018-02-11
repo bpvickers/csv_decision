@@ -27,6 +27,9 @@ module CSVDecision
     # @return [Boolean] True if a first match decision table.
     attr_reader :first_match
 
+    # @return [CSVDecision::Table] Decision table object.
+    attr_reader :table
+
     # @param table [CSVDecision::Table] Decision table being processed.
     def initialize(table:)
       # The result object is a hash of values, and each value will be an array if this is

@@ -16,43 +16,54 @@ module CSVDecision
     #   OK to mutate the input hash. Otherwise a copy of the input hash is symbolized.
     # @return [Hash{Symbol=>Object}] Decision result.
     def self.table(table:, input:, symbolize_keys:)
-      scan_table(
-        table: table,
-        input: symbolize_keys ? input.deep_symbolize_keys : input,
-        decision: Decision.new(table: table),
-        input_hashes: InputHashes.new
-      )
+      input = symbolize_keys ? input.deep_symbolize_keys : input
+      decision = Decision.new(table: table)
+      input_hashes = InputHashes.new
+
+      if table.options[:first_match]
+        scan_first_match(input: input, decision: decision, input_hashes: input_hashes)
+      else
+        scan_accumulate(input: input, decision: decision, input_hashes: input_hashes)
+      end
     end
 
-    def self.scan_table(table:, input:, decision:, input_hashes:)
+    def self.scan_first_match(input:, decision:, input_hashes:)
+      decision.table.paths.each do |path, rows|
+        data = input_hashes.data(decision: decision, path: path, input: input)
+        next if data == {}
+
+        result = decision.index_scan_first_match(
+          scan_cols: data[:scan_cols],
+          hash: data[:hash],
+          index_rows: Array(rows)
+        )
+        return result if result != {}
+      end
+
+      {}
+    end
+    private_class_method :scan_first_match
+
+    def self.scan_accumulate(input:, decision:, input_hashes:)
       # Final result
       result = {}
 
-      table.paths.each do |path, rows|
-        data = input_hashes.data(table: table, path: path, input: input)
+      decision.table.paths.each do |path, rows|
+        data = input_hashes.data(decision: decision, path: path, input: input)
         next if data == {}
 
-        decision.input(data)
-
-        result = scan(rows: rows, input: data, final: result, decision: decision)
-        return result if table.options[:first_match] && !result.empty?
+        result = scan(rows: Array(rows), input: data, final: result, decision: decision)
       end
 
       result
     end
-    private_class_method :scan_table
+    private_class_method :scan_accumulate
 
     def self.scan(rows:, input:, final:, decision:)
-      rows = Array(rows)
-      hash = input[:hash]
-      scan_cols = input[:scan_cols]
-      if decision.first_match
-        result = decision.index_scan_first_match(scan_cols: scan_cols, hash: hash, index_rows: rows)
-        return result unless result.empty?
-      else
-        result = decision.index_scan_accumulate(scan_cols: scan_cols, hash: hash, index_rows: rows)
-        final = accumulate(final: final, result: result) if result
-      end
+      result = decision.index_scan_accumulate(scan_cols: input[:scan_cols],
+                                              hash: input[:hash],
+                                              index_rows: rows)
+      final = accumulate(final: final, result: result) if result
 
       final
     end
@@ -75,14 +86,24 @@ module CSVDecision
       # @param path [Array<Symbol] Path for the input hash.
       # @param input [Hash{Symbol=>Object}] Input hash.
       # @return [Hash{Symbol=>Object}] Parsed input hash.
-      def data(table:, path:, input:)
+      def data(decision:, path:, input:)
+        result = input(decision: decision, path: path, input: input)
+
+        decision.input(result) unless result == {}
+
+        result
+      end
+
+      private
+
+      def input(decision:, path:, input:)
         return @input_hashes[path] if @input_hashes.key?(path)
 
         # Use the path - an array of symbol keys, to dig out the input sub-hash
         hash = path.empty? ? input : input.dig(*path)
 
         # Parse and transform the hash supplied as input
-        data = hash.blank? ? {} : Input.parse_data(table: table, input: hash)
+        data = hash.blank? ? {} : Input.parse_data(table: decision.table, input: hash)
 
         # Cache the parsed input hash data for this path
         @input_hashes[path] = data
