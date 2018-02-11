@@ -609,6 +609,7 @@ describe CSVDecision::Table do
         }
       }
       expect(table.decide(input)).to eq(value: 'BUY')
+      expect(table.decide!(input)).to eq(value: 'BUY')
 
       input = {
         header: { id: 1 },
@@ -617,6 +618,7 @@ describe CSVDecision::Table do
         }
       }
       expect(table.decide(input)).to eq(value: 'BUYL')
+      expect(table.decide!(input)).to eq(value: 'BUYL')
 
       input = {
         payload: { tran_id: 9,
@@ -651,6 +653,7 @@ describe CSVDecision::Table do
       result = { value: %w[Client AAPL Trading 100.00 5010 12:00],
                  key: %w[source_nm client_nm service_nm trade_am account_id receive_tm] }
       expect(table.decide(input)).to eq result
+      expect(table.decide!(input)).to eq result
 
       input = {
         header: {
@@ -662,8 +665,11 @@ describe CSVDecision::Table do
                    ref_data: { type_id: 'BUYL' }
         }
       }
-      result = { key: %w[source_nm service_nm trade_am], value: %w[Client Trading 100.00] }
+      result = { key: %w[source_nm service_nm trade_am],
+                 value: %w[Client Trading 100.00] }
+
       expect(table.decide(input)).to eq result
+      expect(table.decide!(input)).to eq result
     end
   end
 end
