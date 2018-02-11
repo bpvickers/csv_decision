@@ -269,6 +269,35 @@ table.decide(ISIN: '123456789012', country: 'GB', class: 'private') #=> {PAID: '
 
 ```
 
+#### Input `path` columns
+
+For hashes that contain sub-hashes, it's possible to specify a path for the purposes
+of matching. (Arrays are currently not supported.)
+
+```ruby
+data = <<~DATA
+  path:,   path:,    out :value
+  header,  ,         :source_name
+  header,  metrics,  :service_name
+  payload, ,         :amount
+  payload, ref_data, :account_id
+DATA
+table = CSVDecision.parse(data, first_match: false)
+
+input = {
+  header: { 
+    id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
+    metrics: { service_name: 'Trading', receive_time: '12:00' } 
+  },
+  payload: { 
+    tran_id: 9, amount: '100.00',
+    ref_data: { account_id: '5010', type_id: 'BUYL' } 
+  }
+}
+
+table.decide(input) #=> { value: %w[Client Trading 100.00 5010] }
+```
+
 ### Testing
  
  `csv_decision` includes thorough [RSpec](http://rspec.info) tests:

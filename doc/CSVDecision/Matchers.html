@@ -94,8 +94,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/csv_decision/matchers.rb<span class="defines">,<br />
-  lib/csv_decision.rb,<br /> lib/csv_decision/matchers/guard.rb,<br /> lib/csv_decision/matchers/range.rb,<br /> lib/csv_decision/matchers/symbol.rb,<br /> lib/csv_decision/matchers/numeric.rb,<br /> lib/csv_decision/matchers/pattern.rb,<br /> lib/csv_decision/matchers/constant.rb,<br /> lib/csv_decision/matchers/function.rb</span>
+    <dd>lib/csv_decision.rb<span class="defines">,<br />
+  lib/csv_decision/matchers.rb,<br /> lib/csv_decision/matchers/guard.rb,<br /> lib/csv_decision/matchers/range.rb,<br /> lib/csv_decision/matchers/symbol.rb,<br /> lib/csv_decision/matchers/numeric.rb,<br /> lib/csv_decision/matchers/pattern.rb,<br /> lib/csv_decision/matchers/constant.rb,<br /> lib/csv_decision/matchers/function.rb</span>
 </dd>
   </dl>
   
@@ -178,7 +178,7 @@
   You should avoid using this constant if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Match string for inequality</p>
+<p>Match Regexp for inequality</p>
 
 
   </div>
@@ -219,7 +219,7 @@ with one of these 3 symbols.</p>
   You should avoid using this constant if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Match string for equality</p>
+<p>Match Regexp for equality</p>
 
 
   </div>
@@ -350,6 +350,30 @@ decimal point.</p>
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#compare%3F-class_method" title="compare? (class method)">.<strong>compare?</strong>(lhs:, compare:, rhs:)  &#x21d2; nil, Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compare one object with another if they both respond to the compare method.</p>
+</div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -614,14 +638,14 @@ nil.</p>
       <pre class="lines">
 
 
-153
-154
-155
-156
-157</pre>
+167
+168
+169
+170
+171</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 153</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 167</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_matchers'>matchers</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:matchers</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_klass'>klass</span><span class='op'>|</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -688,12 +712,12 @@ nil.</p>
       <pre class="lines">
 
 
-147
-148
-149</pre>
+161
+162
+163</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 161</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ins'>ins</span>
   <span class='ivar'>@ins</span>
@@ -753,12 +777,12 @@ nil.</p>
       <pre class="lines">
 
 
-150
-151
-152</pre>
+164
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 150</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outs'>outs</span>
   <span class='ivar'>@outs</span>
@@ -776,7 +800,110 @@ nil.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="normalize_operator-class_method">
+  <h3 class="signature first" id="compare?-class_method">
+  
+    .<strong>compare?</strong>(lhs:, compare:, rhs:)  &#x21d2; <tt>nil</tt>, <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Compare one object with another if they both respond to the compare method.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>lhs</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>compare</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rhs</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>, <tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+133
+134
+135
+136
+137
+138
+139</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 133</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_compare?'>compare?</span><span class='lparen'>(</span><span class='label'>lhs:</span><span class='comma'>,</span> <span class='label'>compare:</span><span class='comma'>,</span> <span class='label'>rhs:</span><span class='rparen'>)</span>
+  <span class='comment'># Is the rhs the same class or a superclass of lhs, and does rhs respond to the
+</span>  <span class='comment'># compare method?
+</span>  <span class='kw'>return</span> <span class='id identifier rubyid_lhs'>lhs</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_compare'>compare</span><span class='comma'>,</span> <span class='id identifier rubyid_rhs'>rhs</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_lhs'>lhs</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='id identifier rubyid_rhs'>rhs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_rhs'>rhs</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id identifier rubyid_compare'>compare</span><span class='rparen'>)</span>
+
+  <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="normalize_operator-class_method">
   
     .<strong>normalize_operator</strong>(operator)  &#x21d2; <tt>String</tt> 
   
@@ -1024,21 +1151,21 @@ matchers.</p>
       <pre class="lines">
 
 
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144</pre>
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 133</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 147</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>matchers:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='comment'># Build an array of column indexes requiring simple constant matches,
@@ -1311,12 +1438,12 @@ nil.</p>
       <pre class="lines">
 
 
-164
-165
-166</pre>
+178
+179
+180</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 164</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 178</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_ins'>parse_ins</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@ins</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1410,12 +1537,12 @@ nil.</p>
       <pre class="lines">
 
 
-173
-174
-175</pre>
+187
+188
+189</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 173</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/matchers.rb', line 187</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_outs'>parse_outs</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>row:</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="CSVDecision::Matchers (class)">Matchers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="#parse-class_method" title="CSVDecision::Matchers.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='label'>matchers:</span> <span class='ivar'>@outs</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
@@ -1430,7 +1557,7 @@ nil.</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Jan 28 14:41:48 2018 by
+  Generated on Sun Feb 11 10:26:07 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
