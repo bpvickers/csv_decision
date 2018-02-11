@@ -1,3 +1,7 @@
+## v0.5.0, 11 February 2018.
+*Additions*
+- Add the ability to specify an input hash path using path: column types.
+
 ## v0.4.1, 10 February 2018.
 *Additions*
 - For consistency, input columns may now use the form `!nil?` to negate 0-arity Ruby methods.
