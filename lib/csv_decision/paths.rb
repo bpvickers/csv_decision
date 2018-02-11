@@ -31,6 +31,8 @@ module CSVDecision
       current_value
     end
 
+    # @param value [String] Cell value for the path: column.
+    # @return [nil, Symbol] Non-empty string converted to a symbol.
     def self.symbol(value)
       value.blank? ? nil : value.to_sym
     end

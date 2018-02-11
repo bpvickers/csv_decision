@@ -28,6 +28,10 @@ module CSVDecision
       @table = table
     end
 
+    # Initialize the object for new input data.
+    #
+    # @param data [Hash{Symbol=>Object}] Input data hash.
+    # @return [void]
     def input(data)
       # Attributes hash contains the output decision key value pairs
       @attributes = {}
