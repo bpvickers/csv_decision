@@ -27,27 +27,31 @@ module CSVDecision
       # Final result
       final = {}
       input_hashes = InputHashes.new(table)
+      first_match = table.options[:first_match]
 
-      table.path.each do |path, rows|
+      table.paths.each do |path, rows|
         data = input_hashes.data(path: path, input: input)
-        decision.reinitialize(input: data)
+        next if data == {}
 
-        final = scan(rows: Array(rows), input: data, final: final)
+        decision.input(data)
+
+        final = scan(rows: rows, input: data, final: final, decision: decision)
+        return final if first_match && !final.empty?
       end
 
       final
     end
 
-    def self.scan(rows:, input:, final:)
+    def self.scan(rows:, input:, final:, decision:)
       rows = Array(rows)
       hash = input[:hash]
       scan_cols = input[:scan_cols]
-      if table.first_match
+      if decision.first_match
         result = decision.index_scan_first_match(scan_cols: scan_cols, hash: hash, index_rows: rows)
         return result unless result.empty?
       else
         result = decision.index_scan_accumulate(scan_cols: scan_cols, hash: hash, index_rows: rows)
-        final = accumulate(final: final, result: result)
+        final = accumulate(final: final, result: result) if result
       end
 
       final
@@ -70,9 +74,13 @@ module CSVDecision
       def data(path:, input:)
         return @input_hashes[path] if @input_hashes.key?(path)
 
-        # Parse and transform the hash supplied as input
+        # Use the path - an array of symbol keys, to dig out the input sub-hash
         hash = path.empty? ? input : input.dig(*path)
-        data = Input.parse_data(table: @table, input: hash)
+
+        # Parse and transform the hash supplied as input
+        data = hash.blank? ? {} : Input.parse_data(table: @table, input: hash)
+
+        # Cache the parsed input hash data for this path
         @input_hashes[path] = data
       end
     end
