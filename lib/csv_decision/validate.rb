@@ -25,6 +25,9 @@ module CSVDecision
       column_type = match['type']&.downcase&.to_sym
       column_name = column_name(type: column_type, name: match['name'], index: index)
 
+      # Format column types have a qualified name
+      column_name = "format:#{column_name}".to_sym if column_type == :format
+
       [column_type, column_name]
     rescue CellValidationError => exp
       raise CellValidationError, "header column '#{cell}' is not valid as the #{exp.message}"

@@ -221,7 +221,7 @@ describe CSVDecision::Columns do
     expect(table.columns.input_keys).to eq %i[country class CUSIP ISIN]
   end
 
-  it 'recognises the path: columns' do
+  it 'recognises path: columns' do
     data = <<~DATA
       path:,   path:,    in :type_cd, out :value, if:
       header,  ,         !nil?,       :type_cd,   :value.present?
@@ -233,5 +233,23 @@ describe CSVDecision::Columns do
     expect(table.columns.input_keys).to eq %i[type_cd type_id]
     expect(table.columns.paths[0].to_h).to eq(name: nil, eval: false, type: :path, set_if: nil)
     expect(table.columns.paths[1].to_h).to eq(name: nil, eval: false, type: :path, set_if: nil)
+  end
+
+  it 'recognises format: columns' do
+    module TestFormatter
+      def self.format(value:, format:)
+        value[0..format - 1]
+      end
+    end
+
+    data = <<~DATA
+      out :value, format:value, out: len,      if:
+      :type_cd,   := 3,         :value.length, :len == 3
+    DATA
+
+    table = CSVDecision.parse(data)
+
+    expect(table.columns.outs[0].to_h).to eq(name: :value, eval: true, type: :out, set_if: nil)
+    expect(table.columns.outs[1].to_h).to eq(name: :'format:value', eval: nil, type: :format, set_if: nil)
   end
 end

@@ -119,6 +119,10 @@ module CSVDecision
       #   This is actually just a subset of :outs.
       attr_accessor :paths
 
+      # @return [Hash{Integer=>Symbol}] All format columns.
+      #   This is actually just a subset of :outs.
+      attr_accessor :formats
+
       def initialize
         @columns = {}
         @defaults = {}
@@ -126,6 +130,7 @@ module CSVDecision
         @ins = {}
         @outs = {}
         @paths = {}
+        @formats = {}
       end
     end
 
@@ -163,10 +168,16 @@ module CSVDecision
       @dictionary.ifs
     end
 
-    # path: columns hash keyed by column index.
-    # @return [Hash{Index=>Entry}]
+    # path: column name value hash keyed by column index.
+    # @return [Hash{Integer=>Symbol}]
     def paths
       @dictionary.paths
+    end
+
+    # format: column name value hash keyed by column index.
+    # @return [Hash{Integer=>Symbol}]
+    def formats
+      @dictionary.formats
     end
 
     # @return [Array<Symbol>] All input column symbols.

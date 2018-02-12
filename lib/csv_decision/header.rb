@@ -10,7 +10,7 @@ module CSVDecision
   module Header
     # Column types recognised in the header row.
     COLUMN_TYPE = %r{
-      \A(?<type>in/text|in|out/text|out|guard|if|set/nil\?|set/blank\?|set|path)
+      \A(?<type>in/text|in|out/text|out|guard|if|set/nil\?|set/blank\?|set|path|format)
       \s*:\s*(?<name>\S?.*)\z
     }xi
 

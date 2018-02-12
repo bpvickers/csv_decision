@@ -25,16 +25,17 @@ module CSVDecision
     class Entry
       # Table used to build a column dictionary entry.
       ENTRY = {
-        in:           { type: :in,    eval: nil },
-        'in/text':    { type: :in,    eval: false },
-        set:          { type: :set,   eval: nil, set_if: true },
-        'set/nil?':   { type: :set,   eval: nil, set_if: :nil? },
-        'set/blank?': { type: :set,   eval: nil, set_if: :blank? },
-        out:          { type: :out,   eval: nil },
-        'out/text':   { type: :out,   eval: false },
-        guard:        { type: :guard, eval: true },
-        if:           { type: :if,    eval: true },
-        path:         { type: :path,  eval: false }
+        in:           { type: :in,     index: true,  eval: nil },
+        'in/text':    { type: :in,     index: true,  eval: false },
+        set:          { type: :set,    index: true,  eval: nil, set_if: true },
+        'set/nil?':   { type: :set,    index: true,  eval: nil, set_if: :nil? },
+        'set/blank?': { type: :set,    index: true,  eval: nil, set_if: :blank? },
+        guard:        { type: :guard,  index: false, eval: true },
+        out:          { type: :out,    index: false, eval: nil },
+        'out/text':   { type: :out,    index: false, eval: false },
+        if:           { type: :if,     index: false, eval: true },
+        path:         { type: :path,   index: false, eval: false },
+        format:       { type: :format, index: false, eval: nil }
       }.freeze
       private_constant :ENTRY
 
@@ -54,7 +55,7 @@ module CSVDecision
             eval: entry[:eval],              # Set if the column requires functions evaluated
             type: entry[:type],              # Column type
             set_if: entry[:set_if],          # Set if the column has a conditional default
-            indexed: entry[:type] != :guard) # A guard column cannot be indexed.
+            indexed: entry[:index])          # Set if input column may be indexed.
       end
 
       # @return [Boolean] Return true is this is an input column, false otherwise.
@@ -110,6 +111,10 @@ module CSVDecision
           set_if: @set_if
         }
       end
+
+      def format_column
+        @name.to_s.split(':').last.to_sym if @type == :format
+      end
     end
 
     # Classify and build a dictionary of all input and output columns by
@@ -141,7 +146,7 @@ module CSVDecision
       when :in, :guard, :set
         input_entry(dictionary: dictionary, entry: entry, index: index)
 
-      when :out, :if
+      when :out, :if, :format
         output_entry(dictionary: dictionary, entry: entry, index: index)
 
       when :path
@@ -159,6 +164,10 @@ module CSVDecision
       # if: columns are anonymous, even if the user names them
       when :if
         dictionary.ifs[index] = entry
+
+      # format: columns are named after their target output column
+      when :format
+        dictionary.formats[index] = entry.format_column
 
       when :out
         Dictionary.add_name(columns: dictionary.columns, name: entry.name, out: index)
