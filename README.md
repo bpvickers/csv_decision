@@ -298,6 +298,14 @@ input = {
 table.decide(input) #=> { value: %w[Client Trading 100.00 5010] }
 ```
 
+#### Output `format` columns - formatting of output values
+
+A common processing requirement for data hashes is to format an output value according to some 
+predefined set of formats. 
+`csv_decision` allows the optional use of a formatter method using the `format:`
+column type. 
+For examples see`spec/csv_decision/format_spec.rb`.
+
 ### Testing
  
  `csv_decision` includes thorough [RSpec](http://rspec.info) tests:
