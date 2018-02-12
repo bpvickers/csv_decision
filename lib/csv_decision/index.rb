@@ -14,6 +14,9 @@ module CSVDecision
     # @param table [CSVDecision::Table] Decision table being indexed.
     # @return [CSVDecision::Index] The built index.
     def self.build(table:)
+      # Cannot index a table with path columns
+      return unless table.columns.paths.empty?
+
       # Do we even have an index?
       key_cols = index_columns(columns: table.columns.ins)
       return if key_cols.empty?
