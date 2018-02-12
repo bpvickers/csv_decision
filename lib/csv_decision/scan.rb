@@ -32,10 +32,11 @@ module CSVDecision
         data = input_hashes.data(decision: decision, path: path, input: input)
         next if data == {}
 
+        # Note that +rows+ must be enclosed in an array for this method to work.
         result = decision.index_scan_first_match(
           scan_cols: data[:scan_cols],
           hash: data[:hash],
-          index_rows: Array(rows)
+          index_rows: [rows]
         )
         return result if result != {}
       end
