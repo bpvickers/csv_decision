@@ -47,8 +47,7 @@ To get started, just add `csv_decision` to your `Gemfile`, and then run `bundle`
 ### Simple example
   
 This table considers two input conditions: `topic` and `region`, labeled `in:`. 
-Certain combinations yield an output value for `team_member`, 
-labeled `out:`.
+Certain combinations yield an output value for `team_member`, labeled `out:`.
  
 ```
 in:topic | in:region  | out:team_member
@@ -65,10 +64,8 @@ politics |            | Henry
 ```
  
 When the topic is `finance` and the region is `Europe` the team member `Donald`
-is selected.
-
-This is a "first match" decision table in that as soon as a match is made execution
-stops and a single output row (hash) is returned. 
+is selected. This is a "first match" decision table in that as soon as a match is made 
+execution stops and a single output row (hash) is returned. 
 
 The ordering of rows matters. `Ernest`, who is in charge of `finance` for the rest of 
 the world, except for `America` and `Europe`, *must* come after his colleagues 
@@ -99,7 +96,7 @@ Here's the example as code:
   table.decide(topic: 'culture', region: 'America') #=> { team_member: 'Zach' }
 ```
  
-An empty `in:` cell means "matches any value", even nils. 
+An empty `in:` cell means "matches any value". 
 
 Note that all column header names are symbolized, so it's actually more accurate to write 
 `in :topic`; however spaces before and after the `:` do not matter.
@@ -124,23 +121,21 @@ Complete documentation of all table parameters is in the code - see
 `lib/csv_decision/parse.rb` and `lib/csv_decision/table.rb`.
 
 ### CSV Decision features
- * Either returns the first matching row as a hash (default), or accumulates all matches as an 
- array of hashes (i.e., `parse` option `first_match: false` or CSV file option `accumulate`).
+ * Either returns the first matching row as a hash (default), or accumulates all matches
+ as an array of hashes (i.e., `parse` option `first_match: false` or CSV file option 
+ `accumulate`).
  * Fast decision-time performance (see `benchmarks` folder). Automatically indexes all 
  constants-only columns that do not contain any empty strings.
- * In addition to simple strings, `csv_decision` can match basic Ruby constants (e.g., `=nil`), 
+ * In addition to strings, can match basic Ruby constants (e.g., `=nil`), 
  regular expressions (e.g., `=~ on|off`), comparisons (e.g., `> 100.0` ) and 
  Ruby-style ranges (e.g., `1..10`)
  * Can compare an input column versus another input hash key - e.g., `> :column`.
- * Any cell starting with `#` is treated as a comment, and comments may appear anywhere in the
- table. (Comment cells are always interpreted as the empty string.)
- * Can use column symbol expressions or Ruby methods (0-arity) in input columns for 
+ * Any cell starting with `#` is treated as a comment, and comments may appear anywhere in 
+ the table.
+ * Column symbol expressions or Ruby methods (0-arity) may be used in input columns for 
  matching - e.g., `:column.zero?` or `:column == 0`.
  * May also use Ruby methods in output columns - e.g., `:column.length`.
- * Accepts data as a file, CSV string or an array of arrays. (For safety all input data is 
- force encoded to UTF-8, and non-ascii strings are converted to empty strings.)
- * All CSV cells are parsed for correctness, and helpful error messages generated for bad 
- input.
+ * Accepts data as a file, CSV string or an array of arrays.
   
 #### Constants other than strings
 Although `csv_decision` is string oriented, it does recognise other types of constant
@@ -186,8 +181,8 @@ For example:
  
 Note that there is no need to include an input column for `:node` in the decision 
 table - it just needs to be present in the input hash. The expression, `== :node` should be
-read as `:parent == :node`. It can also be shortened to just `:node`, so the above decision table 
-may be simplified to:
+read as `:parent == :node`. It can also be shortened to just `:node`, so the above decision 
+table may be simplified to:
 
  ```ruby
     data = <<~DATA
@@ -272,6 +267,35 @@ table = CSVDecision.parse(data)
 table.decide(CUSIP: '1234567890', class: 'Private') #=> {PAID: '1234567890', len: 10}
 table.decide(ISIN: '123456789012', country: 'GB', class: 'private') #=> {PAID: '123456789012', len: 12}
 
+```
+
+#### Input `path` columns
+
+For hashes that contain sub-hashes, it's possible to specify a path for the purposes
+of matching. (Arrays are currently not supported.)
+
+```ruby
+data = <<~DATA
+  path:,   path:,    out :value
+  header,  ,         :source_name
+  header,  metrics,  :service_name
+  payload, ,         :amount
+  payload, ref_data, :account_id
+DATA
+table = CSVDecision.parse(data, first_match: false)
+
+input = {
+  header: { 
+    id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
+    metrics: { service_name: 'Trading', receive_time: '12:00' } 
+  },
+  payload: { 
+    tran_id: 9, amount: '100.00',
+    ref_data: { account_id: '5010', type_id: 'BUYL' } 
+  }
+}
+
+table.decide(input) #=> { value: %w[Client Trading 100.00 5010] }
 ```
 
 ### Testing

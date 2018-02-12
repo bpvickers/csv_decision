@@ -234,4 +234,18 @@ describe CSVDecision::Columns do
 
     expect(table.columns.input_keys).to eq %i[country class CUSIP ISIN]
   end
+
+  it 'recognises the path: columns' do
+    data = <<~DATA
+      path:,   path:,    in :type_cd, out :value, if:
+      header,  ,         !nil?,       :type_cd,   :value.present?
+      payload, ,         !nil?,       :type_cd,   :value.present?
+      payload, ref_data, ,            :type_id,   :value.present?
+    DATA
+    table = CSVDecision.parse(data)
+
+    expect(table.columns.input_keys).to eq %i[type_cd type_id]
+    expect(table.columns.paths[0].to_h).to eq(name: nil, eval: false, type: :path, set_if: nil)
+    expect(table.columns.paths[1].to_h).to eq(name: nil, eval: false, type: :path, set_if: nil)
+  end
 end

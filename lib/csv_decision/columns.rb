@@ -115,12 +115,17 @@ module CSVDecision
       #   This is actually just a subset of :outs.
       attr_accessor :ifs
 
+      # @return [Hash{Integer=>Symbol}] All path columns.
+      #   This is actually just a subset of :outs.
+      attr_accessor :paths
+
       def initialize
         @columns = {}
         @defaults = {}
         @ifs = {}
         @ins = {}
         @outs = {}
+        @paths = {}
       end
     end
 
@@ -156,6 +161,12 @@ module CSVDecision
     # @return [Hash{Index=>Entry}]
     def ifs
       @dictionary.ifs
+    end
+
+    # path: columns hash keyed by column index.
+    # @return [Hash{Index=>Entry}]
+    def paths
+      @dictionary.paths
     end
 
     # @return [Array<Symbol>] All input column symbols.

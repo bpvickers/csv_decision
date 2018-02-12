@@ -86,10 +86,9 @@ input hash, producing a decision as an output hash.</p>
 
 <p>Typical “business logic” is notoriously illogical - full of corner cases
 and one-off exceptions. A decision table can express data-based decisions
-in a way that comes more naturally to subject matter experts, who typically
-prefer spreadsheet models. Business logic may then be encapsulated,
-avoiding the need to write tortuous conditional expressions in Ruby that
-draw the ire of <code>rubocop</code> and its ilk.</p>
+in a way that comes naturally to subject matter experts, who typically use
+spreadsheet models. Business logic can be encapsulated in a table, avoiding
+the need for tortuous conditional expressions.</p>
 
 <p>This gem and the examples below take inspiration from <a
 href="https://github.com/jmettraux/rufus-decision">rufus/decision</a>.
@@ -125,9 +124,8 @@ politics |            | Henry
          |            | Zach</code></pre>
 
 <p>When the topic is <code>finance</code> and the region is
-<code>Europe</code> the team member <code>Donald</code> is selected.</p>
-
-<p>This is a “first match” decision table in that as soon as a match is made
+<code>Europe</code> the team member <code>Donald</code> is selected. This
+is a “first match” decision table in that as soon as a match is made
 execution stops and a single output row (hash) is returned.</p>
 
 <p>The ordering of rows matters. <code>Ernest</code>, who is in charge of
@@ -137,7 +135,7 @@ colleagues <code>Charlie</code> and <code>Donald</code>. <code>Zach</code>
 has been placed last, catching all the input combos not matching any other
 row.</p>
 
-<p>Here is the example as code:</p>
+<p>Here&#39;s the example as code:</p>
 
 <p>“`ruby  # Valid CSV string  data = &lt;&lt;~DATA  in :topic, in :region,
 out :team_member  sports, Europe, Alice  sports, , Bob  finance, America,
@@ -152,7 +150,7 @@ region: nil) #=&gt; { team_member: &#39;Bob&#39; }  table.decide(topic:
 &#39;culture&#39;, region: &#39;America&#39;) #=&gt; { team_member:
 &#39;Zach&#39; } “`</p>
 
-<p>An empty <code>in:</code> cell means “matches any value”, even nils.</p>
+<p>An empty <code>in:</code> cell means “matches any value”.</p>
 
 <p>Note that all column header names are symbolized, so it&#39;s actually more
 accurate to write <code>in :topic</code>; however spaces before and after
@@ -181,39 +179,33 @@ Complete documentation of all table parameters is in the code - see
 <h3 id="label-CSV+Decision+features">CSV Decision features</h3>
 <ul><li>
 <p>Either returns the first matching row as a hash (default), or accumulates
-all matches as an  array of hashes (i.e., <code>parse</code> option
-<code>first_match: false</code> or CSV file option
+all matches  as an array of hashes (i.e., <code>parse</code> option
+<code>first_match: false</code> or CSV file option 
 <code>accumulate</code>).</p>
 </li><li>
 <p>Fast decision-time performance (see <code>benchmarks</code> folder).
-Automatically indexes all  text-only columns that do not contain any empty
-strings.</p>
+Automatically indexes all  constants-only columns that do not contain any
+empty strings.</p>
 </li><li>
-<p>In addition to simple strings, <code>csv_decision</code> can match basic
-Ruby constants (e.g., <code>=nil</code>),  regular expressions (e.g.,
-<code>=~ on|off</code>), comparisons (e.g., <code>&gt; 100.0</code> ) and 
-Ruby-style ranges (e.g., <code>1..10</code>)</p>
+<p>In addition to strings, can match basic Ruby constants (e.g.,
+<code>=nil</code>),  regular expressions (e.g., <code>=~ on|off</code>),
+comparisons (e.g., <code>&gt; 100.0</code> ) and  Ruby-style ranges (e.g.,
+<code>1..10</code>)</p>
 </li><li>
 <p>Can compare an input column versus another input hash key - e.g.,
 <code>&gt; :column</code>.</p>
 </li><li>
 <p>Any cell starting with <code>#</code> is treated as a comment, and comments
-may appear anywhere in the  table. (Comment cells are always interpreted as
-the empty string.)</p>
+may appear anywhere in  the table.</p>
 </li><li>
-<p>Can use column symbol expressions or Ruby methods (0-arity) in input
+<p>Column symbol expressions or Ruby methods (0-arity) may be used in input
 columns for  matching - e.g., <code>:column.zero?</code> or <code>:column
 == 0</code>.</p>
 </li><li>
 <p>May also use Ruby methods in output columns - e.g.,
 <code>:column.length</code>.</p>
 </li><li>
-<p>Accepts data as a file, CSV string or an array of arrays. (For safety all
-input data is  force encoded to UTF-8, and non-ascii strings are converted
-to empty strings.)</p>
-</li><li>
-<p>All CSV cells are parsed for correctness, and helpful error messages
-generated for bad  input.</p>
+<p>Accepts data as a file, CSV string or an array of arrays.</p>
 </li></ul>
 
 <h4 id="label-Constants+other+than+strings">Constants other than strings</h4>
@@ -263,7 +255,9 @@ the input hash. The expression, <code>== :node</code> should be read as
 operators are also supported: <code>!=</code>, <code>&gt;</code>,
 <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. In addition, you
 can also apply a Ruby 0-arity method - e.g., <code>.present?</code> or
-<code>.nil?</code>. Negation is also supported - e.g., <code>!.nil?</code>.</p>
+<code>.nil?</code>. Negation is also supported - e.g., <code>!.nil?</code>.
+Note that <code>.nil?</code> can also be written as <code>:= nil?</code>,
+and <code>!.nil?</code> as <code>:= !nil?</code>, depending on preference.</p>
 
 <p>For more simple examples see
 <code>spec/csv_decision/examples_spec.rb</code>.</p>
@@ -347,6 +341,34 @@ three variations: <code>set</code> (unconditional default)
 </span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='label'>ISIN:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>123456789012</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>country:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>GB</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>class:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>private</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; {PAID: &#39;123456789012&#39;, len: 12}
 </span></code></pre>
 
+<h4 id="label-Input+path+columns">Input <code>path</code> columns</h4>
+
+<p>For hashes that contain sub-hashes, it&#39;s possible to specify a path for
+the purposes of matching. (Arrays are currently not supported.)</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;~DATA</span>
+<span class='tstring_content'>  path:,   path:,    out :value
+</span><span class='tstring_content'>  header,  ,         :source_name
+</span><span class='tstring_content'>  header,  metrics,  :service_name
+</span><span class='tstring_content'>  payload, ,         :amount
+</span><span class='tstring_content'>  payload, ref_data, :account_id
+</span><span class='heredoc_end'>DATA
+</span><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse'><span class='object_link'><a href="CSVDecision.html#parse-class_method" title="CSVDecision.parse (method)">parse</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>first_match:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_input'>input</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+  <span class='label'>header:</span> <span class='lbrace'>{</span> 
+    <span class='label'>id:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>type_cd:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BUY</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>source_name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Client</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>client_name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>AAPL</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='label'>metrics:</span> <span class='lbrace'>{</span> <span class='label'>service_name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Trading</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>receive_time:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>12:00</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span> 
+  <span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='label'>payload:</span> <span class='lbrace'>{</span> 
+    <span class='label'>tran_id:</span> <span class='int'>9</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>100.00</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='label'>ref_data:</span> <span class='lbrace'>{</span> <span class='label'>account_id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>5010</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>type_id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BUYL</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span> 
+  <span class='rbrace'>}</span>
+<span class='rbrace'>}</span>
+
+<span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_decide'>decide</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span> <span class='comment'>#=&gt; { value: %w[Client Trading 100.00 5010] }
+</span></code></pre>
+
 <h3 id="label-Testing">Testing</h3>
 
 <p><code>csv_decision</code> includes thorough <a
@@ -389,7 +411,7 @@ href="./LICENSE">LICENSE</a> document for more information.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sun Jan 28 14:41:47 2018 by
+  Generated on Sun Feb 11 10:26:06 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

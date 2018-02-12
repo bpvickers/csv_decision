@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Class: CSVDecision::Index
+  Class: CSVDecision::Paths
   
     &mdash; Documentation by YARD 0.9.12
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "CSVDecision::Index";
+  pathId = "CSVDecision::Paths";
   relpath = '../';
 </script>
 
@@ -36,10 +36,10 @@
       <div id="header">
         <div id="menu">
   
-    <a href="../_index.html">Index (I)</a> &raquo;
+    <a href="../_index.html">Index (P)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../CSVDecision.html" title="CSVDecision (module)">CSVDecision</a></span></span>
      &raquo; 
-    <span class="title">Index</span>
+    <span class="title">Paths</span>
   
 </div>
 
@@ -59,7 +59,7 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Class: CSVDecision::Index
+      <div id="content"><h1>Class: CSVDecision::Paths
   
   
   <span class="private note title">Private</span>
@@ -74,7 +74,7 @@
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next">CSVDecision::Index</li>
+            <li class="next">CSVDecision::Paths</li>
           
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
@@ -94,7 +94,7 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/csv_decision/index.rb</dd>
+    <dd>lib/csv_decision/paths.rb</dd>
   </dl>
   
 </div>
@@ -125,36 +125,7 @@ designated as keys</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#columns-instance_method" title="#columns (instance method)">#<strong>columns</strong>  &#x21d2; Array&lt;Integer&gt; </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  <span class="private note title">private</span>
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Array of column indices.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#hash-instance_method" title="#hash (instance method)">#<strong>hash</strong>  &#x21d2; Hash </a>
+      <a href="#paths-instance_method" title="#paths (instance method)">#<strong>paths</strong>  &#x21d2; Hash </a>
     
 
     
@@ -197,7 +168,7 @@ indexes.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#build-class_method" title="build (class method)">.<strong>build</strong>(table:)  &#x21d2; CSVDecision::Index </a>
+      <a href="#scan-class_method" title="scan (class method)">.<strong>scan</strong>(table:)  &#x21d2; CSVDecision::Paths </a>
     
 
     
@@ -212,7 +183,31 @@ indexes.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Build the index on the designated number of input columns.</p>
+<p>Build the index of paths.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#symbol-class_method" title="symbol (class method)">.<strong>symbol</strong>(value)  &#x21d2; nil, Symbol </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Non-empty string converted to a symbol.</p>
 </div></span>
   
 </li>
@@ -236,7 +231,7 @@ indexes.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>New index key value.</p>
+<p>New path key value.</p>
 </div></span>
   
 </li>
@@ -254,7 +249,7 @@ indexes.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(table:, columns:)  &#x21d2; Index </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(table:, columns:)  &#x21d2; Paths </a>
     
 
     
@@ -271,7 +266,7 @@ indexes.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>A new instance of Index.</p>
+<p>A new instance of Paths.</p>
 </div></span>
   
 </li>
@@ -286,7 +281,7 @@ indexes.</p>
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(table:, columns:)  &#x21d2; <tt><span class='object_link'><a href="" title="CSVDecision::Index (class)">Index</a></span></tt> 
+    #<strong>initialize</strong>(table:, columns:)  &#x21d2; <tt><span class='object_link'><a href="" title="CSVDecision::Paths (class)">Paths</a></span></tt> 
   
 
   
@@ -299,7 +294,7 @@ indexes.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Returns a new instance of Index</p>
+<p>Returns a new instance of Paths</p>
 
 
   </div>
@@ -329,7 +324,7 @@ indexes.</p>
         <span class='name'>columns</span>
       
       
-        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="" title="CSVDecision::Index (class)">Index</a></span>&gt;</tt>)</span>
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Index.html" title="CSVDecision::Index (class)">Index</a></span>&gt;</tt>)</span>
       
       
       
@@ -349,21 +344,21 @@ indexes.</p>
       <pre class="lines">
 
 
-79
-80
-81
-82
-83
-84
-85
-86</pre>
+45
+46
+47
+48
+49
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/index.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/paths.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>table:</span><span class='comma'>,</span> <span class='label'>columns:</span><span class='rparen'>)</span>
+  <span class='ivar'>@paths</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span>
-  <span class='ivar'>@hash</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
 
   <span class='id identifier rubyid_build'>build</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span>
 
@@ -382,74 +377,9 @@ indexes.</p>
       
       <span id=""></span>
       <div class="method_details first">
-  <h3 class="signature first" id="columns-instance_method">
+  <h3 class="signature first" id="paths-instance_method">
   
-    #<strong>columns</strong>  &#x21d2; <tt>Array&lt;Integer&gt;</tt>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p class="note private">
-  <strong>This method is part of a private API.</strong>
-  You should avoid using this method if possible, as it may be removed or be changed in the future.
-</p>
-
-<p>Returns Array of column indices</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Array&lt;Integer&gt;</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Array of column indices</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-75
-76
-77</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/index.rb', line 75</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_columns'>columns</span>
-  <span class='ivar'>@columns</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="hash-instance_method">
-  
-    #<strong>hash</strong>  &#x21d2; <tt>Hash</tt>  <span class="extras">(readonly)</span>
+    #<strong>paths</strong>  &#x21d2; <tt>Hash</tt>  <span class="extras">(readonly)</span>
   
 
   
@@ -496,15 +426,15 @@ indexes.</p>
       <pre class="lines">
 
 
-72
-73
-74</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/index.rb', line 72</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/paths.rb', line 41</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_hash'>hash</span>
-  <span class='ivar'>@hash</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_paths'>paths</span>
+  <span class='ivar'>@paths</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -519,9 +449,9 @@ indexes.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="build-class_method">
+  <h3 class="signature first" id="scan-class_method">
   
-    .<strong>build</strong>(table:)  &#x21d2; <tt><span class='object_link'><a href="" title="CSVDecision::Index (class)">CSVDecision::Index</a></span></tt> 
+    .<strong>scan</strong>(table:)  &#x21d2; <tt><span class='object_link'><a href="" title="CSVDecision::Paths (class)">CSVDecision::Paths</a></span></tt> 
   
 
   
@@ -534,7 +464,7 @@ indexes.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Build the index on the designated number of input columns.</p>
+<p>Build the index of paths</p>
 
 
   </div>
@@ -567,13 +497,13 @@ indexes.</p>
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="" title="CSVDecision::Index (class)">CSVDecision::Index</a></span></tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="" title="CSVDecision::Paths (class)">CSVDecision::Paths</a></span></tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>The built index.</p>
+<p>The built index of paths.</p>
 </div>
       
     </li>
@@ -592,27 +522,100 @@ indexes.</p>
 19
 20
 21
-22
-23
-24
-25
-26
-27</pre>
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/index.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/paths.rb', line 16</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build'>build</span><span class='lparen'>(</span><span class='label'>table:</span><span class='rparen'>)</span>
-  <span class='comment'># Do we even have an index?
-</span>  <span class='id identifier rubyid_key_cols'>key_cols</span> <span class='op'>=</span> <span class='id identifier rubyid_index_columns'>index_columns</span><span class='lparen'>(</span><span class='label'>columns:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_ins'>ins</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_key_cols'>key_cols</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='label'>table:</span><span class='rparen'>)</span>
+  <span class='comment'># Do we even have paths?
+</span>  <span class='id identifier rubyid_columns'>columns</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_paths'>paths</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='kw'>return</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
 
-  <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Index (class)">Index</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="CSVDecision::Index#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>columns:</span> <span class='id identifier rubyid_key_cols'>key_cols</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_paths'>paths</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="CSVDecision::Paths (class)">Paths</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="CSVDecision::Paths#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>table:</span> <span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='label'>columns:</span> <span class='id identifier rubyid_columns'>columns</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_paths'><span class='object_link'><a href="#paths-instance_method" title="CSVDecision::Paths#paths (method)">paths</a></span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="symbol-class_method">
+  
+    .<strong>symbol</strong>(value)  &#x21d2; <tt>nil</tt>, <tt>Symbol</tt> 
+  
 
-  <span class='comment'># Indexed columns do not need to be scanned
-</span>  <span class='id identifier rubyid_trim_scan_rows'>trim_scan_rows</span><span class='lparen'>(</span><span class='label'>scan_rows:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_scan_rows'>scan_rows</span><span class='comma'>,</span> <span class='label'>index_columns:</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='rparen'>)</span>
+  
 
-  <span class='id identifier rubyid_table'>table</span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Returns Non-empty string converted to a symbol.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Cell value for the path: column.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>, <tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Non-empty string converted to a symbol.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+36
+37
+38</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/paths.rb', line 36</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_symbol'>symbol</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span> <span class='op'>?</span> <span class='kw'>nil</span> <span class='op'>:</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -635,7 +638,7 @@ indexes.</p>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>Returns New index key value.</p>
+<p>Returns New path key value.</p>
 
 
   </div>
@@ -655,7 +658,7 @@ indexes.</p>
       
         &mdash;
         <div class='inline'>
-<p>Current index key value.</p>
+<p>Current path value.</p>
 </div>
       
     </li>
@@ -671,7 +674,7 @@ indexes.</p>
       
         &mdash;
         <div class='inline'>
-<p>Array row index to be included in the table index entry.</p>
+<p>Array row index to be included in the path entry.</p>
 </div>
       
     </li>
@@ -690,7 +693,7 @@ indexes.</p>
       
         &mdash;
         <div class='inline'>
-<p>New index key value.</p>
+<p>New path key value.</p>
 </div>
       
     </li>
@@ -703,22 +706,20 @@ indexes.</p>
       <pre class="lines">
 
 
-32
-33
-34
-35
-36
-37
-38</pre>
+27
+28
+29
+30
+31
+32</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/index.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/paths.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lparen'>(</span><span class='id identifier rubyid_current_value'>current_value</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_integer_value'>integer_value</span><span class='lparen'>(</span><span class='id identifier rubyid_current_value'>current_value</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_current_value'>current_value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Integer</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='lbracket'>[</span><span class='id identifier rubyid_current_value'>current_value</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_current_value'>current_value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Integer</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_array_value'>array_value</span><span class='lparen'>(</span><span class='id identifier rubyid_current_value'>current_value</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span>
-
+  <span class='id identifier rubyid_current_value'>current_value</span><span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_index'>index</span>
   <span class='id identifier rubyid_current_value'>current_value</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -731,7 +732,7 @@ indexes.</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Feb 11 10:26:07 2018 by
+  Generated on Sun Feb 11 10:26:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

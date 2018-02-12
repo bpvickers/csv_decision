@@ -25,11 +25,14 @@ module CSVDecision
   autoload :Matchers,   'csv_decision/matchers'
   autoload :Options,    'csv_decision/options'
   autoload :Parse,      'csv_decision/parse'
+  autoload :Paths,      'csv_decision/paths'
   autoload :Result,     'csv_decision/result'
+  autoload :Scan,       'csv_decision/scan'
   autoload :ScanRow,    'csv_decision/scan_row'
   autoload :Table,      'csv_decision/table'
   autoload :Validate,   'csv_decision/validate'
 
+  # Cell matchers
   class Matchers
     autoload :Constant,      'csv_decision/matchers/constant'
     autoload :Function,      'csv_decision/matchers/function'

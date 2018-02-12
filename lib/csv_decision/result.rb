@@ -22,20 +22,26 @@ module CSVDecision
     attr_reader :multi_result
 
     # (see Decision.initialize)
-    def initialize(table:, input:)
-      # Attributes hash contains the output decision key value pairs
-      @attributes = {}
-
+    def initialize(table:)
       @outs = table.columns.outs
       @outs_functions = table.outs_functions
-      @if_columns = table.columns.ifs
+      @table = table
+    end
 
+    # Initialize the object for new input data.
+    #
+    # @param data [Hash{Symbol=>Object}] Input data hash.
+    # @return [void]
+    def input(data)
+      # Attributes hash contains the output decision key value pairs
+      @attributes = {}
+      @multi_result = false
       # Partial result always copies in the input hash for calculating output functions.
       # Note that these input key values will not be mutated, as output columns can never
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = input.slice(*table.columns.input_keys) if @outs_functions
+      @partial_result = data.slice(*@table.columns.input_keys) if @outs_functions
     end
 
     # Common case for building a single row result is just copying output column values to the
@@ -57,7 +63,7 @@ module CSVDecision
     # @return [Hash{Symbol=>Object}]
     def final_result
       # If there are no if: columns, then nothing needs to be filtered out of this result hash.
-      return @attributes if @if_columns.empty?
+      return @attributes if @table.columns.ifs.empty?
 
       @multi_result ? multi_row_result : single_row_result
     end
@@ -91,18 +97,18 @@ module CSVDecision
     # Case where we have a single row result, which either gets returned
     # or filtered by the if: column conditions.
     def single_row_result
-      @if_columns.each_key do |col|
-        return false unless @attributes[col]
-
-        # Remove the if: column from the final result hash.
-        @attributes.delete(col)
+      # All if: columns must evaluate to true
+      if @table.columns.ifs.keys.all? { |col| @attributes[col] }
+        # Delete if: columns from final result
+        @table.columns.ifs.each_key { |col| @attributes.delete(col) }
+        return @attributes
       end
 
-      @attributes
+      false
     end
 
     def multi_row_result
-      @if_columns.each_key { |col| check_if_column(col) }
+      @table.columns.ifs.each_key { |col| check_if_column(col) }
 
       normalize_result
     end
@@ -131,46 +137,47 @@ module CSVDecision
       count = @attributes.values.first.count
       @multi_result = count > 1
 
-      case count
-      when 0
-        {}
+      return {} if count.zero?
+      return @attributes.transform_values!(&:first) if count == 1
 
-      # Single row array values do not require arrays.
-      when 1
-        @attributes.transform_values!(&:first)
-
-      else
-        @attributes
-      end
+      @attributes
     end
 
     def eval_outs_constants(row:)
       @outs.each_pair do |col, column|
-        value = row[col]
-        next if value.is_a?(Matchers::Proc)
+        cell = row[col]
+        next if cell.is_a?(Matchers::Proc)
 
-        @partial_result[column.name] = value
-        @attributes[column.name] = value
+        @partial_result[column.name] = cell
+        @attributes[column.name] = cell
       end
     end
 
     def eval_outs_procs(row:)
       @outs.each_pair do |col, column|
-        proc = row[col]
-        next unless proc.is_a?(Matchers::Proc)
+        cell = row[col]
+        next unless cell.is_a?(Matchers::Proc)
 
-        @attributes[column.name] = proc.function[@partial_result]
-        @partial_result[column.name] = @attributes[column.name]
+        eval_out_proc(cell: cell, column_name: column.name, column_type: column.type)
       end
     end
 
+    def eval_out_proc(cell:, column_name:, column_type:)
+      @attributes[column_name] = cell.function[@partial_result]
+
+      # Do not add if: columns to the partial result
+      return if column_type == :if
+      @partial_result[column_name] = @attributes[column_name]
+    end
+
     def partial_result(index)
-      @attributes.each_pair do |column_name, value|
+      @attributes.each_pair do |column_name, values|
+        value = values[index]
         # Delete this column from the partial result in case there is data from a prior result row
-        next @partial_result.delete(column_name) if value[index].is_a?(Matchers::Proc)
+        next @partial_result.delete(column_name) if value.is_a?(Matchers::Proc)
 
         # Add this constant value to the partial result row built so far.
-        @partial_result[column_name] = value[index]
+        @partial_result[column_name] = value
       end
 
       @partial_result

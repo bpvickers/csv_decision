@@ -33,7 +33,8 @@ module CSVDecision
         out:          { type: :out,   eval: nil },
         'out/text':   { type: :out,   eval: false },
         guard:        { type: :guard, eval: true },
-        if:           { type: :if,    eval: true }
+        if:           { type: :if,    eval: true },
+        path:         { type: :path,  eval: false }
       }.freeze
       private_constant :ENTRY
 
@@ -142,6 +143,9 @@ module CSVDecision
 
       when :out, :if
         output_entry(dictionary: dictionary, entry: entry, index: index)
+
+      when :path
+        dictionary.paths[index] = entry
       end
 
       dictionary

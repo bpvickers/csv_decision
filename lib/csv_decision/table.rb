@@ -13,7 +13,7 @@ module CSVDecision
     # @param input [Hash] Input hash.
     # @return [{Symbol => Object, Array<Object>}] Decision hash.
     def decide(input)
-      Decision.make(table: self, input: input, symbolize_keys: true)
+      decision(input: input, symbolize_keys: true)
     end
 
     # Unsafe version of decide - may mutate the input hash and assumes the input
@@ -24,17 +24,21 @@ module CSVDecision
     #   Input hash will be mutated by any functions that have side effects.
     # @return (see #decide)
     def decide!(input)
-      Decision.make(table: self, input: input, symbolize_keys: false)
+      decision( input: input, symbolize_keys: false)
     end
 
     # @return [CSVDecision::Columns] Dictionary of all input and output columns.
     attr_accessor :columns
 
-    # @return [File, Pathname, nil] File path name if decision table was loaded from a CSV file.
+    # @return [File, Pathname, nil] File path name if decision table was loaded from a
+    # CSV file.
     attr_accessor :file
 
     # @return [CSVDecision::Index] The index built on one or more input columns.
     attr_accessor :index
+
+    # @return [CSVDecision::Path] The array of paths built on one or more input columns.
+    attr_accessor :paths
 
     # @return [Hash] All options, explicitly set or defaulted, used to parse the table.
     attr_accessor :options
@@ -77,14 +81,21 @@ module CSVDecision
 
     # @api private
     def initialize
-      @file = nil
-      @index = nil
-      @options = nil
-      @outs_functions = nil
+      @paths = []
       @outs_rows = []
       @if_rows = []
       @rows = []
       @scan_rows = []
+    end
+
+    private
+
+    def decision(input:, symbolize_keys:)
+      if columns.paths.empty?
+        Decision.make(table: self, input: input, symbolize_keys: symbolize_keys)
+      else
+        Scan.table(table: self, input: input, symbolize_keys: symbolize_keys)
+      end
     end
   end
 end

@@ -260,6 +260,33 @@ overlap with input column symbols.</p>
 </li>
 
     
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#paths-instance_method" title="#paths (instance method)">#<strong>paths</strong>  &#x21d2; Hash{Integer=&gt;Symbol} </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>All path columns.</p>
+</div></span>
+  
+</li>
+
+    
   </ul>
 
 
@@ -335,16 +362,17 @@ overlap with input column symbols.</p>
       <pre class="lines">
 
 
-118
-119
-120
-121
 122
 123
-124</pre>
+124
+125
+126
+127
+128
+129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 118</span>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -352,6 +380,7 @@ overlap with input column symbols.</p>
   <span class='ivar'>@ifs</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@ins</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@outs</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@paths</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -691,13 +720,78 @@ of :outs.</p>
 </table>
 </div>
     
+      
+      <span id="paths=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="paths-instance_method">
+  
+    #<strong>paths</strong>  &#x21d2; <tt>Hash{Integer=&gt;Symbol}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Returns All path columns. This is actually just a subset of :outs.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Integer=&gt;Symbol}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>All path columns. This is actually just a subset of :outs.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+120
+121
+122</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/csv_decision/columns.rb', line 120</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_paths'>paths</span>
+  <span class='ivar'>@paths</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 
 </div>
 
       <div id="footer">
-  Generated on Sun Jan 28 14:41:49 2018 by
+  Generated on Sun Feb 11 10:26:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

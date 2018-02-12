@@ -28,7 +28,8 @@ module CSVDecision
   #
   # @param data [Pathname, File, Array<Array<String>>, String] input data given as
   #   a CSV file, array of arrays or CSV string.
-  # @param options [Hash{Symbol=>Object}] Options hash controlling how the table is parsed and interpreted.
+  # @param options [Hash{Symbol=>Object}] Options hash controlling how the table is parsed and
+  #   interpreted.
   #
   # @option options [Boolean] :first_match Stop scanning after finding the first row match.
   # @option options [Boolean] :regexp_implicit Make regular expressions implicit rather than
@@ -88,8 +89,11 @@ module CSVDecision
       # Parse table header and data rows with special cell matchers.
       parse_with_matchers(table: table, matchers: CSVDecision::Matchers.new(options))
 
-      # Build the index if one is indicated
+      # Build the data index if one is indicated
       Index.build(table: table)
+
+      # Build a paths index if one is indicated
+      Paths.scan(table: table)
     end
     private_class_method :parse_table
 
