@@ -52,7 +52,7 @@ module CSVDecision
         data = input_hashes.data(decision: decision, path: path, input: input)
         next if data == {}
 
-        result = scan(rows: Array(rows), input: data, final: result, decision: decision)
+        result = scan(rows: rows, input: data, final: result, decision: decision)
       end
 
       result
@@ -60,17 +60,20 @@ module CSVDecision
     private_class_method :scan_accumulate
 
     def self.scan(rows:, input:, final:, decision:)
+      # Note that +rows+ must be enclosed in an array for this method to work.
       result = decision.index_scan_accumulate(scan_cols: input[:scan_cols],
                                               hash: input[:hash],
-                                              index_rows: rows)
-      final = accumulate(final: final, result: result) if result
+                                              index_rows: [rows])
+
+      # Accumulate this potentially multi-row result into the final result.
+      final = accumulate(final: final, result: result) if result.present?
 
       final
     end
     private_class_method :scan
 
     def self.accumulate(final:, result:)
-      return result if final.empty?
+      return result if final == {}
 
       final.each_pair { |key, value| final[key] = Array(value) + Array(result[key]) }
       final
