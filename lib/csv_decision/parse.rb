@@ -112,6 +112,9 @@ module CSVDecision
         # data cells.
         row = parse_row(table: table, matchers: matchers, row: row, index: index)
 
+        # Does this table have outpiut column formatters?
+        outs_formatters(table: table)
+
         # Does the row have any output functions?
         outs_functions(table: table, index: index)
 
@@ -161,5 +164,18 @@ module CSVDecision
       table.outs_rows[index].procs.each { |col| table.columns.outs[col].eval = true }
     end
     private_class_method :outs_functions
+
+    def self.outs_formatters(table:)
+      return if table.columns.formats.empty?
+
+      # Set this flag as the table has output functions
+      table.outs_functions = true
+
+      # Check that we have a formatter
+      return unless table.options[:formatter].nil?
+
+      raise ArgumentError, 'table with format: columns has no formatter: argument supplied'
+    end
+    private_class_method :outs_formatters
   end
 end
