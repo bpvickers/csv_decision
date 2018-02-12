@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
-SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
-SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
-
 describe CSVDecision::Index do
   it 'indexes a single column CSV' do
     file = Pathname(File.join(SPEC_DATA_VALID, 'options_in_file3.csv'))

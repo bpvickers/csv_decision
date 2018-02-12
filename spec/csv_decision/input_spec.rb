@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
 describe CSVDecision::Input do
   it 'rejects a non-hash or empty hash value' do
     expect { CSVDecision::Input.parse(table: nil, input: [], symbolize_keys: true ) }

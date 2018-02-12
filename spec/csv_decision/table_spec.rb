@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
-SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
-
 describe CSVDecision::Table do
   describe '#decide' do
     context 'makes correct decisions for simple, text-only tables' do

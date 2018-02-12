@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
 describe CSVDecision::Decision do
   it 'decision for table with no functions and first_match: true' do
     data = <<~DATA

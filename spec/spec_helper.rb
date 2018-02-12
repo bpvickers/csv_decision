@@ -18,6 +18,11 @@ require 'json'
 require 'coveralls'
 Coveralls.wear!
 
+require_relative '../lib/csv_decision'
+
+SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
+SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

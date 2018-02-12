@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
 describe CSVDecision::Parse do
   it 'rejects an empty decision table' do
     expect { CSVDecision.parse('') }

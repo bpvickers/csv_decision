@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../../lib/csv_decision'
-
 describe CSVDecision::Matchers::Guard do
   subject { described_class.new }
 

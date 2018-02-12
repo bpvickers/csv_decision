@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
 describe CSVDecision::Load do
   path = Pathname(File.join(CSVDecision.root, 'spec/data/valid'))
 

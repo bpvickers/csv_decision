@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
 context 'simple examples' do
   context 'simple example - strings-only' do
     data = <<~DATA

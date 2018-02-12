@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/csv_decision'
-
-SPEC_DATA_VALID ||= File.join(CSVDecision.root, 'spec', 'data', 'valid')
-SPEC_DATA_INVALID ||= File.join(CSVDecision.root, 'spec', 'data', 'invalid')
-
 describe CSVDecision::Options do
   it 'sets the default options' do
     data = <<~DATA

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../lib/csv_decision'
 
 describe CSVDecision::Data do
   it 'parses an CSV string' do
