@@ -626,23 +626,31 @@ describe CSVDecision::Table do
         }
       }
       expect(table.decide(input)).to eq(value: 'BUYL')
+
+      input = {
+        payload: { tran_id: nil,
+                   ref_data: {  type_id: '' }
+        }
+      }
+      expect(table.decide(input)).to eq({})
     end
 
     it 'scans the input hash paths accumulating matches' do
       data = <<~DATA
         path:,   path:,    out :value,     out :key,   if:
-        header,  ,         :source_name,   source_nm,  :value.present?
-        header,  ,         :client_name,   client_nm,  :value.present?
-        header,  metrics,  :service_name,  service_nm, :value.present?
-        payload, ,         :amount,        trade_am,   :value.present?
-        payload, ref_data, :account_id,    account_id, :value.present?
-        header,  metrics,  :receive_time,  receive_tm, :value.present?
+        header,  ,         :source_name,   source_nm,     :value.present?
+        header,  ,         :client_name,   client_nm,     :value.present?
+        header,  ,         :client_ref,    client_ref_id, :value.present?
+        header,  metrics,  :service_name,  service_nm,    :value.present?
+        payload, ,         :amount,        trade_am,      :value.present?
+        payload, ref_data, :account_id,    account_id,    :value.present?
+        header,  metrics,  :receive_time,  receive_tm,    :value.present?
       DATA
       table = CSVDecision.parse(data, first_match: false)
 
       input = {
         header: {
-          id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
+          id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL', client_ref: 'A1',
           metrics: { service_name: 'Trading', receive_time: '12:00' }
         },
         payload: { tran_id: 9,
@@ -650,14 +658,14 @@ describe CSVDecision::Table do
                    ref_data: { account_id: '5010', type_id: 'BUYL' }
         }
       }
-      result = { value: %w[Client AAPL Trading 100.00 5010 12:00],
-                 key: %w[source_nm client_nm service_nm trade_am account_id receive_tm] }
+      result = { value: %w[Client AAPL A1 Trading 100.00 5010 12:00],
+                 key: %w[source_nm client_nm client_ref_id service_nm trade_am account_id receive_tm] }
       expect(table.decide(input)).to eq result
       expect(table.decide!(input)).to eq result
 
       input = {
         header: {
-          id: 1, type_cd: 'BUY', source_name: 'Client',
+          id: 1, type_cd: 'BUY', source_name: 'Client', client_ref: 'A1',
           metrics: { service_name: 'Trading' }
         },
         payload: { tran_id: 9,
@@ -665,8 +673,8 @@ describe CSVDecision::Table do
                    ref_data: { type_id: 'BUYL' }
         }
       }
-      result = { key: %w[source_nm service_nm trade_am],
-                 value: %w[Client Trading 100.00] }
+      result = { value: %w[Client A1 Trading 100.00],
+                 key: %w[source_nm client_ref_id service_nm trade_am] }
 
       expect(table.decide(input)).to eq result
       expect(table.decide!(input)).to eq result
