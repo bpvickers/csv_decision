@@ -25,7 +25,8 @@ module CSVDecision
       first_match: true,
       regexp_implicit: false,
       text_only: false,
-      matchers: DEFAULT_MATCHERS
+      matchers: DEFAULT_MATCHERS,
+      formatter: nil
     }.freeze
     private_constant :VALID
 
@@ -37,6 +38,9 @@ module CSVDecision
       text_only: [:text_only, true], string_search: [:text_only, true]
     }.freeze
     private_constant :CSV_NAMES
+
+    FORMATTER_PARAMS = [%i[keyreq value], %i[keyreq format]].freeze
+    private_constant :FORMATTER_PARAMS
 
     # Validate options and supply default values for any options not explicitly set.
     #
@@ -86,6 +90,9 @@ module CSVDecision
       # The user may override the list of matchers to be used
       result[:matchers] = matchers(result)
 
+      # User may specify a formatter
+      validate_formatter(result)
+
       # Supply any missing options with default values
       VALID.each_pair do |key, value|
         next if result.key?(key)
@@ -104,6 +111,18 @@ module CSVDecision
       options[:matchers]
     end
     private_class_method :matchers
+
+    def self.validate_formatter(options)
+      return unless (formatter = options&.fetch(:formatter, nil))
+
+      unless formatter.respond_to?(:format)
+        raise ArgumentError, 'formatter must respond to :format method'
+      end
+
+      return if (FORMATTER_PARAMS - formatter.method(:format).parameters).empty?
+      raise ArgumentError, "formatter's :format method requires :value and :format parameters"
+    end
+    private_class_method :validate_formatter
 
     def self.option?(cell)
       key = cell.strip.downcase.to_sym

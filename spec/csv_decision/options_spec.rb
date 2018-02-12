@@ -13,6 +13,7 @@ describe CSVDecision::Options do
       first_match: true,
       regexp_implicit: false,
       text_only: false,
+      formatter: nil,
       matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
@@ -32,6 +33,7 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: false,
       text_only: false,
+      formatter: nil,
       matchers: [CSVDecision::Matchers::Pattern]
     }
     expect(result.options).to eql expected
@@ -56,6 +58,7 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: false,
       text_only: false,
+      formatter: nil,
       matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
@@ -69,21 +72,54 @@ describe CSVDecision::Options do
       first_match: false,
       regexp_implicit: true,
       text_only: false,
+      formatter: nil,
       matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
   end
 
-  it 'parses index option from the CSV file' do
-    file = Pathname(File.join(SPEC_DATA_VALID, 'options_in_file3.csv'))
-    result = CSVDecision.parse(file)
+  it 'parses a valid formatter option' do
+    data = <<~DATA
+      IN :input, OUT :output
+      input0,    output0
+    DATA
+
+    module GoodFormatter
+      def self.format(value:, format:)
+        value
+      end
+    end
+
+    result = CSVDecision.parse(data, formatter: GoodFormatter)
 
     expected = {
-      first_match: false,
-      regexp_implicit: true,
+      first_match: true,
+      regexp_implicit: false,
       text_only: false,
+      formatter: GoodFormatter,
       matchers: CSVDecision::Options::DEFAULT_MATCHERS
     }
     expect(result.options).to eql expected
+  end
+
+  it 'rejects an invalid formatter option' do
+    module BadFormatter
+      def self.format(value:)
+        value
+      end
+    end
+
+    data = <<~DATA
+      IN :input, OUT :output
+      input0,    output0
+    DATA
+
+    expect { CSVDecision.parse(data, formatter: 'junk') }
+      .to raise_error(ArgumentError,
+                      'formatter must respond to :format method')
+
+    expect { CSVDecision.parse(data, formatter: BadFormatter) }
+      .to raise_error(ArgumentError,
+                      "formatter's :format method requires :value and :format parameters")
   end
 end
