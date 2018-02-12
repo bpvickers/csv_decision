@@ -25,6 +25,7 @@ module CSVDecision
     def initialize(table:)
       @outs = table.columns.outs
       @outs_functions = table.outs_functions
+      @formatter = table.options[:formatter]
       @table = table
     end
 
@@ -85,11 +86,28 @@ module CSVDecision
 
     # Evaluate the cell proc using the partial result calculated so far.
     #
-    # @param proc [Matchers::Pro]
-    # @param column_name [Symbol, Integer]
+    # @param cell [Object]
+    # @param column [Symbol, Integer]
     # @param index [Integer]
-    def eval_cell_proc(proc:, column_name:, index:)
-      @attributes[column_name][index] = proc.function[partial_result(index)]
+    def eval_proc(cell:, column:, index:)
+      @partial_result = partial_result(index)
+
+      @attributes[column.name][index] = cell.function[@partial_result] if cell.is_a?(Matchers::Proc)
+
+      format(format: cell, column: column, index: index) if column.type == :format
+    end
+
+    # Evaluate the cell proc using the partial result calculated so far.
+    #
+    # @param format [Object]
+    # @param column [CSVDecision::Dictionary::Entry]
+    # @param index [nil, Integer]
+    def format(format:, column:, index: nil)
+      column_name = column.format_column
+      value = @formatter.format(value: @partial_result[column_name], format: format)
+
+      @partial_result[column_name] = value
+      index ? @attributes[column_name][index] = value : @attributes[column_name] = value
     end
 
     private
@@ -104,7 +122,7 @@ module CSVDecision
         return @attributes
       end
 
-      false
+      nil
     end
 
     def multi_row_result
@@ -156,18 +174,20 @@ module CSVDecision
     def eval_outs_procs(row:)
       @outs.each_pair do |col, column|
         cell = row[col]
-        next unless cell.is_a?(Matchers::Proc)
+        eval_out_proc(cell: cell, column: column)
 
-        eval_out_proc(cell: cell, column_name: column.name, column_type: column.type)
+        format(format: cell, column: column) if column.type == :format
       end
     end
 
-    def eval_out_proc(cell:, column_name:, column_type:)
-      @attributes[column_name] = cell.function[@partial_result]
+    def eval_out_proc(cell:, column:)
+      return unless cell.is_a?(Matchers::Proc)
+
+      @attributes[column.name] = cell.function[@partial_result]
 
       # Do not add if: columns to the partial result
-      return if column_type == :if
-      @partial_result[column_name] = @attributes[column_name]
+      return if column.type == :if
+      @partial_result[column.name] = @attributes[column.name]
     end
 
     def partial_result(index)

@@ -166,12 +166,11 @@ module CSVDecision
     end
 
     def eval_procs(col:, column:)
-      @rows_picked.each_with_index do |row, index|
+      @rows_picked.each_with_index do |row, i|
         cell = row[col]
-        next unless cell.is_a?(Matchers::Proc)
 
         # Evaluate the proc and update the result
-        @result.eval_cell_proc(proc: cell, column_name: column.name, index: index)
+        @result.eval_proc(cell: cell, column: column, index: i) if cell.present?
       end
     end
 

@@ -251,7 +251,7 @@ describe CSVDecision::Columns do
       table = CSVDecision.parse(data, formatter: TestFormatter)
 
       expect(table.columns.outs[0].to_h).to eq(name: :value, eval: true, type: :out, set_if: nil)
-      expect(table.columns.outs[1].to_h).to eq(name: :'format:value', eval: nil, type: :format, set_if: nil)
+      expect(table.columns.outs[1].to_h).to eq(name: :'format:value', eval: true, type: :format, set_if: nil)
     end
 
     it 'raises an error if a formatter is not supplied' do

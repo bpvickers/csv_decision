@@ -35,7 +35,7 @@ module CSVDecision
         'out/text':   { type: :out,    index: false, eval: false },
         if:           { type: :if,     index: false, eval: true },
         path:         { type: :path,   index: false, eval: false },
-        format:       { type: :format, index: false, eval: nil }
+        format:       { type: :format, index: false, eval: true }
       }.freeze
       private_constant :ENTRY
 
@@ -167,7 +167,7 @@ module CSVDecision
 
       # format: columns are named after their target output column
       when :format
-        dictionary.formats[index] = entry.format_column
+        dictionary.formats[index] = entry
 
       when :out
         Dictionary.add_name(columns: dictionary.columns, name: entry.name, out: index)
