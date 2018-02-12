@@ -1,3 +1,7 @@
+## v0.5.1, 12 February 2018.
+*Bug Fix*
+- Fix bug when using a path to scan for a first match.
+
 ## v0.5.0, 11 February 2018.
 *Additions*
 - Add the ability to specify an input hash path using path: column types.
