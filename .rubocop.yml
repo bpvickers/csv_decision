@@ -8,6 +8,9 @@ Metrics/MethodLength:
 Metrics/LineLength:
   Max: 100
 
+Metrics/ClassLength:
+  Max: 125
+
 Layout/TrailingWhitespace:
   Enabled: false
 
