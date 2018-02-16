@@ -8,6 +8,14 @@ module CSVDecision
   # Accumulate the matching row(s) into a result hash.
   # @api private
   class Result
+    # Each result "row", given by the row +index+ is a collection of column arrays.
+    # @param attributes [Hash{Symbol=>Object}] Result attributes hash.
+    # @param index [Integer] Row index.
+    # @return [{Symbol=>Object}, {Integer=>Object}]
+    def self.delete_row(attributes, index)
+      attributes.transform_values { |value| value.delete_at(index) }
+    end
+
     # @return [Hash{Symbol=>Object}, Hash{Integer=>Object}] The decision result hash containing
     #   both result values and if: columns, which eventually get evaluated and removed.
     attr_reader :attributes
@@ -92,9 +100,26 @@ module CSVDecision
     def eval_proc(cell:, column:, index:)
       @partial_result = partial_result(index)
 
-      @attributes[column.name][index] = cell.function[@partial_result] if cell.is_a?(Matchers::Proc)
+      # Evaluate the cell if it contains a proc
+      if cell.is_a?(Matchers::Proc)
+        cell = cell.function[@partial_result]
+        @attributes[column.name][index] = cell
+      end
 
-      format(format: cell, column: column, index: index) if column.type == :format
+      # Apply the format to its value if a format: column.
+      # Note that a cell could be both a Proc and a format value.
+      format_cell(format: cell, column: column, index: index) if column.type == :format
+    end
+
+    private
+
+    def eval_outs_procs(row:)
+      @outs.each_pair do |col, column|
+        cell = row[col]
+        eval_out_proc(cell: cell, column: column)
+
+        format_cell(format: cell, column: column) if column.type == :format
+      end
     end
 
     # Evaluate the cell proc using the partial result calculated so far.
@@ -102,15 +127,13 @@ module CSVDecision
     # @param format [Object]
     # @param column [CSVDecision::Dictionary::Entry]
     # @param index [nil, Integer]
-    def format(format:, column:, index: nil)
+    def format_cell(format:, column:, index: nil)
       column_name = column.format_column
       value = @formatter.format(value: @partial_result[column_name], format: format)
 
       @partial_result[column_name] = value
       index ? @attributes[column_name][index] = value : @attributes[column_name] = value
     end
-
-    private
 
     # Case where we have a single row result, which either gets returned
     # or filtered by the if: column conditions.
@@ -139,14 +162,7 @@ module CSVDecision
       @attributes.delete(col)
 
       # Adjust the row index as we delete rows in sequence.
-      delete_rows.each_with_index { |index, sequence| delete_row(index - sequence) }
-    end
-
-    # Each result "row", given by the row +index+ is a collection of column arrays.
-    # @param index [Integer] Row index.
-    # @return [{Symbol=>Object}, {Integer=>Object}]
-    def delete_row(index)
-      @attributes.transform_values { |value| value.delete_at(index) }
+      delete_rows.each_with_index { |index, i| Result.delete_row(@attributes, index - i) }
     end
 
     # @return [{Symbol=>Object}] Decision result hash with any if: columns removed.
@@ -171,15 +187,6 @@ module CSVDecision
       end
     end
 
-    def eval_outs_procs(row:)
-      @outs.each_pair do |col, column|
-        cell = row[col]
-        eval_out_proc(cell: cell, column: column)
-
-        format(format: cell, column: column) if column.type == :format
-      end
-    end
-
     def eval_out_proc(cell:, column:)
       return unless cell.is_a?(Matchers::Proc)
 
@@ -193,7 +200,8 @@ module CSVDecision
     def partial_result(index)
       @attributes.each_pair do |column_name, values|
         value = values[index]
-        # Delete this column from the partial result in case there is data from a prior result row
+        # Delete this column from the partial result in case there is data from
+        # a prior result row.
         next @partial_result.delete(column_name) if value.is_a?(Matchers::Proc)
 
         # Add this constant value to the partial result row built so far.

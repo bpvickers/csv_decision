@@ -146,9 +146,9 @@ module CSVDecision
     # Use an index to scan the decision table up against the input hash.
     def index_scan
       # If the index lookup fails, there's no match.
-      return {} unless (index_rows = Array(@table.index.hash[@input[:key]]))
+      return {} unless (index_rows = @table.index.hash[@input[:key]])
 
-      index_scan_rows(rows: index_rows)
+      index_scan_rows(rows: Array(index_rows))
     end
 
     def accumulated_result
