@@ -87,20 +87,20 @@ module CSVDecision
         @input_hashes = {}
       end
 
-      # @param path [Array<Symbol] Path for the input hash.
+      # @param path [Array<Symbol>] Path for the input hash.
       # @param input [Hash{Symbol=>Object}] Input hash.
       # @return [Hash{Symbol=>Object}] Parsed input hash.
       def data(decision:, path:, input:)
         result = input(decision: decision, path: path, input: input)
+        return {} if result == {}
 
-        decision.input(result) unless result == {}
-
-        result
+        decision.input(result)
       end
 
       private
 
       def input(decision:, path:, input:)
+        # Is it already in the cache?
         return @input_hashes[path] if @input_hashes.key?(path)
 
         # Use the path - an array of symbol keys, to dig out the input sub-hash

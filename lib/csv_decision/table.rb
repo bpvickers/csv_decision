@@ -24,7 +24,7 @@ module CSVDecision
     #   Input hash will be mutated by any functions that have side effects.
     # @return (see #decide)
     def decide!(input)
-      decision( input: input, symbolize_keys: false)
+      decision(input: input, symbolize_keys: false)
     end
 
     # @return [CSVDecision::Columns] Dictionary of all input and output columns.
@@ -43,11 +43,11 @@ module CSVDecision
     # @return [Hash] All options, explicitly set or defaulted, used to parse the table.
     attr_accessor :options
 
-    # Set if the table row has any output functions (planned feature)
+    # Set if the table row has any output functions.
     # @api private
     attr_accessor :outs_functions
 
-    # @return [Array<Array>] Data rows after parsing.
+    # @return [Array<Array>] Table data rows after parsing.
     # @api private
     attr_accessor :rows
 

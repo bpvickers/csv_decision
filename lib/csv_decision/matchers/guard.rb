@@ -73,7 +73,7 @@ module CSVDecision
         proc = FUNCTION[method]
         return proc if proc
 
-        proc { |symbol, value, hash| Matchers.compare?(lhs: hash[symbol], compare: method, rhs: value) }
+        proc { |sym, val, hash| Matchers.compare?(lhs: hash[sym], compare: method, rhs: val) }
       end
       private_class_method :non_numeric
 
