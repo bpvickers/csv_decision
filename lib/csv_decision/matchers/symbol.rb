@@ -9,7 +9,7 @@ module CSVDecision
   # @api private
   class Matchers
     # Match cell against a symbolic expression - e.g., :column, > :column.
-    # Can also call a Ruby method pn the column value - e.g, .blank? or !.blank?
+    # Can also call a Ruby method on the column value - e.g, .blank? or !.blank?
     class Symbol < Matcher
       SYMBOL_COMPARATORS = "#{INEQUALITY}|>=|<=|<|>|#{EQUALS}"
       private_constant :SYMBOL_COMPARATORS
@@ -28,14 +28,14 @@ module CSVDecision
       # Note that we do *not* check +hash.key?(symbol)+, so a +nil+ value will match a missing
       # hash key.
       EQUALITY = {
-        ':=' => proc { |symbol, value, hash| value == hash[symbol] },
-        '!=' => proc { |symbol, value, hash| value != hash[symbol] }
+        ':=' => proc { |symbol, value, hash| value == hash.dig(*symbol) },
+        '!=' => proc { |symbol, value, hash| value != hash.dig(*symbol) }
       }.freeze
       private_constant :EQUALITY
 
       def self.compare_proc(sym)
         proc do |symbol, value, hash|
-          Matchers.compare?(lhs: value, compare: sym, rhs: hash[symbol])
+          Matchers.compare?(lhs: value, compare: sym, rhs: hash.dig(*symbol))
         end
       end
       private_class_method :compare_proc
@@ -78,7 +78,7 @@ module CSVDecision
       # E.g., > :col, we get comparator: >, name: col
       def self.comparison(comparator:, name:)
         function = COMPARE[comparator]
-        Matchers::Proc.new(type: :symbol, function: function[name], symbols: name)
+        Matchers::Proc.new(type: :symbol, function: function[name], symbols: [name])
       end
       private_class_method :comparison
 
@@ -122,7 +122,7 @@ module CSVDecision
         # Method call - e.g, .blank? or !.present?
         # Can also take the forms: := .blank? or !=.present?
         else
-          method_call(comparator: comparator, name: name, type: type || '.')
+          method_call(comparator: comparator, name: name[0], type: type || '.')
         end
       end
       private_class_method :comparator_type
@@ -136,7 +136,8 @@ module CSVDecision
         type = match['type']
         return false if comparator.nil? && type.nil?
 
-        comparator_type(comparator: comparator || '=', type: type, name: match['name'].to_sym)
+        symbols = Matchers.path(match['name'])
+        comparator_type(comparator: comparator || '=', type: type, name: symbols)
       end
 
       # @param (see Matcher#matches?)

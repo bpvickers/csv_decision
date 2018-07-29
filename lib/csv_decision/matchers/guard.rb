@@ -34,38 +34,38 @@ module CSVDecision
 
       # Note: value has already been converted to an Integer or BigDecimal.
       NUMERIC_COMPARE = {
-        '=='  => proc { |symbol, value, hash| Matchers.numeric(hash[symbol])   == value },
-        '!='  => proc { |symbol, value, hash| Matchers.numeric(hash[symbol])   != value },
-        '>'   => proc { |symbol, value, hash| Matchers.numeric(hash[symbol]) &.>  value },
-        '>='  => proc { |symbol, value, hash| Matchers.numeric(hash[symbol]) &.>= value },
-        '<'   => proc { |symbol, value, hash| Matchers.numeric(hash[symbol]) &.<  value },
-        '<='  => proc { |symbol, value, hash| Matchers.numeric(hash[symbol]) &.<= value }
+        '=='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols))   == value },
+        '!='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols))   != value },
+        '>'   => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.>  value },
+        '>='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.>= value },
+        '<'   => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.<  value },
+        '<='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.<= value }
       }.freeze
       private_constant :NUMERIC_COMPARE
 
-      def self.symbol_function(symbol, method, hash)
-        hash[symbol].respond_to?(method) && hash[symbol].send(method)
+      def self.symbol_function(symbols, method, hash)
+        hash.dig(*symbols).respond_to?(method) && hash.dig(*symbols).send(method)
       end
       private_class_method :symbol_function
 
-      def self.regexp_match(symbol, value, hash)
+      def self.regexp_match(symbols, value, hash)
         return false unless value.is_a?(String)
-        data = hash[symbol]
+        data = hash.dig(*symbols)
         data.is_a?(String) && Matchers.regexp(value).match?(data)
       end
       private_class_method :regexp_match
 
       FUNCTION = {
-        '.'  => proc { |symbol, method, hash|  symbol_function(symbol, method, hash) },
-        '!.' => proc { |symbol, method, hash| !symbol_function(symbol, method, hash) },
-        '=~' => proc { |symbol, value, hash|  regexp_match(symbol, value, hash) },
-        '!~' => proc { |symbol, value, hash| !regexp_match(symbol, value, hash) }
+        '.'  => proc { |symbols, method, hash|  symbol_function(symbols, method, hash) },
+        '!.' => proc { |symbols, method, hash| !symbol_function(symbols, method, hash) },
+        '=~' => proc { |symbols, value, hash|  regexp_match(symbols, value, hash) },
+        '!~' => proc { |symbols, value, hash| !regexp_match(symbols, value, hash) }
       }.freeze
       private_constant :FUNCTION
 
       SYMBOL_PROC = {
-        ':'  => proc { |symbol, hash|  hash[symbol] },
-        '!:' => proc { |symbol, hash| !hash[symbol] }
+        ':'  => proc { |symbols, hash|  hash.dig(*symbols) },
+        '!:' => proc { |symbols, hash| !hash.dig(*symbols) }
       }.freeze
       private_constant :SYMBOL_PROC
 
@@ -73,7 +73,7 @@ module CSVDecision
         proc = FUNCTION[method]
         return proc if proc
 
-        proc { |sym, val, hash| Matchers.compare?(lhs: hash[sym], compare: method, rhs: val) }
+        proc { |sym, val, hash| Matchers.compare?(lhs: hash.dig(*sym), compare: method, rhs: val) }
       end
       private_class_method :non_numeric
 
@@ -103,8 +103,8 @@ module CSVDecision
 
         method = match['negate'].present? ? '!:' : ':'
         proc = SYMBOL_PROC[method]
-        symbol = match['name'].to_sym
-        Matchers::Proc.new(type: :guard, symbols: symbol, function: proc.curry[symbol].freeze)
+        symbols = Matchers.path(match['name'])
+        Matchers::Proc.new(type: :guard, symbols: [symbols], function: proc.curry[symbols].freeze)
       end
       private_class_method :symbol_proc
 
@@ -113,9 +113,9 @@ module CSVDecision
         return false unless match
 
         proc, value = guard_proc(match)
-        symbol = match['name'].to_sym
-        Matchers::Proc.new(type: :guard, symbols: symbol,
-                           function: proc.curry[symbol][value].freeze)
+        symbols = Matchers.path(match['name'])
+        Matchers::Proc.new(type: :guard, symbols: [symbols],
+                           function: proc.curry[symbols][value].freeze)
       end
       private_class_method :symbol_guard
 

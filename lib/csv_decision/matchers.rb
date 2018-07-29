@@ -138,6 +138,14 @@ module CSVDecision
       nil
     end
 
+    # Decompose a bar delimited path string into an array of symbols
+    #
+    # @param path [String]
+    # @return [Array<Symbol>]
+    def self.path(path)
+      path.split('|').map!(&:strip).map!(&:to_sym)
+    end
+
     # Parse the supplied input columns for the row supplied using an array of matchers.
     #
     # @param columns [Hash{Integer=>Columns::Entry}] Input columns hash.

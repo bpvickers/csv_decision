@@ -50,6 +50,8 @@ module CSVDecision
     private_class_method :check_outs_symbols
 
     def self.check_outs_symbol(columns:, symbol:, index:)
+      # If symbol is a array of length one, then make it a simple symbol
+      symbol = symbol.is_a?(::Array) && symbol.length == 1 ? symbol[0] : symbol
       in_out = columns.dictionary[symbol]
 
       # If its an input column symbol then we're good.

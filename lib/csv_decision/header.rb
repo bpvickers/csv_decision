@@ -17,7 +17,7 @@ module CSVDecision
     # Regular expression string for a column name.
     # More lenient than a Ruby method name - note any spaces will have been replaced with
     # underscores.
-    COLUMN_NAME = "\\w[\\w:/!?]*"
+    COLUMN_NAME = "\\w[\\w:/!?|]*"
 
     # Regular expression for matching a column name.
     COLUMN_NAME_RE = Matchers.regexp(Header::COLUMN_NAME)

@@ -163,7 +163,7 @@ context 'simple examples' do
       ,            :ISIN.present?,  :ISIN,   ISIN,         :ID.length, :len == 12
       ,            :ISIN.present?,  :ISIN,   DUMMY,        :ID.length,
       ,            :CUSIP.present?, :CUSIP,  DUMMY,        :ID.length,
-      DATA
+    DATA
 
     table = CSVDecision.parse(data)
 
@@ -173,9 +173,9 @@ context 'simple examples' do
       .to eq(ID: '123456789', ID_type: 'CUSIP9', len: 9)
     expect(table.decide(country: 'US',  CUSIP: '1234567890'))
       .to eq(ID: '1234567890', ID_type: 'DUMMY', len: 10)
-    expect(table.decide(country: nil,  CUSIP: '123456789', ISIN:'123456789012'))
+    expect(table.decide(country: nil,  CUSIP: '123456789', ISIN: '123456789012'))
       .to eq(ID: '123456789012', ID_type: 'ISIN', len: 12)
-    expect(table.decide(CUSIP: '12345678', ISIN:'1234567890'))
+    expect(table.decide(CUSIP: '12345678', ISIN: '1234567890'))
       .to eq(ID: '1234567890', ID_type: 'DUMMY', len: 10)
   end
 
@@ -193,7 +193,8 @@ context 'simple examples' do
     expect(table.decide(CUSIP: '1234567890', class: 'Private')).to eq(PAID: '1234567890', len: 10)
     expect(table.decide(CUSIP: '123456789', class: 'Public')).to eq(PAID: '123456789', len: 9)
     expect(table.decide(ISIN: '123456789', country: 'GB', class: 'public')).to eq({})
-    expect(table.decide(ISIN: '123456789012', country: 'GB', class: 'private')).to eq(PAID: '123456789012', len: 12)
+    expect(table.decide(ISIN: '123456789012', country: 'GB', class: 'private'))
+      .to eq(PAID: '123456789012', len: 12)
   end
 
   it 'recognises in column method call conditions' do
@@ -210,7 +211,8 @@ context 'simple examples' do
     expect(table.decide(CUSIP: '1234567890', class: 'Private')).to eq(PAID: '1234567890', len: 10)
     expect(table.decide(CUSIP: '123456789', class: 'Public')).to eq(PAID: '123456789', len: 9)
     expect(table.decide(ISIN: '123456789', country: 'GB', class: 'public')).to eq({})
-    expect(table.decide(ISIN: '123456789012', country: 'GB', class: 'private')).to eq(PAID: '123456789012', len: 12)
+    expect(table.decide(ISIN: '123456789012', country: 'GB', class: 'private'))
+      .to eq(PAID: '123456789012', len: 12)
   end
 
   it 'scans the input hash paths accumulating matches' do
@@ -220,6 +222,31 @@ context 'simple examples' do
       header,  metrics,  :service_name
       payload, ,         :amount
       payload, ref_data, :account_id
+    DATA
+    table = CSVDecision.parse(data, first_match: false)
+
+    input = {
+      header: {
+        id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
+        metrics: { service_name: 'Trading', receive_time: '12:00' }
+      },
+      payload: {
+        tran_id: 9, amount: '100.00',
+        ref_data: { account_id: '5010', type_id: 'BUYL' }
+      }
+    }
+
+    expect(table.decide(input)).to eq(value: %w[Client Trading 100.00 5010])
+    expect(table.decide!(input)).to eq(value: %w[Client Trading 100.00 5010])
+  end
+
+  it 'scans the input absolute hash paths accumulating matches' do
+    data = <<~DATA
+      out :value
+      :header|source_name
+      :header|metrics|service_name
+      :payload|amount
+      :payload|ref_data|account_id
     DATA
     table = CSVDecision.parse(data, first_match: false)
 

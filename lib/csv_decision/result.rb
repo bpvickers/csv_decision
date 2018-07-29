@@ -50,7 +50,21 @@ module CSVDecision
       # have the same symbol as an input hash key.
       # However, the rest of this hash is mutated as output column evaluation results
       # are accumulated.
-      @partial_result = data.slice(*@table.columns.input_keys) if @outs_functions
+      return unless @outs_functions
+
+      @partial_result = {}
+      @table.columns.input_keys.each do |key|
+        next @partial_result.deep_merge!(key => data[key]) unless key.is_a?(::Array)
+        @partial_result = Result.extract_hash(data, key, result: @partial_result)
+      end
+    end
+
+    def self.extract_hash(data, keys, result: {})
+      key = keys[0]
+      value = data[key]
+      return result.deep_merge!(key => value) if keys.length == 1
+
+      result.deep_merge!(key => extract_hash(value, keys[1..-1]))
     end
 
     # Common case for building a single row result is just copying output column values to the

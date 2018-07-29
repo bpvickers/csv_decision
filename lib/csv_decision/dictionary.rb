@@ -15,9 +15,11 @@ module CSVDecision
     # @param out [false, Index] False if an input column, otherwise the index of the output column.
     # @return [Hash{Symbol=>[:in, Integer]}] Column dictionary updated with the new name.
     def self.add_name(columns:, name:, out: false)
+      # If name is a array of length one, then make it a simple symbol
+      name = name.is_a?(::Array) && name.length == 1 ? name[0] : name
       Validate.name(columns: columns, name: name, out: out)
 
-      columns[name] = out ? out : :in
+      columns[name] = out || :in
       columns
     end
 
