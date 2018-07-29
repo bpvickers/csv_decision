@@ -50,4 +50,12 @@ describe CSVDecision::Index do
     expect(result.index.columns).to eq [1, 2]
     expect(result.index.hash).to eql expected
   end
+
+  it 'uses the index to find a row' do
+    path = Pathname('spec/data/valid/iso_15022_fields.csv')
+    table = CSVDecision.parse(path, first_match: true, text_only: true)
+
+    result = table.decide!(Field_Type: '13A', Qualifier: 'COUP')
+    expect(result[:Business_Element]).to eq('Coupon Number')
+  end
 end
