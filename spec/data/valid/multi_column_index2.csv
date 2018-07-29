@@ -1,5 +1,4 @@
-#comment,
-index : 2
+#comment,,,
 guard:,in :type, IN :input,OUT :output
 :number.present?,integer,none,:=0
 :string.blank?,string,none,:=nil
