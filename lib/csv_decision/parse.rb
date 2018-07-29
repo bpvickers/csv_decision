@@ -112,7 +112,7 @@ module CSVDecision
         # data cells.
         row = parse_row(table: table, matchers: matchers, row: row, index: index)
 
-        # Does this table have outpiut column formatters?
+        # Does this table have output column formatters?
         outs_formatters(table: table)
 
         # Does the row have any output functions?
