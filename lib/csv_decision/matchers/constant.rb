@@ -61,7 +61,7 @@ module CSVDecision
       #   otherwise return false.
       #
       # (see Matcher#matches?)
-      def matches?(cell)
+      def matches?(cell, _path)
         Matchers::Constant.matches?(cell)
       end
 

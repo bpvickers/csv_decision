@@ -86,7 +86,7 @@ module CSVDecision
       # +*+ and +.+.
       # @param (see Matcher#matches?)
       # @return (see Matcher#matches?)
-      def matches?(cell)
+      def matches?(cell, _path = [])
         Pattern.matches?(cell, regexp_explicit: @regexp_explicit)
       end
     end

@@ -13,13 +13,13 @@ describe CSVDecision::Matchers::Numeric do
 
     context 'comparison matches value' do
       data = [
-          ['< 1',  0],
-          ['< 1', '0'],
-          ['> 1',  5],
-          ['!= 1',  0],
-          ['> 1', '5'],
-          ['>= 1.1', BigDecimal('1.1')],
-          ['<=-1.1', BigDecimal('-12')]
+        ['< 1',  0],
+        ['< 1', '0'],
+        ['> 1',  5],
+        ['!= 1',  0],
+        ['> 1', '5'],
+        ['>= 1.1', BigDecimal('1.1')],
+        ['<=-1.1', BigDecimal('-12')]
       ]
 
       data.each do |cell, value|

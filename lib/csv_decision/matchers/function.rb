@@ -43,7 +43,7 @@ module CSVDecision
 
       # @param (see Matchers::Matcher#matches?)
       # @return (see Matchers::Matcher#matches?)
-      def matches?(cell)
+      def matches?(cell, _path = [])
         Function.matches?(cell)
       end
 

@@ -142,7 +142,7 @@ module CSVDecision
 
       # @param (see Matcher#matches?)
       # @return (see Matcher#matches?)
-      def matches?(cell)
+      def matches?(cell, _path = [])
         Symbol.matches?(cell)
       end
     end

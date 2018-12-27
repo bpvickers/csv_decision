@@ -6,7 +6,7 @@ describe CSVDecision::Matchers::Guard do
   describe '#new' do
     it { is_expected.to be_a CSVDecision::Matchers::Guard }
     it { is_expected.to be_a CSVDecision::Matchers::Matcher }
-    it { is_expected.to respond_to(:matches?).with(1).argument }
+    it { is_expected.to respond_to(:matches?).with(2).arguments }
   end
 
   describe '#matches?' do

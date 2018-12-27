@@ -14,26 +14,29 @@ module CSVDecision
 
     # Scan the table cell against all matches.
     #
-    # @param column [Dictionary::Entry] Column dictionary entry.
+    # @param columns [Hash{Integer=>Dictionary::Entry}] Column dictionary entry.
     # @param matchers [Array<Matchers::Matcher>]
     # @param cell [String]
     # @return [false, Matchers::Proc]
-    def self.scan(column:, matchers:, cell:)
+    def self.scan(columns:, col:, matchers:, cell:)
       return false if cell == ''
 
-      proc = scan_matchers(column: column, matchers: matchers, cell: cell)
+      proc = scan_matchers(columns: columns, col: col, matchers: matchers, cell: cell)
       return proc if proc
 
       # Must be a simple string constant - this is OK except for a certain column types.
-      invalid_constant?(type: :constant, column: column)
+      invalid_constant?(type: :constant, column: columns[col])
     end
 
-    def self.scan_matchers(column:, matchers:, cell:)
+    def self.scan_matchers(columns:, col:, matchers:, cell:)
+      column = columns[col]
+      path = []
+
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
         next if guard_ins_matcher?(column, matcher)
 
-        proc = scan_proc(column: column, cell: cell, matcher: matcher)
+        proc = scan_proc(column: column, cell: cell, matcher: matcher, path: path)
         return proc if proc
       end
 
@@ -48,8 +51,8 @@ module CSVDecision
     end
     private_class_method :guard_ins_matcher?
 
-    def self.scan_proc(column:, cell:, matcher:)
-      proc = matcher.matches?(cell)
+    def self.scan_proc(column:, cell:, matcher:, path:)
+      proc = matcher.matches?(cell, path)
       invalid_constant?(type: proc.type, column: column) if proc
 
       proc
@@ -95,7 +98,7 @@ module CSVDecision
 
         # Need to scan the cell against all matchers, and possibly overwrite
         # the cell contents with a Matchers::Proc value.
-        row[col] = scan_cell(column: column, col: col, matchers: matchers, cell: cell)
+        row[col] = scan_cell(columns: columns, col: col, matchers: matchers, cell: cell)
       end
 
       row
@@ -116,9 +119,11 @@ module CSVDecision
 
     private
 
-    def scan_cell(column:, col:, matchers:, cell:)
+    def scan_cell(columns:, col:, matchers:, cell:)
+      column = columns[col]
+
       # Scan the cell against all the matchers
-      proc = ScanRow.scan(column: column, matchers: matchers, cell: cell)
+      proc = ScanRow.scan(columns: columns, col: col, matchers: matchers, cell: cell)
 
       return set(proc: proc, col: col, column: column) if proc
 

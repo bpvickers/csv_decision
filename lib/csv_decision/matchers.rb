@@ -98,9 +98,13 @@ module CSVDecision
 
     # Regular expression used to recognise a numeric string with or without a decimal point.
     NUMERIC = '[-+]?\d*(?<decimal>\.?)\d*'
+    INTEGER = '[-]?\d*'
 
     NUMERIC_RE = regexp(NUMERIC)
     private_constant :NUMERIC_RE
+
+    INTEGER_RE = regexp(INTEGER)
+    private_constant :INTEGER_RE
 
     # Validate a numeric value and convert it to an Integer or BigDecimal if a valid numeric string.
     #
@@ -138,12 +142,18 @@ module CSVDecision
       nil
     end
 
-    # Decompose a bar delimited path string into an array of symbols
+    # Decompose a path string into an array of symbols and/or integer
+    # array indexes. E.g., header[metrics][-1][service_nm]
     #
     # @param path [String]
-    # @return [Array<Symbol>]
+    # @return [Array<Symbol, Integer>]
     def self.path(path)
-      path.split('|').map!(&:strip).map!(&:to_sym)
+      return [path.to_sym] if Header::COLUMN_SYMBOL_RE.match?(path)
+      path.split('[').each_with_object([]) do |part, result|
+        part = part.strip.chomp(']')
+        part = INTEGER_RE.match?(part) ? part.to_i : part.to_sym
+        result << part
+      end
     end
 
     # Parse the supplied input columns for the row supplied using an array of matchers.
@@ -206,7 +216,7 @@ module CSVDecision
       # @return [false, CSVDecision::Proc] Returns false if this cell is not a match; otherwise
       #   returns the +CSVDecision::Proc+ object indicating if this is a constant or some type of
       #   function.
-      def matches?(cell); end
+      def matches?(cell, path = []); end
 
       # Does this matcher apply to output cells?
       #

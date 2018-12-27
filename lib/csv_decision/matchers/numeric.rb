@@ -36,7 +36,7 @@ module CSVDecision
       end
 
       # (see Matcher#matches?)
-      def matches?(cell)
+      def matches?(cell, _path = [])
         Numeric.matches?(cell)
       end
     end

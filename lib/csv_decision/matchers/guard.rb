@@ -9,9 +9,9 @@ module CSVDecision
   # @api private
   class Matchers
     # Match cell against a column symbol guard expression -
-    # e.g., +>:column.present?+ or +:column == 100.0+.
+    # e.g., +:column.present?+ or +:column == 100.0+.
     class Guard < Matcher
-      # Column symbol expression - e.g., +>:column+ or +:!column+.
+      # Column symbol expression - e.g., +> :column+ or +!:column+.
       SYMBOL_RE =
         Matchers.regexp("(?<negate>#{Matchers::NEGATE}?)\\s*:(?<name>#{Header::COLUMN_NAME})")
       private_constant :SYMBOL_RE
@@ -32,14 +32,18 @@ module CSVDecision
                    '=~' => '!~', '!~' => '=~' }.freeze
       private_constant :NEGATION
 
+      def self.numeric_dig(hash, symbols)
+        Matchers.numeric(hash.dig(*symbols))
+      end
+
       # Note: value has already been converted to an Integer or BigDecimal.
       NUMERIC_COMPARE = {
-        '=='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols))   == value },
-        '!='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols))   != value },
-        '>'   => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.>  value },
-        '>='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.>= value },
-        '<'   => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.<  value },
-        '<='  => proc { |symbols, value, hash| Matchers.numeric(hash.dig(*symbols)) &.<= value }
+        '=='  => proc { |symbols, value, hash| numeric_dig(hash, symbols)   == value },
+        '!='  => proc { |symbols, value, hash| numeric_dig(hash, symbols)   != value },
+        '>'   => proc { |symbols, value, hash| numeric_dig(hash, symbols) &.>  value },
+        '>='  => proc { |symbols, value, hash| numeric_dig(hash, symbols) &.>= value },
+        '<'   => proc { |symbols, value, hash| numeric_dig(hash, symbols) &.<  value },
+        '<='  => proc { |symbols, value, hash| numeric_dig(hash, symbols) &.<= value }
       }.freeze
       private_constant :NUMERIC_COMPARE
 
@@ -58,8 +62,8 @@ module CSVDecision
       FUNCTION = {
         '.'  => proc { |symbols, method, hash|  symbol_function(symbols, method, hash) },
         '!.' => proc { |symbols, method, hash| !symbol_function(symbols, method, hash) },
-        '=~' => proc { |symbols, value, hash|  regexp_match(symbols, value, hash) },
-        '!~' => proc { |symbols, value, hash| !regexp_match(symbols, value, hash) }
+        '=~' => proc { |symbols, value, hash|      regexp_match(symbols, value,  hash) },
+        '!~' => proc { |symbols, value, hash|     !regexp_match(symbols, value,  hash) }
       }.freeze
       private_constant :FUNCTION
 
@@ -97,40 +101,40 @@ module CSVDecision
       end
       private_class_method :guard_proc
 
-      def self.symbol_proc(cell)
+      def self.symbol_proc(cell, path)
         match = SYMBOL_RE.match(cell)
         return false unless match
 
         method = match['negate'].present? ? '!:' : ':'
         proc = SYMBOL_PROC[method]
-        symbols = Matchers.path(match['name'])
+        symbols = path + Matchers.path(match['name'])
         Matchers::Proc.new(type: :guard, symbols: [symbols], function: proc.curry[symbols].freeze)
       end
       private_class_method :symbol_proc
 
-      def self.symbol_guard(cell)
+      def self.symbol_guard(cell, path)
         match = GUARD_RE.match(cell)
         return false unless match
 
         proc, value = guard_proc(match)
-        symbols = Matchers.path(match['name'])
+        symbols = path + Matchers.path(match['name'])
         Matchers::Proc.new(type: :guard, symbols: [symbols],
                            function: proc.curry[symbols][value].freeze)
       end
       private_class_method :symbol_guard
 
       # (see Matcher#matches?)
-      def self.matches?(cell)
-        proc = symbol_proc(cell)
+      def self.matches?(cell, path)
+        proc = symbol_proc(cell, path)
         return proc if proc
 
-        symbol_guard(cell)
+        symbol_guard(cell, path)
       end
 
       # @param (see Matcher#matches?)
       # @return (see Matcher#matches?)
-      def matches?(cell)
-        Guard.matches?(cell)
+      def matches?(cell, path = [])
+        Guard.matches?(cell, path)
       end
 
       # @return (see Matcher#outs?)

@@ -135,14 +135,14 @@ describe CSVDecision::Columns do
 
   it 'rejects an invalid column name' do
     data = [
-      ['IN :input', 'IN: a-b'],
+      ['IN :input', 'IN: a+b'],
       ['input', '']
     ]
 
     expect { CSVDecision.parse(data) }
       .to raise_error(CSVDecision::CellValidationError,
-                      "header column 'IN: a-b' is not valid as " \
-                      "the column name 'a-b' contains invalid characters")
+                      "header column 'IN: a+b' is not valid as " \
+                      "the column name 'a+b' contains invalid characters")
   end
 
   context 'rejects invalid CSV decision table columns' do

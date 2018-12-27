@@ -7,6 +7,7 @@ describe CSVDecision::Matchers::Symbol do
     it { is_expected.to be_a CSVDecision::Matchers::Symbol }
     it { is_expected.to be_a CSVDecision::Matchers::Matcher }
     it { is_expected.to respond_to(:matches?).with(1).argument }
+    it { is_expected.to respond_to(:matches?).with(2).arguments }
   end
 
   describe '#matches?' do

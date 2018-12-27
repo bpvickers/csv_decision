@@ -87,7 +87,7 @@ module CSVDecision
       # Ruby-like range expressions or their negation - e.g., +0...10+ or +!a..z+.
       #
       # @return (see Matcher#matches?)
-      def matches?(cell)
+      def matches?(cell, _path = [])
         Range.matches?(cell)
       end
     end

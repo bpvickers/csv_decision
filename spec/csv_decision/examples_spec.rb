@@ -217,17 +217,17 @@ context 'simple examples' do
 
   it 'scans the input hash paths accumulating matches' do
     data = <<~DATA
-      path:,   path:,    out :value
-      header,  ,         :source_name
-      header,  metrics,  :service_name
-      payload, ,         :amount
-      payload, ref_data, :account_id
+      path:,   path:,    guard:,          out :value
+      header,  ,         :client == AAPL, :source_name
+      header,  metrics,  ,                :service_name
+      payload, ,         ,                :amount
+      payload, ref_data, ,                :account_id
     DATA
     table = CSVDecision.parse(data, first_match: false)
 
     input = {
       header: {
-        id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
+        id: 1, type_cd: 'BUY', source_name: 'Client', client: 'AAPL',
         metrics: { service_name: 'Trading', receive_time: '12:00' }
       },
       payload: {
@@ -242,18 +242,21 @@ context 'simple examples' do
 
   it 'scans the input absolute hash paths accumulating matches' do
     data = <<~DATA
-      out :value
-      :header|source_name
-      :header|metrics|service_name
-      :payload|amount
-      :payload|ref_data|account_id
+      guard:,                    out :value
+      :header[client] == AAPL,   :header[source_name]
+      :header[metrics].present?, :header[metrics][-1][service_name]
+      ,                          :payload[amount]
+      ,                          :payload[ref_data][account_id]
     DATA
     table = CSVDecision.parse(data, first_match: false)
 
     input = {
       header: {
-        id: 1, type_cd: 'BUY', source_name: 'Client', client_name: 'AAPL',
-        metrics: { service_name: 'Trading', receive_time: '12:00' }
+        id: 1, type_cd: 'BUY', source_name: 'Client', client: 'AAPL',
+        metrics: [
+          { service_name: 'Confirm', receive_time: '12:00' },
+          { service_name: 'Trading', receive_time: '12:00' }
+        ]
       },
       payload: {
         tran_id: 9, amount: '100.00',

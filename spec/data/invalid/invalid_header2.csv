@@ -1,4 +1,4 @@
 #comment,
-IN :input,BAD :-
+IN :input,BAD :+
 input,#output
 ,#end comment
