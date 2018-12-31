@@ -230,7 +230,7 @@ describe CSVDecision::Columns do
     DATA
     table = CSVDecision.parse(data)
 
-    expect(table.columns.input_keys).to eq %i[type_cd type_id]
+    expect(table.columns.input_keys).to eq [[:header, :type_cd], [:payload, :type_cd], [:payload, :ref_data, :type_id]]
     expect(table.columns.paths[0].to_h).to eq(name: nil, eval: false, type: :path, set_if: nil)
     expect(table.columns.paths[1].to_h).to eq(name: nil, eval: false, type: :path, set_if: nil)
   end

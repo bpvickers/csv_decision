@@ -71,7 +71,7 @@ module CSVDecision
         # No need for a regular expression if we have simple string inequality
         pattern = comparator == '!=' ? value : Matchers.regexp(value)
 
-        Proc.new(type: :proc, function: PATTERN_LAMBDAS[comparator].curry[pattern].freeze)
+        Proc.define(type: :proc, function: PATTERN_LAMBDAS[comparator].curry[pattern])
       end
 
       # @param options [Hash{Symbol=>Object}] Used to determine the value of regexp_implicit:.

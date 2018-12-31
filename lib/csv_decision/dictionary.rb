@@ -183,8 +183,10 @@ module CSVDecision
       # Default function will set the input value unconditionally or conditionally.
       dictionary.defaults[index] = entry if entry.type == :set
 
-      # guard: columns are anonymous
-      Dictionary.add_name(columns: dictionary.columns, name: entry.name) unless entry.type == :guard
+      # Exclude guard: columns which are anonymous, and the case where paths are used.
+      unless entry.type == :guard || !dictionary.paths.empty?
+        Dictionary.add_name(columns: dictionary.columns, name: entry.name)
+      end
     end
     private_class_method :input_entry
   end

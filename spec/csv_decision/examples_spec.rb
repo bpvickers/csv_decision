@@ -267,4 +267,29 @@ context 'simple examples' do
     expect(table.decide(input)).to eq(value: %w[Client Trading 100.00 5010])
     expect(table.decide!(input)).to eq(value: %w[Client Trading 100.00 5010])
   end
+
+  it 'scans the input mixed hash path accumulating matches' do
+    data = <<~DATA
+      path:,   guard:,          out :value
+      header,  :client == AAPL, :source_name
+      header,  ,                :metrics[service_name]
+      payload, ,                :amount
+      payload, ,                :ref_data[account_id]
+    DATA
+    table = CSVDecision.parse(data, first_match: false)
+
+    input = {
+      header: {
+        id: 1, type_cd: 'BUY', source_name: 'Client', client: 'AAPL',
+        metrics: { service_name: 'Trading', receive_time: '12:00' }
+      },
+      payload: {
+        tran_id: 9, amount: '100.00',
+        ref_data: { account_id: '5010', type_id: 'BUYL' }
+      }
+    }
+
+    expect(table.decide(input)).to eq(value: %w[Client Trading 100.00 5010])
+    expect(table.decide!(input)).to eq(value: %w[Client Trading 100.00 5010])
+  end
 end

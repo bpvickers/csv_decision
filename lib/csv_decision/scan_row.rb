@@ -18,19 +18,21 @@ module CSVDecision
     # @param matchers [Array<Matchers::Matcher>]
     # @param cell [String]
     # @return [false, Matchers::Proc]
-    def self.scan(columns:, col:, matchers:, cell:)
+    def self.scan(path:, columns:, col:, matchers:, cell:)
       return false if cell == ''
 
-      proc = scan_matchers(columns: columns, col: col, matchers: matchers, cell: cell)
+      proc = scan_matchers(path: path, columns: columns, col: col, matchers: matchers, cell: cell)
       return proc if proc
 
       # Must be a simple string constant - this is OK except for a certain column types.
       invalid_constant?(type: :constant, column: columns[col])
     end
 
-    def self.scan_matchers(columns:, col:, matchers:, cell:)
+    def self.scan_matchers(path:, columns:, col:, matchers:, cell:)
       column = columns[col]
-      path = []
+
+      # An if: guard looks at the flat output hash
+      path = column.type == :if ? [] : path
 
       matchers.each do |matcher|
         # Guard function only accepts the same matchers as an output column.
@@ -72,9 +74,11 @@ module CSVDecision
     # @return [Array<Integer>] Column indices for Proc objects.
     attr_reader :procs
 
-    def initialize
+    def initialize(columns, path = [])
       @constants = []
       @procs = []
+      @path = path
+      @columns = columns
     end
 
     # Scan all the specified +columns+ (e.g., inputs) in the given +data+ row using the +matchers+
@@ -109,6 +113,9 @@ module CSVDecision
     # @param hash (see Decision#row_scan)
     # @return [Boolean] True for a match, false otherwise.
     def match?(row:, scan_cols:, hash:)
+      # If this row has a path, then need a different algorithm
+      return match_path?(row: row, hash: hash) unless @path.empty?
+
       # Check any table row cell constants first, and maybe fail fast...
       return false if @constants.any? { |col| row[col] != scan_cols[col] }
 
@@ -119,11 +126,23 @@ module CSVDecision
 
     private
 
+    def match_path?(row:, hash:)
+      path = hash.dig(*@path)
+      return unless path.is_a?(::Hash)
+
+      # Check any table row cell constants first, and maybe fail fast...
+      return false if @constants.any? { |col| row[col] != path[@columns[col].name] }
+
+      # These table row cells are Proc objects which need evaluating and
+      # must all return a truthy value.
+      @procs.all? { |col| row[col].call(value: path[@columns[col].name], hash: hash) }
+    end
+
     def scan_cell(columns:, col:, matchers:, cell:)
       column = columns[col]
 
       # Scan the cell against all the matchers
-      proc = ScanRow.scan(columns: columns, col: col, matchers: matchers, cell: cell)
+      proc = ScanRow.scan(path: @path, columns: columns, col: col, matchers: matchers, cell: cell)
 
       return set(proc: proc, col: col, column: column) if proc
 

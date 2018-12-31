@@ -12,35 +12,28 @@ module CSVDecision
     # Implemented as an immutable array of 2 or 3 entries for memory compactness and speed.
     # @api private
     class Proc < Array
+      def self.define(type:, function:, symbols: nil)
+        if type == :guard
+          Guard.new(type: type, function: function, symbols: symbols)
+        elsif type == :constant
+          Matchers::Proc.new(type: type, function: function)
+        elsif function.arity == 1
+          Proc1.new(type: type, function: function, symbols: symbols)
+        else
+          Proc2.new(type: type, function: function, symbols: symbols)
+        end
+      end
+
       # @param type [Symbol] Type of the function value - e.g., :constant or :guard.
       # @param function [Object] Either a lambda function,
       #   or some kind of constant such as an Integer.
       # @param symbols [nil, Symbol, Array<Symbol>] The symbol or list of symbols
       #   that the function uses to reference input hash keys (which are always symbolized).
       def initialize(type:, function:, symbols: nil)
-        super()
+        size = symbols.nil? ? 2 : 3
 
-        self << type
-
-        # Function values should always be frozen
-        self << function.freeze
-
-        # Some function values, such as constants or 0-arity functions, do not reference symbols.
-        self << symbols if symbols
-
+        super(size) { |i| [type, function.freeze, symbols][i] }
         freeze
-      end
-
-      # @param hash [Hash] Input hash to function call.
-      # @param value [Object] Input value to function call.
-      # @return [Object] Value returned from function call.
-      def call(hash:, value: nil)
-        func = fetch(1)
-
-        return func.call(hash) if fetch(0) == :guard
-
-        # All other procs can take one or two args
-        func.arity == 1 ? func.call(value) : func.call(value, hash)
       end
 
       # @return [Symbol] Type of the function value - e.g., :constant or :guard.
@@ -57,6 +50,27 @@ module CSVDecision
       #   that the function uses to reference input hash keys (which are always symbolized).
       def symbols
         fetch(2, nil)
+      end
+
+      # Call guard Proc
+      class Guard < Matchers::Proc
+        def call(args)
+          fetch(1).call(args[:hash])
+        end
+      end
+
+      # Call proc of arity 1
+      class Proc1 < Proc
+        def call(args)
+          fetch(1).call(args[:value])
+        end
+      end
+
+      # Call proc of arity 2
+      class Proc2 < Matchers::Proc
+        def call(hash:, value:)
+          fetch(1).call(value, hash)
+        end
       end
     end
 
@@ -162,10 +176,10 @@ module CSVDecision
     # @param matchers [Array<Matchers::Matcher>]
     # @param row [Array<String>] Data row being parsed.
     # @return [Array<(Array, ScanRow)>] Used to scan a table row against an input hash for matches.
-    def self.parse(columns:, matchers:, row:)
+    def self.parse(columns:, matchers:, row:, path: [])
       # Build an array of column indexes requiring simple constant matches,
       # and a second array of columns requiring special matchers.
-      scan_row = ScanRow.new
+      scan_row = ScanRow.new(columns, path)
 
       # Scan the columns in the data row, and build an object to scan this row against
       # an input hash.
@@ -194,7 +208,8 @@ module CSVDecision
     # @param row (see Matchers.parse)
     # @return (see Matchers.parse)
     def parse_ins(columns:, row:)
-      Matchers.parse(columns: columns, matchers: @ins, row: row)
+      path = columns.paths.empty? ? [] : parse_ins_path(columns.paths, row)
+      Matchers.parse(path: path, columns: columns.ins, matchers: @ins, row: row)
     end
 
     # Parse the row's output columns using the output matchers.
@@ -203,7 +218,15 @@ module CSVDecision
     # @param row (see Matchers.parse)
     # @return (see Matchers.parse)
     def parse_outs(columns:, row:)
-      Matchers.parse(columns: columns, matchers: @outs, row: row)
+      path = columns.paths.empty? ? [] : parse_ins_path(columns.paths, row)
+      Matchers.parse(path: path, columns: columns.outs, matchers: @outs, row: row)
+    end
+
+    def parse_ins_path(paths, row)
+      paths.each_key.with_object([]) do |col, path|
+        name = row[col]
+        path << name.to_sym unless name.blank?
+      end
     end
 
     # Subclass and override {#matches?} to implement a custom Matcher class.

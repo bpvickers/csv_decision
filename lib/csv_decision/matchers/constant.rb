@@ -38,7 +38,7 @@ module CSVDecision
       end
 
       def self.proc(function:)
-        Matchers::Proc.new(type: :constant, function: function)
+        Matchers::Proc.define(type: :constant, function: function)
       end
       private_class_method :proc
 

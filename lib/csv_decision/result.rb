@@ -61,9 +61,12 @@ module CSVDecision
 
     def self.extract_hash(data, keys, result: {})
       key = keys[0]
+      return result unless data.key?(key)
+
       value = data[key]
       return result.deep_merge!(key => value) if keys.length == 1
 
+      return result unless value.is_a?(::Hash)
       result.deep_merge!(key => extract_hash(value, keys[1..-1]))
     end
 

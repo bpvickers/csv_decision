@@ -20,7 +20,7 @@ module CSVDecision
       defaults = columns.defaults
 
       # Scan the default row for procs and constants
-      scan_row = ScanRow.new.scan_columns(row: row, columns: defaults, matchers: matchers)
+      scan_row = ScanRow.new(columns).scan_columns(row: row, columns: defaults, matchers: matchers)
 
       parse_columns(defaults: defaults, columns: columns.dictionary, row: scan_row)
     end

@@ -633,7 +633,7 @@ describe CSVDecision::Table do
 
     it 'scans the input hash paths accumulating matches' do
       data = <<~DATA
-        path:,   path:,    out :value,     out :key,   if:
+        path:,   path:,    out :value,     out :key,      if:
         header,  ,         :source_name,   source_nm,     :value.present?
         header,  ,         :client_name,   client_nm,     :value.present?
         header,  ,         :client_ref,    client_ref_id, :value.present?

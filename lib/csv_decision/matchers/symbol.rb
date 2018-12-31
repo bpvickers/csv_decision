@@ -78,7 +78,7 @@ module CSVDecision
       # E.g., > :col, we get comparator: >, name: col
       def self.comparison(comparator:, name:)
         function = COMPARE[comparator]
-        Matchers::Proc.new(type: :symbol, function: function[name], symbols: [name])
+        Matchers::Proc.define(type: :symbol, function: function[name], symbols: [name])
       end
       private_class_method :comparison
 
@@ -111,7 +111,7 @@ module CSVDecision
         return false unless METHOD_NAME_RE.match?(name)
 
         function = COMPARE[negate ? '!.' : '.']
-        Matchers::Proc.new(type: :proc, function: function[name])
+        Matchers::Proc.define(type: :proc, function: function[name])
       end
       private_class_method :method_function
 

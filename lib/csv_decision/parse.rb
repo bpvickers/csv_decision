@@ -135,7 +135,7 @@ module CSVDecision
 
     def self.parse_row_ins(table:, matchers:, row:, index:)
       # Parse the input cells for this row
-      row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns.ins, row: row)
+      row, table.scan_rows[index] = matchers.parse_ins(columns: table.columns, row: row)
 
       # Add any symbol references made by input cell procs to the column dictionary
       Columns.ins_dictionary(columns: table.columns.dictionary, row: row)
@@ -146,7 +146,7 @@ module CSVDecision
 
     def self.parse_row_outs(table:, matchers:, row:, index:)
       # Parse the output cells for this row
-      row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns.outs, row: row)
+      row, table.outs_rows[index] = matchers.parse_outs(columns: table.columns, row: row)
 
       Columns.outs_dictionary(columns: table.columns, row: row)
 

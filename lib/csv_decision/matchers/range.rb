@@ -80,7 +80,7 @@ module CSVDecision
         negate, range = range(match, coerce: coerce)
         method = coerce ? :numeric_range : :alnum_range
         function = Range.send(method, negate, range).freeze
-        Proc.new(type: :proc, function: function)
+        Proc.define(type: :proc, function: function)
       end
       private_class_method :range_proc
 

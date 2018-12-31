@@ -91,11 +91,11 @@ module CSVDecision
     private
 
     def decision(input:, symbolize_keys:)
-      if columns.paths.empty?
+      # if columns.paths.empty?
         Decision.make(table: self, input: input, symbolize_keys: symbolize_keys)
-      else
-        Scan.table(table: self, input: input, symbolize_keys: symbolize_keys)
-      end
+      # else
+      #   Scan.table(table: self, input: input, symbolize_keys: symbolize_keys)
+      # end
     end
   end
 end
