@@ -83,7 +83,7 @@ describe CSVDecision::Table do
 
             expect(table.send(method, constant: nil)).to eq(type: nil)
             expect(table.send(method, constant: 0)).to eq(type: 0)
-            expect(table.send(method, constant: BigDecimal.new('100.0'))).to eq(type: BigDecimal('100.0'))
+            expect(table.send(method, constant: BigDecimal('100.0'))).to eq(type: BigDecimal('100.0'))
             expect(table.send(method, constant: ':=nil')).to eq(type: 'Unrecognized')
             expect(table.send(method, constant: '= 0')).to eq(type: 'Unrecognized')
             expect(table.send(method, constant: ':=100.0')).to eq(type: 'Unrecognized')
