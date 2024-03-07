@@ -22,8 +22,8 @@ describe CSVDecision::Matchers::Range do
         %w[a..z       z],
         %w[a..z       m],
         %w[!-1..1     1.1],
-          ['! -1..1', BigDecimal.new('1.1')],
-          [  '-1..1', BigDecimal.new('1')]
+          ['! -1..1', BigDecimal('1.1')],
+          [  '-1..1', BigDecimal('1')]
       ]
 
       data.each do |cell, value|
@@ -43,8 +43,8 @@ describe CSVDecision::Matchers::Range do
         %w[a...z      z],
         %w[!a..z      m],
         %w[-1..1     1.1],
-        ['-1..1', BigDecimal.new('1.1')],
-        ['-1..1', BigDecimal.new('1.1')]
+        ['-1..1', BigDecimal('1.1')],
+        ['-1..1', BigDecimal('1.1')]
       ]
 
       data.each do |cell, value|
