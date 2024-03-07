@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  app:
+    container_name: csv_decision_app
+    build: .
+    command: bash
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+    stdin_open: true
+    tty: true
+volumes:
+  bundle:
