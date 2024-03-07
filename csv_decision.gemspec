@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ['brett@phillips-vickers.com']
   spec.description   = 'CSV based Ruby decision tables.'
   spec.summary       = <<-DESC
-    CSV Decision implements CSV based Ruby decision tables. It parses and loads 
-    decision table files which can then be used to execute complex conditional 
+    CSV Decision implements CSV based Ruby decision tables. It parses and loads
+    decision table files which can then be used to execute complex conditional
     logic against an input hash, producing a decision as an output hash.
     DESC
   spec.homepage      = 'https://github.com/bpvickers/csv_decision.git'
@@ -22,13 +22,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.3.0'
+  spec.required_ruby_version = '>= 2.7.0'
 
-  spec.add_dependency 'activesupport', '~> 5.1'
+  spec.add_dependency 'activesupport', '~> 7.0'
 
   spec.add_development_dependency 'benchmark-ips',         '~> 2.7'
   spec.add_development_dependency 'benchmark-memory',      '~> 0.1'
-  spec.add_development_dependency 'bundler',               '~> 1.3'
+  spec.add_development_dependency 'bundler',               '~> 2.1'
   spec.add_development_dependency 'oj',                    '~> 3.3'
   spec.add_development_dependency 'rake',                  '~> 12.3'
   spec.add_development_dependency 'rspec',                 '~> 3.7'

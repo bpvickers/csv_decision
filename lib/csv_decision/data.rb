@@ -51,9 +51,9 @@ module CSVDecision
     # Parse the input data which may either be a file path name, CSV string or
     # array of arrays
     def self.data_array(input)
-      return CSV.read(input, CSV_OPTIONS) if input_file?(input)
+      return CSV.read(input, **CSV_OPTIONS) if input_file?(input)
       return input.deep_dup if input.is_a?(Array) && input[0].is_a?(Array)
-      return CSV.parse(input, CSV_OPTIONS) if input.is_a?(String)
+      return CSV.parse(input, **CSV_OPTIONS) if input.is_a?(String)
 
       raise ArgumentError,
             "#{input.class} input invalid; " \
